@@ -2,12 +2,23 @@
   <div class="page">
     <div id="search-form">
       <label>
-        <input type="checkbox" name="activate-search" v-model="autoSearch" @keydown.enter="search" />
+        <input
+          type="checkbox"
+          name="activate-search"
+          v-model="autoSearch"
+          @keydown.enter="search()"
+        />
         :جستجو با کلیک روی نقشه
       </label>
       <br />
       <label class="justify-between">
-        <input dir="rtl" type="search" name="search" v-model="searchText" @keydown.enter="search" />
+        <input
+          dir="rtl"
+          type="search"
+          name="search"
+          v-model="searchText"
+          @keydown.enter="search()"
+        />
         :متن جستجو
       </label>
       <br />
@@ -16,47 +27,50 @@
         :مختصات جستجو
       </label>
       <br />
-      <button @click="search">جستجو</button>
+      <button @click="search()">جستجو</button>
     </div>
     <Map
       ref="map"
       mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
       serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
       :center="{ latitude: 36.311559, longitude: 59.5870851 }"
-      @click="handleClick"
+      @on-click="handleClick"
       poi
       traffic
     />
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Map from "@/components/Map.vue";
 
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "HomeView",
   components: {
     Map,
   },
   data() {
     return {
-      searchText: null,
+      searchText: "",
       autoSearch: false,
       coords: null,
     };
   },
   methods: {
-    handleClick(event) {
+    handleClick(event: any) {
       this.coords = event.stdPoint;
       if (this.autoSearch) {
         this.search();
       }
     },
-    search({ coords = this.coords, text = this.searchText } = {}) {
-      this.$refs.map.search({ text, coords });
+    search({ coords, text }: { coords?: any; text?: any } = {}) {
+      coords ||= this.coords;
+      text ||= this.searchText;
+      (this.$refs.map as any).search({ text, coords });
     },
   },
-};
+});
 </script>
 
 <style>
