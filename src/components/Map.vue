@@ -3,7 +3,7 @@
     <div id="settings">
       <div id="tiles">
         <div
-          v-for="tile in tiles"
+          v-for="tile in readonlyTiles"
           :key="tile.title"
           @click="changeMapType(tile.title)"
           class="tile"
@@ -21,8 +21,8 @@
           <input
             type="checkbox"
             name="poi"
-            @change="togglePoi(poiLayer)"
-            v-model="poiLayer"
+            @change="togglePoi(poi)"
+            v-model="poi"
           />
         </label>
         <label for="traffic"
@@ -30,8 +30,8 @@
           <input
             type="checkbox"
             name="traffic"
-            @change="toggleTraffic(trafficLayer)"
-            v-model="trafficLayer"
+            @change="toggleTraffic(traffic)"
+            v-model="traffic"
           />
         </label>
       </div>
@@ -39,321 +39,279 @@
   </div>
 </template>
 <script lang="ts">
-/* eslint-disable */
 declare const ol: any;
-const tiles = [
-  {
-    title: "osm-bright",
-    url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-bright.png",
-  },
-  {
-    title: "standard-night",
-    url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-standard-night.png",
-  },
-  {
-    title: "standard-day",
-    url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-standard-day.png",
-  },
-  {
-    title: "neshan",
-    url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-neshan.png",
-  },
-  {
-    title: "dreamy-gold",
-    url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-dreamy-gold.png",
-  },
-  {
-    title: "dreamy",
-    url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-dreamy.png",
-  },
-];
-const createHeaders = (token: string) => {
-  return {
-    "Api-Key": token,
-  };
-};
-const urls = {
-  reverse: "https://api.neshan.org/v4/reverse",
-  search: "https://api.neshan.org/v1/search",
-  map: "https://static.neshan.org/sdk/openlayers/5.3.0/ol.js",
-};
-const createApi = (token: string): Api => {
-  return {
-    REVERSE: async (lng, lat) => {
-      const params = `?lat=${lat}&lng=${lng}`;
-      const res = await fetch(urls.reverse + params, {
-        headers: createHeaders(token),
-      });
-      return await res.json();
-    },
-    SEARCH: async (term, [lng, lat]) => {
-      const params = `?term=${term}&lat=${lat}&lng=${lng}`;
-      const res = await fetch(urls.search + params, {
-        headers: createHeaders(token),
-      });
-      return await res.json();
-    },
-  };
-};
-const markerUrls = {
-  red: "https://img.icons8.com/color/344/marker--v1.png",
-  blue: "https://img.icons8.com/ultraviolet/344/marker.png",
-};
-
-const createText = (): any => {
-  return new ol.style.Text({
-    overflow: true,
-    scale: 1.6,
-    offsetY: -43,
-    // backgroundFill: new ol.style.Fill({
-    //   color: "#ffffff",
-    // }),
-    fill: new ol.style.Fill({
-      color: "#fff",
-    }),
-    stroke: new ol.style.Stroke({
-      color: "0",
-      width: 2,
-    }),
-    // backgroundStroke: new ol.style.Stroke({
-    //   color: "0",
-    //   width: 1,
-    // }),
-    // padding: [2, 4, 2, 4],
-  });
-};
-const createIcon = ({
-  color = "red",
-  iconScale = 0.1,
-}: CreateIconProps = {}): any => {
-  return new ol.style.Icon({
-    src: markerUrls[color],
-    scale: iconScale,
-    anchor: [0.5, 1],
-  });
-};
-const createStyle = ({ image, text }: CreateStyleProps): any => {
-  return new ol.style.Style({
-    image: image,
-    text: text,
-  });
-};
-const createSource = (features: any): any => {
-  return new ol.source.Vector({
-    features,
-  });
-};
-const createLayer = ({
-  target = "points",
-  style,
-  source,
-}: CreateLayerProps) => {
-  return new ol.layer.Vector({
-    target,
-    source,
-    style,
-  });
-};
-const getTitleFromData = (data: GetTitleFromDataProps) => {
-  const mainTitle = data.place
-    ? data.place
-    : data.route_name
-    ? data.route_name
-    : "معبر بدون نام";
-  const fullTitle = data.neighbourhood
-    ? mainTitle + `، ${data.neighbourhood}`
-    : mainTitle;
-  return fullTitle;
-};
-const sanitizeLocation = (loc?: CoordsObj) => {
-  return loc ? loc instanceof Object ? [loc.longitude, loc.latitude] as CoordsArr : loc : null;
-};
-
-import { defineComponent, PropType } from "vue";
 import {
-  CreateIconProps,
-  CreateStyleProps,
-  CreateLayerProps,
-  GetTitleFromDataProps,
+  createApi,
+  createIcon,
+  createLayer,
+  createSource,
+  createStyle,
+  createText,
+  getTitleFromData,
+  sanitizeLocation,
+  tiles,
+  urls,
+  getLocation,
+} from "./Map.util";
+import {
+  defineProps,
+  onMounted,
+  PropType,
+  readonly,
+  ref,
+  toRefs,
+  watch,
+  defineEmits,
+  defineExpose,
+} from "vue";
+import {
   CoordsObj,
   Api,
   CoordsArr,
   SearchProps,
   AddMarkersProps,
   AddMarkersPropsItem,
-IconColor
+  IconColor,
 } from "./Map.model";
-export default defineComponent({
+export default {
   name: "NeshanMap",
-  props: {
-    mapKey: {
-      type: String,
-      required: true,
-    },
-    serviceKey: String as PropType<string>,
-    center: Object as PropType<CoordsObj>,
-    zoom: {
-      type: Number,
-      default: 12,
-    },
-    poi: Boolean,
-    traffic: Boolean,
+};
+</script>
+<script setup lang="ts">
+const props = defineProps({
+  mapKey: {
+    type: String,
+    required: true,
   },
-  data() {
-    return {
-      sanitizedCenter: null as CoordsArr | null,
-      map: null as any,
-      mainMarker: null,
-      mainMarkerCoords: null as CoordsArr | null,
-      searchMarkers: null,
-      api: null as Api | null,
-      tiles: tiles,
-      mapType: "neshan",
-      poiLayer: this.poi,
-      trafficLayer: this.traffic,
-    };
+  serviceKey: {
+    type: String as PropType<string>,
+    default: "",
   },
-  watch: {
-    serviceKey(nv: string) {
-      this.setToken(nv);
-    },
+  center: {
+    type: Object as PropType<CoordsObj>,
+    default: null,
   },
-  methods: {
-    async getLocation() {
-      const positionPromise: Promise<GeolocationPosition> = new Promise(
-        (resolve) => {
-          navigator.geolocation.getCurrentPosition((pos) => {
-            resolve(pos);
-          });
-        }
-      );
-      const position = await positionPromise;
-      return position
-        ? sanitizeLocation(position.coords)
-        : [59.5870851, 36.311559];
-    },
-    async bundleMap() {
-      const coords = this.sanitizedCenter || (await this.getLocation());
-      const map = new ol.Map({
-        target: "map",
-        key: this.mapKey,
-        // mapType: 'standard-night',
-        poi: this.poi,
-        traffic: this.traffic,
-        view: new ol.View({
-          center: ol.proj.fromLonLat(coords),
-          zoom: this.zoom,
-          smoothExtentConstraint: true,
-        }),
-      });
-      this.map = map;
+  zoom: {
+    type: Number,
+    default: 12,
+  },
+  poi: Boolean,
+  traffic: Boolean,
+});
 
-      map.on("click", (event: any) => {
-        this.handleClickEvent(event);
-      });
-    },
-    importMap() {
-      const foundDoc = document.getElementById("my-overlayer")
-      if (foundDoc) return foundDoc; // was already loaded
-      const scriptTag = document.createElement("script");
-      scriptTag.src = urls.map;
-      scriptTag.id = "my-overlayer";
-      document.getElementsByTagName("head")[0].appendChild(scriptTag);
-      return scriptTag;
-    },
-    addMarkers(points: AddMarkersProps) {
-      const [{ layer, style, image, color, iconScale } = {} as AddMarkersPropsItem] = points;
-      const features = points.map(
-        (point) =>
-          new ol.Feature({
-            geometry: new ol.geom.Point(point.coords),
-            text: point.text,
-          })
+const sanitizedCenter = ref<CoordsArr | null>(null);
+const map = ref<any>(null);
+const mainMarker = ref<any>(null);
+const mainMarkerCoords = ref<CoordsArr | null>(null);
+const searchMarkers = ref<any>(null);
+const api = ref<Api | null>(null);
+const readonlyTiles = readonly(tiles);
+const mapType = ref("neshan");
+const { poi, traffic, serviceKey, mapKey, zoom, center } = toRefs(props);
+
+const emit = defineEmits(["on-click"]);
+
+/**
+ * Whenever service token changes,
+ * applies it to api
+ */
+watch(serviceKey, (nv) => {
+  setToken(nv);
+});
+
+/**
+ * Adds the map from given url to given script
+ * @param url - Url of map or another script
+ * @param tagName - Name of the expected tag
+ */
+const importMap = (url: string, tagName = "my-overlayer") => {
+  const foundDoc = document.getElementById(tagName);
+  if (foundDoc) return foundDoc; // was already loaded
+  const scriptTag = document.createElement("script");
+  scriptTag.src = url;
+  scriptTag.id = tagName;
+  document.getElementsByTagName("head")[0].appendChild(scriptTag);
+  return scriptTag;
+};
+
+/**
+ * Starts the map and adds it to element with id='map'
+ * Gets the mapKey, zoom, traffic and poi from props.
+ * Gets the center from either sanitizedCenter variable or gets it from divice location
+ * or Neshan building location.
+ */
+const startMap = async () => {
+  const coords = sanitizedCenter.value || (await getLocation());
+  const newMap = new ol.Map({
+    target: "map",
+    key: mapKey.value,
+    // mapType: 'standard-night',
+    poi: poi.value,
+    traffic: traffic.value,
+    view: new ol.View({
+      center: ol.proj.fromLonLat(coords),
+      zoom: zoom.value,
+      smoothExtentConstraint: true,
+    }),
+  });
+  map.value = newMap;
+
+  map.value.on("click", (event: any) => {
+    handleClickEvent(event);
+  });
+};
+
+/**
+ * After clicking on map, sets a marker on that coords.
+ * Sends a request to api.reverse and labels the marker
+ * Then emits an event named 'on-click'.
+ * @param event - Map click event.
+ */
+const handleClickEvent = async (event: any) => {
+  try {
+    map.value.removeLayer(mainMarker.value);
+    const point: CoordsArr = event.coordinate;
+    const { layer: marker, style } = addMarkers([{ coords: point, text: " " }]);
+    const stdPoint: CoordsArr = ol.proj.transform(
+      point,
+      "EPSG:3857",
+      "EPSG:4326"
+    );
+    mainMarkerCoords.value = stdPoint;
+    const data = await api.value!.REVERSE(...stdPoint);
+    const text = getTitleFromData(data);
+    style.getText().setText(text);
+    marker.setStyle(style);
+    mainMarker.value = marker;
+    emit("on-click", { event, marker, stdPoint, data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
+ * Receives an array of points and marks them on map.
+ * @param points - Array of points.
+ * @param point.text - Coordinates of that point.
+ * @param point.text - If you have a particular text for the point.
+ * @param point.layer - if you wanna apply them to your desired layer (only checks the first point for now).
+ * @param point.style - If you have a particular style for that point (only checks the first point for now).
+ * @param point.color - If you have a particular color for that point (only checks the first point for now).
+ * @param point.image - If you have a particular image for that point (only checks the first point for now).
+ * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
+ * @returns style and layer.
+ */
+const addMarkers = (points: AddMarkersProps) => {
+  const [
+    { layer, style, image, color, iconScale } = {} as AddMarkersPropsItem,
+  ] = points;
+  const features = points.map(
+    (point) =>
+      new ol.Feature({
+        geometry: new ol.geom.Point(point.coords),
+        text: point.text,
+      })
+  );
+  const _text = createText();
+  const _image = image || createIcon({ color, iconScale });
+  const _style = style || createStyle({ text: _text, image: _image });
+  const styleFunc = (feature: any) => {
+    _style.getText().setText(feature.get("text"));
+    return _style;
+  };
+  const source = createSource(features);
+  const _pinLayer = layer || createLayer({ style: styleFunc, source });
+  map.value.addLayer(_pinLayer);
+  return { layer: _pinLayer, style: _style };
+};
+/**
+ * Does a neshan search based on given parameters
+ * @param searchParams.text - Part of or whole name of the place.
+ * @param searchParams.coords - Coordinates you want to search around.
+ */
+const search = async ({ text = "", coords }: SearchProps) => {
+  try {
+    const reliableCoords = (coords ||=
+      mainMarkerCoords.value || sanitizedCenter.value!);
+    const result = await api.value!.SEARCH(text, reliableCoords);
+    map.value.removeLayer(searchMarkers.value);
+    searchMarkers.value = null;
+    const points = result.items.map((item) => {
+      const point = Object.values(item.location);
+      const stdPoint: CoordsArr = ol.proj.transform(
+        point,
+        "EPSG:4326",
+        "EPSG:3857"
       );
-      const _text = createText();
-      const _image = image || createIcon({ color, iconScale });
-      const _style = style || createStyle({ text: _text, image: _image });
-      const styleFunc = (feature: any) => {
-        _style.getText().setText(feature.get("text"));
-        return _style;
+      return {
+        coords: stdPoint,
+        text: item.title,
+        color: "blue" as IconColor,
+        iconScale: 0.07,
       };
-      const source = createSource(features);
-      const _pinLayer = layer || createLayer({ style: styleFunc, source });
-      this.map.addLayer(_pinLayer);
-      return { layer: _pinLayer, style: _style };
-    },
-    async handleClickEvent(event: any) {
-      try {
-        this.map.removeLayer(this.mainMarker);
-        const point: CoordsArr = event.coordinate;
-        const { layer: marker, style } = this.addMarkers([
-          { coords: point, text: " " },
-        ]);
-        const stdPoint: CoordsArr = ol.proj.transform(point, "EPSG:3857", "EPSG:4326");
-        this.mainMarkerCoords = stdPoint
-        const data = await this.api!.REVERSE(...stdPoint);
-        const text = getTitleFromData(data);
-        style.getText().setText(text);
-        marker.setStyle(style);
-        this.mainMarker = marker;
-        this.$emit("on-click", { event, marker, stdPoint, data });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async search({ text = "", coords }: SearchProps) {
-      try {
-        const reliableCoords = coords ||= this.mainMarkerCoords || this.sanitizedCenter!;
-        const result = await this.api!.SEARCH(text, reliableCoords);
-        this.map.removeLayer(this.searchMarkers);
-        this.searchMarkers = null;
-        const points = result.items.map((item) => {
-          const point = Object.values(item.location);
-          const stdPoint: CoordsArr = ol.proj.transform(point, "EPSG:4326", "EPSG:3857");
-          return {
-            coords: stdPoint,
-            text: item.title,
-            color: "blue" as IconColor,
-            iconScale: 0.07,
-          };
-        });
-        const { layer } = this.addMarkers(points);
-        this.searchMarkers = layer;
-        const extent = layer.getSource().getExtent();
-        this.map.getView().fit(extent, {
-          size: this.map.getSize(),
-          duration: 500,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    setToken(token: string) {
-      this.api = createApi(token);
-    },
-    changeMapType(type: string) {
-      this.map.setMapType(type);
-      this.mapType = type;
-    },
-    togglePoi(value: boolean) {
-      this.map.switchPoiLayer(value);
-    },
-    toggleTraffic(value: boolean) {
-      this.map.switchTrafficLayer(value);
-    },
-  },
-  mounted() {
-    if (this.serviceKey) {
-      this.setToken(this.serviceKey);
-    }
-    this.sanitizedCenter = sanitizeLocation(this.center);
-    const scriptTag = this.importMap();
-    scriptTag.onload = this.bundleMap;
-  },
+    });
+    const { layer } = addMarkers(points);
+    searchMarkers.value = layer;
+    const extent = layer.getSource().getExtent();
+    map.value.getView().fit(extent, {
+      size: map.value.getSize(),
+      duration: 500,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+/**
+ * Sets the given token for api
+ * @param token
+ */
+const setToken = (token: string) => {
+  api.value = createApi(token);
+};
+/**
+ * Changes Map type
+ * @param type - Exact name of a given map name
+ */
+const changeMapType = (type: string) => {
+  map.value.setMapType(type);
+  mapType.value = type;
+};
+/**
+ * Switches poi layer
+ * @param value - Whether it should be on or off
+ */
+const togglePoi = (value: boolean) => {
+  map.value.switchPoiLayer(value);
+};
+/**
+ * Switches traffic layer
+ * @param value - Whether it should be on or off
+ */
+const toggleTraffic = (value: boolean) => {
+  map.value.switchTrafficLayer(value);
+};
+/**
+ * Setups Map, adds serviceToken to api
+ * and sanitizes center object
+ */
+onMounted(() => {
+  if (serviceKey) {
+    setToken(serviceKey.value);
+  }
+  sanitizedCenter.value = sanitizeLocation(center.value);
+  const scriptTag = importMap(urls.map);
+  scriptTag.onload = startMap;
+});
+
+/**
+ * Makes it possible to have access to search function from outside of the component
+ */
+defineExpose({
+  search,
 });
 </script>
 
-<style>
+<style lang="scss">
 @import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
 
 #map {
@@ -372,12 +330,11 @@ export default defineComponent({
   max-height: 8vw;
   overflow: hidden;
   transition: 0.5s;
-}
-
-#settings:hover {
-  max-width: 100%;
-  max-height: 100%;
-  transition: 1s;
+  :hover {
+    max-width: 100%;
+    max-height: 100%;
+    transition: 1s;
+  }
 }
 
 #checkboxes {
@@ -393,14 +350,13 @@ export default defineComponent({
 
 .tile {
   cursor: pointer;
-}
-
-.tile img {
-  width: 8vw;
-  height: 8vw;
-  border-radius: 1vw;
-  margin-left: 0.3vw;
-  margin-right: 0.3vw;
+  img {
+    width: 8vw;
+    height: 8vw;
+    border-radius: 1vw;
+    margin-left: 0.3vw;
+    margin-right: 0.3vw;
+  }
 }
 
 .desc {
