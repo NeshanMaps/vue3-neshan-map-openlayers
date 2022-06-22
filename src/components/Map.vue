@@ -21,8 +21,8 @@
           <input
             type="checkbox"
             name="poi"
-            @change="togglePoi(poi)"
-            v-model="poi"
+            @change="togglePoi(poiLayer)"
+            v-model="poiLayer"
           />
         </label>
         <label for="traffic"
@@ -30,8 +30,8 @@
           <input
             type="checkbox"
             name="traffic"
-            @change="toggleTraffic(traffic)"
-            v-model="traffic"
+            @change="toggleTraffic(trafficLayer)"
+            v-model="trafficLayer"
           />
         </label>
       </div>
@@ -118,6 +118,32 @@ const emit = defineEmits(["on-click"]);
 watch(serviceKey, (nv) => {
   setToken(nv);
 });
+
+const trafficLayer = ref(traffic.value);
+const poiLayer = ref(poi.value);
+watch(traffic, (nv) => {
+  console.log(nv);
+  toggleTraffic(nv)
+});
+watch(poi, (nv) => {
+  togglePoi(nv)
+});
+/**
+ * Switches poi layer
+ * @param value - Whether it should be on or off
+ */
+const togglePoi = (value: boolean) => {
+  poiLayer.value = value;
+  map.value.switchPoiLayer(value);
+};
+/**
+ * Switches traffic layer
+ * @param value - Whether it should be on or off
+ */
+const toggleTraffic = (value: boolean) => {
+  trafficLayer.value = value;
+  map.value.switchTrafficLayer(value);
+};
 
 /**
  * Adds the map from given url to given script
@@ -277,20 +303,6 @@ const changeMapType = (type: string) => {
   mapType.value = type;
 };
 /**
- * Switches poi layer
- * @param value - Whether it should be on or off
- */
-const togglePoi = (value: boolean) => {
-  map.value.switchPoiLayer(value);
-};
-/**
- * Switches traffic layer
- * @param value - Whether it should be on or off
- */
-const toggleTraffic = (value: boolean) => {
-  map.value.switchTrafficLayer(value);
-};
-/**
  * Setups Map, adds serviceToken to api
  * and sanitizes center object
  */
@@ -330,7 +342,7 @@ defineExpose({
   max-height: 8vw;
   overflow: hidden;
   transition: 0.5s;
-  :hover {
+  &:hover {
     max-width: 100%;
     max-height: 100%;
     transition: 1s;
