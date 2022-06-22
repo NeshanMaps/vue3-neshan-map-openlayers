@@ -18,21 +18,11 @@
       <div id="checkboxes">
         <label
           >poi
-          <input
-            type="checkbox"
-            name="poi"
-            @change="togglePoi(poiLayer)"
-            v-model="poiLayer"
-          />
+          <input type="checkbox" name="poi" v-model="poiLayer" />
         </label>
         <label for="traffic"
           >traffic
-          <input
-            type="checkbox"
-            name="traffic"
-            @change="toggleTraffic(trafficLayer)"
-            v-model="trafficLayer"
-          />
+          <input type="checkbox" name="traffic" v-model="trafficLayer" />
         </label>
       </div>
     </div>
@@ -122,18 +112,22 @@ watch(serviceKey, (nv) => {
 const trafficLayer = ref(traffic.value);
 const poiLayer = ref(poi.value);
 watch(traffic, (nv) => {
-  console.log(nv);
-  toggleTraffic(nv)
+  trafficLayer.value = nv;
 });
 watch(poi, (nv) => {
-  togglePoi(nv)
+  poiLayer.value = nv;
+});
+watch(trafficLayer, (nv) => {
+  toggleTraffic(nv);
+});
+watch(poiLayer, (nv) => {
+  togglePoi(nv);
 });
 /**
  * Switches poi layer
  * @param value - Whether it should be on or off
  */
 const togglePoi = (value: boolean) => {
-  poiLayer.value = value;
   map.value.switchPoiLayer(value);
 };
 /**
@@ -141,7 +135,6 @@ const togglePoi = (value: boolean) => {
  * @param value - Whether it should be on or off
  */
 const toggleTraffic = (value: boolean) => {
-  trafficLayer.value = value;
   map.value.switchTrafficLayer(value);
 };
 
