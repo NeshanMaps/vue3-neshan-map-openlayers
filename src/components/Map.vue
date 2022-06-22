@@ -1,31 +1,21 @@
 <template>
   <div id="map">
-    <div id="settings">
-      <div id="tiles">
-        <div
-          v-for="tile in readonlyTiles"
-          :key="tile.title"
-          @click="changeMapType(tile.title)"
-          class="tile"
-          :class="{ 'selected-tile': tile.title == mapType }"
-        >
-          <img :src="tile.url" />
-          <div class="desc">
-            {{ tile.title }}
-          </div>
-        </div>
-      </div>
-      <div id="checkboxes">
-        <label
-          >poi
-          <input type="checkbox" name="poi" v-model="poiLayer" />
-        </label>
-        <label for="traffic"
-          >traffic
-          <input type="checkbox" name="traffic" v-model="trafficLayer" />
-        </label>
-      </div>
-    </div>
+    <slot
+      v-if="!hideSettings"
+      name="settings"
+      :tiles="reactiveTiles"
+      :mapType="mapType"
+      :poi="poiLayer"
+      :traffic="trafficLayer"
+    >
+      <Settings
+        :tiles="reactiveTiles"
+        :mapType="mapType"
+        @update:map-type="changeMapType($event)"
+        v-model:traffic="trafficLayer"
+        v-model:poi="poiLayer"
+      />
+    </slot>
   </div>
 </template>
 <script lang="ts">
@@ -47,9 +37,7 @@ import {
   defineProps,
   onMounted,
   PropType,
-  readonly,
   ref,
-  toRefs,
   watch,
   defineEmits,
   defineExpose,
@@ -62,12 +50,15 @@ import {
   AddMarkersProps,
   AddMarkersPropsItem,
   IconColor,
+  MapType,
 } from "./Map.model";
 export default {
   name: "NeshanMap",
 };
 </script>
 <script setup lang="ts">
+import Settings from "./settings/index.vue";
+
 const props = defineProps({
   mapKey: {
     type: String,
@@ -87,6 +78,18 @@ const props = defineProps({
   },
   poi: Boolean,
   traffic: Boolean,
+  defaultType: {
+    type: String as PropType<MapType>,
+    default: "neshan",
+  },
+  mapTypes: {
+    type: Array as PropType<MapType[]>,
+    default: tiles.map((tile) => tile.title),
+  },
+  settingsBoxClass: Array,
+  settingsBoxStyle: Object,
+  hideSettings: Boolean,
+  typesClass: Array,
 });
 
 const sanitizedCenter = ref<CoordsArr | null>(null);
@@ -95,28 +98,38 @@ const mainMarker = ref<any>(null);
 const mainMarkerCoords = ref<CoordsArr | null>(null);
 const searchMarkers = ref<any>(null);
 const api = ref<Api | null>(null);
-const readonlyTiles = readonly(tiles);
-const mapType = ref("neshan");
-const { poi, traffic, serviceKey, mapKey, zoom, center } = toRefs(props);
+const mapType = ref(props.defaultType);
+const reactiveTiles = ref(
+  tiles.filter((tile) => props.mapTypes.includes(tile.title))
+);
 
-const emit = defineEmits(["on-click"]);
+const emit = defineEmits(["on-click", "on-zoom"]);
 
 /**
  * Whenever service token changes,
  * applies it to api
  */
-watch(serviceKey, (nv) => {
-  setToken(nv);
-});
+watch(
+  () => props.serviceKey,
+  (nv) => {
+    setToken(nv);
+  }
+);
 
-const trafficLayer = ref(traffic.value);
-const poiLayer = ref(poi.value);
-watch(traffic, (nv) => {
-  trafficLayer.value = nv;
-});
-watch(poi, (nv) => {
-  poiLayer.value = nv;
-});
+const trafficLayer = ref(props.traffic);
+const poiLayer = ref(props.poi);
+watch(
+  () => props.traffic,
+  (nv) => {
+    trafficLayer.value = nv;
+  }
+);
+watch(
+  () => props.poi,
+  (nv) => {
+    poiLayer.value = nv;
+  }
+);
 watch(trafficLayer, (nv) => {
   toggleTraffic(nv);
 });
@@ -163,20 +176,34 @@ const startMap = async () => {
   const coords = sanitizedCenter.value || (await getLocation());
   const newMap = new ol.Map({
     target: "map",
-    key: mapKey.value,
+    key: props.mapKey,
     // mapType: 'standard-night',
-    poi: poi.value,
-    traffic: traffic.value,
+    poi: poiLayer.value,
+    traffic: trafficLayer.value,
     view: new ol.View({
       center: ol.proj.fromLonLat(coords),
-      zoom: zoom.value,
+      zoom: props.zoom,
       smoothExtentConstraint: true,
     }),
   });
   map.value = newMap;
-
+  // Currently these is a problem with assigning different map type on initilization
+  changeMapType(mapType.value);
+};
+/**
+ * Sets the required events up for the map.
+ */
+const setupMapEvents = () => {
+  let currentZoom: number = map.value.getView().getZoom();
   map.value.on("click", (event: any) => {
     handleClickEvent(event);
+  });
+  map.value.on("moveend", () => {
+    const newZoom: number = map.value.getView().getZoom();
+    if (currentZoom != newZoom) {
+      emit("on-zoom", newZoom);
+      currentZoom = newZoom;
+    }
   });
 };
 
@@ -253,8 +280,7 @@ const search = async ({ text = "", coords }: SearchProps) => {
     const reliableCoords = (coords ||=
       mainMarkerCoords.value || sanitizedCenter.value!);
     const result = await api.value!.SEARCH(text, reliableCoords);
-    map.value.removeLayer(searchMarkers.value);
-    searchMarkers.value = null;
+    clearSearchMarkers();
     const points = result.items.map((item) => {
       const point = Object.values(item.location);
       const stdPoint: CoordsArr = ol.proj.transform(
@@ -281,6 +307,14 @@ const search = async ({ text = "", coords }: SearchProps) => {
   }
 };
 /**
+ * removes search markers from map
+ */
+const clearSearchMarkers = () => {
+  map.value.removeLayer(searchMarkers.value);
+  searchMarkers.value = null;
+};
+
+/**
  * Sets the given token for api
  * @param token
  */
@@ -291,7 +325,7 @@ const setToken = (token: string) => {
  * Changes Map type
  * @param type - Exact name of a given map name
  */
-const changeMapType = (type: string) => {
+const changeMapType = (type: MapType) => {
   map.value.setMapType(type);
   mapType.value = type;
 };
@@ -300,12 +334,15 @@ const changeMapType = (type: string) => {
  * and sanitizes center object
  */
 onMounted(() => {
-  if (serviceKey) {
-    setToken(serviceKey.value);
+  if (props.serviceKey) {
+    setToken(props.serviceKey);
   }
-  sanitizedCenter.value = sanitizeLocation(center.value);
+  sanitizedCenter.value = sanitizeLocation(props.center);
   const scriptTag = importMap(urls.map);
-  scriptTag.onload = startMap;
+  scriptTag.onload = () => {
+    startMap();
+    setupMapEvents();
+  };
 });
 
 /**
@@ -322,57 +359,5 @@ defineExpose({
 #map {
   height: 100%;
   position: relative;
-}
-
-#settings {
-  background-color: white;
-  border-radius: 0.5vw;
-  border: 1px solid rgb(178, 178, 178);
-  position: absolute;
-  z-index: 10;
-  bottom: 3.5vh;
-  max-width: 8.6vw;
-  max-height: 8vw;
-  overflow: hidden;
-  transition: 0.5s;
-  &:hover {
-    max-width: 100%;
-    max-height: 100%;
-    transition: 1s;
-  }
-}
-
-#checkboxes {
-  display: flex;
-  justify-content: space-around;
-  padding-top: 1vw;
-  padding-bottom: 1vw;
-}
-
-#tiles {
-  display: flex;
-}
-
-.tile {
-  cursor: pointer;
-  img {
-    width: 8vw;
-    height: 8vw;
-    border-radius: 1vw;
-    margin-left: 0.3vw;
-    margin-right: 0.3vw;
-  }
-}
-
-.desc {
-  overflow: hidden;
-  padding-right: 0.1vw;
-  padding-left: 0.1vw;
-  text-align: center;
-  font-size: small;
-}
-
-.selected-tile {
-  border: 1px solid rgb(145, 145, 145);
 }
 </style>

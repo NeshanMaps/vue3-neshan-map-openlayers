@@ -1,83 +1,95 @@
-export declare type NuString = null | string
+export declare type NuString = null | string;
+export declare type MapType =
+  | "neshan"
+  | "dreamy"
+  | "dreamy-gold"
+  | "standard-night"
+  | "standard-day"
+  | "osm-bright";
 
-export declare type IconColor = 'red' | 'blue'
+export declare interface Tile {
+  title: MapType
+  url: string
+}
+
+export declare type IconColor = "red" | "blue";
 export declare interface CreateIconProps {
-    color?: IconColor,
-    iconScale?: number
+  color?: IconColor;
+  iconScale?: number;
 }
 
 export declare interface CreateStyleProps {
-    image?: any,
-    text?: any
+  image?: any;
+  text?: any;
 }
 
 export declare interface CreateLayerProps {
-    target?: string,
-    style?: any,
-    source?: any
+  target?: string;
+  style?: any;
+  source?: any;
 }
 
 export declare interface GetTitleFromDataProps {
-    place?: NuString,
-    route_name?: NuString,
-    neighbourhood?: NuString
+  place?: NuString;
+  route_name?: NuString;
+  neighbourhood?: NuString;
 }
 
 export declare interface CoordsObj {
-    latitude: number,
-    longitude: number
+  latitude: number;
+  longitude: number;
 }
-export declare type CoordsArr = [number, number]
+export declare type CoordsArr = [number, number];
 
 export declare interface SearchItem {
-    category: string,
-    location: {
-        x: number,
-        y: number
-    },
-    neighbourhood: string,
-    region: string,
-    title: string,
-    type: string
+  category: string;
+  location: {
+    x: number;
+    y: number;
+  };
+  neighbourhood: string;
+  region: string;
+  title: string;
+  type: string;
 }
 export declare interface SearchResult {
-    count: number,
-    items: SearchItem[]
+  count: number;
+  items: SearchItem[];
 }
 
 export declare interface ReverseResult {
-    city: NuString
-    district: NuString
-    formatted_address: NuString
-    in_odd_even_zone: boolean
-    in_traffic_zone: boolean
-    municipality_zone: NuString
-    neighbourhood: NuString
-    place: NuString
-    route_name: NuString
-    route_type: NuString
-    state: NuString
-    status: NuString
-    village: NuString
+  city: NuString;
+  district: NuString;
+  formatted_address: NuString;
+  in_odd_even_zone: boolean;
+  in_traffic_zone: boolean;
+  municipality_zone: NuString;
+  neighbourhood: NuString;
+  place: NuString;
+  route_name: NuString;
+  route_type: NuString;
+  state: NuString;
+  status: NuString;
+  village: NuString;
 }
 
 export declare interface Api {
-    REVERSE: (lng: number, lat: number) => Promise<ReverseResult>
-    SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>
+  REVERSE: (lng: number, lat: number) => Promise<ReverseResult>;
+  SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>;
 }
 
 export declare interface SearchProps {
-    text?: string,
-    coords?: CoordsArr
+  text?: string;
+  coords?: CoordsArr;
 }
 
 export declare interface AddMarkersPropsItem {
-    layer?: any
-    style?: any
-    image?: any
-    color?: IconColor
-    iconScale?: number
-    text?: string
-    coords?: CoordsArr
+  layer?: any;
+  style?: any;
+  image?: any;
+  color?: IconColor;
+  iconScale?: number;
+  text?: string;
+  coords?: CoordsArr;
 }
-export declare type AddMarkersProps = AddMarkersPropsItem[]
+export declare type AddMarkersProps = AddMarkersPropsItem[];

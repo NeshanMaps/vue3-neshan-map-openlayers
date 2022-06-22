@@ -7,8 +7,10 @@ import {
     CoordsObj,
     Api,
     CoordsArr,
+    Tile,
 } from "./Map.model";
-export const tiles = [
+
+export const tiles: Tile[] = [
     {
         title: "osm-bright",
         url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-bright.png",
