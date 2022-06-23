@@ -152,5 +152,15 @@ export const getLocation = async () => {
         }
     );
     const position = await positionPromise;
-    return position ? sanitizeLocation(position.coords) : [59.5870851, 36.311559];
+    return (position && sanitizeLocation(position.coords)) || Object.values(createCoordsObject());
 };
+
+/**
+ * Create an object for a quick lat lng access
+ */
+export const createCoordsObject = () => {
+    return {
+        longitude: 59.5870851,
+        latitude: 36.311559
+    }
+}

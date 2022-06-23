@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <div id="search-form">
+    <!-- <div id="search-form">
       <label>
         <input
           type="checkbox"
@@ -28,7 +28,7 @@
       </label>
       <br />
       <button @click="search()">جستجو</button>
-    </div>
+    </div> -->
     <Map
       ref="map"
       mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
@@ -37,6 +37,7 @@
       @on-click="handleClick"
       poi
       traffic
+      show-search-box
     />
   </div>
 </template>

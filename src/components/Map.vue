@@ -16,6 +16,14 @@
         v-model:poi="poiLayer"
       />
     </slot>
+    <slot
+      v-if="showSearchBox"
+      name="search-box"
+    >
+      <SearchBox
+      @submit="search"
+      />
+    </slot>
   </div>
 </template>
 <script lang="ts">
@@ -58,6 +66,7 @@ export default {
 </script>
 <script setup lang="ts">
 import Settings from "./settings/index.vue";
+import SearchBox from './search-box/index.vue'
 
 const props = defineProps({
   mapKey: {
@@ -65,7 +74,7 @@ const props = defineProps({
     required: true,
   },
   serviceKey: {
-    type: String as PropType<string>,
+    type: String,
     default: "",
   },
   center: {
@@ -90,6 +99,7 @@ const props = defineProps({
   settingsBoxStyle: Object,
   hideSettings: Boolean,
   typesClass: Array,
+  showSearchBox: Boolean,
 });
 
 const sanitizedCenter = ref<CoordsArr | null>(null);
@@ -155,6 +165,7 @@ const toggleTraffic = (value: boolean) => {
  * Adds the map from given url to given script
  * @param url - Url of map or another script
  * @param tagName - Name of the expected tag
+ * @returns Created tag
  */
 const importMap = (url: string, tagName = "my-overlayer") => {
   const foundDoc = document.getElementById(tagName);
