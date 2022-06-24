@@ -73,14 +73,13 @@ export declare interface ReverseResult {
   village: NuString;
 }
 
+export declare interface SearchProps {
+  term?: string;
+  coords?: CoordsArr;
+}
 export declare interface Api {
   REVERSE: (lng: number, lat: number) => Promise<ReverseResult>;
   SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>;
-}
-
-export declare interface SearchProps {
-  text?: string;
-  coords?: CoordsArr;
 }
 
 export declare interface AddMarkersPropsItem {

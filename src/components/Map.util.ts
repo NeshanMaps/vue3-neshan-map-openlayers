@@ -107,11 +107,20 @@ export const createStyle = ({ image, text }: CreateStyleProps): any => {
         text: text,
     });
 };
+/**
+ * Creates ol source from given features
+ * @param features  
+ * @returns ol source
+ */
 export const createSource = (features: any): any => {
     return new ol.source.Vector({
         features,
     });
 };
+/**
+ * Creates ol layer
+ * @returns ol layer
+ */
 export const createLayer = ({
     target = "points",
     style,
@@ -143,6 +152,12 @@ export const sanitizeLocation = (loc?: CoordsObj) => {
     return loc ? loc instanceof Object ? [loc.longitude, loc.latitude] as CoordsArr : loc : null;
 };
 
+/**
+ * Gets the device location
+ * if it was succesfull, formats it and returns
+ * otherwise, sends Neshan locaton
+ * @returns location array
+ */
 export const getLocation = async () => {
     const positionPromise: Promise<GeolocationPosition> = new Promise(
         (resolve) => {
@@ -152,7 +167,7 @@ export const getLocation = async () => {
         }
     );
     const position = await positionPromise;
-    return (position && sanitizeLocation(position.coords)) || Object.values(createCoordsObject());
+    return (position && sanitizeLocation(position.coords)) || Object.values(createCoordsObject()) as CoordsArr;
 };
 
 /**

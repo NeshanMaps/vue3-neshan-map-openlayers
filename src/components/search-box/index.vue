@@ -1,5 +1,5 @@
 <template>
-  <div id="search-form" :style="searchBoxStyle" :class="searchBoxClass">
+  <div id="search-box" :style="searchBoxStyle" :class="searchBoxClass">
     <label class="justify-between">
       <input
         dir="rtl"
@@ -26,9 +26,9 @@
 </template>
 <script lang="ts">
 import { defineProps, PropType, defineEmits, ref } from "vue";
-import { CoordsObj } from "../Map.model";
+import { CoordsObj, SearchProps } from "../Map.model";
 import { computed } from "@vue/reactivity";
-import { getLocation } from "../Map.util";
+import { createCoordsObject } from "../Map.util";
 export default {
   name: "SettingsComp",
 };
@@ -44,13 +44,7 @@ const props = defineProps({
   },
   searchCoords: {
     type: Object as PropType<CoordsObj>,
-    default: async () => {
-      const coordsArr = await getLocation()
-      return {
-        latitude: coordsArr[1],
-        longitude: coordsArr[0]
-      }
-    }
+    default: () => createCoordsObject()
   },
 });
 
@@ -79,25 +73,29 @@ const coords = computed({
 const privateText = ref(props.searchText)
 const privateCoords = ref(props.searchCoords)
 
-const emitSearch = (val = { text: text.value || privateText.value, coords: coords.value || privateCoords.value }) => {
-  emit('submit', val)
+const emitSearch = (val: SearchProps = {}) => {
+  const inputText = val?.term || text.value || privateText.value
+  const coordsArr = val?.coords || Object.values(coords.value || privateCoords.value)
+  const data = {
+    term: inputText,
+    coords: coordsArr
+  }
+  emit('submit', data)
 }
 </script>
 
 <style lang="scss">
-#search-form {
+#search-box {
+  border-radius: 10px;
   padding: 1rem;
-  position: absolute;
-  z-index: 2;
   background-color: white;
   border: 1px solid rgb(116, 116, 116);
-  min-width: 300px;
-  max-width: 50vw;
-  top: 4vh;
-  left: 4vw;
-}
-.justify-between {
-  display: flex;
-  justify-content: space-between;
+  button {
+    border-radius: 5px;
+    background-color: white;
+    border-width: 1px;
+    padding: 3px 6px;
+    cursor: pointer;
+  }
 }
 </style>

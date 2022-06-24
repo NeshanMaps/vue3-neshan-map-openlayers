@@ -1,28 +1,19 @@
 <template>
   <div id="map">
-    <slot
-      v-if="!hideSettings"
-      name="settings"
-      :tiles="reactiveTiles"
-      :mapType="mapType"
-      :poi="poiLayer"
-      :traffic="trafficLayer"
-    >
-      <Settings
-        :tiles="reactiveTiles"
-        :mapType="mapType"
-        @update:map-type="changeMapType($event)"
-        v-model:traffic="trafficLayer"
-        v-model:poi="poiLayer"
-      />
+    <slot v-if="!hideSettings" name="settings" :tiles="reactiveTiles" :mapType="mapType" :poi="poiLayer"
+      :traffic="trafficLayer">
+      <Settings :tiles="reactiveTiles" :mapType="mapType" @update:map-type="changeMapType($event)"
+        v-model:traffic="trafficLayer" v-model:poi="poiLayer" />
     </slot>
-    <slot
-      v-if="showSearchBox"
-      name="search-box"
-    >
-      <SearchBox
-      @submit="search"
-      />
+    <slot v-if="!hideSearchContainer" name="search-container">
+      <div id="search-container">
+        <slot v-if="!hideSearchBox" name="search-box">
+          <SearchBox @submit="search" />
+        </slot>
+        <slot v-if="!hideResultBox" name="search-box">
+          <ResultBox />
+        </slot>
+      </div>
     </slot>
   </div>
 </template>
@@ -67,6 +58,7 @@ export default {
 <script setup lang="ts">
 import Settings from "./settings/index.vue";
 import SearchBox from './search-box/index.vue'
+import ResultBox from './result-box/index.vue'
 
 const props = defineProps({
   mapKey: {
@@ -99,7 +91,9 @@ const props = defineProps({
   settingsBoxStyle: Object,
   hideSettings: Boolean,
   typesClass: Array,
-  showSearchBox: Boolean,
+  hideSearchBox: Boolean,
+  hideSearchContainer: Boolean,
+  hideResultBox: Boolean
 });
 
 const sanitizedCenter = ref<CoordsArr | null>(null);
@@ -286,11 +280,12 @@ const addMarkers = (points: AddMarkersProps) => {
  * @param searchParams.text - Part of or whole name of the place.
  * @param searchParams.coords - Coordinates you want to search around.
  */
-const search = async ({ text = "", coords }: SearchProps) => {
+const search = async ({ term = "", coords }: SearchProps) => {
   try {
     const reliableCoords = (coords ||=
       mainMarkerCoords.value || sanitizedCenter.value!);
-    const result = await api.value!.SEARCH(text, reliableCoords);
+
+    const result = await api.value!.SEARCH(term, reliableCoords);
     clearSearchMarkers();
     const points = result.items.map((item) => {
       const point = Object.values(item.location);
@@ -370,5 +365,19 @@ defineExpose({
 #map {
   height: 100%;
   position: relative;
+}
+
+#search-container {
+  position: absolute;
+  z-index: 2;
+  min-width: 300px;
+  max-width: 50vw;
+  top: 4vh;
+  left: 4vw;
+}
+
+.justify-between {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
