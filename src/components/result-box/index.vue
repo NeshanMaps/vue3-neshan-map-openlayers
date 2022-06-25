@@ -1,19 +1,76 @@
 <template>
-  <div id="result-box" :style="resultBoxStyle" :class="resultBoxClass">
-    as
-  </div>
+  <details
+    id="result-box"
+    :style="resultBoxStyle"
+    :class="resultBoxClass"
+    class="neshan-scroll-bar"
+    open
+  >
+    <summary dir="rtl" class="select-none">
+      نتایج:
+      <template v-if="results"> &nbsp; ({{ results.length }}) </template>
+    </summary>
+    <ul>
+      <ResultItem
+        v-for="item in results"
+        :key="'' + item.location.x + item.location.y"
+        :item="item"
+      />
+    </ul>
+  </details>
 </template>
 <script lang="ts">
-import { defineProps, PropType } from 'vue';
-import { SearchItem } from '../Map.model';
+import { defineProps, PropType } from "vue";
+import { SearchItem } from "../Map.model";
 export default {
-  name: 'ResultBox'
-}
+  name: "ResultBox",
+};
 </script>
 <script setup lang="ts">
+import ResultItem from "./ResultItem.vue";
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
-  results: Array as PropType<SearchItem[]>
-})
+  results: Array as PropType<SearchItem[]>,
+});
 </script>
+
+<style lang="scss" scoped>
+#result-box {
+  margin-top: 10px;
+  background-color: white;
+  border: 1px solid rgb(110, 110, 110);
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 30vh;
+
+  summary {
+    cursor: pointer;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>

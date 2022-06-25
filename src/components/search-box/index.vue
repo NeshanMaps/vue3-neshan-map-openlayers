@@ -28,7 +28,7 @@
 import { defineProps, PropType, defineEmits, ref } from "vue";
 import { CoordsObj, SearchProps } from "../Map.model";
 import { computed } from "@vue/reactivity";
-import { createCoordsObject } from "../Map.util";
+import { createCoordsObject } from "@/utils";
 export default {
   name: "SettingsComp",
 };
@@ -96,6 +96,9 @@ const emitSearch = (val: SearchProps = {}) => {
     border-width: 1px;
     padding: 3px 6px;
     cursor: pointer;
+  }
+  input {
+    margin: 1px;
   }
 }
 </style>

@@ -1,9 +1,20 @@
 <template>
   <div id="map">
-    <slot v-if="!hideSettings" name="settings" :tiles="reactiveTiles" :mapType="mapType" :poi="poiLayer"
-      :traffic="trafficLayer">
-      <Settings :tiles="reactiveTiles" :mapType="mapType" @update:map-type="changeMapType($event)"
-        v-model:traffic="trafficLayer" v-model:poi="poiLayer" />
+    <slot
+      v-if="!hideSettings"
+      name="settings"
+      :tiles="reactiveTiles"
+      :mapType="mapType"
+      :poi="poiLayer"
+      :traffic="trafficLayer"
+    >
+      <Settings
+        :tiles="reactiveTiles"
+        :mapType="mapType"
+        @update:map-type="changeMapType($event)"
+        v-model:traffic="trafficLayer"
+        v-model:poi="poiLayer"
+      />
     </slot>
     <slot v-if="!hideSearchContainer" name="search-container">
       <div id="search-container">
@@ -11,27 +22,30 @@
           <SearchBox @submit="search" />
         </slot>
         <slot v-if="!hideResultBox" name="search-box">
-          <ResultBox />
+          <ResultBox :results="searchResults" />
         </slot>
       </div>
     </slot>
   </div>
 </template>
 <script lang="ts">
-declare const ol: any;
+declare const ol: any; // eslint-disable-line
 import {
-  createApi,
+  tiles,
+  urls
+} from "../parameters";
+import {
+  createMapPoints,
+  getTitleFromData,
+  sanitizeLocation,
+  getLocation,
   createIcon,
   createLayer,
   createSource,
   createStyle,
   createText,
-  getTitleFromData,
-  sanitizeLocation,
-  tiles,
-  urls,
-  getLocation,
-} from "./Map.util";
+} from "../utils";
+import { createApi } from "../apis";
 import {
   defineProps,
   onMounted,
@@ -48,8 +62,8 @@ import {
   SearchProps,
   AddMarkersProps,
   AddMarkersPropsItem,
-  IconColor,
   MapType,
+  SearchItem,
 } from "./Map.model";
 export default {
   name: "NeshanMap",
@@ -57,8 +71,8 @@ export default {
 </script>
 <script setup lang="ts">
 import Settings from "./settings/index.vue";
-import SearchBox from './search-box/index.vue'
-import ResultBox from './result-box/index.vue'
+import SearchBox from "./search-box/index.vue";
+import ResultBox from "./result-box/index.vue";
 
 const props = defineProps({
   mapKey: {
@@ -93,7 +107,7 @@ const props = defineProps({
   typesClass: Array,
   hideSearchBox: Boolean,
   hideSearchContainer: Boolean,
-  hideResultBox: Boolean
+  hideResultBox: Boolean,
 });
 
 const sanitizedCenter = ref<CoordsArr | null>(null);
@@ -275,6 +289,8 @@ const addMarkers = (points: AddMarkersProps) => {
   map.value.addLayer(_pinLayer);
   return { layer: _pinLayer, style: _style };
 };
+
+const searchResults = ref<SearchItem[]>([]);
 /**
  * Does a neshan search based on given parameters
  * @param searchParams.text - Part of or whole name of the place.
@@ -284,23 +300,10 @@ const search = async ({ term = "", coords }: SearchProps) => {
   try {
     const reliableCoords = (coords ||=
       mainMarkerCoords.value || sanitizedCenter.value!);
-
     const result = await api.value!.SEARCH(term, reliableCoords);
-    clearSearchMarkers();
-    const points = result.items.map((item) => {
-      const point = Object.values(item.location);
-      const stdPoint: CoordsArr = ol.proj.transform(
-        point,
-        "EPSG:4326",
-        "EPSG:3857"
-      );
-      return {
-        coords: stdPoint,
-        text: item.title,
-        color: "blue" as IconColor,
-        iconScale: 0.07,
-      };
-    });
+    clearMarkerLayer(searchMarkers);
+    const points = createMapPoints(result.items);
+    searchResults.value = result.items;
     const { layer } = addMarkers(points);
     searchMarkers.value = layer;
     const extent = layer.getSource().getExtent();
@@ -313,11 +316,11 @@ const search = async ({ term = "", coords }: SearchProps) => {
   }
 };
 /**
- * removes search markers from map
+ * Removes markers from map
  */
-const clearSearchMarkers = () => {
-  map.value.removeLayer(searchMarkers.value);
-  searchMarkers.value = null;
+const clearMarkerLayer = (layer: any) => {
+  map.value.removeLayer(layer.value);
+  layer.value = null;
 };
 
 /**
@@ -370,8 +373,7 @@ defineExpose({
 #search-container {
   position: absolute;
   z-index: 2;
-  min-width: 300px;
-  max-width: 50vw;
+  width: 300px;
   top: 4vh;
   left: 4vw;
 }
@@ -379,5 +381,15 @@ defineExpose({
 .justify-between {
   display: flex;
   justify-content: space-between;
+}
+
+.select-none {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+  supported by Chrome, Edge, Opera and Firefox */
 }
 </style>
