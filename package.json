@@ -1,12 +1,16 @@
 {
-  "name": "vue-map",
+  "name": "vue3-neshan-map-openlayers",
   "version": "0.1.0",
+  "main": "dist/vue3-neshan-map-openlayers.umd.js",
+  "browser": {
+    "./sfc": "src/components/Map.vue"
+  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "prepublish": "vue-cli-service build --target lib --name vue3-neshan-map-openlayers src/components/Map.vue"
+    "prepare": "vue-cli-service build --target lib --name vue3-neshan-map-openlayers src/components/Map.vue"
   },
   "dependencies": {
     "core-js": "^3.8.3",
