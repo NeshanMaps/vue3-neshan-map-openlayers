@@ -43,7 +43,9 @@
 </template>
 
 <script lang="ts">
-import Map from "@/components/Map.vue";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import Map from "@/components/vue3-neshan-map-openlayers.umd.js";
 
 import { defineComponent } from "vue";
 export default defineComponent({
