@@ -16,6 +16,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
   },
   ignorePatterns: [
-    "src/components/vue3-neshan-map-openlayers.umd.js"
+    "src/components/vue3-neshan-map-openlayers.umd.js",
+    "dist/**"
   ]
 }

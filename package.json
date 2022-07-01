@@ -1,9 +1,9 @@
 {
   "name": "vue3-neshan-map-openlayers",
-  "version": "0.2.1",
-  "main": "dist/vue3-neshan-map-openlayers.umd.js",
-  "module": "dist/vue3-neshan-map-openlayers.umd.js",
-  "unpkg": "dist/dist/vue3-neshan-map-openlayers.umd.min.js",
+  "version": "0.2.2",
+  "main": "src/components/Map.vue",
+  "module": "dist/index.umd.js",
+  "unpkg": "dist/index.umd.min.js",
   "browser": {
     "./sfc": "src/components/Map.vue"
   },
@@ -12,7 +12,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "prepare": "vue-cli-service build --target lib --name vue3-neshan-map-openlayers src/components/Map.vue"
+    "prepare": "vue-cli-service build --target lib --name index src/components/Map.vue"
   },
   "dependencies": {
     "core-js": "^3.8.3",
