@@ -6,7 +6,7 @@ import {
   CreateIconProps,
   CreateStyleProps,
   CreateLayerProps,
-} from "@/components/Map.model";
+} from "../components/Map.model";
 
 export const markerUrls = {
   red: "https://img.icons8.com/color/344/marker--v1.png",

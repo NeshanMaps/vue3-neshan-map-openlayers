@@ -1,4 +1,4 @@
-import { Tile } from "@/components/Map.model";
+import { Tile } from "../components/Map.model";
 
 export const urls = {
     reverse: "https://api.neshan.org/v4/reverse",

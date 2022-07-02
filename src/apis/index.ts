@@ -1,6 +1,6 @@
 declare const ol: any; // eslint-disable-line
-import { Api } from "@/components/Map.model";
-import { urls } from "@/parameters";
+import { Api } from "../components/Map.model";
+import { urls } from "../parameters";
 
 export const createHeaders = (token: string) => {
     return {

@@ -1,5 +1,5 @@
 declare const ol: any; // eslint-disable-line
-import { GetTitleFromDataProps, CoordsObj, CoordsArr } from "@/components/Map.model";
+import { GetTitleFromDataProps, CoordsObj, CoordsArr } from "../components/Map.model";
 /**
  * Creates the sufficent title based on result data.
  * @param data - result of neshan web search
