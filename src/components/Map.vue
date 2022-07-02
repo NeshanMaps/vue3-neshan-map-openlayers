@@ -206,6 +206,8 @@ const startMap = async () => {
     }),
   });
   map.value = newMap;
+  console.log(newMap, map.value);
+  
   // Currently these is a problem with assigning different map type on initilization
   changeMapType(mapType.value);
 };
@@ -350,7 +352,9 @@ onMounted(() => {
   const scriptTag = importMap(urls.map);
   scriptTag.onload = () => {
     startMap();
-    setupMapEvents();
+    setTimeout(() => {
+      setupMapEvents();
+    }, 3000)
   };
 });
 
