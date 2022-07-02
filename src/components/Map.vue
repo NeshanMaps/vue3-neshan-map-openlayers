@@ -30,10 +30,7 @@
 </template>
 <script lang="ts">
 declare const ol: any; // eslint-disable-line
-import {
-  tiles,
-  urls
-} from "../parameters";
+import { tiles, urls } from "../parameters";
 import {
   createMapPoints,
   getTitleFromData,
@@ -54,6 +51,7 @@ import {
   watch,
   defineEmits,
   defineExpose,
+  nextTick,
 } from "vue";
 import {
   CoordsObj,
@@ -206,8 +204,6 @@ const startMap = async () => {
     }),
   });
   map.value = newMap;
-  console.log(newMap, map.value);
-  
   // Currently these is a problem with assigning different map type on initilization
   changeMapType(mapType.value);
 };
@@ -352,9 +348,9 @@ onMounted(() => {
   const scriptTag = importMap(urls.map);
   scriptTag.onload = () => {
     startMap();
-    setTimeout(() => {
+    nextTick(() => {
       setupMapEvents();
-    }, 3000)
+    });
   };
 });
 
