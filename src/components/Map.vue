@@ -12,6 +12,7 @@
         :tiles="reactiveTiles"
         :mapType="mapType"
         @update:map-type="changeMapType($event)"
+        :settingsBoxClass="settingsBoxClass"
         v-model:traffic="trafficLayer"
         v-model:poi="poiLayer"
       />

@@ -18,9 +18,6 @@ export const createText = (): any => { // eslint-disable-line
     overflow: true,
     scale: 1.6,
     offsetY: -43,
-    // backgroundFill: new ol.style.Fill({
-    //   color: "#ffffff",
-    // }),
     fill: new ol.style.Fill({
       color: "#fff",
     }),
@@ -28,11 +25,6 @@ export const createText = (): any => { // eslint-disable-line
       color: "0",
       width: 2,
     }),
-    // backgroundStroke: new ol.style.Stroke({
-    //   color: "0",
-    //   width: 1,
-    // }),
-    // padding: [2, 4, 2, 4],
   });
 };
 export const createIcon = ({

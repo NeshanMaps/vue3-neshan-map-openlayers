@@ -73,6 +73,11 @@ const coords = computed({
 const privateText = ref(props.searchText)
 const privateCoords = ref(props.searchCoords)
 
+/**
+ * Emits Search Properties to the parent component
+ * @param val.term search text
+ * @param val.coords search coords
+ */
 const emitSearch = (val: SearchProps = {}) => {
   const inputText = val?.term || text.value || privateText.value
   const coordsArr = val?.coords || Object.values(coords.value || privateCoords.value)

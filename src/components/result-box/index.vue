@@ -6,10 +6,10 @@
     class="neshan-scroll-bar"
     open
   >
-    <summary dir="rtl" class="select-none">
+    <!-- <summary dir="rtl" class="select-none">
       نتایج:
-      <template v-if="results"> &nbsp; ({{ results.length }}) </template>
-    </summary>
+      <template v-if="results.length !== 0"> &nbsp; ({{ results.length }}) </template>
+    </summary> -->
     <ul>
       <ResultItem
         v-for="item in results"
@@ -28,10 +28,13 @@ export default {
 </script>
 <script setup lang="ts">
 import ResultItem from "./ResultItem.vue";
-const props = defineProps({
+defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
-  results: Array as PropType<SearchItem[]>,
+  results: {
+    type: Array as PropType<SearchItem[]>,
+    default: () => []
+  },
 });
 </script>
 

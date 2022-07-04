@@ -42,7 +42,10 @@ const props = defineProps({
     type: String as PropType<MapType>,
     default: "neshan",
   },
-  tiles: Array as PropType<Tile[]>,
+  tiles: {
+    type: Array as PropType<Tile[]>,
+    default: () => []
+  },
   settingsBoxClass: Array,
   settingsBoxStyle: Object,
   typesClass: Array,

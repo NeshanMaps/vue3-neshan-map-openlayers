@@ -1,6 +1,30 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 8998:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+var __webpack_unused_export__;
+
+
+__webpack_unused_export__ = ({
+  value: true
+}); // runtime helper for setting properties on components
+// in a tree-shakable way
+
+exports.Z = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+
+  return target;
+};
+
+/***/ }),
+
 /***/ 9662:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1547,30 +1571,6 @@ $({ target: 'Array', proto: true, forced: BROKEN_ON_SPARSE }, {
 // https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
 addToUnscopables('includes');
 
-
-/***/ }),
-
-/***/ 89:
-/***/ (function(__unused_webpack_module, exports) {
-
-"use strict";
-var __webpack_unused_export__;
-
-
-__webpack_unused_export__ = ({
-  value: true
-}); // runtime helper for setting properties on components
-// in a tree-shakable way
-
-exports.Z = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-
-  return target;
-};
 
 /***/ })
 
@@ -3815,7 +3815,7 @@ function deferredComputed(getter) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/index.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/index.vue?vue&type=script&setup=true&lang=ts
 
 
 const _hoisted_1 = {
@@ -3850,7 +3850,10 @@ const __default__ = {
       type: String,
       default: "neshan"
     },
-    tiles: Array,
+    tiles: {
+      type: Array,
+      default: () => []
+    },
     settingsBoxClass: Array,
     settingsBoxStyle: Object,
     typesClass: Array
@@ -3899,10 +3902,10 @@ const __default__ = {
 }));
 ;// CONCATENATED MODULE: ./src/components/settings/index.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/index.vue?vue&type=style&index=0&id=448ca800&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/index.vue?vue&type=style&index=0&id=20a1339f&lang=scss
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/settings/index.vue?vue&type=style&index=0&id=448ca800&lang=scss
+;// CONCATENATED MODULE: ./src/components/settings/index.vue?vue&type=style&index=0&id=20a1339f&lang=scss
 
 ;// CONCATENATED MODULE: ./src/components/settings/index.vue
 
@@ -3923,21 +3926,13 @@ const createText = () => {
     overflow: true,
     scale: 1.6,
     offsetY: -43,
-    // backgroundFill: new ol.style.Fill({
-    //   color: "#ffffff",
-    // }),
     fill: new ol.style.Fill({
       color: "#fff"
     }),
     stroke: new ol.style.Stroke({
       color: "0",
       width: 2
-    }) // backgroundStroke: new ol.style.Stroke({
-    //   color: "0",
-    //   width: 1,
-    // }),
-    // padding: [2, 4, 2, 4],
-
+    })
   });
 };
 const createIcon = ({
@@ -4047,7 +4042,7 @@ const createCoordsObject = () => {
 ;// CONCATENATED MODULE: ./src/utils/index.ts
 
 
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/search-box/index.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/search-box/index.vue?vue&type=script&setup=true&lang=ts
 
 
 const search_boxvue_type_script_setup_true_lang_ts_hoisted_1 = {
@@ -4117,6 +4112,11 @@ const search_boxvue_type_script_setup_true_lang_ts_default_ = {
 
     const privateText = (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.ref)(props.searchText);
     const privateCoords = (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.ref)(props.searchCoords);
+    /**
+     * Emits Search Properties to the parent component
+     * @param val.term search text
+     * @param val.coords search coords
+     */
 
     const emitSearch = (val = {}) => {
       const inputText = val?.term || text.value || privateText.value;
@@ -4156,10 +4156,10 @@ const search_boxvue_type_script_setup_true_lang_ts_default_ = {
 }));
 ;// CONCATENATED MODULE: ./src/components/search-box/index.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/search-box/index.vue?vue&type=style&index=0&id=49aa024d&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/search-box/index.vue?vue&type=style&index=0&id=7397fb7c&lang=scss
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/search-box/index.vue?vue&type=style&index=0&id=49aa024d&lang=scss
+;// CONCATENATED MODULE: ./src/components/search-box/index.vue?vue&type=style&index=0&id=7397fb7c&lang=scss
 
 ;// CONCATENATED MODULE: ./src/components/search-box/index.vue
 
@@ -4170,7 +4170,7 @@ const search_boxvue_type_script_setup_true_lang_ts_default_ = {
 const search_box_exports_ = search_boxvue_type_script_setup_true_lang_ts;
 
 /* harmony default export */ var search_box = (search_box_exports_);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/result-box/ResultItem.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/result-box/ResultItem.vue?vue&type=script&setup=true&lang=ts
 
 
 const ResultItemvue_type_script_setup_true_lang_ts_default_ = {
@@ -4196,7 +4196,7 @@ const ResultItemvue_type_script_setup_true_lang_ts_default_ = {
 ;// CONCATENATED MODULE: ./src/components/result-box/ResultItem.vue?vue&type=style&index=0&id=39b1dede&lang=scss&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
-var exportHelper = __webpack_require__(89);
+var exportHelper = __webpack_require__(8998);
 ;// CONCATENATED MODULE: ./src/components/result-box/ResultItem.vue
 
 
@@ -4207,18 +4207,8 @@ var exportHelper = __webpack_require__(89);
 const ResultItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultItemvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-39b1dede"]])
 
 /* harmony default export */ var ResultItem = (ResultItem_exports_);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/result-box/index.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/result-box/index.vue?vue&type=script&setup=true&lang=ts
 
-
-
-const _withScopeId = n => (_pushScopeId("data-v-28bfbaa3"), n = n(), _popScopeId(), n);
-
-const result_boxvue_type_script_setup_true_lang_ts_hoisted_1 = {
-  dir: "rtl",
-  class: "select-none"
-};
-
-const result_boxvue_type_script_setup_true_lang_ts_hoisted_2 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createTextVNode)(" نتایج: ");
 
 
 const result_boxvue_type_script_setup_true_lang_ts_default_ = {
@@ -4228,20 +4218,20 @@ const result_boxvue_type_script_setup_true_lang_ts_default_ = {
   props: {
     resultBoxClass: Array,
     resultBoxStyle: Object,
-    results: Array
+    results: {
+      type: Array,
+      default: () => []
+    }
   },
 
   setup(__props) {
-    const props = __props;
     return (_ctx, _cache) => {
       return (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementBlock)("details", {
         id: "result-box",
         style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.normalizeStyle)(__props.resultBoxStyle),
         class: (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.normalizeClass)([__props.resultBoxClass, "neshan-scroll-bar"]),
         open: ""
-      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementVNode)("summary", result_boxvue_type_script_setup_true_lang_ts_hoisted_1, [result_boxvue_type_script_setup_true_lang_ts_hoisted_2, __props.results ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementBlock)(external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.Fragment, {
-        key: 0
-      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createTextVNode)("   (" + (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.toDisplayString)(__props.results.length) + ") ", 1)], 64)) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createCommentVNode)("", true)]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementVNode)("ul", null, [((0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.openBlock)(true), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementBlock)(external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.Fragment, null, (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.renderList)(__props.results, item => {
+      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementVNode)("ul", null, [((0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.openBlock)(true), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementBlock)(external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.Fragment, null, (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.renderList)(__props.results, item => {
         return (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createBlock)(ResultItem, {
           key: '' + item.location.x + item.location.y,
           item: item
@@ -4253,10 +4243,10 @@ const result_boxvue_type_script_setup_true_lang_ts_default_ = {
 }));
 ;// CONCATENATED MODULE: ./src/components/result-box/index.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/result-box/index.vue?vue&type=style&index=0&id=28bfbaa3&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/result-box/index.vue?vue&type=style&index=0&id=da61f962&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/result-box/index.vue?vue&type=style&index=0&id=28bfbaa3&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/result-box/index.vue?vue&type=style&index=0&id=da61f962&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/result-box/index.vue
 
@@ -4265,7 +4255,7 @@ const result_boxvue_type_script_setup_true_lang_ts_default_ = {
 ;
 
 
-const result_box_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(result_boxvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-28bfbaa3"]])
+const result_box_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(result_boxvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-da61f962"]])
 
 /* harmony default export */ var result_box = (result_box_exports_);
 ;// CONCATENATED MODULE: ./src/parameters/index.ts
@@ -4318,7 +4308,7 @@ const createApi = token => {
     }
   };
 };
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=script&setup=true&lang=ts
 
 
 
@@ -4683,11 +4673,12 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
         tiles: reactiveTiles.value,
         mapType: mapType.value,
         "onUpdate:mapType": _cache[0] || (_cache[0] = $event => changeMapType($event)),
+        settingsBoxClass: __props.settingsBoxClass,
         traffic: trafficLayer.value,
         "onUpdate:traffic": _cache[1] || (_cache[1] = $event => trafficLayer.value = $event),
         poi: poiLayer.value,
         "onUpdate:poi": _cache[2] || (_cache[2] = $event => poiLayer.value = $event)
-      }, null, 8, ["tiles", "mapType", "traffic", "poi"])]) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createCommentVNode)("", true), !__props.hideSearchContainer ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.renderSlot)(_ctx.$slots, "search-container", {
+      }, null, 8, ["tiles", "mapType", "settingsBoxClass", "traffic", "poi"])]) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createCommentVNode)("", true), !__props.hideSearchContainer ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.renderSlot)(_ctx.$slots, "search-container", {
         key: 1
       }, () => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.createElementVNode)("div", Mapvue_type_script_setup_true_lang_ts_hoisted_2, [!__props.hideSearchBox ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.renderSlot)(_ctx.$slots, "search-box", {
         key: 0
@@ -4704,10 +4695,10 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 }));
 ;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=9d7ef92e&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=8440babc&lang=scss
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=9d7ef92e&lang=scss
+;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=8440babc&lang=scss
 
 ;// CONCATENATED MODULE: ./src/components/Map.vue
 
