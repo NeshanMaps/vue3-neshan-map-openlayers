@@ -15,12 +15,13 @@
         v-for="item in results"
         :key="'' + item.location.x + item.location.y"
         :item="item"
+        @mouseenter="emitHover(item)"
       />
     </ul>
   </details>
 </template>
 <script lang="ts">
-import { defineProps, PropType } from "vue";
+import { defineProps, PropType, defineEmits } from "vue";
 import { SearchItem } from "../Map.model";
 export default {
   name: "ResultBox",
@@ -36,6 +37,11 @@ defineProps({
     default: () => []
   },
 });
+
+const emits = defineEmits(['result-hover'])
+const emitHover = (item: SearchItem) => {
+  emits('result-hover', item)
+}
 </script>
 
 <style lang="scss" scoped>

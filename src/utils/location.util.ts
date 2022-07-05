@@ -6,18 +6,18 @@ import { GetTitleFromDataProps, CoordsObj, CoordsArr } from "../components/Map.m
  * @returns title
  */
 export const getTitleFromData = (data: GetTitleFromDataProps) => {
-    const mainTitle = data.place
-        ? data.place
-        : data.route_name
-            ? data.route_name
-            : "معبر بدون نام";
-    const fullTitle = data.neighbourhood
-        ? mainTitle + `، ${data.neighbourhood}`
-        : mainTitle;
-    return fullTitle;
+  const mainTitle = data.place
+    ? data.place
+    : data.route_name
+      ? data.route_name
+      : "معبر بدون نام";
+  const fullTitle = data.neighbourhood
+    ? mainTitle + `، ${data.neighbourhood}`
+    : mainTitle;
+  return fullTitle;
 };
 export const sanitizeLocation = (loc?: CoordsObj) => {
-    return loc ? loc instanceof Object ? [loc.longitude, loc.latitude] as CoordsArr : loc : null;
+  return loc ? loc instanceof Object ? [loc.longitude, loc.latitude] as CoordsArr : loc : null;
 };
 
 /**
@@ -27,23 +27,35 @@ export const sanitizeLocation = (loc?: CoordsObj) => {
  * @returns location array
  */
 export const getLocation = async () => {
-    const positionPromise: Promise<GeolocationPosition> = new Promise(
-        (resolve) => {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                resolve(pos);
-            });
-        }
-    );
-    const position = await positionPromise;
-    return (position && sanitizeLocation(position.coords)) || Object.values(createCoordsObject()) as CoordsArr;
+  const positionPromise: Promise<GeolocationPosition> = new Promise(
+    (resolve) => {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        resolve(pos);
+      });
+    }
+  )
+  const position = await positionPromise;
+  return (position && sanitizeLocation(position.coords)) || Object.values(createCoordsObject()) as CoordsArr;
 };
 
 /**
  * Create an object for a quick lat lng access
  */
 export const createCoordsObject = () => {
-    return {
-        longitude: 59.5870851,
-        latitude: 36.311559
-    }
+  return {
+    longitude: 59.5870851,
+    latitude: 36.311559
+  }
+}
+
+/**
+ * Gets OpenLayer Coordinates of the given feature
+ * @param feature 
+ * @returns Coords array
+ */
+export const getCoordsFromFeature = (feature: any): CoordsArr => {
+  return feature
+    .getGeometry()
+    .getCoordinates()
+    .slice(0, 2); //slice because it return array of 3 args idk why
 }

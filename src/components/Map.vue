@@ -23,7 +23,10 @@
           <SearchBox @submit="search" />
         </slot>
         <slot v-if="!hideResultBox" name="search-box">
-          <ResultBox :results="searchResults" />
+          <ResultBox
+            :results="searchResults"
+            @result-hover="handleResultHover"
+          />
         </slot>
       </div>
     </slot>
@@ -33,13 +36,9 @@
 <script lang="ts">
 declare const ol: any; // eslint-disable-line
 import { tiles, urls } from "../parameters";
-import {
-  createMapPoints,
-  getTitleFromData,
-  sanitizeLocation,
-  getLocation,
-  createMarkers,
-} from "../utils";
+import { sanitizeLocation, getLocation } from "../utils";
+import markersFunc from "../utils/markers.util";
+import eventsFunc from "../utils/events.util";
 import { createApi } from "../apis";
 import {
   defineProps,
@@ -47,16 +46,15 @@ import {
   PropType,
   ref,
   watch,
-  defineEmits,
   defineExpose,
   nextTick,
+  defineEmits
 } from "vue";
 import {
   CoordsObj,
   Api,
   CoordsArr,
   SearchProps,
-  CreateMarkersProps,
   MapType,
   SearchItem,
 } from "./Map.model";
@@ -134,8 +132,6 @@ const reactiveTiles = ref(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
 );
 
-const emit = defineEmits(["on-click", "on-zoom"]);
-
 const trafficLayer = ref(props.traffic);
 const poiLayer = ref(props.poi);
 watch(
@@ -212,107 +208,15 @@ const startMap = async () => {
   changeMapType(mapType.value);
 };
 /**
- * Sets the required events up for the map.
+ * Changes Map type
+ * @param type - Exact name of a given map name
  */
-const setupMapEvents = () => {
-  setupClickEvent();
-  setupZoomEvent();
-  setupMarkerHoverEvent();
-};
-const setupClickEvent = () => {
-  map.value.on("click", (event: any) => {
-    handleClickEvent(event);
-  });
-};
-const setupZoomEvent = () => {
-  let currentZoom: number = map.value.getView().getZoom();
-  map.value.on("moveend", () => {
-    const newZoom: number = map.value.getView().getZoom();
-    if (currentZoom != newZoom) {
-      emit("on-zoom", newZoom);
-      currentZoom = newZoom;
-    }
-  });
-};
-const setupMarkerHoverEvent = () => {
-  const container = document.getElementById("popup-container");
-  if (!container) return;
-  const overlay = new ol.Overlay({
-    element: container,
-    map: map.value,
-    positioning: "top-center",
-    offset: [0, -40],
-    // position: [6620159.9622328775, 4345916.668505147],
-  });
-  map.value.addOverlay(overlay);
-  map.value.on("pointermove", function (evt: any) {
-    const feature_onHover = map.value.forEachFeatureAtPixel(
-      evt.pixel,
-      (feature: any) => feature
-    );
-
-    if (feature_onHover) {
-      const featCoords = feature_onHover
-        .getGeometry()
-        .getCoordinates()
-        .slice(0, 2); //slice because it return array of 3 args idk why
-      const featText = feature_onHover.getProperties().text.trim();
-      if (featText) {
-        container.innerHTML = featText;
-        overlay.setPosition(featCoords);
-        map.value.addOverlay(overlay);
-        return;
-      }
-    }
-    overlay.setPosition(undefined);
-  });
+const changeMapType = (type: MapType) => {
+  map.value.setMapType(type);
+  mapType.value = type;
 };
 
-/**
- * After clicking on map, sets a marker on that coords.
- * Sends a request to api.reverse and labels the marker
- * Then emits an event named 'on-click'.
- * @param event - Map click event.
- */
-const handleClickEvent = async (event: any) => {
-  try {
-    map.value.removeLayer(mainMarker.value);
-    const point: CoordsArr = event.coordinate;
-    const { layer: marker, style } = addMarkers([{ coords: point, text: " " }]);
-    const stdPoint: CoordsArr = ol.proj.transform(
-      point,
-      "EPSG:3857",
-      "EPSG:4326"
-    );
-    mainMarkerCoords.value = stdPoint;
-    const data = await api.value.REVERSE(...stdPoint);
-    const text = getTitleFromData(data);
-    style.getText().setText(text);
-    marker.setStyle(style);
-    mainMarker.value = marker;
-    emit("on-click", { event, marker, stdPoint, data });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-/**
- * Receives an array of points and marks them on map.
- * @param points - Array of points.
- * @param point.coords - Coordinates of that point.
- * @param point.text - If you have a particular text for the point.
- * @param point.style - If you have a particular style for that point (only checks the first point for now).
- * @param point.color - If you have a particular color for that point (only checks the first point for now).
- * @param point.image - If you have a particular image for that point (only checks the first point for now).
- * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
- * @returns style and layer.
- */
-const addMarkers = (points: CreateMarkersProps, showPopup = false) => {
-  const { layer, style } = createMarkers(points, showPopup);
-  map.value.addLayer(layer);
-  return { layer, style };
-};
-
+const { createMapPoints, addMarkers, clearMarkerLayer } = markersFunc(map);
 const searchResults = ref<SearchItem[]>([]);
 /**
  * Does a neshan search based on given parameters
@@ -339,22 +243,16 @@ const search = async ({ term = "", coords }: SearchProps) => {
     console.log(error);
   }
 };
-/**
- * Removes markers from map
- */
-const clearMarkerLayer = (layer: any) => {
-  map.value.removeLayer(layer.value);
-  layer.value = null;
-};
 
-/**
- * Changes Map type
- * @param type - Exact name of a given map name
- */
-const changeMapType = (type: MapType) => {
-  map.value.setMapType(type);
-  mapType.value = type;
-};
+const eventsEmits = defineEmits(['on-zoom', 'on-click'])
+const { setupMapEvents, handleResultHover } = eventsFunc({
+  map,
+  mainMarker,
+  mainMarkerCoords,
+  searchMarkers,
+  api,
+  emits: eventsEmits
+});
 /**
  * Setups Map, adds serviceToken to api
  * and sanitizes center object
@@ -414,6 +312,9 @@ defineExpose({
   box-shadow: 0px 0px 14px 2px #000000;
   border-radius: 5px;
   padding: 2px 5px;
+}
+
+.ol-overlay-container {
   pointer-events: none;
 }
 </style>
