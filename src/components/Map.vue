@@ -28,6 +28,7 @@
       </div>
     </slot>
   </div>
+  <div id="popup-container"></div>
 </template>
 <script lang="ts">
 declare const ol: any; // eslint-disable-line
@@ -37,11 +38,7 @@ import {
   getTitleFromData,
   sanitizeLocation,
   getLocation,
-  createIcon,
-  createLayer,
-  createSource,
-  createStyle,
-  createText,
+  createMarkers,
 } from "../utils";
 import { createApi } from "../apis";
 import {
@@ -59,8 +56,7 @@ import {
   Api,
   CoordsArr,
   SearchProps,
-  AddMarkersProps,
-  AddMarkersPropsItem,
+  CreateMarkersProps,
   MapType,
   SearchItem,
 } from "./Map.model";
@@ -109,19 +105,14 @@ const props = defineProps({
   hideResultBox: Boolean,
 });
 
-const sanitizedCenter = ref<CoordsArr | null>(null);
-const map = ref<any>(null);
-const mainMarker = ref<any>(null);
-const mainMarkerCoords = ref<CoordsArr | null>(null);
-const searchMarkers = ref<any>(null);
-const api = ref<Api | null>(null);
-const mapType = ref(props.defaultType);
-const reactiveTiles = ref(
-  tiles.filter((tile) => props.mapTypes.includes(tile.title))
-);
-
-const emit = defineEmits(["on-click", "on-zoom"]);
-
+const api = ref<Api>(createApi(props.serviceKey));
+/**
+ * Sets the given token for api
+ * @param token
+ */
+const setToken = (token: string) => {
+  api.value = createApi(token);
+};
 /**
  * Whenever service token changes,
  * applies it to api
@@ -132,6 +123,18 @@ watch(
     setToken(nv);
   }
 );
+
+const sanitizedCenter = ref<CoordsArr | null>(sanitizeLocation(props.center));
+const map = ref<any>(null);
+const mainMarker = ref<any>(null);
+const mainMarkerCoords = ref<CoordsArr | null>(null);
+const searchMarkers = ref<any>(null);
+const mapType = ref(props.defaultType);
+const reactiveTiles = ref(
+  tiles.filter((tile) => props.mapTypes.includes(tile.title))
+);
+
+const emit = defineEmits(["on-click", "on-zoom"]);
 
 const trafficLayer = ref(props.traffic);
 const poiLayer = ref(props.poi);
@@ -212,16 +215,56 @@ const startMap = async () => {
  * Sets the required events up for the map.
  */
 const setupMapEvents = () => {
-  let currentZoom: number = map.value.getView().getZoom();
+  setupClickEvent();
+  setupZoomEvent();
+  setupMarkerHoverEvent();
+};
+const setupClickEvent = () => {
   map.value.on("click", (event: any) => {
     handleClickEvent(event);
   });
+};
+const setupZoomEvent = () => {
+  let currentZoom: number = map.value.getView().getZoom();
   map.value.on("moveend", () => {
     const newZoom: number = map.value.getView().getZoom();
     if (currentZoom != newZoom) {
       emit("on-zoom", newZoom);
       currentZoom = newZoom;
     }
+  });
+};
+const setupMarkerHoverEvent = () => {
+  const container = document.getElementById("popup-container");
+  if (!container) return;
+  const overlay = new ol.Overlay({
+    element: container,
+    map: map.value,
+    positioning: "top-center",
+    offset: [0, -40],
+    // position: [6620159.9622328775, 4345916.668505147],
+  });
+  map.value.addOverlay(overlay);
+  map.value.on("pointermove", function (evt: any) {
+    const feature_onHover = map.value.forEachFeatureAtPixel(
+      evt.pixel,
+      (feature: any) => feature
+    );
+
+    if (feature_onHover) {
+      const featCoords = feature_onHover
+        .getGeometry()
+        .getCoordinates()
+        .slice(0, 2); //slice because it return array of 3 args idk why
+      const featText = feature_onHover.getProperties().text.trim();
+      if (featText) {
+        container.innerHTML = featText;
+        overlay.setPosition(featCoords);
+        map.value.addOverlay(overlay);
+        return;
+      }
+    }
+    overlay.setPosition(undefined);
   });
 };
 
@@ -242,7 +285,7 @@ const handleClickEvent = async (event: any) => {
       "EPSG:4326"
     );
     mainMarkerCoords.value = stdPoint;
-    const data = await api.value!.REVERSE(...stdPoint);
+    const data = await api.value.REVERSE(...stdPoint);
     const text = getTitleFromData(data);
     style.getText().setText(text);
     marker.setStyle(style);
@@ -256,37 +299,18 @@ const handleClickEvent = async (event: any) => {
 /**
  * Receives an array of points and marks them on map.
  * @param points - Array of points.
- * @param point.text - Coordinates of that point.
+ * @param point.coords - Coordinates of that point.
  * @param point.text - If you have a particular text for the point.
- * @param point.layer - if you wanna apply them to your desired layer (only checks the first point for now).
  * @param point.style - If you have a particular style for that point (only checks the first point for now).
  * @param point.color - If you have a particular color for that point (only checks the first point for now).
  * @param point.image - If you have a particular image for that point (only checks the first point for now).
  * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
  * @returns style and layer.
  */
-const addMarkers = (points: AddMarkersProps) => {
-  const [
-    { layer, style, image, color, iconScale } = {} as AddMarkersPropsItem,
-  ] = points;
-  const features = points.map(
-    (point) =>
-      new ol.Feature({
-        geometry: new ol.geom.Point(point.coords),
-        text: point.text,
-      })
-  );
-  const _text = createText();
-  const _image = image || createIcon({ color, iconScale });
-  const _style = style || createStyle({ text: _text, image: _image });
-  const styleFunc = (feature: any) => {
-    _style.getText().setText(feature.get("text"));
-    return _style;
-  };
-  const source = createSource(features);
-  const _pinLayer = layer || createLayer({ style: styleFunc, source });
-  map.value.addLayer(_pinLayer);
-  return { layer: _pinLayer, style: _style };
+const addMarkers = (points: CreateMarkersProps, showPopup = false) => {
+  const { layer, style } = createMarkers(points, showPopup);
+  map.value.addLayer(layer);
+  return { layer, style };
 };
 
 const searchResults = ref<SearchItem[]>([]);
@@ -297,13 +321,14 @@ const searchResults = ref<SearchItem[]>([]);
  */
 const search = async ({ term = "", coords }: SearchProps) => {
   try {
-    const reliableCoords = (coords ||=
-      mainMarkerCoords.value || sanitizedCenter.value!);
-    const result = await api.value!.SEARCH(term, reliableCoords);
+    const reliableCoords =
+      coords || mainMarkerCoords.value || sanitizedCenter.value;
+    if (!reliableCoords) return;
+    const result = await api.value.SEARCH(term, reliableCoords);
     clearMarkerLayer(searchMarkers);
-    const points = createMapPoints(result.items);
     searchResults.value = result.items;
-    const { layer } = addMarkers(points);
+    const points = createMapPoints(result.items);
+    const { layer } = addMarkers(points, true);
     searchMarkers.value = layer;
     const extent = layer.getSource().getExtent();
     map.value.getView().fit(extent, {
@@ -323,13 +348,6 @@ const clearMarkerLayer = (layer: any) => {
 };
 
 /**
- * Sets the given token for api
- * @param token
- */
-const setToken = (token: string) => {
-  api.value = createApi(token);
-};
-/**
  * Changes Map type
  * @param type - Exact name of a given map name
  */
@@ -342,10 +360,6 @@ const changeMapType = (type: MapType) => {
  * and sanitizes center object
  */
 onMounted(() => {
-  if (props.serviceKey) {
-    setToken(props.serviceKey);
-  }
-  sanitizedCenter.value = sanitizeLocation(props.center);
   const scriptTag = importMap(urls.map);
   scriptTag.onload = () => {
     startMap();
@@ -392,5 +406,14 @@ defineExpose({
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
   supported by Chrome, Edge, Opera and Firefox */
+}
+
+#popup-container {
+  background-color: white;
+  -webkit-box-shadow: 0px 0px 14px 2px #000000;
+  box-shadow: 0px 0px 14px 2px #000000;
+  border-radius: 5px;
+  padding: 2px 5px;
+  pointer-events: none;
 }
 </style>

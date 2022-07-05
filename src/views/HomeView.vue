@@ -37,8 +37,6 @@
       @on-click="handleClick"
       poi
       traffic
-      hide-search-container
-      :map-types="['neshan', 'dreamy-gold']"
     />
   </div>
 </template>

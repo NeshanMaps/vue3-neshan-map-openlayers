@@ -82,8 +82,7 @@ export declare interface Api {
   SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>;
 }
 
-export declare interface AddMarkersPropsItem {
-  layer?: any;
+export declare interface CreateMarkersPropsItem {
   style?: any;
   image?: any;
   color?: IconColor;
@@ -91,4 +90,4 @@ export declare interface AddMarkersPropsItem {
   text?: string;
   coords?: CoordsArr;
 }
-export declare type AddMarkersProps = AddMarkersPropsItem[];
+export declare type CreateMarkersProps = CreateMarkersPropsItem[];
