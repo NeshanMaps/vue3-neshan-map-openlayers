@@ -26,6 +26,7 @@
           <ResultBox
             :results="searchResults"
             @result-hover="handleResultHover"
+            @result-click="handleResultClick"
           />
         </slot>
       </div>
@@ -36,9 +37,12 @@
 <script lang="ts">
 declare const ol: any; // eslint-disable-line
 import { tiles, urls } from "../parameters";
-import { sanitizeLocation, getLocation } from "../utils";
-import markersFunc from "../utils/markers.util";
-import eventsFunc from "../utils/events.util";
+import {
+  sanitizeLocation,
+  getLocation,
+  eventsFunc,
+  markersFunc,
+} from "../utils";
 import { createApi } from "../apis";
 import {
   defineProps,
@@ -48,7 +52,7 @@ import {
   watch,
   defineExpose,
   nextTick,
-  defineEmits
+  defineEmits,
 } from "vue";
 import {
   CoordsObj,
@@ -57,6 +61,9 @@ import {
   SearchProps,
   MapType,
   SearchItem,
+  ResultHoverCallback,
+  ResultClickCallback,
+  MarkersIconCallback,
 } from "./Map.model";
 export default {
   name: "NeshanMap",
@@ -101,6 +108,25 @@ const props = defineProps({
   hideSearchBox: Boolean,
   hideSearchContainer: Boolean,
   hideResultBox: Boolean,
+  resultHoverCallback: Function as PropType<ResultHoverCallback>,
+  resultClickCallback: Function as PropType<ResultClickCallback>,
+  markersIconCallback: Function as PropType<MarkersIconCallback>,
+  popupOnMarkerHover: {
+    type: Boolean,
+    default: true,
+  },
+  popupOnResultHover: {
+    type: Boolean,
+    default: true,
+  },
+  zoomOnMarkerClick: {
+    type: Boolean,
+    default: true,
+  },
+  zoomOnResultClick: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const api = ref<Api>(createApi(props.serviceKey));
@@ -204,7 +230,7 @@ const startMap = async () => {
     }),
   });
   map.value = newMap;
-  // Currently these is a problem with assigning different map type on initilization
+  // Currently there is a problem with assigning different map type on initilization
   changeMapType(mapType.value);
 };
 /**
@@ -216,7 +242,10 @@ const changeMapType = (type: MapType) => {
   mapType.value = type;
 };
 
-const { createMapPoints, addMarkers, clearMarkerLayer } = markersFunc(map);
+const { createMapPoints, addMarkers, clearMarkerLayer } = markersFunc({
+  map,
+  markersIconCallback: props.markersIconCallback,
+});
 const searchResults = ref<SearchItem[]>([]);
 /**
  * Does a neshan search based on given parameters
@@ -238,20 +267,27 @@ const search = async ({ term = "", coords }: SearchProps) => {
     map.value.getView().fit(extent, {
       size: map.value.getSize(),
       duration: 500,
+      minResolution: 1,
     });
   } catch (error) {
     console.log(error);
   }
 };
 
-const eventsEmits = defineEmits(['on-zoom', 'on-click'])
-const { setupMapEvents, handleResultHover } = eventsFunc({
+const eventsEmits = defineEmits(["on-zoom", "on-click"]);
+const { setupMapEvents, handleResultHover, handleResultClick } = eventsFunc({
   map,
   mainMarker,
   mainMarkerCoords,
   searchMarkers,
   api,
-  emits: eventsEmits
+  emits: eventsEmits,
+  resultHoverCallback: props.resultHoverCallback,
+  resultClickCallback: props.resultClickCallback,
+  zoomOnMarkerClick: props.zoomOnMarkerClick,
+  zoomOnResultClick: props.zoomOnResultClick,
+  popupOnMarkerHover: props.popupOnMarkerHover,
+  popupOnResultHover: props.popupOnResultHover,
 });
 /**
  * Setups Map, adds serviceToken to api
@@ -308,8 +344,8 @@ defineExpose({
 
 #popup-container {
   background-color: white;
-  -webkit-box-shadow: 0px 0px 14px 2px #000000;
-  box-shadow: 0px 0px 14px 2px #000000;
+  -webkit-box-shadow: 0px 0px 4px 2px #0000008d;
+  box-shadow: 0px 0px 4px 2px #00000046;
   border-radius: 5px;
   padding: 2px 5px;
 }

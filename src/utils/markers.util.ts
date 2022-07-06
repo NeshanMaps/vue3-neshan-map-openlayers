@@ -1,4 +1,4 @@
-declare const ol: any; // eslint-disable-line
+declare const ol: any;
 import {
   IconColor,
   SearchItem,
@@ -7,17 +7,35 @@ import {
   CreateStyleProps,
   CreateLayerProps,
   CreateMarkersProps,
-  CreateMarkersPropsItem
+  CreateMarkersPropsItem,
+  MarkersMixinProps,
 } from "../components/Map.model";
 
-export default function (map: { value: any }) {
+export function markersFunc({ map, markersIconCallback }: MarkersMixinProps) {
   const markerUrls = {
     red: "https://img.icons8.com/color/344/marker--v1.png",
     // blue: "https://img.icons8.com/ultraviolet/344/marker.png",
     blue: "https://cdn-icons.flaticon.com/png/512/5616/premium/5616461.png?token=exp=1657019697~hmac=76f95f6acf11241e906b5fc7fcaa5d59",
   };
 
-  const createText = (): any => { // eslint-disable-line
+  /**
+   * Receives an array of points and returns an array of features.
+   * @param points - Array of points.
+   * @param point.text - If you have a particular text for the point.
+   * @returns array of features.
+   */
+  const createFeaturesFromPoints = (points: CreateMarkersProps) => {
+    return points.map(
+      (point) =>
+        new ol.Feature({
+          geometry: new ol.geom.Point(point.coords),
+          text: point.text,
+          iconProps: markersIconCallback && markersIconCallback(point),
+        })
+    );
+  };
+
+  const createText = (): any => {
     return new ol.style.Text({
       overflow: true,
       scale: 1.6,
@@ -34,14 +52,16 @@ export default function (map: { value: any }) {
   const createIcon = ({
     color = "red",
     iconScale = 0.1,
-  }: CreateIconProps = {}): any => { // eslint-disable-line
+    src = markerUrls[color],
+    anchor = [0.5, 1],
+  }: CreateIconProps = {}): any => {
     return new ol.style.Icon({
-      src: markerUrls[color],
+      src,
       scale: iconScale,
-      anchor: [0.5, 1],
+      anchor,
     });
   };
-  const createStyle = ({ image, text }: CreateStyleProps): any => { // eslint-disable-line
+  const createStyle = ({ image, text }: CreateStyleProps): any => {
     return new ol.style.Style({
       image: image,
       text: text,
@@ -53,7 +73,7 @@ export default function (map: { value: any }) {
    * @param features
    * @returns ol source
    */
-  const createSource = (features: any): any => { // eslint-disable-line
+  const createSource = (features: any): any => {
     return new ol.source.Vector({
       features,
     });
@@ -93,6 +113,7 @@ export default function (map: { value: any }) {
         text: item.title,
         color: color as IconColor,
         iconScale: 0.06,
+        originalItem: item,
       };
     });
   };
@@ -106,43 +127,48 @@ export default function (map: { value: any }) {
    * @param point.color - If you have a particular color for that point (only checks the first point for now).
    * @param point.image - If you have a particular image for that point (only checks the first point for now).
    * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
+   * @param point.originalItem - original item from neshan search result
+   * @param showPopup - If you want show the text as popup
    * @returns style and layer.
    */
   const createMarkers = (points: CreateMarkersProps, showPopup = false) => {
-    const [
-      { style, image, color, iconScale } = {} as CreateMarkersPropsItem,
-    ] = points;
-    const features = points.map(
-      (point) =>
-        new ol.Feature({
-          geometry: new ol.geom.Point(point.coords),
-          text: point.text,
-        })
-    );
+    const [{ style, image, color, iconScale } = {} as CreateMarkersPropsItem] =
+      points;
+    const features = createFeaturesFromPoints(points);
     const _text = createText();
     const _image = image || createIcon({ color, iconScale });
     const _style = style || createStyle({ text: _text, image: _image });
-    const styleFunc = (feature: any) => {
-      _style.getText().setText(feature.get("text"));
-      return _style;
-    };
-    const finalStyle = showPopup ? _style : styleFunc
+    const styleFunc = styleFuncGen(_style)
+    const finalStyle = showPopup ? _style : styleFunc;
     const source = createSource(features);
     const _pinLayer = createLayer({ style: finalStyle, source });
     return { layer: _pinLayer, style: _style };
+  };
+
+  const styleFuncGen = (style: any) => {
+    return (feature: any) => {
+      style.getText().setText(feature.get("text"));
+      const iconProps = feature.get("iconProps")
+      if (iconProps) {
+        style.setImage(createIcon(feature.get("iconProps")));
+      }
+      return style;
+    };
   }
 
   /**
- * Receives an array of points and marks them on map.
- * @param points - Array of points.
- * @param point.coords - Coordinates of that point.
- * @param point.text - If you have a particular text for the point.
- * @param point.style - If you have a particular style for that point (only checks the first point for now).
- * @param point.color - If you have a particular color for that point (only checks the first point for now).
- * @param point.image - If you have a particular image for that point (only checks the first point for now).
- * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
- * @returns style and layer.
- */
+   * Receives an array of points and marks them on map.
+   * @param points - Array of points.
+   * @param point.coords - Coordinates of that point.
+   * @param point.text - If you have a particular text for the point.
+   * @param point.style - If you have a particular style for that point (only checks the first point for now).
+   * @param point.color - If you have a particular color for that point (only checks the first point for now).
+   * @param point.image - If you have a particular image for that point (only checks the first point for now).
+   * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
+   * @param point.originalItem - original item from neshan search result
+   * @param showPopup - If you want show the text as popup
+   *  @returns style and layer.
+   */
   const addMarkers = (points: CreateMarkersProps, showPopup = false) => {
     const { layer, style } = createMarkers(points, showPopup);
     map.value.addLayer(layer);
@@ -150,8 +176,8 @@ export default function (map: { value: any }) {
   };
 
   /**
- * Removes markers from map
- */
+   * Removes markers from map
+   */
   const clearMarkerLayer = (layer: any) => {
     map.value.removeLayer(layer.value);
     layer.value = null;
@@ -166,7 +192,6 @@ export default function (map: { value: any }) {
     createMapPoints,
     createMarkers,
     addMarkers,
-    clearMarkerLayer
-  }
+    clearMarkerLayer,
+  };
 }
-

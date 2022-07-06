@@ -1,3 +1,5 @@
+import { Ref } from "vue";
+
 export declare type NuString = null | string;
 export declare type MapType =
   | "neshan"
@@ -6,16 +8,19 @@ export declare type MapType =
   | "standard-night"
   | "standard-day"
   | "osm-bright";
+export declare type DoubleNums = [number, number];
 
 export declare interface Tile {
-  title: MapType
-  url: string
+  title: MapType;
+  url: string;
 }
 
 export declare type IconColor = "red" | "blue";
 export declare interface CreateIconProps {
   color?: IconColor;
   iconScale?: number;
+  src?: string;
+  anchor?: DoubleNums;
 }
 
 export declare interface CreateStyleProps {
@@ -39,7 +44,7 @@ export declare interface CoordsObj {
   latitude: number;
   longitude: number;
 }
-export declare type CoordsArr = [number, number];
+export declare type CoordsArr = DoubleNums;
 
 export declare interface SearchItem {
   category: string;
@@ -91,3 +96,33 @@ export declare interface CreateMarkersPropsItem {
   coords?: CoordsArr;
 }
 export declare type CreateMarkersProps = CreateMarkersPropsItem[];
+
+export declare interface ChangeOverlayStatsProps {
+  coords: CoordsArr;
+  text: string;
+}
+
+export declare type ResultHoverCallback = (...[arg]: any[]) => any;
+export declare type ResultClickCallback = (...[arg]: any[]) => any;
+export declare type MarkersIconCallback = (
+  points: CreateMarkersPropsItem
+) => CreateIconProps;
+
+export declare interface EventsMixinProps {
+  map: Ref<any>;
+  mainMarker: Ref<any>;
+  mainMarkerCoords: Ref<CoordsArr | null>;
+  searchMarkers: Ref<any>;
+  api: Ref<Api>;
+  emits: (event: "on-zoom" | "on-click", arg: any) => void;
+  resultHoverCallback?: ResultHoverCallback;
+  resultClickCallback?: ResultClickCallback;
+  popupOnMarkerHover: boolean;
+  popupOnResultHover: boolean;
+  zoomOnMarkerClick: boolean;
+  zoomOnResultClick: boolean;
+}
+export declare interface MarkersMixinProps {
+  map: Ref<any>
+  markersIconCallback?: MarkersIconCallback
+}

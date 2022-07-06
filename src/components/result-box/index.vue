@@ -16,6 +16,7 @@
         :key="'' + item.location.x + item.location.y"
         :item="item"
         @mouseenter="emitHover(item)"
+        @click="emitClick(item)"
       />
     </ul>
   </details>
@@ -38,9 +39,12 @@ defineProps({
   },
 });
 
-const emits = defineEmits(['result-hover'])
+const emits = defineEmits(['result-hover', 'result-click'])
 const emitHover = (item: SearchItem) => {
   emits('result-hover', item)
+}
+const emitClick = (item: SearchItem) => {
+  emits('result-click', item)
 }
 </script>
 

@@ -1,21 +1,34 @@
-declare const ol: any
-import { Api, CoordsArr, SearchItem } from "@/components/Map.model";
-import { Ref } from "vue";
+declare const ol: any;
+import {
+  ChangeOverlayStatsProps,
+  CoordsArr,
+  EventsMixinProps,
+  SearchItem,
+} from "@/components/Map.model";
+import { ref } from "vue";
 import { getCoordsFromFeature, getTitleFromData } from "./location.util";
-import markersFunc from "./markers.util"
+import { markersFunc } from ".";
 
-export default function ({ map, mainMarker, mainMarkerCoords, searchMarkers, api, emits }: {
-  map: Ref<any>,
-  mainMarker: Ref<any>,
-  mainMarkerCoords: Ref<CoordsArr | null>,
-  searchMarkers: Ref<any>,
-  api: Ref<Api>,
-  emits: (event: "on-zoom" | "on-click", arg: any) => void
-}) {
-  
+export function eventsFunc({
+  map,
+  mainMarker,
+  mainMarkerCoords,
+  searchMarkers,
+  api,
+  emits,
+  resultHoverCallback,
+  resultClickCallback,
+  zoomOnMarkerClick,
+  zoomOnResultClick,
+  popupOnMarkerHover,
+  popupOnResultHover
+}: EventsMixinProps) {
+  const container = ref<HTMLElement | null>(null);
+  const overlay = ref<any>();
+
   /**
- * Sets the required events up for the map.
- */
+   * Sets the required events up for the map.
+   */
   const setupMapEvents = () => {
     setupClickEvent();
     setupZoomEvent();
@@ -37,47 +50,58 @@ export default function ({ map, mainMarker, mainMarkerCoords, searchMarkers, api
     });
   };
   const setupMarkerHoverEvent = () => {
-    const container = document.getElementById("popup-container");
-    if (!container) return;
-    const overlay = new ol.Overlay({
-      element: container,
-      map: map.value,
-      positioning: "top-center",
-      offset: [0, -40],
-    });
-    map.value.addOverlay(overlay);
+    container.value = document.getElementById("popup-container");
+    overlay.value = createOverlay(false);
+    map.value.addOverlay(overlay.value);
     map.value.on("pointermove", function (evt: any) {
-      const feature_onHover = map.value.forEachFeatureAtPixel(
+      const hoveredFeature = map.value.forEachFeatureAtPixel(
         evt.pixel,
         (feature: any) => feature
       );
-
-      if (feature_onHover) {
-        const featCoords = getCoordsFromFeature(feature_onHover);
-        const featText = feature_onHover.getProperties().text.trim();
+      if (hoveredFeature) {
+        const { featCoords, featText } =
+          getCoordsAndTextFromFeature(hoveredFeature);
         if (featText) {
-          container.innerHTML = featText;
-          overlay.setPosition(featCoords);
-          map.value.addOverlay(overlay);
+          if (popupOnMarkerHover) {
+            changeOverlayStats({ text: featText, coords: featCoords });
+          }
           return;
         }
       }
-      overlay.setPosition(undefined);
+      if (!overlay.value.get("persistant")) {
+        overlay.value.setPosition(undefined);
+      }
     });
   };
 
-  const { addMarkers } = markersFunc(map)
+  const { addMarkers } = markersFunc({ map });
   /**
    * After clicking on map, sets a marker on that coords.
    * Sends a request to api.reverse and labels the marker
    * Then emits an event named 'on-click'.
    * @param event - Map click event.
    */
-  const handleClickEvent = async (event: any) => {
-    try {
-      map.value.removeLayer(mainMarker.value);
+  const handleClickEvent = (event: any) => {
+    map.value.removeLayer(mainMarker.value);
+    const selectedFeature = map.value.forEachFeatureAtPixel(
+      event.pixel,
+      (feature: any) => feature
+    );
+    if (selectedFeature) {
+      if (zoomOnMarkerClick) {
+        zoomToFeature(selectedFeature);
+      }
+    } else {
       const point: CoordsArr = event.coordinate;
-      const { layer: marker, style } = addMarkers([{ coords: point, text: " " }]);
+      reverseOnPoint(point);
+    }
+  };
+
+  const reverseOnPoint = async (point: CoordsArr) => {
+    try {
+      const { layer: marker, style } = addMarkers([
+        { coords: point, text: " " },
+      ]);
       const stdPoint: CoordsArr = ol.proj.transform(
         point,
         "EPSG:3857",
@@ -94,14 +118,73 @@ export default function ({ map, mainMarker, mainMarkerCoords, searchMarkers, api
       console.log(error);
     }
   };
+
+  const zoomToFeature = (feature: any) => {
+    map.value.getView().fit(feature.getGeometry(), {
+      size: map.value.getSize(),
+      duration: 500,
+      minResolution: 0.5,
+    });
+  };
+
   const handleResultHover = (item: SearchItem) => {
     const features: any[] = searchMarkers.value.getSource().getFeatures();
     const foundFeature = features.find(
       (feat) => feat.getProperties().text === item.title
     );
     if (foundFeature) {
-      console.log(foundFeature);
+      if (popupOnResultHover) {
+        const { featText, featCoords } =
+          getCoordsAndTextFromFeature(foundFeature);
+        changeOverlayStats({ coords: featCoords, text: featText });
+      }
+      if (resultHoverCallback) {
+        resultHoverCallback({ map: map.value, feature: foundFeature })
+      }
     }
+  };
+
+  const handleResultClick = (item: SearchItem) => {
+    const foundFeature = findFeatureByTitle(item.title);
+    if (foundFeature) {
+      if (zoomOnResultClick) {
+        zoomToFeature(foundFeature);
+      }
+      if (resultClickCallback) {
+        resultClickCallback({ map: map.value, feature: foundFeature })
+      }
+    }
+  };
+
+  const findFeatureByTitle = (title: string) => {
+    const features: any[] = searchMarkers.value.getSource().getFeatures();
+    return features.find((feat) => feat.getProperties().text === title);
+  };
+
+  const createOverlay = (persistant = false) => {
+    const overlay = new ol.Overlay({
+      element: container.value,
+      map: map.value,
+      positioning: "top-center",
+      offset: [0, -50],
+    });
+    overlay.set("persistant", persistant); // An attr to know that we should remove it on following hovers
+    return overlay;
+  };
+
+  const getCoordsAndTextFromFeature = (feature: any) => {
+    const featCoords = getCoordsFromFeature(feature);
+    const featText = feature.getProperties().text.trim();
+    return {
+      featCoords,
+      featText,
+    };
+  };
+
+  const changeOverlayStats = ({ coords, text }: ChangeOverlayStatsProps) => {
+    if (!container.value) return;
+    container.value.innerHTML = text;
+    overlay.value.setPosition(coords);
   };
 
   return {
@@ -110,6 +193,7 @@ export default function ({ map, mainMarker, mainMarkerCoords, searchMarkers, api
     setupZoomEvent,
     setupMarkerHoverEvent,
     handleClickEvent,
-    handleResultHover
-  }
+    handleResultHover,
+    handleResultClick,
+  };
 }
