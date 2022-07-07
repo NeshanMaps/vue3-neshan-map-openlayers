@@ -52,7 +52,7 @@ export function eventsFunc({
   };
   const setupMarkerHoverEvent = () => {
     container.value = document.getElementById("popup-container");
-    overlay.value = createOverlay(false);
+    overlay.value = createOverlay();
     map.value.addOverlay(overlay.value);
     map.value.on("pointermove", function (evt: any) {
       const hoveredFeature = map.value.forEachFeatureAtPixel(
@@ -64,7 +64,7 @@ export function eventsFunc({
           getCoordsAndTextFromFeature(hoveredFeature);
         if (featText && featText.length === 1) {
           if (popupOnMarkerHover) {
-            changeOverlayStats({ text: featText, coords: featCoords });
+            changeOverlayStats({ text: featText[0], coords: featCoords });
           }
           return;
         }
@@ -101,7 +101,7 @@ export function eventsFunc({
   const reverseOnPoint = async (point: CoordsArr) => {
     try {
       const { layer: marker, style } = addMarkers([
-        { coords: point, text: " " },
+        { coords: point, text: "" },
       ]);
       const stdPoint: CoordsArr = ol.proj.transform(
         point,
@@ -138,7 +138,8 @@ export function eventsFunc({
     map.value.getView().fit(extent, {
       size: map.value.getSize(),
       duration: 500,
-      minResolution: 0.5,
+      minResolution: 0.3,
+      padding: [50, 50, 50, 50]
     });
   }
 
@@ -168,10 +169,10 @@ export function eventsFunc({
   };
 
   const findFeatureByTitle = (title: string) => {
-    const features: any[] = searchMarkers.value.getSource().getFeatures();
-    return features.find(
-      (feat) =>
-        feat.getProperties().text && feat.getProperties().text.includes(title)
+    const clusters: any[] = searchMarkers.value.getSource().getFeatures();
+    return clusters.find(
+      (cluster) =>
+        cluster.get('features').find((feat: any) => feat.get('text') === title)
     );
   };
 
@@ -188,7 +189,7 @@ export function eventsFunc({
 
   const getCoordsAndTextFromFeature = (feature: any) => {
     const featCoords = getCoordsFromFeature(feature);
-    const featText = feature.getProperties().text;
+    const featText: string[] = feature.getProperties().text;
     return {
       featCoords,
       featText,
