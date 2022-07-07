@@ -76,6 +76,7 @@ export function markersFunc({ map, markersIconCallback }: MarkersMixinProps) {
   const createSource = (features: any): any => {
     return new ol.source.Vector({
       features,
+      projection: map.value.getView().projection // Is it neccesary?
     });
   };
 
@@ -138,16 +139,18 @@ export function markersFunc({ map, markersIconCallback }: MarkersMixinProps) {
     const _text = createText();
     const _image = image || createIcon({ color, iconScale });
     const _style = style || createStyle({ text: _text, image: _image });
-    const styleFunc = styleFuncGen(_style)
-    const finalStyle = showPopup ? _style : styleFunc;
-    const source = createSource(features);
-    const _pinLayer = createLayer({ style: finalStyle, source });
-    return { layer: _pinLayer, style: _style };
+    // const styleFunc = styleFuncGen({ style: _style, hardText: showPopup })
+    // const source = createSource(features);
+    // const _pinLayer = createLayer({ style: styleFunc, source });
+    const clusterLayer = createClusterLayer(features)
+    return { layer: clusterLayer, style: _style };
   };
 
-  const styleFuncGen = (style: any) => {
+  const styleFuncGen = ({ style, hardText = false }: { style: any, hardText?: boolean }) => {
     return (feature: any) => {
-      style.getText().setText(feature.get("text"));
+      if (hardText) {
+        style.getText().setText(feature.get("text"));
+      }
       const iconProps = feature.get("iconProps")
       if (iconProps) {
         style.setImage(createIcon(feature.get("iconProps")));
@@ -182,6 +185,75 @@ export function markersFunc({ map, markersIconCallback }: MarkersMixinProps) {
     map.value.removeLayer(layer.value);
     layer.value = null;
   };
+
+  const createClusterSource = (features: any) => {
+    return new ol.source.Cluster({
+      distance: 30,
+      minDistance: 30,
+      source: createSource(features)
+    })
+  }
+
+  const createClusterText = (size: number) => {
+    return new ol.style.Text({
+      text: size.toString(),
+      font: 'bold 20px serif',
+      fill: new ol.style.Fill({
+        color: [0, 0, 0, 1],
+      }),
+    })
+  }
+
+  const createClusterCircle = () => {
+    return new ol.style.Circle({
+      radius: 20,
+      stroke: new ol.style.Stroke({
+        color: [255, 255, 255, 0.7],
+        width: 6,
+      }),
+      fill: new ol.style.Fill({
+        color: [0, 153, 255, 0.7],
+      }),
+    })
+  }
+
+  const createClusterStyle = (size: number) => {
+    return new ol.style.Style({
+      image: createClusterCircle(),
+      text: createClusterText(size),
+    })
+  }
+
+  const createClusterStyleFunc = (styleCache: { [s: string]: any }) => {
+    return function (clusterFeature: any) {
+      const innerFeatures = clusterFeature.get('features')
+      clusterFeature.set('text', innerFeatures.map((feat: any) => feat.get('text')))
+      const size = innerFeatures.length;
+      let style = styleCache[size];
+      if (!style) {
+        if (size !== 1) {
+          style = createClusterStyle(size);
+          styleCache[size] = style;
+        } else {
+          const _text = createText();
+          const _image = createIcon({ color: 'blue', iconScale: 0.07 });
+          const _style = createStyle({ text: _text, image: _image });
+          const styleFunc = styleFuncGen({ style: _style })(innerFeatures[0])
+          style = styleFunc
+        }
+      }
+      return style;
+    }
+  }
+
+  const createClusterLayer = (features: any[]) => {
+    const styleCache: { [s: string]: any } = {};
+    const cluster_layer = new ol.layer.Vector({
+      source: createClusterSource(features),
+      style: createClusterStyleFunc(styleCache)
+    });
+    return cluster_layer
+  }
 
   return {
     createText,

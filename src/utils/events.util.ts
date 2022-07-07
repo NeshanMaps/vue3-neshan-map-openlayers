@@ -3,6 +3,7 @@ import {
   ChangeOverlayStatsProps,
   CoordsArr,
   EventsMixinProps,
+  Extent,
   SearchItem,
 } from "@/components/Map.model";
 import { ref } from "vue";
@@ -21,7 +22,7 @@ export function eventsFunc({
   zoomOnMarkerClick,
   zoomOnResultClick,
   popupOnMarkerHover,
-  popupOnResultHover
+  popupOnResultHover,
 }: EventsMixinProps) {
   const container = ref<HTMLElement | null>(null);
   const overlay = ref<any>();
@@ -61,7 +62,7 @@ export function eventsFunc({
       if (hoveredFeature) {
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature);
-        if (featText) {
+        if (featText && featText.length === 1) {
           if (popupOnMarkerHover) {
             changeOverlayStats({ text: featText, coords: featCoords });
           }
@@ -89,7 +90,7 @@ export function eventsFunc({
     );
     if (selectedFeature) {
       if (zoomOnMarkerClick) {
-        zoomToFeature(selectedFeature);
+        zoomToCluster(selectedFeature);
       }
     } else {
       const point: CoordsArr = event.coordinate;
@@ -108,38 +109,48 @@ export function eventsFunc({
         "EPSG:4326"
       );
       mainMarkerCoords.value = stdPoint;
+      mainMarker.value = marker;
       const data = await api.value.REVERSE(...stdPoint);
       const text = getTitleFromData(data);
       style.getText().setText(text);
       marker.setStyle(style);
-      mainMarker.value = marker;
       emits("on-click", { event, marker, stdPoint, data });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const zoomToFeature = (feature: any) => {
-    map.value.getView().fit(feature.getGeometry(), {
+  const zoomToCluster = (cluster: any) => {
+    const extent = getClusterExtent(cluster)
+    zoomToExtent(extent)
+  };
+  
+  const getClusterExtent = (cluster: any) => {
+    const originalFeatures = cluster.get('features');
+    const extent: Extent = new ol.extent.createEmpty();
+    originalFeatures.forEach((f: any) => {
+      ol.extent.extend(extent, f.getGeometry().getExtent());
+    });
+    return extent
+  }
+
+  const zoomToExtent = (extent: Extent) => {
+    map.value.getView().fit(extent, {
       size: map.value.getSize(),
       duration: 500,
       minResolution: 0.5,
     });
-  };
+  }
 
   const handleResultHover = (item: SearchItem) => {
-    const features: any[] = searchMarkers.value.getSource().getFeatures();
-    const foundFeature = features.find(
-      (feat) => feat.getProperties().text === item.title
-    );
+    const foundFeature = findFeatureByTitle(item.title);
     if (foundFeature) {
       if (popupOnResultHover) {
-        const { featText, featCoords } =
-          getCoordsAndTextFromFeature(foundFeature);
-        changeOverlayStats({ coords: featCoords, text: featText });
+        const { featCoords } = getCoordsAndTextFromFeature(foundFeature);
+        changeOverlayStats({ coords: featCoords, text: item.title });
       }
       if (resultHoverCallback) {
-        resultHoverCallback({ map: map.value, feature: foundFeature })
+        resultHoverCallback({ map: map.value, feature: foundFeature });
       }
     }
   };
@@ -148,17 +159,20 @@ export function eventsFunc({
     const foundFeature = findFeatureByTitle(item.title);
     if (foundFeature) {
       if (zoomOnResultClick) {
-        zoomToFeature(foundFeature);
+        zoomToCluster(foundFeature);
       }
       if (resultClickCallback) {
-        resultClickCallback({ map: map.value, feature: foundFeature })
+        resultClickCallback({ map: map.value, feature: foundFeature });
       }
     }
   };
 
   const findFeatureByTitle = (title: string) => {
     const features: any[] = searchMarkers.value.getSource().getFeatures();
-    return features.find((feat) => feat.getProperties().text === title);
+    return features.find(
+      (feat) =>
+        feat.getProperties().text && feat.getProperties().text.includes(title)
+    );
   };
 
   const createOverlay = (persistant = false) => {
@@ -174,7 +188,7 @@ export function eventsFunc({
 
   const getCoordsAndTextFromFeature = (feature: any) => {
     const featCoords = getCoordsFromFeature(feature);
-    const featText = feature.getProperties().text.trim();
+    const featText = feature.getProperties().text;
     return {
       featCoords,
       featText,
@@ -195,5 +209,6 @@ export function eventsFunc({
     handleClickEvent,
     handleResultHover,
     handleResultClick,
+    zoomToExtent
   };
 }

@@ -9,6 +9,9 @@ export declare type MapType =
   | "standard-day"
   | "osm-bright";
 export declare type DoubleNums = [number, number];
+export declare type QuadrupleNums = [number, number, number, number]
+
+export declare type Extent = QuadrupleNums
 
 export declare interface Tile {
   title: MapType;

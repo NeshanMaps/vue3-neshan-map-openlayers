@@ -263,19 +263,17 @@ const search = async ({ term = "", coords }: SearchProps) => {
     const points = createMapPoints(result.items);
     const { layer } = addMarkers(points, true);
     searchMarkers.value = layer;
-    const extent = layer.getSource().getExtent();
-    map.value.getView().fit(extent, {
-      size: map.value.getSize(),
-      duration: 500,
-      minResolution: 1,
-    });
+    setTimeout(() => { // Apparently it takse some sync time to cluster the source
+      const extent = layer.getSource().getExtent();
+      zoomToExtent(extent)
+    }, 200);
   } catch (error) {
     console.log(error);
   }
 };
 
 const eventsEmits = defineEmits(["on-zoom", "on-click"]);
-const { setupMapEvents, handleResultHover, handleResultClick } = eventsFunc({
+const { setupMapEvents, handleResultHover, handleResultClick, zoomToExtent } = eventsFunc({
   map,
   mainMarker,
   mainMarkerCoords,
