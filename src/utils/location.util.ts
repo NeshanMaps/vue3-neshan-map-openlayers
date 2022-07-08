@@ -16,6 +16,12 @@ export const getTitleFromData = (data: GetTitleFromDataProps) => {
     : mainTitle;
   return fullTitle;
 };
+
+/**
+ * Get the object of location and turns it into array
+ * @param loc - location object
+ * @returns 
+ */
 export const sanitizeLocation = (loc?: CoordsObj) => {
   return loc ? loc instanceof Object ? [loc.longitude, loc.latitude] as CoordsArr : loc : null;
 };

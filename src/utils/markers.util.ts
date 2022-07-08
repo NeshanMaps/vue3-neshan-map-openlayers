@@ -224,6 +224,14 @@ export function markersFunc({ map, markersIconCallback }: MarkersMixinProps) {
     })
   }
 
+  /**
+   * Creates a style function for the clusters.
+   * That if they are pointing to a single marker
+   * the icon shown is the icon for single markers.
+   * @param styleCache - An object to remember the set styles
+   * @param showPopup - whether it should show a popup on hover or is a static text
+   * @returns 
+   */
   const createClusterStyleFunc = (styleCache: { [s: string]: any }, showPopup: boolean) => {
     return (clusterFeature: any) => {
       const innerFeatures = clusterFeature.get('features')

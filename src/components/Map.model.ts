@@ -129,3 +129,7 @@ export declare interface MarkersMixinProps {
   map: Ref<any>
   markersIconCallback?: MarkersIconCallback
 }
+
+export declare interface ZoomToExtentOptions {
+  duration?: number
+}

@@ -5,6 +5,7 @@ import {
   EventsMixinProps,
   Extent,
   SearchItem,
+  ZoomToExtentOptions,
 } from "@/components/Map.model";
 import { ref } from "vue";
 import { getCoordsFromFeature, getTitleFromData } from "./location.util";
@@ -35,11 +36,15 @@ export function eventsFunc({
     setupZoomEvent();
     setupMarkerHoverEvent();
   };
+
   const setupClickEvent = () => {
     map.value.on("click", (event: any) => {
       handleClickEvent(event);
     });
   };
+  /**
+   * Emits the new zoom value
+   */
   const setupZoomEvent = () => {
     let currentZoom: number = map.value.getView().getZoom();
     map.value.on("moveend", () => {
@@ -50,6 +55,9 @@ export function eventsFunc({
       }
     });
   };
+  /**
+   * Sets up hover event for marker popups
+   */
   const setupMarkerHoverEvent = () => {
     container.value = document.getElementById("popup-container");
     overlay.value = createOverlay();
@@ -77,8 +85,10 @@ export function eventsFunc({
 
   const { addMarkers } = markersFunc({ map });
   /**
-   * After clicking on map, sets a marker on that coords.
+   * After clicking on map, if there is no feature in there,
+   * sets a marker on that coords.
    * Sends a request to api.reverse and labels the marker
+   * else it zooms and expands on that feature
    * Then emits an event named 'on-click'.
    * @param event - Map click event.
    */
@@ -98,6 +108,12 @@ export function eventsFunc({
     }
   };
 
+  /**
+   * Places a marker on a point on ol map
+   * Sends a reverse request on that position
+   * and adds a title based on returned value
+   * @param point - OL Coords
+   */
   const reverseOnPoint = async (point: CoordsArr) => {
     try {
       const { layer: marker, style } = addMarkers([
@@ -120,11 +136,20 @@ export function eventsFunc({
     }
   };
 
+  /**
+   * Take the cluster and zooms on it
+   * @param cluster
+   */
   const zoomToCluster = (cluster: any) => {
     const extent = getClusterExtent(cluster)
     zoomToExtent(extent)
   };
-  
+
+  /**
+   * Gets the sufficent extent to zoom on a cluster or marker
+   * @param cluster 
+   * @returns extent
+   */
   const getClusterExtent = (cluster: any) => {
     const originalFeatures = cluster.get('features');
     const extent: Extent = new ol.extent.createEmpty();
@@ -134,15 +159,26 @@ export function eventsFunc({
     return extent
   }
 
-  const zoomToExtent = (extent: Extent) => {
+  /**
+   * Gets the desired extent and zooms on it
+   * @param extent - Extent of the area to zoom on
+   * @param options.duration - Zooming duration 
+   */
+  const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
     map.value.getView().fit(extent, {
       size: map.value.getSize(),
-      duration: 500,
+      duration: options?.duration || 500,
       minResolution: 0.3,
       padding: [50, 50, 50, 50]
     });
   }
 
+  /**
+   * Shows a popup on the relating marker
+   * whenever mouse overs on its result on result box
+   * also can get a callBack from user
+   * @param item - Search item
+   */
   const handleResultHover = (item: SearchItem) => {
     const foundFeature = findFeatureByTitle(item.title);
     if (foundFeature) {
@@ -156,6 +192,12 @@ export function eventsFunc({
     }
   };
 
+  /**
+   * Zooms on the relating marker
+   * whenever its result on result box
+   * gets clicked
+   * @param item - Search item
+   */
   const handleResultClick = (item: SearchItem) => {
     const foundFeature = findFeatureByTitle(item.title);
     if (foundFeature) {
@@ -168,6 +210,11 @@ export function eventsFunc({
     }
   };
 
+  /**
+   * Takes the title of a marker and gives its surrounding cluster
+   * @param title - title of wanted feature
+   * @returns The found cluster
+   */
   const findFeatureByTitle = (title: string) => {
     const clusters: any[] = searchMarkers.value.getSource().getFeatures();
     return clusters.find(
@@ -176,6 +223,11 @@ export function eventsFunc({
     );
   };
 
+  /**
+   * Creates an ol overlay on container element
+   * @param persistant - Whether it should not disappear on mouse leaving
+   * @returns overlay
+   */
   const createOverlay = (persistant = false) => {
     const overlay = new ol.Overlay({
       element: container.value,
@@ -187,6 +239,12 @@ export function eventsFunc({
     return overlay;
   };
 
+  /**
+   * Takes a feature and returns text value from its properties
+   * and ol coords on map
+   * @param feature 
+   * @returns 
+   */
   const getCoordsAndTextFromFeature = (feature: any) => {
     const featCoords = getCoordsFromFeature(feature);
     const featText: string[] = feature.getProperties().text;
@@ -196,6 +254,9 @@ export function eventsFunc({
     };
   };
 
+  /**
+   * Changes overlay coords and text
+   */
   const changeOverlayStats = ({ coords, text }: ChangeOverlayStatsProps) => {
     if (!container.value) return;
     container.value.innerHTML = text;
@@ -210,6 +271,7 @@ export function eventsFunc({
     handleClickEvent,
     handleResultHover,
     handleResultClick,
-    zoomToExtent
+    zoomToExtent,
+    getClusterExtent
   };
 }

@@ -64,6 +64,7 @@ import {
   ResultHoverCallback,
   ResultClickCallback,
   MarkersIconCallback,
+Extent,
 } from "./Map.model";
 export default {
   name: "NeshanMap",
@@ -264,8 +265,8 @@ const search = async ({ term = "", coords }: SearchProps) => {
     const { layer } = addMarkers(points, true);
     searchMarkers.value = layer;
     setTimeout(() => { // Apparently it takse some sync time to cluster the source
-      const extent = layer.getSource().getExtent();
-      zoomToExtent(extent)
+      const extent: Extent = layer.getSource().getExtent();
+      zoomToExtent(extent, { duration: 1000 })
     }, 200);
   } catch (error) {
     console.log(error);
