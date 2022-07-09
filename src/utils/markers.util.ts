@@ -15,7 +15,7 @@ export function markersFunc({ map, markersIconCallback }: MarkersMixinProps) {
   const markerUrls = {
     red: "https://img.icons8.com/color/344/marker--v1.png",
     // blue: "https://img.icons8.com/ultraviolet/344/marker.png",
-    blue: require("../assets/search-marker.png"),
+    blue: require("@/assets/search-marker.png"),
   };
 
   /**
