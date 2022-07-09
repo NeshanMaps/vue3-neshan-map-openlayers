@@ -1,7 +1,7 @@
 {
   "name": "vue3-neshan-map-openlayers",
   "version": "0.2.3",
-  "main": "src/components/Map.vue",
+  "main": "dist/NeshanMap.umd.js",
   "module": "dist/NeshanMap.umd.js",
   "unpkg": "dist/NeshanMap.umd.min.js",
   "types": "dist/NeshanMap.d.ts",
