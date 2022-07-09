@@ -4,7 +4,7 @@
   "main": "dist/NeshanMap.umd.js",
   "module": "dist/NeshanMap.umd.js",
   "unpkg": "dist/NeshanMap.umd.min.js",
-  "types": "dist/NeshanMap.d.ts",
+  "types": "dist/types/components/Map.vue.d.ts",
   "browser": {
     "./sfc": "src/components/Map.vue"
   },
