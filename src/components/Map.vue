@@ -1,4 +1,5 @@
 <template>
+  <!-- <img :src="require('@/assets/search-marker.png')" /> -->
   <div id="map">
     <slot
       v-if="!hideSettings"
@@ -64,7 +65,7 @@ import {
   ResultHoverCallback,
   ResultClickCallback,
   MarkersIconCallback,
-Extent,
+  Extent,
 } from "./Map.model";
 export default {
   name: "NeshanMap",
@@ -264,9 +265,10 @@ const search = async ({ term = "", coords }: SearchProps) => {
     const points = createMapPoints(result.items);
     const { layer } = addMarkers(points, true);
     searchMarkers.value = layer;
-    setTimeout(() => { // Apparently it takse some sync time to cluster the source
+    setTimeout(() => {
+      // Apparently it takse some sync time to cluster the source
       const extent: Extent = layer.getSource().getExtent();
-      zoomToExtent(extent, { duration: 1000 })
+      zoomToExtent(extent, { duration: 1000 });
     }, 200);
   } catch (error) {
     console.log(error);
@@ -274,20 +276,21 @@ const search = async ({ term = "", coords }: SearchProps) => {
 };
 
 const eventsEmits = defineEmits(["on-zoom", "on-click"]);
-const { setupMapEvents, handleResultHover, handleResultClick, zoomToExtent } = eventsFunc({
-  map,
-  mainMarker,
-  mainMarkerCoords,
-  searchMarkers,
-  api,
-  emits: eventsEmits,
-  resultHoverCallback: props.resultHoverCallback,
-  resultClickCallback: props.resultClickCallback,
-  zoomOnMarkerClick: props.zoomOnMarkerClick,
-  zoomOnResultClick: props.zoomOnResultClick,
-  popupOnMarkerHover: props.popupOnMarkerHover,
-  popupOnResultHover: props.popupOnResultHover,
-});
+const { setupMapEvents, handleResultHover, handleResultClick, zoomToExtent } =
+  eventsFunc({
+    map,
+    mainMarker,
+    mainMarkerCoords,
+    searchMarkers,
+    api,
+    emits: eventsEmits,
+    resultHoverCallback: props.resultHoverCallback,
+    resultClickCallback: props.resultClickCallback,
+    zoomOnMarkerClick: props.zoomOnMarkerClick,
+    zoomOnResultClick: props.zoomOnResultClick,
+    popupOnMarkerHover: props.popupOnMarkerHover,
+    popupOnResultHover: props.popupOnResultHover,
+  });
 /**
  * Setups Map, adds serviceToken to api
  * and sanitizes center object
