@@ -35,15 +35,15 @@
   <div id="popup-container"></div>
 </template>
 <script lang="ts">
-declare const ol: any; // eslint-disable-line
-import { tiles, urls } from "../parameters";
+declare const ol: any
+import { tiles, urls } from '../parameters'
 import {
   sanitizeLocation,
   getLocation,
-  eventsFunc,
-  markersFunc,
-} from "../utils";
-import { createApi } from "../apis";
+  createMapPoints,
+} from '../utils'
+import { eventsMixin, overlayMixin, markersMixin } from '../mixins'
+import { createApi } from '../apis'
 import {
   defineProps,
   onMounted,
@@ -51,9 +51,8 @@ import {
   ref,
   watch,
   defineExpose,
-  nextTick,
   defineEmits,
-} from "vue";
+} from 'vue'
 import {
   CoordsObj,
   Api,
@@ -64,16 +63,16 @@ import {
   ResultHoverCallback,
   ResultClickCallback,
   MarkersIconCallback,
-Extent,
-} from "./Map.model";
+  Extent,
+} from './Map.model'
 export default {
-  name: "NeshanMap",
-};
+  name: 'NeshanMap',
+}
 </script>
 <script setup lang="ts">
-import Settings from "./settings/index.vue";
-import SearchBox from "./search-box/index.vue";
-import ResultBox from "./result-box/index.vue";
+import Settings from './settings/index.vue'
+import SearchBox from './search-box/index.vue'
+import ResultBox from './result-box/index.vue'
 
 const props = defineProps({
   mapKey: {
@@ -82,7 +81,7 @@ const props = defineProps({
   },
   serviceKey: {
     type: String,
-    default: "",
+    default: '',
   },
   center: {
     type: Object as PropType<CoordsObj>,
@@ -96,7 +95,7 @@ const props = defineProps({
   traffic: Boolean,
   defaultType: {
     type: String as PropType<MapType>,
-    default: "neshan",
+    default: 'neshan',
   },
   mapTypes: {
     type: Array as PropType<MapType[]>,
@@ -128,16 +127,16 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-});
+})
 
-const api = ref<Api>(createApi(props.serviceKey));
+const api = ref<Api>(createApi(props.serviceKey))
 /**
  * Sets the given token for api
  * @param token
  */
 const setToken = (token: string) => {
-  api.value = createApi(token);
-};
+  api.value = createApi(token)
+}
 /**
  * Whenever service token changes,
  * applies it to api
@@ -145,54 +144,54 @@ const setToken = (token: string) => {
 watch(
   () => props.serviceKey,
   (nv) => {
-    setToken(nv);
+    setToken(nv)
   }
-);
+)
 
-const sanitizedCenter = ref<CoordsArr | null>(sanitizeLocation(props.center));
-const map = ref<any>(null);
-const mainMarker = ref<any>(null);
-const mainMarkerCoords = ref<CoordsArr | null>(null);
-const searchMarkers = ref<any>(null);
-const mapType = ref(props.defaultType);
+const sanitizedCenter = ref<CoordsArr | null>(sanitizeLocation(props.center))
+const map = ref<any>(null)
+const mainMarker = ref<any>(null)
+const mainMarkerCoords = ref<CoordsArr | null>(null)
+const searchMarkers = ref<any>(null)
+const mapType = ref(props.defaultType)
 const reactiveTiles = ref(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
-);
+)
 
-const trafficLayer = ref(props.traffic);
-const poiLayer = ref(props.poi);
+const trafficLayer = ref(props.traffic)
+const poiLayer = ref(props.poi)
 watch(
   () => props.traffic,
   (nv) => {
-    trafficLayer.value = nv;
+    trafficLayer.value = nv
   }
-);
+)
 watch(
   () => props.poi,
   (nv) => {
-    poiLayer.value = nv;
+    poiLayer.value = nv
   }
-);
+)
 watch(trafficLayer, (nv) => {
-  toggleTraffic(nv);
-});
+  toggleTraffic(nv)
+})
 watch(poiLayer, (nv) => {
-  togglePoi(nv);
-});
+  togglePoi(nv)
+})
 /**
  * Switches poi layer
  * @param value - Whether it should be on or off
  */
 const togglePoi = (value: boolean) => {
-  map.value.switchPoiLayer(value);
-};
+  map.value.switchPoiLayer(value)
+}
 /**
  * Switches traffic layer
  * @param value - Whether it should be on or off
  */
 const toggleTraffic = (value: boolean) => {
-  map.value.switchTrafficLayer(value);
-};
+  map.value.switchTrafficLayer(value)
+}
 
 /**
  * Adds the map from given url to given script
@@ -200,15 +199,15 @@ const toggleTraffic = (value: boolean) => {
  * @param tagName - Name of the expected tag
  * @returns Created tag
  */
-const importMap = (url: string, tagName = "my-overlayer") => {
-  const foundDoc = document.getElementById(tagName);
-  if (foundDoc) return foundDoc; // was already loaded
-  const scriptTag = document.createElement("script");
-  scriptTag.src = url;
-  scriptTag.id = tagName;
-  document.getElementsByTagName("head")[0].appendChild(scriptTag);
-  return scriptTag;
-};
+const importMap = (url: string, tagName = 'my-overlayer') => {
+  const foundDoc = document.getElementById(tagName)
+  if (foundDoc) return foundDoc // was already loaded
+  const scriptTag = document.createElement('script')
+  scriptTag.src = url
+  scriptTag.id = tagName
+  document.getElementsByTagName('head')[0].appendChild(scriptTag)
+  return scriptTag
+}
 
 /**
  * Starts the map and adds it to element with id='map'
@@ -217,9 +216,9 @@ const importMap = (url: string, tagName = "my-overlayer") => {
  * or Neshan building location.
  */
 const startMap = async () => {
-  const coords = sanitizedCenter.value || (await getLocation());
+  const coords = sanitizedCenter.value || (await getLocation())
   const newMap = new ol.Map({
-    target: "map",
+    target: 'map',
     key: props.mapKey,
     // mapType: 'standard-night',
     poi: poiLayer.value,
@@ -229,89 +228,95 @@ const startMap = async () => {
       zoom: props.zoom,
       smoothExtentConstraint: true,
     }),
-  });
-  map.value = newMap;
+  })
+  map.value = newMap
   // Currently there is a problem with assigning different map type on initilization
-  changeMapType(mapType.value);
-};
+  changeMapType(mapType.value)
+}
 /**
  * Changes Map type
  * @param type - Exact name of a given map name
  */
 const changeMapType = (type: MapType) => {
-  map.value.setMapType(type);
-  mapType.value = type;
-};
+  map.value.setMapType(type)
+  mapType.value = type
+}
 
-const { createMapPoints, addMarkers, clearMarkerLayer } = markersFunc({
+const { addMarkers, clearMarkerLayer } = markersMixin({
   map,
-  markersIconCallback: props.markersIconCallback,
-});
-const searchResults = ref<SearchItem[]>([]);
+})
+const searchResults = ref<SearchItem[]>([])
 /**
  * Does a neshan search based on given parameters
  * @param searchParams.text - Part of or whole name of the place.
  * @param searchParams.coords - Coordinates you want to search around.
  */
-const search = async ({ term = "", coords }: SearchProps) => {
+const search = async ({ term = '', coords }: SearchProps) => {
   try {
     const reliableCoords =
-      coords || mainMarkerCoords.value || sanitizedCenter.value;
-    if (!reliableCoords) return;
-    const result = await api.value.SEARCH(term, reliableCoords);
-    clearMarkerLayer(searchMarkers);
-    searchResults.value = result.items;
-    const points = createMapPoints(result.items);
-    const { layer } = addMarkers(points, true);
-    searchMarkers.value = layer;
-    setTimeout(() => { // Apparently it takse some sync time to cluster the source
-      const extent: Extent = layer.getSource().getExtent();
+      coords || mainMarkerCoords.value || sanitizedCenter.value
+    if (!reliableCoords) return
+    const result = await api.value.SEARCH(term, reliableCoords)
+    clearMarkerLayer(searchMarkers)
+    searchResults.value = result.items
+    const points = createMapPoints(result.items)
+    const { layer } = addMarkers(points, {
+      showPopup: true,
+      markersIconCallback: props.markersIconCallback,
+    })
+    searchMarkers.value = layer
+    setTimeout(() => {
+      // Apparently it takse some sync time to cluster the source
+      const extent: Extent = layer.getSource().getExtent()
       zoomToExtent(extent, { duration: 1000 })
-    }, 200);
+    }, 200)
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
-const eventsEmits = defineEmits(["on-zoom", "on-click"]);
-const { setupMapEvents, handleResultHover, handleResultClick, zoomToExtent } = eventsFunc({
-  map,
-  mainMarker,
-  mainMarkerCoords,
-  searchMarkers,
-  api,
-  emits: eventsEmits,
-  resultHoverCallback: props.resultHoverCallback,
-  resultClickCallback: props.resultClickCallback,
-  zoomOnMarkerClick: props.zoomOnMarkerClick,
-  zoomOnResultClick: props.zoomOnResultClick,
-  popupOnMarkerHover: props.popupOnMarkerHover,
-  popupOnResultHover: props.popupOnResultHover,
-});
+const eventsEmits = defineEmits(['on-zoom', 'on-click'])
+const { setupOverlay, changeOverlayStats, overlay } = overlayMixin({ map })
+const { setupMapEvents, handleResultHover, handleResultClick, zoomToExtent } =
+  eventsMixin({
+    map,
+    mainMarker,
+    mainMarkerCoords,
+    searchMarkers,
+    api,
+    emits: eventsEmits,
+    resultHoverCallback: props.resultHoverCallback,
+    resultClickCallback: props.resultClickCallback,
+    zoomOnMarkerClick: props.zoomOnMarkerClick,
+    zoomOnResultClick: props.zoomOnResultClick,
+    popupOnMarkerHover: props.popupOnMarkerHover,
+    popupOnResultHover: props.popupOnResultHover,
+    addMarkers,
+    setupOverlay,
+    changeOverlayStats,
+    overlay,
+  })
 /**
  * Setups Map, adds serviceToken to api
- * and sanitizes center object
  */
 onMounted(() => {
-  const scriptTag = importMap(urls.map);
+  const scriptTag = importMap(urls.map)
   scriptTag.onload = () => {
-    startMap();
-    nextTick(() => {
-      setupMapEvents();
-    });
-  };
-});
+    startMap()
+    setupMapEvents()
+  }
+})
 
 /**
  * Makes it possible to have access to search function from outside of the component
  */
 defineExpose({
   search,
-});
+})
 </script>
 
 <style lang="scss">
-@import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
+@import url('https://static.neshan.org/sdk/openlayers/5.3.0/ol.css');
 
 #map {
   height: 100%;
@@ -332,12 +337,18 @@ defineExpose({
 }
 
 .select-none {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
   supported by Chrome, Edge, Opera and Firefox */
 }
 

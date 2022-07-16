@@ -1,3 +1,2 @@
-export * from './markers.util'
 export * from './location.util'
-export * from './events.util'
+export * from './features.util'

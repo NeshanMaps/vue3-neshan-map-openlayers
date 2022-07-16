@@ -1,17 +1,14 @@
-declare const ol: any;
 import {
-  ChangeOverlayStatsProps,
   CoordsArr,
   EventsMixinProps,
   Extent,
   SearchItem,
   ZoomToExtentOptions,
 } from "@/components/Map.model";
-import { ref } from "vue";
-import { getCoordsFromFeature, getTitleFromData } from "./location.util";
-import { markersFunc } from ".";
+import { getClusterExtent, transformCoords } from "@/utils";
+import { getCoordsAndTextFromFeature, getTitleFromData } from "../utils";
 
-export function eventsFunc({
+export function eventsMixin({
   map,
   mainMarker,
   mainMarkerCoords,
@@ -24,9 +21,11 @@ export function eventsFunc({
   zoomOnResultClick,
   popupOnMarkerHover,
   popupOnResultHover,
+  setupOverlay,
+  overlay,
+  changeOverlayStats,
+  addMarkers
 }: EventsMixinProps) {
-  const container = ref<HTMLElement | null>(null);
-  const overlay = ref<any>();
 
   /**
    * Sets the required events up for the map.
@@ -59,14 +58,9 @@ export function eventsFunc({
    * Sets up hover event for marker popups
    */
   const setupMarkerHoverEvent = () => {
-    container.value = document.getElementById("popup-container");
-    overlay.value = createOverlay();
-    map.value.addOverlay(overlay.value);
+    setupOverlay()
     map.value.on("pointermove", function (evt: any) {
-      const hoveredFeature = map.value.forEachFeatureAtPixel(
-        evt.pixel,
-        (feature: any) => feature
-      );
+      const hoveredFeature = getFeatureFromEvent(evt)
       if (hoveredFeature) {
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature);
@@ -83,7 +77,6 @@ export function eventsFunc({
     });
   };
 
-  const { addMarkers } = markersFunc({ map });
   /**
    * After clicking on map, if there is no feature in there,
    * sets a marker on that coords.
@@ -94,10 +87,7 @@ export function eventsFunc({
    */
   const handleClickEvent = (event: any) => {
     map.value.removeLayer(mainMarker.value);
-    const selectedFeature = map.value.forEachFeatureAtPixel(
-      event.pixel,
-      (feature: any) => feature
-    );
+    const selectedFeature = getFeatureFromEvent(event)
     if (selectedFeature) {
       if (zoomOnMarkerClick) {
         zoomToCluster(selectedFeature);
@@ -119,11 +109,7 @@ export function eventsFunc({
       const { layer: marker, style } = addMarkers([
         { coords: point, text: "" },
       ]);
-      const stdPoint: CoordsArr = ol.proj.transform(
-        point,
-        "EPSG:3857",
-        "EPSG:4326"
-      );
+      const stdPoint = transformCoords(point)
       mainMarkerCoords.value = stdPoint;
       mainMarker.value = marker;
       const data = await api.value.REVERSE(...stdPoint);
@@ -144,20 +130,6 @@ export function eventsFunc({
     const extent = getClusterExtent(cluster)
     zoomToExtent(extent)
   };
-
-  /**
-   * Gets the sufficent extent to zoom on a cluster or marker
-   * @param cluster 
-   * @returns extent
-   */
-  const getClusterExtent = (cluster: any) => {
-    const originalFeatures = cluster.get('features');
-    const extent: Extent = new ol.extent.createEmpty();
-    originalFeatures.forEach((f: any) => {
-      ol.extent.extend(extent, f.getGeometry().getExtent());
-    });
-    return extent
-  }
 
   /**
    * Gets the desired extent and zooms on it
@@ -211,7 +183,7 @@ export function eventsFunc({
   };
 
   /**
-   * Takes the title of a marker and gives its surrounding cluster
+   * Takes the title of a marker and returns its surrounding cluster
    * @param title - title of wanted feature
    * @returns The found cluster
    */
@@ -224,44 +196,16 @@ export function eventsFunc({
   };
 
   /**
-   * Creates an ol overlay on container element
-   * @param persistant - Whether it should not disappear on mouse leaving
-   * @returns overlay
+   * Looks for features in current hover or click event of map
+   * @param evt - Map hover or click event
+   * @returns feature (If found)
    */
-  const createOverlay = (persistant = false) => {
-    const overlay = new ol.Overlay({
-      element: container.value,
-      map: map.value,
-      positioning: "top-center",
-      offset: [0, -50],
-    });
-    overlay.set("persistant", persistant); // An attr to know that we should remove it on following hovers
-    return overlay;
-  };
-
-  /**
-   * Takes a feature and returns text value from its properties
-   * and ol coords on map
-   * @param feature 
-   * @returns 
-   */
-  const getCoordsAndTextFromFeature = (feature: any) => {
-    const featCoords = getCoordsFromFeature(feature);
-    const featText: string[] = feature.getProperties().text;
-    return {
-      featCoords,
-      featText,
-    };
-  };
-
-  /**
-   * Changes overlay coords and text
-   */
-  const changeOverlayStats = ({ coords, text }: ChangeOverlayStatsProps) => {
-    if (!container.value) return;
-    container.value.innerHTML = text;
-    overlay.value.setPosition(coords);
-  };
+  const getFeatureFromEvent = (evt: any) => {
+    return map.value.forEachFeatureAtPixel(
+      evt.pixel,
+      (feature: any) => feature
+    );
+  }
 
   return {
     setupMapEvents,
