@@ -1,4 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
+const TypescriptDeclarationPlugin = require('typescript-declaration-webpack-plugin');
+
 const fixEmitDeclarationFilesForTypeScript = {
   chainWebpack: (config) => {
     if (process.env.NODE_ENV === 'production') {
@@ -13,6 +15,15 @@ const fixEmitDeclarationFilesForTypeScript = {
           happyPackMode: false,
         }));
     }
+  },
+  configureWebpack: {
+    plugins: [
+      new TypescriptDeclarationPlugin({
+        out: 'NeshanMap.d.ts',
+        removeMergedDeclarations: false,
+        removeComments: false
+      })
+    ]
   },
   parallel: false,
 };

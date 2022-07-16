@@ -44,6 +44,7 @@
 <script lang="ts">
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// import Map from "../../dist/NeshanMap.umd.js";
 import Map from "@/components/Map.vue";
 
 import { defineComponent } from "vue";
@@ -76,6 +77,7 @@ export default defineComponent({
 </script>
 
 <style>
+@import url('../../dist/NeshanMap.css');
 .page {
   height: 100%;
 }

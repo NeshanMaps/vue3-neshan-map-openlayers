@@ -1,4 +1,5 @@
 <template>
+  <!-- <img :src="require('@/assets/search-marker.png')" /> -->
   <div id="map">
     <slot
       v-if="!hideSettings"

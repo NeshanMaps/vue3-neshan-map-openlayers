@@ -1,9 +1,10 @@
 {
   "name": "vue3-neshan-map-openlayers",
-  "version": "0.2.3",
-  "main": "src/components/Map.vue",
+  "version": "0.2.4",
+  "main": "dist/NeshanMap.umd.js",
   "module": "dist/NeshanMap.umd.js",
   "unpkg": "dist/NeshanMap.umd.min.js",
+  "types": "dist/types/components/Map.vue.d.ts",
   "browser": {
     "./sfc": "src/components/Map.vue"
   },
@@ -31,7 +32,8 @@
     "lint-staged": "^11.1.2",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
-    "typescript": "~4.5.5"
+    "typescript": "~4.5.5",
+    "typescript-declaration-webpack-plugin": "^0.2.2"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
