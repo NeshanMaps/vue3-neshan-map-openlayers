@@ -77,7 +77,7 @@ export default defineComponent({
 </script>
 
 <style>
-@import url('../../dist/NeshanMap.css');
+/* @import url('../../dist/NeshanMap.css'); */
 .page {
   height: 100%;
 }

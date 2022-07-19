@@ -1,43 +1,44 @@
 <template>
-  <details
+  <div
     id="result-box"
     :style="resultBoxStyle"
     :class="resultBoxClass"
     class="neshan-scroll-bar"
     open
   >
-    <!-- <summary dir="rtl" class="select-none">
-      نتایج:
-      <template v-if="results.length !== 0"> &nbsp; ({{ results.length }}) </template>
-    </summary> -->
-    <ul>
-      <ResultItem
-        v-for="item in results"
-        :key="'' + item.location.x + item.location.y"
-        :item="item"
-        @mouseenter="emitHover(item)"
-        @click="emitClick(item)"
-      />
-    </ul>
-  </details>
+    <Loading
+      v-if="loading"
+      dense
+      color="blue"
+    />
+    <ResultItem
+      v-for="item in results"
+      :key="'' + item.location.x + item.location.y"
+      :item="item"
+      @mouseenter="emitHover(item)"
+      @click="emitClick(item)"
+    />
+  </div>
 </template>
 <script lang="ts">
-import { defineProps, PropType, defineEmits } from "vue";
-import { SearchItem } from "../Map.model";
+import { defineProps, PropType, defineEmits } from 'vue'
+import { SearchItem } from '../Map.model'
 export default {
-  name: "ResultBox",
-};
+  name: 'ResultBox',
+}
 </script>
 <script setup lang="ts">
-import ResultItem from "./ResultItem.vue";
+import ResultItem from './ResultItem.vue'
+import Loading from '../Loading.vue'
 defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
   results: {
     type: Array as PropType<SearchItem[]>,
-    default: () => []
+    default: () => [],
   },
-});
+  loading: Boolean
+})
 
 const emits = defineEmits(['result-hover', 'result-click'])
 const emitHover = (item: SearchItem) => {
@@ -50,26 +51,13 @@ const emitClick = (item: SearchItem) => {
 
 <style lang="scss" scoped>
 #result-box {
-  margin-top: 10px;
-  background-color: white;
-  border: 1px solid rgb(110, 110, 110);
-  border-radius: 10px;
   overflow: auto;
-  max-height: 30vh;
-
-  summary {
-    cursor: pointer;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
+  background: none;
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 /* Track */

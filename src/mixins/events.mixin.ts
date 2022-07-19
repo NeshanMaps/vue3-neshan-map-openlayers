@@ -141,7 +141,7 @@ export function eventsMixin({
       size: map.value.getSize(),
       duration: options?.duration || 500,
       minResolution: 0.3,
-      padding: [50, 50, 50, 50]
+      padding: [50, 400, 50, 50]
     });
   }
 

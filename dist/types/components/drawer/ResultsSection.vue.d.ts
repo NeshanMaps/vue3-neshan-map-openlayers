@@ -1,5 +1,5 @@
-import { PropType } from "vue";
-import { SearchItem } from "../Map.model";
+import { PropType } from 'vue';
+import { SearchItem } from '../Map.model';
 declare const _default: import("vue").DefineComponent<{
     resultBoxClass: ArrayConstructor;
     resultBoxStyle: ObjectConstructor;

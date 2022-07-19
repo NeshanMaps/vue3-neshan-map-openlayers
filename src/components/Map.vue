@@ -19,18 +19,13 @@
       />
     </slot>
     <slot v-if="!hideSearchContainer" name="search-container">
-      <div id="search-container">
-        <slot v-if="!hideSearchBox" name="search-box">
-          <SearchBox @submit="search" />
-        </slot>
-        <slot v-if="!hideResultBox" name="search-box">
-          <ResultBox
-            :results="searchResults"
-            @result-hover="handleResultHover"
-            @result-click="handleResultClick"
-          />
-        </slot>
-      </div>
+      <Drawer
+        :results="searchResults"
+        :loading="loading"
+        @search="search"
+        @result-click="handleResultClick"
+        @result-hover="handleResultHover"
+      />
     </slot>
   </div>
   <div id="popup-container"></div>
@@ -38,11 +33,7 @@
 <script lang="ts">
 declare const ol: any
 import { tiles, urls } from '../parameters'
-import {
-  sanitizeLocation,
-  getLocation,
-  createMapPoints,
-} from '../utils'
+import { sanitizeLocation, getLocation, createMapPoints } from '../utils'
 import { eventsMixin, overlayMixin, markersMixin } from '../mixins'
 import { createApi } from '../apis'
 import {
@@ -72,8 +63,7 @@ export default {
 </script>
 <script setup lang="ts">
 import Settings from './settings/index.vue'
-import SearchBox from './search-box/index.vue'
-import ResultBox from './result-box/index.vue'
+import Drawer from './drawer/index.vue'
 
 const props = defineProps({
   mapKey: {
@@ -247,6 +237,7 @@ const { addMarkers, clearMarkerLayer } = markersMixin({
   map,
 })
 const searchResults = ref<SearchItem[]>([])
+const loading = ref(false)
 /**
  * Does a neshan search based on given parameters
  * @param searchParams.text - Part of or whole name of the place.
@@ -254,6 +245,7 @@ const searchResults = ref<SearchItem[]>([])
  */
 const search = async ({ term = '', coords }: SearchProps) => {
   try {
+    loading.value = true
     const reliableCoords =
       coords || mainMarkerCoords.value || sanitizedCenter.value
     if (!reliableCoords) return
@@ -273,6 +265,8 @@ const search = async ({ term = '', coords }: SearchProps) => {
     }, 200)
   } catch (error) {
     console.log(error)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -321,15 +315,7 @@ defineExpose({
 
 #map {
   height: 100%;
-  position: relative;
-}
-
-#search-container {
-  position: absolute;
-  z-index: 2;
-  width: 300px;
-  top: 4vh;
-  left: 4vw;
+  // position: relative;
 }
 
 .justify-between {
