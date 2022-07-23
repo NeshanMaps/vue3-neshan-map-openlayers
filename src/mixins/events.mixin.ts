@@ -22,6 +22,7 @@ export function eventsMixin({
   emits,
   resultHoverCallback,
   resultClickCallback,
+  markerHoverCallback,
   zoomOnMarkerClick,
   zoomOnResultClick,
   popupOnMarkerHover,
@@ -84,10 +85,11 @@ export function eventsMixin({
             return;
           }
         }
+        if (markerHoverCallback) {
+          markerHoverCallback({ changeOverlayStats, map })
+        }
       }
-      if (!overlay.value.get("persistant")) {
-        overlay.value.setPosition(undefined);
-      }
+      overlay.value.setPosition(undefined);
     });
   };
 

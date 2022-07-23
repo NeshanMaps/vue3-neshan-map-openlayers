@@ -1,5 +1,5 @@
 declare const ol: any;
-import { ChangeOverlayStatsProps, OverlayMixinProps } from "@/components/Map.model";
+import { ChangeOverlayStats, OverlayMixinProps } from "@/components/Map.model";
 import { ref } from "vue";
 
 export function overlayMixin({
@@ -20,7 +20,7 @@ export function overlayMixin({
   /**
    * Changes overlay coords and text
    */
-  const changeOverlayStats = ({ coords, text }: ChangeOverlayStatsProps) => {
+  const changeOverlayStats: ChangeOverlayStats = ({ coords, text }) => {
     if (!container.value) return;
     container.value.innerHTML = text;
     overlay.value.setPosition(coords);

@@ -1,6 +1,6 @@
 <template>
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
-  <div id="map">
+  <div :id="mapId">
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -54,7 +54,8 @@ import {
   SearchItem,
   ResultHoverCallback,
   ResultClickCallback,
-  MarkersIconCallback
+  MarkersIconCallback,
+  MarkerHoverCallback
 } from './Map.model'
 export default {
   name: 'NeshanMap',
@@ -65,6 +66,10 @@ import Settings from './settings/index.vue'
 import Drawer from './drawer/index.vue'
 
 const props = defineProps({
+  mapId: {
+    type: String,
+    default: 'map'
+  },
   mapKey: {
     type: String,
     required: true,
@@ -101,6 +106,7 @@ const props = defineProps({
   resultHoverCallback: Function as PropType<ResultHoverCallback>,
   resultClickCallback: Function as PropType<ResultClickCallback>,
   markersIconCallback: Function as PropType<MarkersIconCallback>,
+  markerHoverCallback: Function as PropType<MarkerHoverCallback>,
   popupOnMarkerHover: {
     type: Boolean,
     default: true,
@@ -262,8 +268,7 @@ const search = async ({ term = '', coords }: SearchProps) => {
       cluster: props.cluster
     })
     searchMarkers.value = layer
-    setTimeout(() => {
-      // Apparently it takse some sync time to cluster the source
+    setTimeout(() => { // Apparently it takse some sync time to cluster the source
       const features: any[] = layer.getSource().getFeatures()
       //To fix a problem with zooming on single feature layers extent
       if (features.length === 1) {
@@ -296,6 +301,7 @@ const {
   emits: eventsEmits,
   resultHoverCallback: props.resultHoverCallback,
   resultClickCallback: props.resultClickCallback,
+  markerHoverCallback: props.markerHoverCallback,
   zoomOnMarkerClick: props.zoomOnMarkerClick,
   zoomOnResultClick: props.zoomOnResultClick,
   popupOnMarkerHover: props.popupOnMarkerHover,

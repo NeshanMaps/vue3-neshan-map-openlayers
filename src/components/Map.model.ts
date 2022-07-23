@@ -107,6 +107,12 @@ export declare interface ChangeOverlayStatsProps {
 
 export declare type ResultHoverCallback = (...[arg]: any[]) => any
 export declare type ResultClickCallback = (...[arg]: any[]) => any
+export declare type ChangeOverlayStats = (options: ChangeOverlayStatsProps) => void
+export declare interface MarkerHoverCallbackProps {
+  changeOverlayStats: ChangeOverlayStats
+  map: Map
+}
+export declare type MarkerHoverCallback = (options: MarkerHoverCallbackProps) => void
 export declare type MarkersIconCallback = (
   points: CreateMarkersPropsItem
 ) => CreateIconProps
@@ -120,6 +126,7 @@ export declare interface EventsMixinProps {
   emits: (event: 'on-zoom' | 'on-click', arg: any) => void
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback
+  markerHoverCallback?: MarkerHoverCallback
   popupOnMarkerHover: boolean
   popupOnResultHover: boolean
   zoomOnMarkerClick: boolean
