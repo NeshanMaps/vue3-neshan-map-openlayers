@@ -111,6 +111,7 @@ export declare type ChangeOverlayStats = (options: ChangeOverlayStatsProps) => v
 export declare interface MarkerHoverCallbackProps {
   changeOverlayStats: ChangeOverlayStats
   map: Map
+  feature: any
 }
 export declare type MarkerHoverCallback = (options: MarkerHoverCallbackProps) => void
 export declare type MarkersIconCallback = (

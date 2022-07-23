@@ -86,7 +86,7 @@ export function eventsMixin({
           }
         }
         if (markerHoverCallback) {
-          markerHoverCallback({ changeOverlayStats, map })
+          markerHoverCallback({ changeOverlayStats, map, feature: hoveredFeature })
         }
       }
       overlay.value.setPosition(undefined);

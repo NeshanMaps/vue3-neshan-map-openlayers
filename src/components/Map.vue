@@ -1,6 +1,6 @@
 <template>
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
-  <div :id="mapId">
+  <div :id="mapId" style="height: 100%;">
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -218,7 +218,7 @@ const importMap = (url: string, tagName = "my-overlayer") => {
 const startMap = async () => {
   const coords = sanitizedCenter.value || (await getLocation());
   const newMap = new ol.Map({
-    target: "map",
+    target: props.mapId,
     key: props.mapKey,
     // mapType: 'standard-night',
     poi: poiLayer.value,
@@ -334,11 +334,6 @@ defineExpose({
 
 <style lang="scss">
 @import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
-
-#map {
-  height: 100%;
-  // position: relative;
-}
 
 .justify-between {
   display: flex;
