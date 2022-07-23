@@ -6,13 +6,49 @@ import {
   CreateMarkersOptions,
   CreateMarkersProps,
   CreateMarkersPropsItem,
-  CreateStyleProps,
+  CreateRawStyleProps,
   Extent,
   IconColor,
   MarkersIconCallback,
   SearchItem,
 } from '@/components/Map.model'
 import { markerUrls } from '@/parameters'
+
+/**
+ * Receives an array of points and returns a layer of markers.
+ * @param points - Array of points.
+ * @param point.coords - Coordinates of that point.
+ * @param point.text - If you have a particular text for the point.
+ * @param point.color - If you have a particular color for that point (only checks the first point for now).
+ * @param point.image - If you have a particular image for that point (only checks the first point for now).
+ * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
+ * @param point.originalItem - original item from neshan search result
+ * @param options.showPopup - If you want show the text as popup
+ * @returns style and layer.
+ */
+export const createMarkers = (
+  points: CreateMarkersProps,
+  options?: CreateMarkersOptions
+) => {
+  const [{ image, color, iconScale } = {} as CreateMarkersPropsItem] =
+    points
+  const features = createFeaturesFromPoints(
+    points,
+    options?.markersIconCallback
+  )
+  let layer: any
+  let _style: any
+  if (options?.cluster) {
+    layer = createClusterLayer(features, options?.showPopup)
+  } else {
+    const _image = image ||createIcon({ color, iconScale })
+    const { styleFunc, style } = createStyle({ image: _image, showPopup: options?.showPopup})
+    _style = style
+    const source = createSource(features)
+    layer = createLayer({ style: styleFunc, source })
+  }
+  return { layer, style: _style }
+}
 
 export const createText = (): any => {
   return new ol.style.Text({
@@ -41,11 +77,22 @@ export const createIcon = ({
     anchor,
   })
 }
-export const createStyle = ({ image, text }: CreateStyleProps): any => {
+
+export const createRawStyle = ({ image, text }: CreateRawStyleProps): any => {
   return new ol.style.Style({
     image: image,
     text: text,
   })
+}
+
+export const createStyle = ({ showPopup = true, image = undefined }) => {
+  const _text = createText()
+  const _image = image || createIcon({ color: 'blue', iconScale: 0.15 })
+  const _style = createRawStyle({ text: _text, image: _image })
+  const styleFunc = styleFuncGen(_style, {
+    hardText: !showPopup,
+  })
+  return { style: _style, styleFunc}
 }
 
 /**
@@ -100,52 +147,26 @@ export const createMapPoints = (items: SearchItem[], color = 'blue') => {
 }
 
 /**
- * Receives an array of points and returns a layer of markers.
- * @param points - Array of points.
- * @param point.coords - Coordinates of that point.
- * @param point.text - If you have a particular text for the point.
- * @param point.style - If you have a particular style for that point (only checks the first point for now).
- * @param point.color - If you have a particular color for that point (only checks the first point for now).
- * @param point.image - If you have a particular image for that point (only checks the first point for now).
- * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
- * @param point.originalItem - original item from neshan search result
- * @param options.showPopup - If you want show the text as popup
- * @returns style and layer.
+ * Creates an style function to dynamically change popup text and marker icons
+ * @param style - The static raw style
+ * @param options.hardText - Will not use popups and just hard text
+ * @returns
  */
-export const createMarkers = (
-  points: CreateMarkersProps,
-  options?: CreateMarkersOptions
+const styleFuncGen = (
+  style: any,
+  {
+    hardText = false,
+  }: {
+    hardText?: boolean
+  }
 ) => {
-  const [{ style, image, color, iconScale } = {} as CreateMarkersPropsItem] =
-    points
-  const features = createFeaturesFromPoints(
-    points,
-    options?.markersIconCallback
-  )
-  const _text = createText()
-  const _image = image || createIcon({ color, iconScale })
-  const _style = style || createStyle({ text: _text, image: _image })
-  // const styleFunc = styleFuncGen({ style: _style, hardText: showPopup })
-  // const source = createSource(features);
-  // const _pinLayer = createLayer({ style: styleFunc, source });
-  const clusterLayer = createClusterLayer(features, options?.showPopup)
-  return { layer: clusterLayer, style: _style }
-}
-
-const styleFuncGen = ({
-  style,
-  hardText = false,
-}: {
-  style: any
-  hardText?: boolean
-}) => {
   return (feature: any) => {
     if (hardText) {
       style.getText().setText(feature.get('text'))
     }
     const iconProps = feature.get('iconProps')
     if (iconProps) {
-      style.setImage(createIcon(feature.get('iconProps')))
+      style.setImage(createIcon(iconProps))
     }
     return style
   }
@@ -216,13 +237,7 @@ const createClusterStyleFunc = (
         style = createClusterStyle(size)
         styleCache[size] = style
       } else {
-        const _text = createText()
-        const _image = createIcon({ color: 'blue', iconScale: 0.15 })
-        const _style = createStyle({ text: _text, image: _image })
-        const styleFunc = styleFuncGen({
-          style: _style,
-          hardText: !showPopup,
-        })
+        const { styleFunc } = createStyle({ showPopup })
         style = styleFunc(innerFeatures[0])
       }
     }
@@ -248,9 +263,18 @@ export const getClusterExtent = (cluster: any) => {
   const originalFeatures = cluster.get('features')
   const extent: Extent = new ol.extent.createEmpty()
   originalFeatures.forEach((f: any) => {
-    ol.extent.extend(extent, f.getGeometry().getExtent())
+    ol.extent.extend(extent, getFeatureExtent(f))
   })
   return extent
+}
+
+/**
+ * Gets the extent of a feature
+ * @param feature 
+ * @returns extent
+ */
+export const getFeatureExtent = (feature: any): Extent => {
+  return feature.getGeometry().getExtent()
 }
 
 /**

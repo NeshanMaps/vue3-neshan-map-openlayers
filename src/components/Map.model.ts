@@ -26,7 +26,7 @@ export declare interface CreateIconProps {
   anchor?: DoubleNums
 }
 
-export declare interface CreateStyleProps {
+export declare interface CreateRawStyleProps {
   image?: any
   text?: any
 }
@@ -131,6 +131,7 @@ export declare interface EventsMixinProps {
   setupOverlay: () => void
   overlay: Ref<any>
   changeOverlayStats: ({ text, coords }: ChangeOverlayStatsProps) => void
+  clusterMode: boolean
 }
 export declare interface MarkersMixinProps {
   map: Map
@@ -148,4 +149,5 @@ export declare interface OverlayMixinProps {
 export declare interface CreateMarkersOptions {
   markersIconCallback?: MarkersIconCallback
   showPopup?: boolean
+  cluster?: boolean
 }

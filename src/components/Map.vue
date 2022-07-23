@@ -54,8 +54,7 @@ import {
   SearchItem,
   ResultHoverCallback,
   ResultClickCallback,
-  MarkersIconCallback,
-  Extent,
+  MarkersIconCallback
 } from './Map.model'
 export default {
   name: 'NeshanMap',
@@ -115,6 +114,10 @@ const props = defineProps({
     default: true,
   },
   zoomOnResultClick: {
+    type: Boolean,
+    default: true,
+  },
+  cluster: {
     type: Boolean,
     default: true,
   },
@@ -256,12 +259,18 @@ const search = async ({ term = '', coords }: SearchProps) => {
     const { layer } = addMarkers(points, {
       showPopup: true,
       markersIconCallback: props.markersIconCallback,
+      cluster: props.cluster
     })
     searchMarkers.value = layer
     setTimeout(() => {
       // Apparently it takse some sync time to cluster the source
-      const extent: Extent = layer.getSource().getExtent()
-      zoomToExtent(extent, { duration: 1000 })
+      const features: any[] = layer.getSource().getFeatures()
+      //To fix a problem with zooming on single feature layers extent
+      if (features.length === 1) {
+        zoomToCluster(features[0], { duration: 1000 })
+      } else {
+        zoomToLayer(layer, { duration: 1000 })
+      }
     }, 200)
   } catch (error) {
     console.log(error)
@@ -272,25 +281,31 @@ const search = async ({ term = '', coords }: SearchProps) => {
 
 const eventsEmits = defineEmits(['on-zoom', 'on-click'])
 const { setupOverlay, changeOverlayStats, overlay } = overlayMixin({ map })
-const { setupMapEvents, handleResultHover, handleResultClick, zoomToExtent } =
-  eventsMixin({
-    map,
-    mainMarker,
-    mainMarkerCoords,
-    searchMarkers,
-    api,
-    emits: eventsEmits,
-    resultHoverCallback: props.resultHoverCallback,
-    resultClickCallback: props.resultClickCallback,
-    zoomOnMarkerClick: props.zoomOnMarkerClick,
-    zoomOnResultClick: props.zoomOnResultClick,
-    popupOnMarkerHover: props.popupOnMarkerHover,
-    popupOnResultHover: props.popupOnResultHover,
-    addMarkers,
-    setupOverlay,
-    changeOverlayStats,
-    overlay,
-  })
+const {
+  setupMapEvents,
+  handleResultHover,
+  handleResultClick,
+  zoomToLayer,
+  zoomToCluster,
+} = eventsMixin({
+  map,
+  mainMarker,
+  mainMarkerCoords,
+  searchMarkers,
+  api,
+  emits: eventsEmits,
+  resultHoverCallback: props.resultHoverCallback,
+  resultClickCallback: props.resultClickCallback,
+  zoomOnMarkerClick: props.zoomOnMarkerClick,
+  zoomOnResultClick: props.zoomOnResultClick,
+  popupOnMarkerHover: props.popupOnMarkerHover,
+  popupOnResultHover: props.popupOnResultHover,
+  addMarkers,
+  setupOverlay,
+  changeOverlayStats,
+  overlay,
+  clusterMode: props.cluster
+})
 /**
  * Setups Map, adds serviceToken to api
  */
