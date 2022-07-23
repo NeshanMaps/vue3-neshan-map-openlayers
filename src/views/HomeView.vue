@@ -37,7 +37,6 @@
       @on-click="handleClick"
       poi
       traffic
-      :cluster="false"
     />
   </div>
 </template>

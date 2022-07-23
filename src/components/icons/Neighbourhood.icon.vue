@@ -8,13 +8,15 @@
 </template>
 
 <script lang="ts">
-export default {
-  name: 'NeighbourhoodIcon',
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "NeighbourhoodIcon",
   props: {
     size: {
       type: Number,
       default: 24,
     },
   },
-}
+});
 </script>

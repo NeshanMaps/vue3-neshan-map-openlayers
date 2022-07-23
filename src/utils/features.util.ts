@@ -3,6 +3,7 @@ import {
   CoordsArr,
   CreateIconProps,
   CreateLayerProps,
+  CreateMapPointsOptions,
   CreateMarkersOptions,
   CreateMarkersProps,
   CreateMarkersPropsItem,
@@ -41,8 +42,8 @@ export const createMarkers = (
   if (options?.cluster) {
     layer = createClusterLayer(features, options?.showPopup)
   } else {
-    const _image = image ||createIcon({ color, iconScale })
-    const { styleFunc, style } = createStyle({ image: _image, showPopup: options?.showPopup})
+    const _image = image || createIcon({ color, iconScale })
+    const { styleFunc, style } = createStyle({ image: _image, showPopup: options?.showPopup })
     _style = style
     const source = createSource(features)
     layer = createLayer({ style: styleFunc, source })
@@ -92,7 +93,7 @@ export const createStyle = ({ showPopup = true, image = undefined }) => {
   const styleFunc = styleFuncGen(_style, {
     hardText: !showPopup,
   })
-  return { style: _style, styleFunc}
+  return { style: _style, styleFunc }
 }
 
 /**
@@ -126,9 +127,10 @@ export const createLayer = ({
 /**
  * Converts points given from neshan server to openlayers-friendly points
  * @param items - Items from search result
- * @param color - color of the markers
+ * @param options.color - color of the markers
+ * @param options.iconScale - scale of the markers
  */
-export const createMapPoints = (items: SearchItem[], color = 'blue') => {
+export const createMapPoints = (items: SearchItem[], options?: CreateMapPointsOptions) => {
   return items.map((item) => {
     const point = Object.values(item.location)
     const stdPoint: CoordsArr = ol.proj.transform(
@@ -139,8 +141,8 @@ export const createMapPoints = (items: SearchItem[], color = 'blue') => {
     return {
       coords: stdPoint,
       text: item.title,
-      color: color as IconColor,
-      iconScale: 0.06,
+      color: options?.color || 'blue' as IconColor,
+      iconScale: options?.iconScale || 0.15,
       originalItem: item,
     }
   })
@@ -156,8 +158,6 @@ const styleFuncGen = (
   style: any,
   {
     hardText = false,
-  }: {
-    hardText?: boolean
   }
 ) => {
   return (feature: any) => {
@@ -285,7 +285,7 @@ export const getFeatureExtent = (feature: any): Extent => {
  */
 export const getCoordsAndTextFromFeature = (feature: any) => {
   const featCoords = getCoordsFromFeature(feature)
-  const featText: string[] = feature.getProperties().text
+  const featText: string[] | string = feature.getProperties().text
   return {
     featCoords,
     featText,

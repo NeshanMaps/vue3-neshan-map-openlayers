@@ -8,7 +8,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: 'CloseIcon',
   props: {
     size: {
@@ -16,5 +18,5 @@ export default {
       default: 24
     }
   }
-}
+}) 
 </script>

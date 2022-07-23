@@ -151,3 +151,8 @@ export declare interface CreateMarkersOptions {
   showPopup?: boolean
   cluster?: boolean
 }
+
+export declare interface CreateMapPointsOptions {
+  color?: IconColor
+  iconScale: number
+}
