@@ -14,7 +14,7 @@
       @keydown.enter="runTimeout(0)"
       @input="runTimeout()"
       @focus="emitActivation(true)"
-    />
+    >
     <button v-if="!activated" @click="emitActivation(true)">
       <Icon name="magnet" :size="15"></Icon>
     </button>
@@ -47,7 +47,7 @@ const props = defineProps({
 const emit = defineEmits([
   'update:search-text',
   'update:search-coords',
-  'update:activation',
+  'update:activated',
   'submit',
 ])
 const text = computed({
@@ -74,7 +74,7 @@ const emitSearch = (term = '') => {
  * Emits activation value to weather the component should be expanded or collapsed
  */
 const emitActivation = (val: boolean) => {
-  emit('update:activation', val)
+  emit('update:activated', val)
 }
 
 let emitTimeout: number;

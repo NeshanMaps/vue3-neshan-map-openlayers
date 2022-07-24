@@ -78,7 +78,7 @@ export function eventsMixin({
             return;
           }
         } else {
-          if (featText && typeof featText === 'string') {
+          if (featText && typeof featText === "string") {
             if (popupOnMarkerHover) {
               changeOverlayStats({ text: featText, coords: featCoords });
             }
@@ -86,7 +86,11 @@ export function eventsMixin({
           }
         }
         if (markerHoverCallback) {
-          markerHoverCallback({ changeOverlayStats, map, feature: hoveredFeature })
+          markerHoverCallback({
+            changeOverlayStats,
+            map,
+            feature: hoveredFeature,
+          });
         }
       }
       overlay.value.setPosition(undefined);
@@ -97,11 +101,11 @@ export function eventsMixin({
    * After clicking on map, if there is no feature in there,
    * sets a marker on that coords.
    * Sends a request to api.reverse and labels the marker
-   * else it zooms and expands on that feature
-   * Then emits an event named 'on-click'.
+   * otherwise it zooms and expands on that feature
+   * In both cases emits an event named 'on-click' afterwards.
    * @param event - Map click event.
    */
-  const handleClickEvent = (event: any) => {
+  const handleClickEvent = async (event: any) => {
     map.value.removeLayer(mainMarker.value);
     const selectedFeature = getFeatureFromEvent(event);
     if (selectedFeature) {
@@ -110,9 +114,12 @@ export function eventsMixin({
           ? zoomToCluster(selectedFeature)
           : zoomToMarker(selectedFeature);
       }
+      emits("on-click", { event, selectedFeature, map });
     } else {
       const point: CoordsArr = event.coordinate;
-      reverseOnPoint(point);
+      const result = await reverseOnPoint(point);
+      const { marker, stdPoint, data } = result;
+      emits("on-click", { event, marker, stdPoint, data, map });
     }
   };
 
@@ -121,6 +128,7 @@ export function eventsMixin({
    * Sends a reverse request on that position
    * and adds a title based on returned value
    * @param point - OL Coords
+   * @returns marker, standard coords of point and api result data
    */
   const reverseOnPoint = async (point: CoordsArr) => {
     try {
@@ -135,9 +143,10 @@ export function eventsMixin({
       const text = getTitleFromData(data);
       style.getText().setText(text);
       marker.setStyle(style);
-      emits("on-click", { event, marker, stdPoint, data });
+      return { marker, stdPoint, data };
     } catch (error) {
       console.log(error);
+      return {}
     }
   };
 

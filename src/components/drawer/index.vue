@@ -1,8 +1,7 @@
 <template>
   <div id="drawer" :activated="activated">
     <SearchSection
-      :activated="activated"
-      @update:activation="toggleDrawer($event)"
+      v-model:activated="activated"
       @submit="emitSearch({ term: $event })"
     ></SearchSection>
     <ResultsSection
@@ -34,13 +33,9 @@ const props = defineProps({
   },
   loading: Boolean
 })
-
+const activated = ref(false)
 const emits = defineEmits(['search', 'result-click', 'result-hover'])
 
-const activated = ref(false)
-const toggleDrawer = (value: boolean) => {
-  activated.value = value
-}
 const emitSearch = (searchData: SearchProps) => {
   const coordsArr = searchData?.coords || [
     props.searchCoords.longitude,

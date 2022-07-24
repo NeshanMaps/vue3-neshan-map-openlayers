@@ -1,6 +1,6 @@
 <template>
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
-  <div :id="mapId" style="height: 100%;">
+  <div :id="mapId" style="height: 100%">
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -227,11 +227,13 @@ const startMap = async () => {
       center: ol.proj.fromLonLat(coords),
       zoom: props.zoom,
       smoothExtentConstraint: true,
+      // projection: 'EPSG:4326' //Default was EPSG:3857
     }),
   });
   map.value = newMap;
   // Currently there is a problem with assigning different map type on initilization
   changeMapType(mapType.value);
+  shakeMap();
 };
 /**
  * Changes Map type
@@ -240,6 +242,12 @@ const startMap = async () => {
 const changeMapType = (type: MapType) => {
   map.value.setMapType(type);
   mapType.value = type;
+};
+/**
+ * Updates map coords so the offset problem is no more.
+ */
+const shakeMap = () => {
+  setTimeout(() => map.value.updateSize(), 300);
 };
 
 const { addMarkers, clearMarkerLayer } = markersMixin({
