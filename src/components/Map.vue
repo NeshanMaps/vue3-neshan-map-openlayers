@@ -22,13 +22,14 @@
       <Drawer
         :results="searchResults"
         :loading="loading"
+        :map-height="mapHeight"
         @search="search"
         @result-click="handleResultClick"
         @result-hover="handleResultHover"
       />
     </slot>
   </div>
-  <div id="popup-container"></div>
+  <div class="map-popup-container" ref="popupContainer"></div>
 </template>
 <script lang="ts">
 declare const ol: any;
@@ -56,6 +57,7 @@ import {
   ResultClickCallback,
   MarkersIconCallback,
   MarkerHoverCallback,
+  OlMap
 } from "./Map.model";
 export default {
   name: "NeshanMap",
@@ -149,7 +151,7 @@ watch(
 );
 
 const sanitizedCenter = ref<CoordsArr | null>(sanitizeLocation(props.center));
-const map = ref<any>(null);
+const map = ref<OlMap | null>(null);
 const mainMarker = ref<any>(null);
 const mainMarkerCoords = ref<CoordsArr | null>(null);
 const searchMarkers = ref<any>(null);
@@ -157,6 +159,7 @@ const mapType = ref(props.defaultType);
 const reactiveTiles = ref(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
 );
+const popupContainer = ref<HTMLElement | null>(null)
 
 const trafficLayer = ref(props.traffic);
 const poiLayer = ref(props.poi);
@@ -183,14 +186,14 @@ watch(poiLayer, (nv) => {
  * @param value - Whether it should be on or off
  */
 const togglePoi = (value: boolean) => {
-  map.value.switchPoiLayer(value);
+  map.value?.switchPoiLayer(value);
 };
 /**
  * Switches traffic layer
  * @param value - Whether it should be on or off
  */
 const toggleTraffic = (value: boolean) => {
-  map.value.switchTrafficLayer(value);
+  map.value?.switchTrafficLayer(value);
 };
 
 /**
@@ -240,14 +243,14 @@ const startMap = async () => {
  * @param type - Exact name of a given map name
  */
 const changeMapType = (type: MapType) => {
-  map.value.setMapType(type);
+  map.value?.setMapType(type);
   mapType.value = type;
 };
 /**
  * Updates map coords so the offset problem is no more.
  */
 const shakeMap = () => {
-  setTimeout(() => map.value.updateSize(), 300);
+  setTimeout(() => map.value?.updateSize(), 300);
 };
 
 const { addMarkers, clearMarkerLayer } = markersMixin({
@@ -278,7 +281,7 @@ const search = async ({ term = "", coords }: SearchProps) => {
     searchMarkers.value = layer;
     setTimeout(() => {
       // Apparently it takse some sync time to cluster the source
-      const features: any[] = layer.getSource().getFeatures();
+      const features = layer.getSource().getFeatures();
       //To fix a problem with zooming on single feature layers extent
       if (features.length === 1) {
         zoomToCluster(features[0], { duration: 1000 });
@@ -294,13 +297,15 @@ const search = async ({ term = "", coords }: SearchProps) => {
 };
 
 const eventsEmits = defineEmits(["on-zoom", "on-click"]);
-const { setupOverlay, changeOverlayStats, overlay } = overlayMixin({ map });
+const { setupOverlay, changeOverlayStats, overlay } = overlayMixin({ map, popupContainer });
 const {
   setupMapEvents,
   handleResultHover,
   handleResultClick,
   zoomToLayer,
   zoomToCluster,
+  updateMapHeight,
+  mapHeight
 } = eventsMixin({
   map,
   mainMarker,
@@ -320,7 +325,9 @@ const {
   changeOverlayStats,
   overlay,
   clusterMode: props.cluster,
+  mapId: props.mapId
 });
+
 /**
  * Setups Map, adds serviceToken to api
  */
@@ -329,6 +336,7 @@ onMounted(() => {
   scriptTag.onload = () => {
     startMap();
     setupMapEvents();
+    updateMapHeight()
   };
 });
 
@@ -364,7 +372,7 @@ defineExpose({
   supported by Chrome, Edge, Opera and Firefox */
 }
 
-#popup-container {
+.map-popup-container {
   background-color: white;
   -webkit-box-shadow: 0px 0px 4px 2px #0000008d;
   box-shadow: 0px 0px 4px 2px #00000046;

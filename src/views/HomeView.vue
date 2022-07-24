@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <!-- <div id="search-form">
+    <!-- <div class="map-search-form">
       <label>
         <input
           type="checkbox"
@@ -81,7 +81,7 @@ export default defineComponent({
 .page {
   height: 100%;
 }
-#search-form {
+.map-search-form {
   padding: 1rem;
   position: absolute;
   z-index: 2;

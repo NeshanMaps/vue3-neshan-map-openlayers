@@ -5,6 +5,7 @@ import {
   SearchItem,
   ZoomToExtentOptions,
 } from "@/components/Map.model";
+import { ref } from "vue";
 import {
   getCoordsAndTextFromFeature,
   getTitleFromData,
@@ -32,6 +33,7 @@ export function eventsMixin({
   changeOverlayStats,
   addMarkers,
   clusterMode,
+  mapId,
 }: EventsMixinProps) {
   /**
    * Sets the required events up for the map.
@@ -40,23 +42,28 @@ export function eventsMixin({
     setupClickEvent();
     setupZoomEvent();
     setupMarkerHoverEvent();
+    setupMapHeightUpdater();
   };
 
   const setupClickEvent = () => {
-    map.value.on("click", (event: any) => {
+    map.value?.on("click", (event: any) => {
       handleClickEvent(event);
     });
   };
+
+  const zoom = ref(0);
   /**
    * Emits the new zoom value
    */
   const setupZoomEvent = () => {
-    let currentZoom: number = map.value.getView().getZoom();
+    if (!map.value) return
+    zoom.value = map.value.getView().getZoom();
     map.value.on("moveend", () => {
-      const newZoom: number = map.value.getView().getZoom();
-      if (currentZoom != newZoom) {
+      if (!map.value) return
+      const newZoom = map.value.getView().getZoom();
+      if (zoom.value != newZoom) {
         emits("on-zoom", newZoom);
-        currentZoom = newZoom;
+        zoom.value = newZoom;
       }
     });
   };
@@ -65,7 +72,7 @@ export function eventsMixin({
    */
   const setupMarkerHoverEvent = () => {
     setupOverlay();
-    map.value.on("pointermove", function (evt: any) {
+    map.value?.on("pointermove", function (evt: any) {
       const hoveredFeature = getFeatureFromEvent(evt);
       if (hoveredFeature) {
         const { featCoords, featText } =
@@ -97,6 +104,16 @@ export function eventsMixin({
     });
   };
 
+  const mapHeight = ref(1000);
+  const setupMapHeightUpdater = () => {
+    window.onresize = updateMapHeight;
+  };
+  const updateMapHeight = () => {
+    const mapContainer = document.getElementById(mapId);
+    if (!mapContainer) return;
+    mapHeight.value = mapContainer.clientHeight;
+  };
+
   /**
    * After clicking on map, if there is no feature in there,
    * sets a marker on that coords.
@@ -106,7 +123,7 @@ export function eventsMixin({
    * @param event - Map click event.
    */
   const handleClickEvent = async (event: any) => {
-    map.value.removeLayer(mainMarker.value);
+    if (mainMarker.value) map.value?.removeLayer(mainMarker.value);
     const selectedFeature = getFeatureFromEvent(event);
     if (selectedFeature) {
       if (zoomOnMarkerClick) {
@@ -146,7 +163,7 @@ export function eventsMixin({
       return { marker, stdPoint, data };
     } catch (error) {
       console.log(error);
-      return {}
+      return {};
     }
   };
 
@@ -175,7 +192,7 @@ export function eventsMixin({
    * @param options.duration - Zooming duration
    */
   const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
-    map.value.getView().fit(extent, {
+    map.value?.getView().fit(extent, {
       size: map.value.getSize(),
       duration: options?.duration || 500,
       minResolution: 0.3,
@@ -240,8 +257,8 @@ export function eventsMixin({
    * @returns The found cluster
    */
   const findClusterByTitle = (title: string) => {
-    const clusters: any[] = searchMarkers.value.getSource().getFeatures();
-    return clusters.find((cluster) =>
+    const clusters = searchMarkers.value?.getSource().getFeatures();
+    return clusters?.find((cluster) =>
       cluster.get("features").find((feat: any) => feat.get("text") === title)
     );
   };
@@ -252,8 +269,8 @@ export function eventsMixin({
    * @returns The found marker
    */
   const findMarkerByTitle = (title: string) => {
-    const markers: any[] = searchMarkers.value.getSource().getFeatures();
-    return markers.find((feature) => feature.get("text") === title);
+    const markers = searchMarkers.value?.getSource().getFeatures();
+    return markers?.find((feature) => feature.get("text") === title);
   };
 
   /**
@@ -262,7 +279,7 @@ export function eventsMixin({
    * @returns feature (If found)
    */
   const getFeatureFromEvent = (evt: any) => {
-    return map.value.forEachFeatureAtPixel(
+    return map.value?.forEachFeatureAtPixel(
       evt.pixel,
       (feature: any) => feature
     );
@@ -280,5 +297,7 @@ export function eventsMixin({
     zoomToExtent,
     zoomToCluster,
     zoomToLayer,
+    mapHeight,
+    updateMapHeight,
   };
 }

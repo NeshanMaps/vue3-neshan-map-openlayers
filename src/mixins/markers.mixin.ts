@@ -21,7 +21,7 @@ export function markersMixin({ map }: MarkersMixinProps) {
    */
   const addMarkers = (points: CreateMarkersProps, options?: CreateMarkersOptions) => {
     const { layer, style } = createMarkers(points, options)
-    map.value.addLayer(layer)
+    map.value?.addLayer(layer)
     return { layer, style }
   }
 
@@ -29,7 +29,7 @@ export function markersMixin({ map }: MarkersMixinProps) {
    * Removes markers from map
    */
   const clearMarkerLayer = (layer: any) => {
-    map.value.removeLayer(layer.value)
+    map.value?.removeLayer(layer.value)
     layer.value = null
   }
 

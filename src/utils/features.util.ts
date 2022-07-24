@@ -11,9 +11,13 @@ import {
   Extent,
   IconColor,
   MarkersIconCallback,
+  Ol,
   SearchItem,
+  Style,
+  VectorLayer,
 } from "@/components/Map.model";
 import { markerUrls } from "@/parameters";
+import { Feature, geom } from "openlayers";
 import { transformCoords } from "./location.util";
 
 /**
@@ -82,7 +86,7 @@ export const createIcon = ({
   });
 };
 
-export const createRawStyle = ({ image, text }: CreateRawStyleProps): any => {
+export const createRawStyle = ({ image, text }: CreateRawStyleProps): Style => {
   return new ol.style.Style({
     image: image,
     text: text,
@@ -119,7 +123,7 @@ export const createLayer = ({
   target = "points",
   style,
   source,
-}: CreateLayerProps) => {
+}: CreateLayerProps): VectorLayer => {
   return new ol.layer.Vector({
     target,
     source,
@@ -156,8 +160,8 @@ export const createMapPoints = (
  * @param options.hardText - Will not use popups and just hard text
  * @returns
  */
-const styleFuncGen = (style: any, { hardText = false }) => {
-  return (feature: any) => {
+const styleFuncGen = (style: any, { hardText = false }): Ol.StyleFunction => {
+  return (feature) => {
     if (hardText) {
       style.getText().setText(feature.get("text"));
     }
@@ -235,7 +239,7 @@ const createClusterStyleFunc = (
         styleCache[size] = style;
       } else {
         const { styleFunc } = createStyle({ showPopup });
-        style = styleFunc(innerFeatures[0]);
+        style = styleFunc(innerFeatures[0], 100); // 100 is to shut its type up
       }
     }
     return style;
@@ -259,7 +263,7 @@ const createClusterLayer = (features: any[], showPopup?: boolean) => {
 export const getClusterExtent = (cluster: any) => {
   const originalFeatures = cluster.get("features");
   const extent: Extent = new ol.extent.createEmpty();
-  originalFeatures.forEach((f: any) => {
+  originalFeatures.forEach((f: Feature) => {
     ol.extent.extend(extent, getFeatureExtent(f));
   });
   return extent;
@@ -270,7 +274,7 @@ export const getClusterExtent = (cluster: any) => {
  * @param feature
  * @returns extent
  */
-export const getFeatureExtent = (feature: any): Extent => {
+export const getFeatureExtent = (feature: Feature): Extent => {
   return feature.getGeometry().getExtent();
 };
 
@@ -280,7 +284,7 @@ export const getFeatureExtent = (feature: any): Extent => {
  * @param feature
  * @returns
  */
-export const getCoordsAndTextFromFeature = (feature: any) => {
+export const getCoordsAndTextFromFeature = (feature: Feature) => {
   const featCoords = getCoordsFromFeature(feature);
   const featText: string[] | string = feature.getProperties().text;
   return {
@@ -294,8 +298,9 @@ export const getCoordsAndTextFromFeature = (feature: any) => {
  * @param feature
  * @returns Coords array
  */
-export const getCoordsFromFeature = (feature: any): CoordsArr => {
-  return feature.getGeometry().getCoordinates().slice(0, 2); //slice because it return array of 3 args idk why
+export const getCoordsFromFeature = (feature: Feature): CoordsArr => {
+  const geometry: geom.Point = <geom.Point>feature.getGeometry()
+  return <CoordsArr>geometry.getCoordinates().slice(0, 2); //slice because it return array of 3 args idk why
 };
 
 /**
@@ -307,11 +312,11 @@ export const getCoordsFromFeature = (feature: any): CoordsArr => {
 export const createFeaturesFromPoints = (
   points: CreateMarkersProps,
   markersIconCallback?: MarkersIconCallback
-) => {
+): Feature[] => {
   return points.map(
     (point) =>
       new ol.Feature({
-        geometry: new ol.geom.Point(point.coords),
+        geometry: new ol.geom.Point(point.coords) as geom.Point,
         text: point.text,
         iconProps: markersIconCallback && markersIconCallback(point),
       })

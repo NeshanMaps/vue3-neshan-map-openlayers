@@ -1,5 +1,5 @@
 <template>
-  <div id="drawer" :activated="activated">
+  <div class="map-drawer" :activated="activated">
     <SearchSection
       v-model:activated="activated"
       @submit="emitSearch({ term: $event })"
@@ -31,7 +31,8 @@ const props = defineProps({
     type: Object as PropType<CoordsObj>,
     default: () => createCoordsObject(),
   },
-  loading: Boolean
+  loading: Boolean,
+  mapHeight: Number
 })
 const activated = ref(false)
 const emits = defineEmits(['search', 'result-click', 'result-hover'])
@@ -57,7 +58,7 @@ const emitResultHover = (item: SearchItem) => {
 </script>
 
 <style lang="scss">
-#drawer {
+.map-drawer {
   position: absolute;
   z-index: 2;
   top: 5%;
@@ -71,7 +72,7 @@ const emitResultHover = (item: SearchItem) => {
   border-top-left-radius: 10px;
 }
 
-#drawer[activated='true'] {
+.map-drawer[activated='true'] {
   top: 0;
   right: 0;
   max-height: 100%;

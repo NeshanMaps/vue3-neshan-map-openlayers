@@ -16,6 +16,7 @@
     "prepare": "vue-cli-service build --target lib --name NeshanMap src/components/Map.vue"
   },
   "dependencies": {
+    "@types/openlayers": "^4.6.18",
     "core-js": "^3.8.3",
     "vue": "^3.2.13"
   },

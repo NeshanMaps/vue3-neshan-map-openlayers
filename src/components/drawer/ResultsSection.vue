@@ -1,9 +1,8 @@
 <template>
   <div
-    id="result-box"
     :style="resultBoxStyle"
     :class="resultBoxClass"
-    class="neshan-scroll-bar"
+    class="map-result-box neshan-scroll-bar"
     open
   >
     <Loading
@@ -50,7 +49,7 @@ const emitClick = (item: SearchItem) => {
 </script>
 
 <style lang="scss" scoped>
-#result-box {
+.map-result-box {
   overflow: auto;
   background: none;
 }

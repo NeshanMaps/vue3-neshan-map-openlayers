@@ -1,6 +1,6 @@
 <template>
-  <div id="settings" :style="settingsBoxStyle" :class="settingsBoxClass">
-    <div id="tiles">
+  <div :style="settingsBoxStyle" class="map-settings" :class="settingsBoxClass">
+    <div class="map-tiles">
       <div
         v-for="tile of tiles"
         :key="tile.title"
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div id="checkboxes">
+    <div class="map-checkboxes">
       <label
         >poi
         <input type="checkbox" name="poi" v-model="poiLayer" />
@@ -64,7 +64,7 @@ const trafficLayer = computed({
 </script>
 
 <style lang="scss">
-#settings {
+.map-settings {
   background-color: white;
   border-radius: 0.5vw;
   border: 1px solid rgb(178, 178, 178);
@@ -82,14 +82,14 @@ const trafficLayer = computed({
   }
 }
 
-#checkboxes {
+.map-checkboxes {
   display: flex;
   justify-content: space-around;
   padding-top: 1vw;
   padding-bottom: 1vw;
 }
 
-#tiles {
+.map-tiles {
   display: flex;
 }
 

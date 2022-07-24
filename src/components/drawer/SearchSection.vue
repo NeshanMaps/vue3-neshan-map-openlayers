@@ -1,9 +1,9 @@
 <template>
   <div
-    id="search-box"
     :activated="activated"
     dir="rtl"
     :style="searchBoxStyle"
+    class="map-search-box"
     :class="searchBoxClass"
   >
     <input
@@ -92,7 +92,7 @@ const runTimeout = (delay = 1000) => {
 </script>
 
 <style lang="scss">
-#search-box {
+.map-search-box {
   border-radius: 10px;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
@@ -126,7 +126,7 @@ const runTimeout = (delay = 1000) => {
   }
 }
 
-#search-box[activated='true'] {
+.map-search-box[activated='true'] {
   align-items: center;
   background: #f5f5f5;
   border: 1px solid #d9d9d9;

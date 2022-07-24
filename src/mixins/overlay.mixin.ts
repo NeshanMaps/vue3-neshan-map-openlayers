@@ -3,26 +3,25 @@ import { ChangeOverlayStats, OverlayMixinProps } from "@/components/Map.model";
 import { ref } from "vue";
 
 export function overlayMixin({
-  map
+  map,
+  popupContainer
 }: OverlayMixinProps) {
 
-  const container = ref<HTMLElement | null>(null);
   const overlay = ref<any>();
 
   /**
    * Sets up overlay on map
    */
   const setupOverlay = () => {
-    container.value = document.getElementById("popup-container");
     overlay.value = createOverlay();
-    map.value.addOverlay(overlay.value);
+    map.value?.addOverlay(overlay.value);
   }
   /**
    * Changes overlay coords and text
    */
   const changeOverlayStats: ChangeOverlayStats = ({ coords, text }) => {
-    if (!container.value) return;
-    container.value.innerHTML = text;
+    if (!popupContainer.value) return;
+    popupContainer.value.innerHTML = text;
     overlay.value.setPosition(coords);
   };
 
@@ -33,7 +32,7 @@ export function overlayMixin({
   */
   const createOverlay = (persistant = false) => {
     const overlay = new ol.Overlay({
-      element: container.value,
+      element: popupContainer.value,
       map: map.value,
       positioning: "top-center",
       offset: [0, -50],
