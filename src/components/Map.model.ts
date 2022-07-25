@@ -13,18 +13,21 @@ export declare type MapType =
   | "standard-day"
   | "osm-bright";
 export declare interface OlMap extends Map {
-  setMapType(value: MapType): void
-  switchPoiLayer(value: boolean): void
-  switchTrafficLayer(value: boolean): void
+  setMapType(value: MapType): void;
+  switchPoiLayer(value: boolean): void;
+  switchTrafficLayer(value: boolean): void;
 }
-export declare type OlMapRef = Ref<OlMap | null>
+export declare type OlMapRef = Ref<OlMap | undefined>;
 export declare type DoubleNums = Ol.Coordinate;
 export declare type Extent = Ol.Extent;
-export declare type Style = style.Style
-export declare type Image = Ol.Image
-export declare type Text = style.Text
-export declare type Source = Ol.source.Source
-export declare type VectorLayer = Ol.layer.Vector
+export declare type Style = style.Style;
+export declare type Image = Ol.style.Image;
+export declare type Text = style.Text;
+export declare type Source = Ol.source.Source;
+export declare type VectorLayer = Ol.layer.Vector;
+export declare type VectorLayerRef = Ref<VectorLayer | undefined>
+export declare type Cluster = Ol.source.Cluster;
+export declare type Overlay = Ol.Overlay
 export declare interface CoordsObj {
   latitude: number;
   longitude: number;
@@ -47,6 +50,11 @@ export declare interface CreateIconProps {
 export declare interface CreateRawStyleProps {
   image?: Image;
   text?: Text;
+}
+
+export declare interface CreateStyleProps {
+  showPopup?: boolean;
+  image?: Image;
 }
 
 export declare interface CreateLayerProps {
@@ -102,7 +110,7 @@ export declare interface Api {
   SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>;
 }
 
-export declare interface CreateMarkersPropsItem {
+export declare interface CreateMarkersPointsItem {
   style?: Style;
   image?: Image;
   color?: IconColor;
@@ -110,7 +118,15 @@ export declare interface CreateMarkersPropsItem {
   text?: string;
   coords?: CoordsArr;
 }
-export declare type CreateMarkersProps = CreateMarkersPropsItem[];
+export declare type CreateMarkersPoints = CreateMarkersPointsItem[];
+export declare interface CreateMarkersResult {
+  layer: VectorLayer;
+  style: Style | undefined;
+}
+export declare type CreateMarkers = (
+  points: CreateMarkersPoints,
+  options?: CreateMarkersOptions
+) => CreateMarkersResult;
 
 export declare interface ChangeOverlayStatsProps {
   coords: CoordsArr;
@@ -131,14 +147,14 @@ export declare type MarkerHoverCallback = (
   options: MarkerHoverCallbackProps
 ) => void;
 export declare type MarkersIconCallback = (
-  points: CreateMarkersPropsItem
+  points: CreateMarkersPointsItem
 ) => CreateIconProps;
 
 export declare interface EventsMixinProps {
   map: OlMapRef;
-  mainMarker: Ref<VectorLayer | null>;
-  mainMarkerCoords: Ref<CoordsArr | null>;
-  searchMarkers: Ref<VectorLayer | null>;
+  mainMarker: VectorLayerRef;
+  mainMarkerCoords: Ref<CoordsArr | undefined>;
+  searchMarkers: VectorLayerRef;
   api: Ref<Api>;
   emits: (event: "on-zoom" | "on-click", arg: any) => void;
   resultHoverCallback?: ResultHoverCallback;
@@ -148,12 +164,9 @@ export declare interface EventsMixinProps {
   popupOnResultHover: boolean;
   zoomOnMarkerClick: boolean;
   zoomOnResultClick: boolean;
-  addMarkers: (
-    points: CreateMarkersProps,
-    options?: CreateMarkersOptions
-  ) => { layer: any; style: any };
+  addMarkers: CreateMarkers
   setupOverlay: () => void;
-  overlay: Ref<any>;
+  overlay: Ref<Overlay | undefined>;
   changeOverlayStats: ({ text, coords }: ChangeOverlayStatsProps) => void;
   clusterMode: boolean;
   mapId: string;

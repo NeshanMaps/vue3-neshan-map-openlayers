@@ -1,5 +1,5 @@
 declare const ol: any;
-import { ChangeOverlayStats, OverlayMixinProps } from "@/components/Map.model";
+import { ChangeOverlayStats, Overlay, OverlayMixinProps } from "@/components/Map.model";
 import { ref } from "vue";
 
 export function overlayMixin({
@@ -7,7 +7,7 @@ export function overlayMixin({
   popupContainer
 }: OverlayMixinProps) {
 
-  const overlay = ref<any>();
+  const overlay = ref<Overlay>();
 
   /**
    * Sets up overlay on map
@@ -22,7 +22,7 @@ export function overlayMixin({
   const changeOverlayStats: ChangeOverlayStats = ({ coords, text }) => {
     if (!popupContainer.value) return;
     popupContainer.value.innerHTML = text;
-    overlay.value.setPosition(coords);
+    overlay.value?.setPosition(coords);
   };
 
   /**
@@ -31,7 +31,7 @@ export function overlayMixin({
   * @returns overlay
   */
   const createOverlay = (persistant = false) => {
-    const overlay = new ol.Overlay({
+    const overlay: Overlay = new ol.Overlay({
       element: popupContainer.value,
       map: map.value,
       positioning: "top-center",

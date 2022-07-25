@@ -2,9 +2,12 @@ import {
   CoordsArr,
   EventsMixinProps,
   Extent,
+  Ol,
   SearchItem,
+  VectorLayer,
   ZoomToExtentOptions,
 } from "@/components/Map.model";
+import { Feature, MapBrowserEvent } from "openlayers";
 import { ref } from "vue";
 import {
   getCoordsAndTextFromFeature,
@@ -46,8 +49,8 @@ export function eventsMixin({
   };
 
   const setupClickEvent = () => {
-    map.value?.on("click", (event: any) => {
-      handleClickEvent(event);
+    map.value?.on("click", (event) => {
+      handleClickEvent(<Ol.MapBrowserEvent>event);
     });
   };
 
@@ -72,8 +75,8 @@ export function eventsMixin({
    */
   const setupMarkerHoverEvent = () => {
     setupOverlay();
-    map.value?.on("pointermove", function (evt: any) {
-      const hoveredFeature = getFeatureFromEvent(evt);
+    map.value?.on("pointermove", function (evt) {
+      const hoveredFeature = getFeatureFromEvent(<MapBrowserEvent>evt);
       if (hoveredFeature) {
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature);
@@ -100,7 +103,7 @@ export function eventsMixin({
           });
         }
       }
-      overlay.value.setPosition(undefined);
+      overlay.value?.setPosition(undefined);
     });
   };
 
@@ -122,7 +125,7 @@ export function eventsMixin({
    * In both cases emits an event named 'on-click' afterwards.
    * @param event - Map click event.
    */
-  const handleClickEvent = async (event: any) => {
+  const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
     if (mainMarker.value) map.value?.removeLayer(mainMarker.value);
     const selectedFeature = getFeatureFromEvent(event);
     if (selectedFeature) {
@@ -158,7 +161,7 @@ export function eventsMixin({
       mainMarker.value = marker;
       const data = await api.value.REVERSE(...stdPoint);
       const text = getTitleFromData(data);
-      style.getText().setText(text);
+      style?.getText().setText(text);
       marker.setStyle(style);
       return { marker, stdPoint, data };
     } catch (error) {
@@ -172,7 +175,7 @@ export function eventsMixin({
    * @param cluster
    * @param options.duration - Zooming duration
    */
-  const zoomToCluster = (cluster: any, options?: ZoomToExtentOptions) => {
+  const zoomToCluster = (cluster: Feature, options?: ZoomToExtentOptions) => {
     const extent = getClusterExtent(cluster);
     zoomToExtent(extent, options);
   };
@@ -182,7 +185,7 @@ export function eventsMixin({
    * @param marker
    * @param options.duration - Zooming duration
    */
-  const zoomToMarker = (marker: any, options?: ZoomToExtentOptions) => {
+  const zoomToMarker = (marker: Feature, options?: ZoomToExtentOptions) => {
     const extent = getFeatureExtent(marker);
     zoomToExtent(extent, options);
   };
@@ -205,7 +208,7 @@ export function eventsMixin({
    * @param layer
    * @param options.duration - Zooming duration
    */
-  const zoomToLayer = (layer: any, options?: ZoomToExtentOptions) => {
+  const zoomToLayer = (layer: VectorLayer, options?: ZoomToExtentOptions) => {
     const extent: Extent = layer.getSource().getExtent();
     zoomToExtent(extent, options);
   };
@@ -259,7 +262,7 @@ export function eventsMixin({
   const findClusterByTitle = (title: string) => {
     const clusters = searchMarkers.value?.getSource().getFeatures();
     return clusters?.find((cluster) =>
-      cluster.get("features").find((feat: any) => feat.get("text") === title)
+      cluster.get("features").find((feat: Feature) => feat.get("text") === title)
     );
   };
 
@@ -278,10 +281,10 @@ export function eventsMixin({
    * @param evt - Map hover or click event
    * @returns feature (If found)
    */
-  const getFeatureFromEvent = (evt: any) => {
-    return map.value?.forEachFeatureAtPixel(
+  const getFeatureFromEvent = (evt: MapBrowserEvent) => {
+    return <Feature | undefined>map.value?.forEachFeatureAtPixel(
       evt.pixel,
-      (feature: any) => feature
+      (feature) => feature
     );
   };
 

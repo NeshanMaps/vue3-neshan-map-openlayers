@@ -31,7 +31,7 @@ export const sanitizeLocation = (loc?: CoordsObj) => {
     ? loc instanceof Object
       ? ([loc.longitude, loc.latitude] as CoordsArr)
       : loc
-    : null
+    : undefined
 }
 
 /**

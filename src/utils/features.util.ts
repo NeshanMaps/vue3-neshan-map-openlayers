@@ -4,16 +4,19 @@ import {
   CreateIconProps,
   CreateLayerProps,
   CreateMapPointsOptions,
-  CreateMarkersOptions,
-  CreateMarkersProps,
-  CreateMarkersPropsItem,
+  CreateMarkers,
+  CreateMarkersPoints,
+  CreateMarkersPointsItem,
   CreateRawStyleProps,
+  CreateStyleProps,
   Extent,
   IconColor,
   MarkersIconCallback,
   Ol,
   SearchItem,
+  Source,
   Style,
+  Text,
   VectorLayer,
 } from "@/components/Map.model";
 import { markerUrls } from "@/parameters";
@@ -32,17 +35,17 @@ import { transformCoords } from "./location.util";
  * @param options.showPopup - If you want show the text as popup
  * @returns style and layer.
  */
-export const createMarkers = (
-  points: CreateMarkersProps,
-  options?: CreateMarkersOptions
+export const createMarkers: CreateMarkers = (
+  points,
+  options
 ) => {
-  const [{ image, color, iconScale } = {} as CreateMarkersPropsItem] = points;
+  const [{ image, color, iconScale } = {} as CreateMarkersPointsItem] = points;
   const features = createFeaturesFromPoints(
     points,
     options?.markersIconCallback
   );
-  let layer: any;
-  let _style: any;
+  let layer: VectorLayer;
+  let _style: Style | undefined;
   if (options?.cluster) {
     layer = createClusterLayer(features, options?.showPopup);
   } else {
@@ -58,7 +61,7 @@ export const createMarkers = (
   return { layer, style: _style };
 };
 
-export const createText = (): any => {
+export const createText = (): Text => {
   return new ol.style.Text({
     overflow: true,
     scale: 1.6,
@@ -78,7 +81,7 @@ export const createIcon = ({
   iconScale = 0.1,
   src = markerUrls[color],
   anchor = [0.5, 1],
-}: CreateIconProps = {}): any => {
+}: CreateIconProps = {}): Ol.style.Image => {
   return new ol.style.Icon({
     src,
     scale: iconScale,
@@ -93,7 +96,7 @@ export const createRawStyle = ({ image, text }: CreateRawStyleProps): Style => {
   });
 };
 
-export const createStyle = ({ showPopup = true, image = undefined }) => {
+export const createStyle = ({ showPopup = true, image }: CreateStyleProps) => {
   const _text = createText();
   const _image = image || createIcon({ color: "blue", iconScale: 0.15 });
   const _style = createRawStyle({ text: _text, image: _image });
@@ -108,7 +111,7 @@ export const createStyle = ({ showPopup = true, image = undefined }) => {
  * @param features
  * @returns ol source
  */
-const createSource = (features: any): any => {
+const createSource = (features: Feature[]): Source => {
   return new ol.source.Vector({
     features,
     // projection: map.value.getView().projection, // Is it neccesary?
@@ -160,7 +163,7 @@ export const createMapPoints = (
  * @param options.hardText - Will not use popups and just hard text
  * @returns
  */
-const styleFuncGen = (style: any, { hardText = false }): Ol.StyleFunction => {
+const styleFuncGen = (style: Style, { hardText = false }): Ol.StyleFunction => {
   return (feature) => {
     if (hardText) {
       style.getText().setText(feature.get("text"));
@@ -173,7 +176,7 @@ const styleFuncGen = (style: any, { hardText = false }): Ol.StyleFunction => {
   };
 };
 
-const createClusterSource = (features: any) => {
+const createClusterSource = (features: Feature[]) => {
   return new ol.source.Cluster({
     distance: 30,
     minDistance: 30,
@@ -223,16 +226,16 @@ const createClusterStyleFunc = (
   styleCache: { [s: string]: any },
   showPopup?: boolean
 ) => {
-  return (clusterFeature: any) => {
-    const innerFeatures = clusterFeature.get("features");
+  return (clusterFeature: Feature) => {
+    const innerFeatures: Feature[] = clusterFeature.get("features");
     if (showPopup) {
       clusterFeature.set(
         "text",
-        innerFeatures.map((feat: any) => feat.get("text"))
+        innerFeatures.map((feat: Feature) => feat.get("text"))
       );
     }
     const size = innerFeatures.length;
-    let style = styleCache[size];
+    let style: Style | Style[] | null = styleCache[size];
     if (!style) {
       if (size !== 1) {
         style = createClusterStyle(size);
@@ -246,9 +249,9 @@ const createClusterStyleFunc = (
   };
 };
 
-const createClusterLayer = (features: any[], showPopup?: boolean) => {
+const createClusterLayer = (features: Feature[], showPopup?: boolean) => {
   const styleCache: { [s: string]: any } = {};
-  const cluster_layer = new ol.layer.Vector({
+  const cluster_layer: VectorLayer = new ol.layer.Vector({
     source: createClusterSource(features),
     style: createClusterStyleFunc(styleCache, showPopup),
   });
@@ -260,7 +263,7 @@ const createClusterLayer = (features: any[], showPopup?: boolean) => {
  * @param cluster
  * @returns extent
  */
-export const getClusterExtent = (cluster: any) => {
+export const getClusterExtent = (cluster: Feature) => {
   const originalFeatures = cluster.get("features");
   const extent: Extent = new ol.extent.createEmpty();
   originalFeatures.forEach((f: Feature) => {
@@ -274,7 +277,7 @@ export const getClusterExtent = (cluster: any) => {
  * @param feature
  * @returns extent
  */
-export const getFeatureExtent = (feature: Feature): Extent => {
+export const getFeatureExtent = (feature: Feature) => {
   return feature.getGeometry().getExtent();
 };
 
@@ -298,7 +301,7 @@ export const getCoordsAndTextFromFeature = (feature: Feature) => {
  * @param feature
  * @returns Coords array
  */
-export const getCoordsFromFeature = (feature: Feature): CoordsArr => {
+export const getCoordsFromFeature = (feature: Feature) => {
   const geometry: geom.Point = <geom.Point>feature.getGeometry()
   return <CoordsArr>geometry.getCoordinates().slice(0, 2); //slice because it return array of 3 args idk why
 };
@@ -310,7 +313,7 @@ export const getCoordsFromFeature = (feature: Feature): CoordsArr => {
  * @returns array of features.
  */
 export const createFeaturesFromPoints = (
-  points: CreateMarkersProps,
+  points: CreateMarkersPoints,
   markersIconCallback?: MarkersIconCallback
 ): Feature[] => {
   return points.map(

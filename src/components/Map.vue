@@ -57,7 +57,8 @@ import {
   ResultClickCallback,
   MarkersIconCallback,
   MarkerHoverCallback,
-  OlMap
+  OlMap,
+VectorLayer
 } from "./Map.model";
 export default {
   name: "NeshanMap",
@@ -150,11 +151,11 @@ watch(
   }
 );
 
-const sanitizedCenter = ref<CoordsArr | null>(sanitizeLocation(props.center));
-const map = ref<OlMap | null>(null);
-const mainMarker = ref<any>(null);
-const mainMarkerCoords = ref<CoordsArr | null>(null);
-const searchMarkers = ref<any>(null);
+const sanitizedCenter = ref<CoordsArr | undefined>(sanitizeLocation(props.center));
+const map = ref<OlMap>();
+const mainMarker = ref<VectorLayer>();
+const mainMarkerCoords = ref<CoordsArr>();
+const searchMarkers = ref<VectorLayer>();
 const mapType = ref(props.defaultType);
 const reactiveTiles = ref(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))

@@ -1,7 +1,7 @@
 import {
-  CreateMarkersOptions,
-  CreateMarkersProps,
+  CreateMarkers,
   MarkersMixinProps,
+  VectorLayerRef,
 } from '../components/Map.model'
 import { createMarkers } from '../utils'
 
@@ -19,7 +19,7 @@ export function markersMixin({ map }: MarkersMixinProps) {
    * @param options.showPopup - If you want show the text as popup
    * @returns style and layer.
    */
-  const addMarkers = (points: CreateMarkersProps, options?: CreateMarkersOptions) => {
+  const addMarkers: CreateMarkers = (points, options) => {
     const { layer, style } = createMarkers(points, options)
     map.value?.addLayer(layer)
     return { layer, style }
@@ -28,9 +28,10 @@ export function markersMixin({ map }: MarkersMixinProps) {
   /**
    * Removes markers from map
    */
-  const clearMarkerLayer = (layer: any) => {
+  const clearMarkerLayer = (layer: VectorLayerRef) => {
+    if (!layer.value) return
     map.value?.removeLayer(layer.value)
-    layer.value = null
+    layer.value = undefined
   }
 
   return {
