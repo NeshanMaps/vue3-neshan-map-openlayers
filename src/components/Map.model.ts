@@ -173,7 +173,6 @@ export declare interface EventsMixinProps {
 }
 export declare interface MarkersMixinProps {
   map: OlMapRef;
-  markersIconCallback?: MarkersIconCallback;
 }
 
 export declare interface ZoomToExtentOptions {
@@ -189,6 +188,9 @@ export declare interface CreateMarkersOptions {
   markersIconCallback?: MarkersIconCallback;
   showPopup?: boolean;
   cluster?: boolean;
+  clusterThreshold?: number
+  clusterDistance?: number
+  clusterMinDistance?: number
 }
 
 export declare interface CreateMapPointsOptions {

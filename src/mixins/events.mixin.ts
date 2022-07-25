@@ -153,8 +153,7 @@ export function eventsMixin({
   const reverseOnPoint = async (point: CoordsArr) => {
     try {
       const { layer: marker, style } = addMarkers(
-        [{ coords: point, text: "" }],
-        { cluster: false }
+        [{ coords: point, text: "" }]
       );
       const stdPoint = transformCoords(point);
       mainMarkerCoords.value = stdPoint;
@@ -302,5 +301,6 @@ export function eventsMixin({
     zoomToLayer,
     mapHeight,
     updateMapHeight,
+    zoom
   };
 }

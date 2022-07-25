@@ -1,9 +1,11 @@
+import { Feature } from "openlayers"
+import { toRaw } from "vue"
 import {
   CreateMarkers,
   MarkersMixinProps,
   VectorLayerRef,
-} from '../components/Map.model'
-import { createMarkers } from '../utils'
+} from "../components/Map.model"
+import { createClusterSource, createMarkers } from "../utils"
 
 export function markersMixin({ map }: MarkersMixinProps) {
   /**
@@ -34,8 +36,29 @@ export function markersMixin({ map }: MarkersMixinProps) {
     layer.value = undefined
   }
 
+  /**
+   * Toggles cluster source to deactivate or apply clustering
+   * @param layer
+   * @param deactivate - whether to deactivate clustering or apply it.
+   */
+  const toggleClusterSource = (layer: VectorLayerRef, deactivate: boolean) => {
+    const rawLayer = toRaw(layer.value)
+    const clusterFeatures = rawLayer?.getSource().getFeatures() || []
+    const features = clusterFeatures.reduce((result: Feature[], cf) => {
+      const features: Feature[] = cf.get("features")
+      return [...result, ...features]
+    }, [])
+    const newDistance = deactivate ? 0 : 30
+    const newSource = createClusterSource(features, {
+      distance: newDistance,
+      minDistance: newDistance,
+    })
+    layer.value?.setSource(newSource)
+  }
+
   return {
     addMarkers,
     clearMarkerLayer,
+    toggleClusterSource,
   }
 }

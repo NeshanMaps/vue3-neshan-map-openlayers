@@ -130,6 +130,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  clusterThreshold: {
+    type: Number,
+    default: 18
+  }
 });
 
 const api = ref<Api>(createApi(props.serviceKey));
@@ -203,7 +207,7 @@ const toggleTraffic = (value: boolean) => {
  * @param tagName - Name of the expected tag
  * @returns Created tag
  */
-const importMap = (url: string, tagName = "my-overlayer") => {
+const importMap = (url: string, tagName = "my-openlayer") => {
   const foundDoc = document.getElementById(tagName);
   if (foundDoc) return foundDoc; // was already loaded
   const scriptTag = document.createElement("script");
@@ -254,8 +258,8 @@ const shakeMap = () => {
   setTimeout(() => map.value?.updateSize(), 300);
 };
 
-const { addMarkers, clearMarkerLayer } = markersMixin({
-  map,
+const { addMarkers, clearMarkerLayer, toggleClusterSource } = markersMixin({
+  map
 });
 const searchResults = ref<SearchItem[]>([]);
 const loading = ref(false);
@@ -278,6 +282,7 @@ const search = async ({ term = "", coords }: SearchProps) => {
       showPopup: true,
       markersIconCallback: props.markersIconCallback,
       cluster: props.cluster,
+      clusterThreshold: props.clusterThreshold
     });
     searchMarkers.value = layer;
     setTimeout(() => {
@@ -306,7 +311,8 @@ const {
   zoomToLayer,
   zoomToCluster,
   updateMapHeight,
-  mapHeight
+  mapHeight,
+  zoom
 } = eventsMixin({
   map,
   mainMarker,
@@ -328,6 +334,16 @@ const {
   clusterMode: props.cluster,
   mapId: props.mapId
 });
+/**
+ * Changes cluster source to marker source on cluster threshold passing and vice versa
+ */
+watch(zoom, (nv, ov) => {
+  if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
+    toggleClusterSource(searchMarkers, true)
+  } else if (nv < props.clusterThreshold && ov >= props.clusterThreshold) {
+    toggleClusterSource(searchMarkers, false)
+  }
+})
 
 /**
  * Setups Map, adds serviceToken to api
