@@ -42,8 +42,9 @@ export function markersMixin({ map }: MarkersMixinProps) {
    * @param deactivate - whether to deactivate clustering or apply it.
    */
   const toggleClusterSource = (layer: VectorLayerRef, deactivate: boolean) => {
+    if (!layer.value) return
     const rawLayer = toRaw(layer.value)
-    const clusterFeatures = rawLayer?.getSource().getFeatures() || []
+    const clusterFeatures = rawLayer.getSource().getFeatures() || []
     const features = clusterFeatures.reduce((result: Feature[], cf) => {
       const features: Feature[] = cf.get("features")
       return [...result, ...features]
@@ -53,7 +54,7 @@ export function markersMixin({ map }: MarkersMixinProps) {
       distance: newDistance,
       minDistance: newDistance,
     })
-    layer.value?.setSource(newSource)
+    layer.value.setSource(newSource)
   }
 
   return {

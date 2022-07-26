@@ -1,27 +1,26 @@
 <template>
-  <MagnetIcon v-if="name === 'magnet'" :size="size"></MagnetIcon>
-  <CloseIcon v-else-if="name === 'close'" :size="size"></CloseIcon>
-  <NeighbourhoodIcon
-    v-else-if="name === 'neighbourhood'"
-    :size="size"
-  ></NeighbourhoodIcon>
+  <svg :style="`width: ${size}px; height: ${size}px`" viewBox="0 0 24 24">
+    <path fill="currentColor" :d="inlineSvgs[name].d" />
+  </svg>
 </template>
 
 <script lang="ts">
-import MagnetIcon from "./Magnet.icon.vue";
-import CloseIcon from "./Close.icon.vue";
-import NeighbourhoodIcon from "./Neighbourhood.icon.vue";
-import { defineComponent } from "vue";
+import { defineComponent, PropType, defineProps } from "vue"
+import { IconName } from "../../static/index.model"
 export default defineComponent({
   name: "IconIndex",
-  components: {
-    MagnetIcon,
-    CloseIcon,
-    NeighbourhoodIcon,
+})
+</script>
+<script setup lang="ts">
+import { inlineSvgs } from "../../static/index"
+defineProps({
+  name: {
+    type: String as PropType<IconName>,
+    default: "close",
   },
-  props: {
-    name: String,
-    size: Number,
+  size: {
+    type: Number,
+    default: 15,
   },
-});
+})
 </script>

@@ -2,14 +2,11 @@
   <div
     :style="resultBoxStyle"
     :class="resultBoxClass"
-    class="map-result-box neshan-scroll-bar"
+    class="map-result-box"
     open
+    ref="resultSection"
   >
-    <Loading
-      v-if="loading"
-      dense
-      color="blue"
-    />
+    <Loading v-if="loading" dense color="blue" />
     <ResultItem
       v-for="item in results"
       :key="'' + item.location.x + item.location.y"
@@ -20,37 +17,50 @@
   </div>
 </template>
 <script lang="ts">
-import { defineProps, PropType, defineEmits } from 'vue'
-import { SearchItem } from '../Map.model'
+import { defineProps, PropType, defineEmits, watch, ref } from "vue"
+import { SearchItem } from "../Map.model"
 export default {
-  name: 'ResultBox',
+  name: "ResultBox",
 }
 </script>
 <script setup lang="ts">
-import ResultItem from './ResultItem.vue'
-import Loading from '../Loading.vue'
-defineProps({
+import ResultItem from "./ResultItem.vue"
+import Loading from "../Loading.vue"
+const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
   results: {
     type: Array as PropType<SearchItem[]>,
     default: () => [],
   },
-  loading: Boolean
+  loading: Boolean,
+  mapHeight: {
+    type: Number,
+    default: 300
+  },
 })
 
-const emits = defineEmits(['result-hover', 'result-click'])
+const resultSection = ref<HTMLDivElement>()
+
+const emits = defineEmits(["result-hover", "result-click"])
 const emitHover = (item: SearchItem) => {
-  emits('result-hover', item)
+  emits("result-hover", item)
 }
 const emitClick = (item: SearchItem) => {
-  emits('result-click', item)
+  emits("result-click", item)
 }
+watch(
+  () => props.mapHeight,
+  (nv) => {
+    if (!resultSection.value) return
+    resultSection.value.setAttribute("style", `height: ${nv}px`)
+  }
+)
 </script>
 
 <style lang="scss" scoped>
 .map-result-box {
-  overflow: auto;
+  overflow: hidden;
   background: none;
 }
 

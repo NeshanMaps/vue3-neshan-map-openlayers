@@ -14,7 +14,7 @@
       @keydown.enter="runTimeout(0)"
       @input="runTimeout()"
       @focus="emitActivation(true)"
-    >
+    />
     <button v-if="!activated" @click="emitActivation(true)">
       <Icon name="magnet" :size="15"></Icon>
     </button>
@@ -24,14 +24,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineProps, defineEmits, ref } from 'vue'
-import { computed } from '@vue/reactivity'
+import { defineProps, defineEmits, ref } from "vue"
+import { computed } from "@vue/reactivity"
 export default {
-  name: 'SettingsComp',
+  name: "SettingsComp",
 }
 </script>
 <script setup lang="ts">
-import Icon from '../icons/index.vue'
+import Icon from "../icons/index.vue"
 
 const props = defineProps({
   searchBoxClass: Array,
@@ -40,21 +40,22 @@ const props = defineProps({
   activated: Boolean,
   searchText: {
     type: String,
-    default: '',
   },
 })
 
 const emit = defineEmits([
-  'update:search-text',
-  'update:search-coords',
-  'update:activated',
-  'submit',
+  "update:search-text",
+  "update:search-coords",
+  "update:activated",
+  "submit",
 ])
 const text = computed({
   get: () => props.searchText,
   set: (val) => {
-    privateText.value = val
-    emit('update:search-text', val)
+    if (props.searchText === undefined) {
+      privateText.value = val
+    }
+    emit("update:search-text", val)
   },
 })
 
@@ -65,19 +66,19 @@ const privateText = ref(props.searchText)
  * Emits Search Term to the parent component
  * @param term search text
  */
-const emitSearch = (term = '') => {
+const emitSearch = (term = "") => {
   const inputText = term || text.value || privateText.value
-  emit('submit', inputText)
+  emit("submit", inputText)
 }
 
 /**
  * Emits activation value to weather the component should be expanded or collapsed
  */
 const emitActivation = (val: boolean) => {
-  emit('update:activated', val)
+  emit("update:activated", val)
 }
 
-let emitTimeout: number;
+let emitTimeout: number
 /**
  * Runs and updates a timeout so after that if fires emitSearch function
  */
@@ -98,7 +99,7 @@ const runTimeout = (delay = 1000) => {
   padding-left: 0.5rem;
   background-color: white;
   box-shadow: 0px 2px 4px 1px #a8a8a8;
-  transition: 0.8s;
+  transition: inherit;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,10 +112,17 @@ const runTimeout = (delay = 1000) => {
     height: 2rem;
     padding-right: 0.5rem;
   }
-  input[type='search']::-webkit-search-decoration,
-  input[type='search']::-webkit-search-cancel-button,
-  input[type='search']::-webkit-search-results-button,
-  input[type='search']::-webkit-search-results-decoration {
+  input[type="search"]:-webkit-autofill,
+  input[type="search"]:-webkit-autofill:hover,
+  input[type="search"]:-webkit-autofill:focus,
+  input[type="search"]:-webkit-autofill:active {
+    // To stop the browser from changing background color
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration {
     -webkit-appearance: none;
   }
   button {
@@ -126,7 +134,7 @@ const runTimeout = (delay = 1000) => {
   }
 }
 
-.map-search-box[activated='true'] {
+.map-search-box[activated="true"] {
   align-items: center;
   background: #f5f5f5;
   border: 1px solid #d9d9d9;

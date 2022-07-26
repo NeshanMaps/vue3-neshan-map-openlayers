@@ -11,6 +11,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "open": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "prepare": "vue-cli-service build --target lib --name NeshanMap src/components/Map.vue"
