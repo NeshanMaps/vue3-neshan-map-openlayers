@@ -1,6 +1,6 @@
 <template>
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
-  <div :id="mapId" style="height: 100%">
+  <div :id="mapId" class="map">
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -21,7 +21,6 @@
     <slot v-if="!hideSearchContainer" name="search-container">
       <Drawer
         :results="searchResults"
-        :map-height="mapHeight"
         @search="search"
         @result-click="handleResultClick"
         @result-hover="handleResultHover"
@@ -322,7 +321,6 @@ const {
   zoomToLayer,
   zoomToCluster,
   updateMapHeight,
-  mapHeight,
   zoom,
   updateBreakpoints
 } = eventsMixin({
@@ -381,6 +379,12 @@ defineExpose({
 
 <style lang="scss">
 @import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
+@import url('@/assets/main.scss');
+
+.map {
+  height: 100%;
+  direction: rtl;
+}
 
 .justify-between {
   display: flex;

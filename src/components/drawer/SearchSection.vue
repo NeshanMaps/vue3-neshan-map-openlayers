@@ -1,7 +1,6 @@
 <template>
   <div
-    :activated="activated"
-    dir="rtl"
+    :activated="store.state.drawerActivation"
     :style="searchBoxStyle"
     class="map-search-box"
     :class="searchBoxClass"
@@ -12,12 +11,12 @@
       placeholder="جستجو"
       v-model="text"
       @keydown.enter="runTimeout(0)"
-      @focus="emitActivation(true)"
+      @focus="store.toggleDrawerActivation(true)"
     />
-    <button v-if="!activated" @click="emitActivation(true)">
+    <button v-if="!store.state.drawerActivation" @click="store.toggleDrawerActivation(true)">
       <Icon name="magnet" :size="15"></Icon>
     </button>
-    <button v-else @click="emitActivation(false)">
+    <button v-else @click="store.toggleDrawerActivation(false)">
       <Icon name="close" :size="15"></Icon>
     </button>
   </div>
@@ -37,7 +36,6 @@ const props = defineProps({
   searchBoxClass: Array,
   searchBoxStyle: Object,
   typesClass: Array,
-  activated: Boolean,
   searchText: {
     type: String,
   },
@@ -46,7 +44,6 @@ const props = defineProps({
 const emit = defineEmits([
   "update:search-text",
   "update:search-coords",
-  "update:activated",
   "submit",
 ])
 const text = computed({
@@ -77,16 +74,10 @@ const emitSearch = (term = "") => {
   emit("submit", inputText)
 }
 
-/**
- * Emits activation value to weather the component should be expanded or collapsed
- */
-const emitActivation = (val: boolean) => {
-  emit("update:activated", val)
-}
-
 let emitTimeout: number
 /**
  * Runs and updates a timeout so after that if fires emitSearch function
+ * @param delay - delay time for emiting search, defaults to 1000
  */
 const runTimeout = (delay = 1000) => {
   clearTimeout(emitTimeout)

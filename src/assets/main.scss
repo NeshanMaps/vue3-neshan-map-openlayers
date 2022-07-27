@@ -1,0 +1,25 @@
+:root {
+  --md: 0.5rem;
+  --lg: 1rem;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.px-1 {
+  padding-left: var(--md);
+  padding-right: var(--md);
+}
+.px-2 {
+  padding-left: var(--lg);
+  padding-right: var(--lg);
+}

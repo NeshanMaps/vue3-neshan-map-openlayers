@@ -1,15 +1,12 @@
 <template>
-  <div class="map-drawer" :activated="activated" ref="mapDrawer">
+  <div class="map-drawer" :activated="store.state.drawerActivation" ref="mapDrawer">
     <SearchSection
       ref="searchSection"
-      v-model:activated="activated"
       v-model:searchText="searchText"
       @submit="emitSearch({ term: $event })"
     ></SearchSection>
     <ResultsSection
       :results="results"
-      :loading="loading"
-      :mapHeight="mapHeight"
       @result-click="emitResultClick"
       @result-hover="emitResultHover"
     ></ResultsSection>
@@ -26,6 +23,7 @@ export default {
 <script setup lang="ts">
 import SearchSection from "./SearchSection.vue"
 import ResultsSection from "./ResultsSection.vue"
+import { store } from "@/store"
 
 const props = defineProps({
   results: Array as PropType<SearchItem[]>,
@@ -34,9 +32,7 @@ const props = defineProps({
     default: () => createCoordsObject(),
   },
   loading: Boolean,
-  mapHeight: Number,
 })
-const activated = ref(false)
 const searchText = ref("")
 const emits = defineEmits(["search", "result-click", "result-hover"])
 
@@ -75,11 +71,11 @@ const applyDrawerMaxHeight = (activated: boolean) => {
     mapDrawer.value?.setAttribute("style", `max-height: 100%;`)
   }
 }
-watch(activated, (nv) => {
+watch(() => store.state.drawerActivation, (nv) => {
   applyDrawerMaxHeight(nv)
 })
 onMounted(() => {
-  applyDrawerMaxHeight(activated.value)
+  applyDrawerMaxHeight(store.state.drawerActivation)
 })
 </script>
 

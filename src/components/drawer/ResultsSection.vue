@@ -6,13 +6,18 @@
     ref="resultSection"
   >
     <Loading v-if="store.state.loading" dense color="blue" />
-    <ResultItem
-      v-for="item in results"
-      :key="'' + item.location.x + item.location.y"
-      :item="item"
-      @mouseenter="emitHover(item)"
-      @click="emitClick(item)"
-    />
+    <template v-if="store.state.selectedMarkerLocation">
+      <ResultView :item="store.state.selectedMarkerLocation" />
+    </template>
+    <template v-else>
+      <ResultItem
+        v-for="item in results"
+        :key="'' + item.location.x + item.location.y"
+        :item="item"
+        @mouseenter="emitHover(item)"
+        @click="emitClick(item)"
+      />
+    </template>
   </div>
 </template>
 <script lang="ts">
@@ -25,17 +30,14 @@ export default {
 <script setup lang="ts">
 import ResultItem from "./ResultItem.vue"
 import Loading from "../Loading.vue"
+import ResultView from './ResultView.vue'
 import { store } from "@/store"
-const props = defineProps({
+defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
   results: {
     type: Array as PropType<SearchItem[]>,
     default: () => [],
-  },
-  mapHeight: {
-    type: Number,
-    default: 300
   },
 })
 
@@ -49,7 +51,7 @@ const emitClick = (item: SearchItem) => {
   emits("result-click", item)
 }
 watch(
-  () => props.mapHeight,
+  () => store.state.mapHeight,
   (nv) => {
     if (!resultSection.value) return
     resultSection.value.setAttribute("style", `height: ${nv}px`)
@@ -59,13 +61,13 @@ watch(
 
 <style lang="scss" scoped>
 .map-result-box {
-  overflow: hidden;
+  overflow: auto;
   background: none;
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 0px;
 }
 
 /* Track */

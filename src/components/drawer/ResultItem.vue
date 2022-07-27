@@ -1,5 +1,5 @@
 <template>
-  <div dir="rtl">
+  <div>
     <div class="list-item">
       <b>
         {{ item?.title }}

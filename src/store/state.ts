@@ -1,3 +1,4 @@
+import { ReverseResult } from "@/components/Map.model"
 import { BreakPoints } from "./state.model"
 
 export const breakpointsSegments = {
@@ -20,5 +21,8 @@ export const state = {
     ...breakpointsSegments,
     lt: {...breakpointsSegments},
     gt: {...breakpointsSegments}
-  } as BreakPoints
+  } as BreakPoints,
+  mapHeight: 1000,
+  selectedMarkerLocation: null as ReverseResult | null,
+  drawerActivation: false
 }

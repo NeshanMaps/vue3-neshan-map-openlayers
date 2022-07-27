@@ -111,10 +111,9 @@ export function eventsMixin({
     })
   }
 
-  const mapHeight = ref(1000)
   const setupResizeEvents = () => {
     window.addEventListener("resize", updateMapHeight)
-    window.addEventListener('resize', updateBreakpoints)
+    window.addEventListener("resize", updateBreakpoints)
   }
   /**
    * Updates map height value on window resize
@@ -122,7 +121,7 @@ export function eventsMixin({
   const updateMapHeight = () => {
     const mapContainer = document.getElementById(mapId)
     if (!mapContainer) return
-    mapHeight.value = mapContainer.clientHeight
+    store.setMapHeight(mapContainer.clientHeight)
   }
   /**
    * Updates store breakpoints on windows resize
@@ -167,8 +166,7 @@ export function eventsMixin({
       emits("on-click", { event, selectedFeature, map })
     } else {
       const point: CoordsArr = event.coordinate
-      const result = await reverseOnPoint(point)
-      const { marker, stdPoint, data } = result
+      const { marker, stdPoint, data } = await reverseOnPoint(point)
       emits("on-click", { event, marker, stdPoint, data, map })
     }
   }
@@ -182,11 +180,14 @@ export function eventsMixin({
    */
   const reverseOnPoint = async (point: CoordsArr) => {
     try {
+      store.toggleDrawerActivation(true)
+      store.toggleLoading(true)
       const { layer: marker, style } = addMarkers([{ coords: point, text: "" }])
       const stdPoint = transformCoords(point)
       mainMarkerCoords.value = stdPoint
       mainMarker.value = marker
       const data = await api.value.REVERSE(...stdPoint)
+      store.setSelectedMarkerLocation(data)
       const text = getTitleFromData(data)
       style?.getText().setText(text)
       marker.setStyle(style)
@@ -194,6 +195,8 @@ export function eventsMixin({
     } catch (error) {
       console.log(error)
       return {}
+    } finally {
+      store.toggleLoading(false)
     }
   }
 
@@ -222,9 +225,10 @@ export function eventsMixin({
    * @param options.duration - Zooming duration
    */
   const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
+    const duration = options?.duration || 500
     map.value?.getView().fit(extent, {
       size: map.value.getSize(),
-      duration: options?.duration || 500,
+      duration,
       minResolution: 0.3,
       padding: [50, 400, 50, 50],
     })
@@ -304,9 +308,8 @@ export function eventsMixin({
     zoomToExtent,
     zoomToCluster,
     zoomToLayer,
-    mapHeight,
     updateMapHeight,
     zoom,
-    updateBreakpoints
+    updateBreakpoints,
   }
 }

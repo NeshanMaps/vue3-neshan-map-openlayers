@@ -71,6 +71,7 @@ const trafficLayer = computed({
   position: absolute;
   z-index: 10;
   bottom: 3.5vh;
+  left: 1vw;
   max-width: 8.6vw;
   max-height: 8vw;
   overflow: hidden;

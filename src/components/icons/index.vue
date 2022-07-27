@@ -1,12 +1,12 @@
 <template>
   <svg :style="`width: ${size}px; height: ${size}px`" viewBox="0 0 24 24">
-    <path fill="currentColor" :d="inlineSvgs[name].d" />
+    <path :fill="color || 'currentColor'" :d="inlineSvgs[name].d" />
   </svg>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, defineProps } from "vue"
-import { IconName } from "../../static/index.model"
+import { RouteTypes } from "../../static/index.model"
 export default defineComponent({
   name: "IconIndex",
 })
@@ -15,12 +15,13 @@ export default defineComponent({
 import { inlineSvgs } from "../../static/index"
 defineProps({
   name: {
-    type: String as PropType<IconName>,
+    type: String as PropType<RouteTypes>,
     default: "close",
   },
   size: {
     type: Number,
     default: 15,
   },
+  color: String
 })
 </script>

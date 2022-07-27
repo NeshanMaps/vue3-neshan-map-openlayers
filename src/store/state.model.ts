@@ -1,7 +1,3 @@
-export declare interface State {
-  loading?: boolean
-}
-
 export declare interface BreakpointsSegments {
   xs: boolean
   sm: boolean

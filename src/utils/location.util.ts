@@ -1,6 +1,6 @@
 declare const ol: any // eslint-disable-line
 import {
-  GetTitleFromDataProps,
+  ReverseResult,
   CoordsObj,
   CoordsArr,
 } from '../components/Map.model'
@@ -9,7 +9,7 @@ import {
  * @param data - result of neshan web search
  * @returns title
  */
-export const getTitleFromData = (data: GetTitleFromDataProps) => {
+export const getTitleFromData = (data: ReverseResult) => {
   const mainTitle = data.place
     ? data.place
     : data.route_name

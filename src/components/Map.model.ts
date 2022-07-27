@@ -1,8 +1,9 @@
 import { Ref } from "vue"
 import type Ol from "openlayers"
 
-export { Ol }
+export type { Ol }
 import { Feature, Map, style } from "openlayers"
+import { RouteTypes } from "@/static/index.model"
 
 export declare type NuString = null | string
 export declare type MapType =
@@ -63,12 +64,6 @@ export declare interface CreateLayerProps {
   source?: Source
 }
 
-export declare interface GetTitleFromDataProps {
-  place?: NuString
-  route_name?: NuString
-  neighbourhood?: NuString
-}
-
 export declare interface SearchItem {
   category: string
   location: {
@@ -95,7 +90,7 @@ export declare interface ReverseResult {
   neighbourhood: NuString
   place: NuString
   route_name: NuString
-  route_type: NuString
+  route_type: null | RouteTypes
   state: NuString
   status: NuString
   village: NuString

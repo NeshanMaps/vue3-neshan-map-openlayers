@@ -18,7 +18,6 @@ import HomeView from './views/HomeView.vue'
 html,
 body {
   height: 100%;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0;
 }
 </style>
