@@ -1,199 +1,201 @@
-import { Ref } from "vue";
-import type Ol from "openlayers";
+import { Ref } from "vue"
+import type Ol from "openlayers"
 
-export { Ol };
-import { Feature, Map, style } from "openlayers";
+export { Ol }
+import { Feature, Map, style } from "openlayers"
 
-export declare type NuString = null | string;
+export declare type NuString = null | string
 export declare type MapType =
   | "neshan"
   | "dreamy"
   | "dreamy-gold"
   | "standard-night"
   | "standard-day"
-  | "osm-bright";
+  | "osm-bright"
 export declare interface OlMap extends Map {
-  setMapType(value: MapType): void;
-  switchPoiLayer(value: boolean): void;
-  switchTrafficLayer(value: boolean): void;
+  setMapType(value: MapType): void
+  switchPoiLayer(value: boolean): void
+  switchTrafficLayer(value: boolean): void
 }
-export declare type OlMapRef = Ref<OlMap | undefined>;
-export declare type DoubleNums = Ol.Coordinate;
-export declare type Extent = Ol.Extent;
-export declare type Style = style.Style;
-export declare type Image = Ol.style.Image;
-export declare type Text = style.Text;
-export declare type Source = Ol.source.Source;
-export declare type VectorLayer = Ol.layer.Vector;
+export declare type OlMapRef = Ref<OlMap | undefined>
+export declare type DoubleNums = Ol.Coordinate
+export declare type Extent = Ol.Extent
+export declare type Style = style.Style
+export declare type Image = Ol.style.Image
+export declare type Text = style.Text
+export declare type Source = Ol.source.Source
+export declare type VectorLayer = Ol.layer.Vector
 export declare type VectorLayerRef = Ref<VectorLayer | undefined>
-export declare type Cluster = Ol.source.Cluster;
+export declare type Cluster = Ol.source.Cluster
 export declare type Overlay = Ol.Overlay
 export declare interface CoordsObj {
-  latitude: number;
-  longitude: number;
+  latitude: number
+  longitude: number
 }
-export declare type CoordsArr = Ol.Coordinate;
+export declare type CoordsArr = Ol.Coordinate
 
 export declare interface Tile {
-  title: MapType;
-  url: string;
+  title: MapType
+  url: string
 }
 
-export declare type IconColor = "red" | "blue";
+export declare type IconColor = "red" | "blue"
 export declare interface CreateIconProps {
-  color?: IconColor;
-  iconScale?: number;
-  src?: string;
-  anchor?: DoubleNums;
+  color?: IconColor
+  iconScale?: number
+  src?: string
+  anchor?: DoubleNums
 }
 
 export declare interface CreateRawStyleProps {
-  image?: Image;
-  text?: Text;
+  image?: Image
+  text?: Text
 }
 
 export declare interface CreateStyleProps {
-  showPopup?: boolean;
-  image?: Image;
+  showPopup?: boolean
+  image?: Image
 }
 
 export declare interface CreateLayerProps {
-  target?: string | Element;
-  style?: Style | Ol.StyleFunction;
-  source?: Source;
+  target?: string | Element
+  style?: Style | Ol.StyleFunction
+  source?: Source
 }
 
 export declare interface GetTitleFromDataProps {
-  place?: NuString;
-  route_name?: NuString;
-  neighbourhood?: NuString;
+  place?: NuString
+  route_name?: NuString
+  neighbourhood?: NuString
 }
 
 export declare interface SearchItem {
-  category: string;
+  category: string
   location: {
-    x: number;
-    y: number;
-  };
-  neighbourhood: string;
-  region: string;
-  title: string;
-  type: string;
+    x: number
+    y: number
+  }
+  neighbourhood: string
+  region: string
+  title: string
+  type: string
 }
 export declare interface SearchResult {
-  count: number;
-  items: SearchItem[];
+  count: number
+  items: SearchItem[]
 }
 
 export declare interface ReverseResult {
-  city: NuString;
-  district: NuString;
-  formatted_address: NuString;
-  in_odd_even_zone: boolean;
-  in_traffic_zone: boolean;
-  municipality_zone: NuString;
-  neighbourhood: NuString;
-  place: NuString;
-  route_name: NuString;
-  route_type: NuString;
-  state: NuString;
-  status: NuString;
-  village: NuString;
+  city: NuString
+  district: NuString
+  formatted_address: NuString
+  in_odd_even_zone: boolean
+  in_traffic_zone: boolean
+  municipality_zone: NuString
+  neighbourhood: NuString
+  place: NuString
+  route_name: NuString
+  route_type: NuString
+  state: NuString
+  status: NuString
+  village: NuString
 }
 
 export declare interface SearchProps {
-  term?: string;
-  coords?: CoordsArr;
+  term?: string
+  coords?: CoordsArr
 }
 export declare interface Api {
-  REVERSE: (lng: number, lat: number) => Promise<ReverseResult>;
-  SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>;
+  REVERSE: (lng: number, lat: number) => Promise<ReverseResult>
+  SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>
 }
 
 export declare interface CreateMarkersPointsItem {
-  style?: Style;
-  image?: Image;
-  color?: IconColor;
-  iconScale?: number;
-  text?: string;
-  coords?: CoordsArr;
+  style?: Style
+  image?: Image
+  color?: IconColor
+  iconScale?: number
+  text?: string
+  coords?: CoordsArr
 }
-export declare type CreateMarkersPoints = CreateMarkersPointsItem[];
+export declare type CreateMarkersPoints = CreateMarkersPointsItem[]
 export declare interface CreateMarkersResult {
-  layer: VectorLayer;
-  style: Style | undefined;
+  layer: VectorLayer
+  style: Style | undefined
 }
 export declare type CreateMarkers = (
   points: CreateMarkersPoints,
   options?: CreateMarkersOptions
-) => CreateMarkersResult;
+) => CreateMarkersResult
 
 export declare interface ChangeOverlayStatsProps {
-  coords: CoordsArr;
-  text: string;
+  coords: CoordsArr
+  text: string
 }
 
-export declare type ResultHoverCallback = (...[arg]: any[]) => any;
-export declare type ResultClickCallback = (...[arg]: any[]) => any;
+export declare type ResultHoverCallback = (...[arg]: any[]) => any
+export declare type ResultClickCallback = (...[arg]: any[]) => any
 export declare type ChangeOverlayStats = (
   options: ChangeOverlayStatsProps
-) => void;
+) => void
 export declare interface MarkerHoverCallbackProps {
-  changeOverlayStats: ChangeOverlayStats;
-  map: OlMapRef;
-  feature: Feature;
+  changeOverlayStats: ChangeOverlayStats
+  map: OlMapRef
+  feature: Feature
 }
 export declare type MarkerHoverCallback = (
   options: MarkerHoverCallbackProps
-) => void;
+) => void
 export declare type MarkersIconCallback = (
   points: CreateMarkersPointsItem
-) => CreateIconProps;
+) => CreateIconProps
 
 export declare interface EventsMixinProps {
-  map: OlMapRef;
-  mainMarker: VectorLayerRef;
-  mainMarkerCoords: Ref<CoordsArr | undefined>;
-  searchMarkers: VectorLayerRef;
-  api: Ref<Api>;
-  emits: (event: "on-zoom" | "on-click", arg: any) => void;
-  resultHoverCallback?: ResultHoverCallback;
-  resultClickCallback?: ResultClickCallback;
-  markerHoverCallback?: MarkerHoverCallback;
-  popupOnMarkerHover: boolean;
-  popupOnResultHover: boolean;
-  zoomOnMarkerClick: boolean;
-  zoomOnResultClick: boolean;
+  map: OlMapRef
+  mainMarker: VectorLayerRef
+  mainMarkerCoords: Ref<CoordsArr | undefined>
+  api: Ref<Api>
+  emits: (event: "on-zoom" | "on-click", arg: any) => void
+  resultHoverCallback?: ResultHoverCallback
+  resultClickCallback?: ResultClickCallback
+  markerHoverCallback?: MarkerHoverCallback
+  popupOnMarkerHover: boolean
+  popupOnResultHover: boolean
+  zoomOnMarkerClick: boolean
+  zoomOnResultClick: boolean
   addMarkers: CreateMarkers
-  setupOverlay: () => void;
-  overlay: Ref<Overlay | undefined>;
-  changeOverlayStats: ({ text, coords }: ChangeOverlayStatsProps) => void;
-  clusterMode: boolean;
-  mapId: string;
+  setupOverlay: () => void
+  overlay: Ref<Overlay | undefined>
+  changeOverlayStats: ({ text, coords }: ChangeOverlayStatsProps) => void
+  clusterMode: boolean
+  mapId: string
+  findMarkerByTitle: (title: string) => Feature | undefined
+  findClusterByTitle: (title: string) => Feature | undefined
 }
 export declare interface MarkersMixinProps {
-  map: OlMapRef;
+  map: OlMapRef
+  searchMarkers: VectorLayerRef
 }
 
 export declare interface ZoomToExtentOptions {
-  duration?: number;
+  duration?: number
 }
 
 export declare interface OverlayMixinProps {
-  map: OlMapRef;
-  popupContainer: Ref<HTMLElement | null>;
+  map: OlMapRef
+  popupContainer: Ref<HTMLElement | null>
 }
 
 export declare interface CreateMarkersOptions {
-  markersIconCallback?: MarkersIconCallback;
-  showPopup?: boolean;
-  cluster?: boolean;
+  markersIconCallback?: MarkersIconCallback
+  showPopup?: boolean
+  cluster?: boolean
   clusterThreshold?: number
   clusterDistance?: number
   clusterMinDistance?: number
 }
 
 export declare interface CreateMapPointsOptions {
-  color?: IconColor;
-  iconScale: number;
+  color?: IconColor
+  iconScale: number
 }

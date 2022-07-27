@@ -3,10 +3,9 @@
     :style="resultBoxStyle"
     :class="resultBoxClass"
     class="map-result-box"
-    open
     ref="resultSection"
   >
-    <Loading v-if="loading" dense color="blue" />
+    <Loading v-if="store.state.loading" dense color="blue" />
     <ResultItem
       v-for="item in results"
       :key="'' + item.location.x + item.location.y"
@@ -26,6 +25,7 @@ export default {
 <script setup lang="ts">
 import ResultItem from "./ResultItem.vue"
 import Loading from "../Loading.vue"
+import { store } from "@/store"
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
@@ -33,7 +33,6 @@ const props = defineProps({
     type: Array as PropType<SearchItem[]>,
     default: () => [],
   },
-  loading: Boolean,
   mapHeight: {
     type: Number,
     default: 300

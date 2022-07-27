@@ -7,7 +7,7 @@ import {
 } from "../components/Map.model"
 import { createClusterSource, createMarkers } from "../utils"
 
-export function markersMixin({ map }: MarkersMixinProps) {
+export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
   /**
    * Receives an array of points and marks them on map.
    * @param points - Array of points.
@@ -57,9 +57,35 @@ export function markersMixin({ map }: MarkersMixinProps) {
     layer.value.setSource(newSource)
   }
 
+  /**
+   * Takes the title of a marker and returns its surrounding cluster
+   * @param title - title of wanted feature
+   * @returns The found cluster
+   */
+  const findClusterByTitle = (title: string) => {
+    const clusters = searchMarkers.value?.getSource().getFeatures()
+    return clusters?.find((cluster) =>
+      cluster
+        .get("features")
+        .find((feat: Feature) => feat.get("text") === title)
+    )
+  }
+
+  /**
+   * Takes the title of a marker and returns it.
+   * @param title - title of wanted feature
+   * @returns The found marker
+   */
+  const findMarkerByTitle = (title: string) => {
+    const markers = searchMarkers.value?.getSource().getFeatures()
+    return markers?.find((feature) => feature.get("text") === title)
+  }
+
   return {
     addMarkers,
     clearMarkerLayer,
     toggleClusterSource,
+    findClusterByTitle,
+    findMarkerByTitle
   }
 }

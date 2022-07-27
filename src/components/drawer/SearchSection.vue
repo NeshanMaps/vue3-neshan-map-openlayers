@@ -12,7 +12,6 @@
       placeholder="جستجو"
       v-model="text"
       @keydown.enter="runTimeout(0)"
-      @input="runTimeout()"
       @focus="emitActivation(true)"
     />
     <button v-if="!activated" @click="emitActivation(true)">
@@ -26,6 +25,7 @@
 <script lang="ts">
 import { defineProps, defineEmits, ref } from "vue"
 import { computed } from "@vue/reactivity"
+import { store } from "@/store";
 export default {
   name: "SettingsComp",
 }
@@ -52,10 +52,16 @@ const emit = defineEmits([
 const text = computed({
   get: () => props.searchText,
   set: (val) => {
-    if (props.searchText === undefined) {
+    if (!props.searchText) {
       privateText.value = val
     }
+    if (val) {
+      store.toggleLoading(true)
+    } else {
+      store.toggleLoading(false)
+    }
     emit("update:search-text", val)
+    runTimeout()
   },
 })
 
@@ -67,7 +73,7 @@ const privateText = ref(props.searchText)
  * @param term search text
  */
 const emitSearch = (term = "") => {
-  const inputText = term || text.value || privateText.value
+  const inputText = term || text.value?.trim() || privateText.value?.trim()
   emit("submit", inputText)
 }
 
