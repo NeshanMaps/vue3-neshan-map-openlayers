@@ -284,11 +284,11 @@ const search = async ({ term = "", coords }: SearchProps) => {
       coords || mainMarkerCoords.value || sanitizedCenter.value
     if (!reliableCoords) return
     const result = await api.value.SEARCH(term, reliableCoords)
+    store.toggleDrawerShowDetails(false)
     clearMarkerLayer(searchMarkers)
     searchResults.value = result.items
     const points = createMapPoints(result.items)
     const { layer } = addMarkers(points, {
-      showPopup: true,
       markersIconCallback: props.markersIconCallback,
       cluster: props.cluster,
       clusterThreshold: props.clusterThreshold,

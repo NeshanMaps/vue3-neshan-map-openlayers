@@ -4,6 +4,7 @@ import type Ol from "openlayers"
 export type { Ol }
 import { Feature, Map, style } from "openlayers"
 import { RouteTypes } from "@/static/index.model"
+import { ChangeOverlayStats } from "@/mixins/overlay.mixin.model"
 
 export declare type NuString = null | string
 export declare type MapType =
@@ -28,7 +29,6 @@ export declare type Source = Ol.source.Source
 export declare type VectorLayer = Ol.layer.Vector
 export declare type VectorLayerRef = Ref<VectorLayer | undefined>
 export declare type Cluster = Ol.source.Cluster
-export declare type Overlay = Ol.Overlay
 export declare interface CoordsObj {
   latitude: number
   longitude: number
@@ -54,7 +54,7 @@ export declare interface CreateRawStyleProps {
 }
 
 export declare interface CreateStyleProps {
-  showPopup?: boolean
+  hidePopup?: boolean
   image?: Image
 }
 
@@ -124,15 +124,6 @@ export declare type CreateMarkers = (
   options?: CreateMarkersOptions
 ) => CreateMarkersResult
 
-export declare interface ChangeOverlayStatsProps {
-  coords: CoordsArr
-  text: string
-}
-export declare type ChangeOverlayStats = (
-  options?: ChangeOverlayStatsProps,
-  target?: "temporary" | "persistant"
-) => void
-
 export declare type ResultHoverCallback = (...[arg]: any[]) => any
 export declare type ResultClickCallback = (...[arg]: any[]) => any
 
@@ -177,15 +168,10 @@ export declare interface ZoomToExtentOptions {
   duration?: number
 }
 
-export declare interface OverlayMixinProps {
-  map: OlMapRef
-  popupContainer: Ref<HTMLElement | null>
-  persistantContainer: Ref<HTMLElement | null>
-}
 
 export declare interface CreateMarkersOptions {
   markersIconCallback?: MarkersIconCallback
-  showPopup?: boolean
+  hidePopup?: boolean
   cluster?: boolean
   clusterThreshold?: number
   clusterDistance?: number

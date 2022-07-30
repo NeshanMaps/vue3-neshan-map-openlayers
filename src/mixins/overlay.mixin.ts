@@ -3,7 +3,7 @@ import {
   ChangeOverlayStats,
   Overlay,
   OverlayMixinProps,
-} from "@/components/Map.model"
+} from "./overlay.mixin.model"
 import { Ref, ref } from "vue"
 
 export function overlayMixin({
@@ -25,6 +25,9 @@ export function overlayMixin({
   }
   /**
    * Changes overlay coords and text
+   * @param stats.coords
+   * @param stats.text
+   * @param target - Whether to manipulated temporary or persistant overlay stats
    */
   const changeOverlayStats: ChangeOverlayStats = (
     stats,

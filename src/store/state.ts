@@ -13,16 +13,17 @@ export const breakpointsSegmentsPixels = {
   sm: 1023,
   md: 1439,
   lg: 1919,
-  xl: Infinity
+  xl: Infinity,
 }
 export const state = {
   loading: false,
   breakpoints: {
     ...breakpointsSegments,
-    lt: {...breakpointsSegments},
-    gt: {...breakpointsSegments}
+    lt: { ...breakpointsSegments },
+    gt: { ...breakpointsSegments },
   } as BreakPoints,
   mapHeight: 1000,
   selectedMarkerLocation: null as ReverseResult | null,
-  drawerActivation: false
+  drawerActivation: false,
+  drawerShowDetails: false
 }

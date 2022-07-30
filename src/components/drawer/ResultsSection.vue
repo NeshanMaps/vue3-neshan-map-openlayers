@@ -6,7 +6,7 @@
     ref="resultSection"
   >
     <Loading v-if="store.state.loading" dense color="blue" />
-    <template v-if="store.state.selectedMarkerLocation">
+    <template v-if="store.state.drawerShowDetails && store.state.selectedMarkerLocation">
       <ResultView :item="store.state.selectedMarkerLocation" />
     </template>
     <template v-else>

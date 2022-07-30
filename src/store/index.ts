@@ -16,4 +16,7 @@ export const store = reactive({
   setMapHeight(value: number) {
     this.state.mapHeight = value
   },
+  toggleDrawerShowDetails(value: boolean) {
+    this.state.drawerShowDetails = value
+  }
 })

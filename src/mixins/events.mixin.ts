@@ -18,7 +18,9 @@ import {
   getClusterExtent,
   transformCoords,
   getFeatureExtent,
+  getCoordsFromFeature,
 } from "../utils"
+import { ReverseOnPointOptions } from "./events.mixin.model"
 
 export function eventsMixin({
   map,
@@ -154,21 +156,38 @@ export function eventsMixin({
    * @param event - Map click event.
    */
   const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
+    let shouldReverse = true
+    let point = event.coordinate
+    let text = ['']
     const selectedFeature = getFeatureFromEvent(event)
-    if (selectedFeature) {
+    if (zoomOnMarkerClick && selectedFeature) {
       const isCluster = selectedFeature.get("isCluster")
-      if (zoomOnMarkerClick) {
-        isCluster
-          ? zoomToCluster(selectedFeature)
-          : zoomToMarker(selectedFeature)
+      isCluster ? zoomToCluster(selectedFeature) : zoomToMarker(selectedFeature)
+      if (isCluster) {
+        const features: Feature[] = selectedFeature.get("features")
+        if (features.length !== 1) {
+          shouldReverse = false
+        } else {
+          point = getCoordsFromFeature(features[0])
+          text = selectedFeature.get('text')
+        }
       }
-      emits("on-click", { event, selectedFeature, map })
-    } else {
-      if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
-      const point: CoordsArr = event.coordinate
-      const { marker, stdPoint, data } = await reverseOnPoint(point)
-      emits("on-click", { event, marker, stdPoint, data, map })
     }
+    let marker
+    let data
+    let stdPoint
+    if (shouldReverse) {
+      if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
+      const result = await reverseOnPoint(point, {
+        useMarker: !selectedFeature,
+        usePopup: !selectedFeature || Boolean(text[0]),
+        customText: text[0]
+      })
+      marker = result.marker
+      data = result.data
+      stdPoint = result.stdPoint
+    }
+    emits("on-click", { event, marker, stdPoint, data, map, selectedFeature })
   }
 
   /**
@@ -176,24 +195,32 @@ export function eventsMixin({
    * Sends a reverse request on that position
    * and adds a title based on returned value
    * @param point - OL Coords
+   * @param putMarker - Whether to put marker on locating area
    * @returns marker, standard coords of point and api result data
    */
-  const reverseOnPoint = async (point: CoordsArr) => {
+  const reverseOnPoint = async (
+    point: CoordsArr,
+    { useMarker = true, usePopup = true, customText }: ReverseOnPointOptions = {}
+  ) => {
     try {
-      changeOverlayStats(undefined, 'persistant')
+      changeOverlayStats(undefined, "persistant")
       store.toggleDrawerActivation(true)
       store.toggleLoading(true)
-      const { layer: marker } = addMarkers([{ coords: point, text: "" }])
-      // const { layer: marker, style } = addMarkers([{ coords: point, text: "" }])
       const stdPoint = transformCoords(point)
-      mainMarkerCoords.value = stdPoint
-      mainMarker.value = marker
+      let marker: VectorLayer | null = null
+      if (useMarker) {
+        const { layer } = addMarkers([{ coords: point, text: "" }])
+        mainMarkerCoords.value = stdPoint
+        mainMarker.value = layer
+        marker = layer
+      }
       const data = await api.value.REVERSE(...stdPoint)
       store.setSelectedMarkerLocation(data)
-      const text = getTitleFromData(data)
-      changeOverlayStats({ coords: point, text }, "persistant")
-      // style?.getText().setText(text)
-      // marker.setStyle(style)
+      store.toggleDrawerShowDetails(true)
+      if (usePopup) {
+        const text = customText || getTitleFromData(data)
+        changeOverlayStats({ coords: point, text }, "persistant")
+      }
       return { marker, stdPoint, data }
     } catch (error) {
       console.log(error)

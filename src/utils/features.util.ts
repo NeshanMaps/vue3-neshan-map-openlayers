@@ -34,7 +34,7 @@ import { transformCoords } from "./location.util"
  * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
  * @param point.originalItem - original item from neshan search result
  * @param point.props - props to set for point feature
- * @param options.showPopup - If you want show the text as popup
+ * @param options.hidePopup - If you don't want to show popup
  * @param options.cluster - If these markers need to be clusterd on given zoom number
  * @param options.clusterThreshold - Zoom number that markers should be clusterd on zoom condition above that given zoom
  * @param options.props - Props to set for all features
@@ -58,7 +58,7 @@ export const createMarkers: CreateMarkers = (points, options) => {
     const _image = image || createIcon({ color, iconScale })
     const { styleFunc, style } = createStyle({
       image: _image,
-      showPopup: options?.showPopup,
+      hidePopup: options?.hidePopup,
     })
     _style = style
     const source = createSource(features)
@@ -102,12 +102,12 @@ export const createRawStyle = ({ image, text }: CreateRawStyleProps): Style => {
   })
 }
 
-export const createStyle = ({ showPopup = true, image }: CreateStyleProps) => {
+export const createStyle = ({ hidePopup = false, image }: CreateStyleProps) => {
   const _text = createText()
   const _image = image || createIcon({ color: "blue", iconScale: 0.15 })
   const _style = createRawStyle({ text: _text, image: _image })
   const styleFunc = styleFuncGen(_style, {
-    hardText: !showPopup,
+    hidePopup,
   })
   return { style: _style, styleFunc }
 }
@@ -166,12 +166,12 @@ export const createMapPoints = (
 /**
  * Creates an style function to dynamically change popup text and marker icons
  * @param style - The static raw style
- * @param options.hardText - Will not use popups and just hard text
+ * @param options.hidePopup - Will not use popups and just hard text
  * @returns
  */
-const styleFuncGen = (style: Style, { hardText = false }): Ol.StyleFunction => {
+const styleFuncGen = (style: Style, { hidePopup = false }): Ol.StyleFunction => {
   return (feature) => {
-    if (hardText) {
+    if (hidePopup) {
       style.getText().setText(feature.get("text"))
     }
     const iconProps = feature.get("iconProps")
@@ -227,14 +227,14 @@ const createClusterStyle = (size: number) => {
  * Creates a style function for the clusters.
  * That if they are pointing to a single marker
  * the icon shown is the icon for single markers.
- * @param showPopup - whether it should show a popup on hover or is a static text
+ * @param hidePopup - whether it should show a popup on hover or is a static text
  * @returns
  */
-const createClusterStyleFunc = (showPopup?: boolean) => {
+const createClusterStyleFunc = (hidePopup?: boolean) => {
   const styleCache: { [s: string]: Style | Style[] | null } = {}
   return (clusterFeature: Feature) => {
     const innerFeatures: Feature[] = clusterFeature.get("features")
-    if (showPopup) {
+    if (!hidePopup) {
       clusterFeature.set(
         "text",
         innerFeatures.map((feat: Feature) => feat.get("text"))
@@ -248,7 +248,7 @@ const createClusterStyleFunc = (showPopup?: boolean) => {
         style = createClusterStyle(size)
         styleCache[size] = style
       } else {
-        const { styleFunc } = createStyle({ showPopup: showPopup })
+        const { styleFunc } = createStyle({ hidePopup })
         style = styleFunc(innerFeatures[0], 100) // 100 is to shut its type up
       }
     }
@@ -265,7 +265,7 @@ const createClusterLayer = (
       minDistance: options?.clusterDistance,
       distance: options?.clusterDistance,
     }),
-    style: createClusterStyleFunc(options?.showPopup),
+    style: createClusterStyleFunc(options?.hidePopup),
   })
   return cluster_layer
 }
