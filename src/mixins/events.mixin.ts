@@ -37,7 +37,6 @@ export function eventsMixin({
   overlay,
   changeOverlayStats,
   addMarkers,
-  clusterMode,
   mapId,
   findMarkerByTitle,
   findClusterByTitle,
@@ -82,9 +81,10 @@ export function eventsMixin({
     map.value?.on("pointermove", function (evt) {
       const hoveredFeature = getFeatureFromEvent(<MapBrowserEvent>evt)
       if (hoveredFeature) {
+        const isCluster = hoveredFeature.get('isCluster')
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature)
-        if (clusterMode) {
+        if (isCluster) {
           if (featText && featText.length === 1) {
             if (popupOnMarkerHover) {
               changeOverlayStats({ text: featText[0], coords: featCoords })
@@ -155,16 +155,17 @@ export function eventsMixin({
    * @param event - Map click event.
    */
   const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
-    if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
     const selectedFeature = getFeatureFromEvent(event)
     if (selectedFeature) {
+      const isCluster = selectedFeature.get('isCluster')
       if (zoomOnMarkerClick) {
-        clusterMode
+        isCluster
           ? zoomToCluster(selectedFeature)
           : zoomToMarker(selectedFeature)
       }
       emits("on-click", { event, selectedFeature, map })
     } else {
+      if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
       const point: CoordsArr = event.coordinate
       const { marker, stdPoint, data } = await reverseOnPoint(point)
       emits("on-click", { event, marker, stdPoint, data, map })
@@ -251,9 +252,8 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
-    const foundFeature = clusterMode
-      ? findClusterByTitle(item.title)
-      : findMarkerByTitle(item.title)
+    let foundFeature = findClusterByTitle(item.title)
+    if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
     if (foundFeature) {
       if (popupOnResultHover) {
         const { featCoords } = getCoordsAndTextFromFeature(foundFeature)
@@ -272,12 +272,12 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultClick = (item: SearchItem) => {
-    const foundFeature = clusterMode
-      ? findClusterByTitle(item.title)
-      : findMarkerByTitle(item.title)
+    let foundFeature = findClusterByTitle(item.title)
+    if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
     if (foundFeature) {
       if (zoomOnResultClick) {
-        clusterMode ? zoomToCluster(foundFeature) : zoomToMarker(foundFeature)
+        const isCluster = foundFeature.get('isCluster')
+        isCluster ? zoomToCluster(foundFeature) : zoomToMarker(foundFeature)
       }
       if (resultClickCallback) {
         resultClickCallback({ map: map.value, feature: foundFeature })

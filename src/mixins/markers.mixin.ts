@@ -18,7 +18,11 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
    * @param point.image - If you have a particular image for that point (only checks the first point for now).
    * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
    * @param point.originalItem - original item from neshan search result
+   * @param point.props - props to set for point feature
+   * @param options.cluster - If these markers need to be clusterd on given zoom number
+   * @param options.clusterThreshold - Zoom number that markers should be clusterd on zoom condition above that given zoom
    * @param options.showPopup - If you want show the text as popup
+   * @param options.props - Props to set for all features
    * @returns style and layer.
    */
   const addMarkers: CreateMarkers = (points, options) => {
@@ -37,7 +41,7 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
   }
 
   /**
-   * Toggles cluster source to deactivate or apply clustering
+   * Toggles cluster source to deactivate or apply clustering (The layer will remain a cluster layer)
    * @param layer
    * @param deactivate - whether to deactivate clustering or apply it.
    */
@@ -86,6 +90,6 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
     clearMarkerLayer,
     toggleClusterSource,
     findClusterByTitle,
-    findMarkerByTitle
+    findMarkerByTitle,
   }
 }

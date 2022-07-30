@@ -112,6 +112,7 @@ export declare interface CreateMarkersPointsItem {
   iconScale?: number
   text?: string
   coords?: CoordsArr
+  props?: any
 }
 export declare type CreateMarkersPoints = CreateMarkersPointsItem[]
 export declare interface CreateMarkersResult {
@@ -162,7 +163,6 @@ export declare interface EventsMixinProps {
   setupOverlay: () => void
   overlay: Ref<Overlay | undefined>
   changeOverlayStats: ({ text, coords }: ChangeOverlayStatsProps) => void
-  clusterMode: boolean
   mapId: string
   findMarkerByTitle: (title: string) => Feature | undefined
   findClusterByTitle: (title: string) => Feature | undefined
@@ -188,6 +188,7 @@ export declare interface CreateMarkersOptions {
   clusterThreshold?: number
   clusterDistance?: number
   clusterMinDistance?: number
+  props?: any
 }
 
 export declare interface CreateMapPointsOptions {

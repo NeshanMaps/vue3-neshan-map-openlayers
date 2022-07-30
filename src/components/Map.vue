@@ -253,7 +253,7 @@ const changeMapType = (type: MapType) => {
   mapType.value = type
 }
 /**
- * Updates map coords so the offset problem is no more.
+ * Updates map frame so the offset problem is no more.
  */
 const shakeMap = () => {
   setTimeout(() => map.value?.updateSize(), 300)
@@ -321,8 +321,8 @@ const {
   zoomToLayer,
   zoomToCluster,
   updateMapHeight,
+  updateBreakpoints,
   zoom,
-  updateBreakpoints
 } = eventsMixin({
   map,
   mainMarker,
@@ -340,7 +340,6 @@ const {
   setupOverlay,
   changeOverlayStats,
   overlay,
-  clusterMode: props.cluster,
   mapId: props.mapId,
   findMarkerByTitle,
   findClusterByTitle,
@@ -379,7 +378,7 @@ defineExpose({
 
 <style lang="scss">
 @import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
-@import url('@/assets/main.scss');
+@import url("@/assets/main.scss");
 
 .map {
   height: 100%;

@@ -33,16 +33,22 @@ import { transformCoords } from "./location.util"
  * @param point.image - If you have a particular image for that point (only checks the first point for now).
  * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
  * @param point.originalItem - original item from neshan search result
+ * @param point.props - props to set for point feature
  * @param options.showPopup - If you want show the text as popup
  * @param options.cluster - If these markers need to be clusterd on given zoom number
  * @param options.clusterThreshold - Zoom number that markers should be clusterd on zoom condition above that given zoom
+ * @param options.props - Props to set for all features
  * @returns style and layer.
  */
 export const createMarkers: CreateMarkers = (points, options) => {
   const [{ image, color, iconScale } = {} as CreateMarkersPointsItem] = points
   const features = createFeaturesFromPoints(
     points,
-    options?.markersIconCallback
+    options?.markersIconCallback,
+    {
+      isCluster: options?.cluster,
+      ...options?.props
+    }
   )
   let layer: VectorLayer
   let _style: Style | undefined
@@ -234,6 +240,7 @@ const createClusterStyleFunc = (showPopup?: boolean) => {
         innerFeatures.map((feat: Feature) => feat.get("text"))
       )
     }
+    clusterFeature.set('isCluster', innerFeatures[0].get('isCluster'))
     const size = innerFeatures.length
     let style = styleCache[size]
     if (!style) {
@@ -315,11 +322,14 @@ export const getCoordsFromFeature = (feature: Feature) => {
  * Receives an array of points and returns an array of features.
  * @param points - Array of points.
  * @param point.text - If you have a particular text for the point.
+ * @param proint.props - Props to set for a feature
+ * @param props - Props to set for features
  * @returns array of features.
  */
 export const createFeaturesFromPoints = (
   points: CreateMarkersPoints,
-  markersIconCallback?: MarkersIconCallback
+  markersIconCallback?: MarkersIconCallback,
+  props?: any
 ): Feature[] => {
   return points.map(
     (point) =>
@@ -327,6 +337,8 @@ export const createFeaturesFromPoints = (
         geometry: new ol.geom.Point(point.coords) as geom.Point,
         text: point.text,
         iconProps: markersIconCallback && markersIconCallback(point),
+        ...point.props,
+        ...props,
       })
   )
 }
