@@ -28,6 +28,7 @@
     </slot>
   </div>
   <div class="map-popup-container" ref="popupContainer"></div>
+  <div class="map-popup-container" ref="persistantContainer"></div>
 </template>
 <script lang="ts">
 declare const ol: any
@@ -166,6 +167,7 @@ const reactiveTiles = ref(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
 )
 const popupContainer = ref<HTMLElement | null>(null)
+const persistantContainer = ref<HTMLElement | null>(null)
 
 const trafficLayer = ref(props.traffic)
 const poiLayer = ref(props.poi)
@@ -310,9 +312,10 @@ const search = async ({ term = "", coords }: SearchProps) => {
 }
 
 const eventsEmits = defineEmits(["on-zoom", "on-click"])
-const { setupOverlay, changeOverlayStats, overlay } = overlayMixin({
+const { setupOverlays, changeOverlayStats } = overlayMixin({
   map,
   popupContainer,
+  persistantContainer
 })
 const {
   setupMapEvents,
@@ -337,9 +340,8 @@ const {
   popupOnMarkerHover: props.popupOnMarkerHover,
   popupOnResultHover: props.popupOnResultHover,
   addMarkers,
-  setupOverlay,
+  setupOverlays,
   changeOverlayStats,
-  overlay,
   mapId: props.mapId,
   findMarkerByTitle,
   findClusterByTitle,

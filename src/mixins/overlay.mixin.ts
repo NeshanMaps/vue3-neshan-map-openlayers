@@ -1,50 +1,72 @@
-declare const ol: any;
-import { ChangeOverlayStats, Overlay, OverlayMixinProps } from "@/components/Map.model";
-import { ref } from "vue";
+declare const ol: any
+import {
+  ChangeOverlayStats,
+  Overlay,
+  OverlayMixinProps,
+} from "@/components/Map.model"
+import { Ref, ref } from "vue"
 
 export function overlayMixin({
   map,
-  popupContainer
+  popupContainer,
+  persistantContainer,
 }: OverlayMixinProps) {
-
-  const overlay = ref<Overlay>();
+  const overlay = ref<Overlay>()
+  const persistantOverlay = ref<Overlay>()
 
   /**
    * Sets up overlay on map
    */
-  const setupOverlay = () => {
-    overlay.value = createOverlay();
-    map.value?.addOverlay(overlay.value);
+  const setupOverlays = () => {
+    overlay.value = createOverlay(popupContainer)
+    persistantOverlay.value = createOverlay(persistantContainer, true)
+    map.value?.addOverlay(overlay.value)
+    map.value?.addOverlay(persistantOverlay.value)
   }
   /**
    * Changes overlay coords and text
    */
-  const changeOverlayStats: ChangeOverlayStats = ({ coords, text }) => {
-    if (!popupContainer.value) return;
-    popupContainer.value.innerHTML = text;
-    overlay.value?.setPosition(coords);
-  };
+  const changeOverlayStats: ChangeOverlayStats = (
+    stats,
+    target: "temporary" | "persistant" = "temporary"
+  ) => {
+    const targetContainer =
+      target === "temporary" ? popupContainer : persistantContainer
+    const targetOverlay = target === "temporary" ? overlay : persistantOverlay
+    if (!targetContainer.value) return
+    if (stats) {
+      const { coords, text } = stats
+      targetContainer.value.innerHTML = text
+      targetOverlay.value?.setPosition(coords)
+    } else {
+      targetOverlay.value?.setPosition(undefined)
+    }
+  }
 
   /**
-  * Creates an ol overlay on container element
-  * @param persistant - Whether it should not disappear on mouse leaving
-  * @returns overlay
-  */
-  const createOverlay = (persistant = false) => {
+   * Creates an ol overlay on container element
+   * @param persistant - Whether it should not disappear on mouse leaving
+   * @returns overlay
+   */
+  const createOverlay = (
+    container: Ref<HTMLElement | null>,
+    persistant = false
+  ) => {
     const overlay: Overlay = new ol.Overlay({
-      element: popupContainer.value,
+      element: container.value,
       map: map.value,
       positioning: "top-center",
       offset: [0, -50],
-    });
-    overlay.set("persistant", persistant); // An attr to know that we should remove it on following hovers
-    return overlay;
-  };
+    })
+    overlay.set("persistant", persistant) // An attr to know that we should remove it on following hovers
+    return overlay
+  }
 
   return {
-    setupOverlay,
+    setupOverlays,
     createOverlay,
     changeOverlayStats,
-    overlay
+    overlay,
+    persistantOverlay,
   }
 }

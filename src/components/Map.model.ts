@@ -128,12 +128,14 @@ export declare interface ChangeOverlayStatsProps {
   coords: CoordsArr
   text: string
 }
+export declare type ChangeOverlayStats = (
+  options?: ChangeOverlayStatsProps,
+  target?: "temporary" | "persistant"
+) => void
 
 export declare type ResultHoverCallback = (...[arg]: any[]) => any
 export declare type ResultClickCallback = (...[arg]: any[]) => any
-export declare type ChangeOverlayStats = (
-  options: ChangeOverlayStatsProps
-) => void
+
 export declare interface MarkerHoverCallbackProps {
   changeOverlayStats: ChangeOverlayStats
   map: OlMapRef
@@ -160,9 +162,8 @@ export declare interface EventsMixinProps {
   zoomOnMarkerClick: boolean
   zoomOnResultClick: boolean
   addMarkers: CreateMarkers
-  setupOverlay: () => void
-  overlay: Ref<Overlay | undefined>
-  changeOverlayStats: ({ text, coords }: ChangeOverlayStatsProps) => void
+  setupOverlays: () => void
+  changeOverlayStats: ChangeOverlayStats
   mapId: string
   findMarkerByTitle: (title: string) => Feature | undefined
   findClusterByTitle: (title: string) => Feature | undefined
@@ -179,6 +180,7 @@ export declare interface ZoomToExtentOptions {
 export declare interface OverlayMixinProps {
   map: OlMapRef
   popupContainer: Ref<HTMLElement | null>
+  persistantContainer: Ref<HTMLElement | null>
 }
 
 export declare interface CreateMarkersOptions {

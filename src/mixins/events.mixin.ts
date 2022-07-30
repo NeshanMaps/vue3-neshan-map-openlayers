@@ -33,8 +33,7 @@ export function eventsMixin({
   zoomOnResultClick,
   popupOnMarkerHover,
   popupOnResultHover,
-  setupOverlay,
-  overlay,
+  setupOverlays,
   changeOverlayStats,
   addMarkers,
   mapId,
@@ -77,11 +76,11 @@ export function eventsMixin({
    * Sets up hover event for marker popups
    */
   const setupMarkerHoverEvent = () => {
-    setupOverlay()
+    setupOverlays()
     map.value?.on("pointermove", function (evt) {
       const hoveredFeature = getFeatureFromEvent(<MapBrowserEvent>evt)
       if (hoveredFeature) {
-        const isCluster = hoveredFeature.get('isCluster')
+        const isCluster = hoveredFeature.get("isCluster")
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature)
         if (isCluster) {
@@ -107,7 +106,7 @@ export function eventsMixin({
           })
         }
       }
-      overlay.value?.setPosition(undefined)
+      changeOverlayStats()
     })
   }
 
@@ -157,7 +156,7 @@ export function eventsMixin({
   const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
     const selectedFeature = getFeatureFromEvent(event)
     if (selectedFeature) {
-      const isCluster = selectedFeature.get('isCluster')
+      const isCluster = selectedFeature.get("isCluster")
       if (zoomOnMarkerClick) {
         isCluster
           ? zoomToCluster(selectedFeature)
@@ -181,17 +180,20 @@ export function eventsMixin({
    */
   const reverseOnPoint = async (point: CoordsArr) => {
     try {
+      changeOverlayStats(undefined, 'persistant')
       store.toggleDrawerActivation(true)
       store.toggleLoading(true)
-      const { layer: marker, style } = addMarkers([{ coords: point, text: "" }])
+      const { layer: marker } = addMarkers([{ coords: point, text: "" }])
+      // const { layer: marker, style } = addMarkers([{ coords: point, text: "" }])
       const stdPoint = transformCoords(point)
       mainMarkerCoords.value = stdPoint
       mainMarker.value = marker
       const data = await api.value.REVERSE(...stdPoint)
       store.setSelectedMarkerLocation(data)
       const text = getTitleFromData(data)
-      style?.getText().setText(text)
-      marker.setStyle(style)
+      changeOverlayStats({ coords: point, text }, "persistant")
+      // style?.getText().setText(text)
+      // marker.setStyle(style)
       return { marker, stdPoint, data }
     } catch (error) {
       console.log(error)
@@ -276,7 +278,7 @@ export function eventsMixin({
     if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
     if (foundFeature) {
       if (zoomOnResultClick) {
-        const isCluster = foundFeature.get('isCluster')
+        const isCluster = foundFeature.get("isCluster")
         isCluster ? zoomToCluster(foundFeature) : zoomToMarker(foundFeature)
       }
       if (resultClickCallback) {
