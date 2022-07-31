@@ -8,7 +8,7 @@ import {
   ZoomToExtentOptions,
 } from "@/components/Map.model"
 import { store } from "@/store"
-import { breakpointsSegments, breakpointsSegmentsPixels } from "@/store/state"
+import { breakpointsSegments, breakpointsSegmentsPixels } from "@/parameters"
 import { BreakpointsSegments } from "@/store/state.model"
 import { Feature, MapBrowserEvent } from "openlayers"
 import { ref } from "vue"
@@ -131,14 +131,15 @@ export function eventsMixin({
     const width = window.innerWidth
     const keys = <(keyof BreakpointsSegments)[]>Object.keys(breakpointsSegments)
     keys.forEach((brp, i) => {
+      const nextBrp = keys[i + 1]
       if (width >= breakpointsSegmentsPixels[brp]) {
         store.state.breakpoints.lt[brp] = false
-        store.state.breakpoints.gt[brp] = true
-        const nextBrp = keys[i + 1]
-        if (!nextBrp || breakpointsSegmentsPixels[nextBrp] > width) {
+        if (!nextBrp || width < breakpointsSegmentsPixels[nextBrp]) {
           store.state.breakpoints[brp] = true
+          store.state.breakpoints.gt[brp] = false
         } else {
           store.state.breakpoints[brp] = false
+          store.state.breakpoints.gt[brp] = true
         }
       } else if (width < breakpointsSegmentsPixels[brp]) {
         store.state.breakpoints.lt[brp] = true

@@ -1,5 +1,9 @@
 <template>
-  <div class="map-drawer" :activated="store.state.drawerActivation" ref="mapDrawer">
+  <div
+    :class="store.state.breakpoints.lt.md ? 'map-drawer--mobile' : 'map-drawer'"
+    :activated="store.state.drawerActivation"
+    ref="mapDrawer"
+  >
     <SearchSection
       ref="searchSection"
       v-model:searchText="searchText"
@@ -71,9 +75,12 @@ const applyDrawerMaxHeight = (activated: boolean) => {
     mapDrawer.value?.setAttribute("style", `max-height: 100%;`)
   }
 }
-watch(() => store.state.drawerActivation, (nv) => {
-  applyDrawerMaxHeight(nv)
-})
+watch(
+  () => store.state.drawerActivation,
+  (nv) => {
+    applyDrawerMaxHeight(nv)
+  }
+)
 onMounted(() => {
   applyDrawerMaxHeight(store.state.drawerActivation)
 })
@@ -91,13 +98,18 @@ onMounted(() => {
   display: flex;
   flex-flow: column;
   border-radius: 10px;
-}
-
-.map-drawer[activated="true"] {
+  &.map-drawer[activated="true"] {
   top: 0;
   right: 0;
   max-height: 100%;
   overflow: hidden;
   border-radius: 0;
+}
+}
+
+
+
+.map-drawer--mobile {
+  
 }
 </style>
