@@ -285,7 +285,6 @@ const search = async ({ term = "", coords }: SearchProps) => {
     if (!reliableCoords) return
     const result = await api.value.SEARCH(term, reliableCoords)
     store.toggleDrawerShowDetails(false)
-    
     clearMarkerLayer(searchMarkers)
     searchResults.value = result.items
     const points = createMapPoints(result.items)
