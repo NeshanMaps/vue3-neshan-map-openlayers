@@ -10,10 +10,13 @@
       name="search"
       placeholder="جستجو"
       v-model="text"
-      @keydown.enter="runTimeout(0)"
+      @keydown.enter="runTimeout(text || privateText, 0)"
       @focus="store.toggleDrawerActivation(true)"
     />
-    <button v-if="!store.state.drawerActivation" @click="store.toggleDrawerActivation(true)">
+    <button
+      v-if="!store.state.drawerActivation"
+      @click="store.toggleDrawerActivation(true)"
+    >
       <Icon name="magnet" :size="15"></Icon>
     </button>
     <button v-else @click="store.toggleDrawerActivation(false)">
@@ -24,7 +27,7 @@
 <script lang="ts">
 import { defineProps, defineEmits, ref } from "vue"
 import { computed } from "@vue/reactivity"
-import { store } from "@/store";
+import { store } from "@/store"
 export default {
   name: "SettingsComp",
 }
@@ -52,13 +55,8 @@ const text = computed({
     if (!props.searchText) {
       privateText.value = val
     }
-    if (val) {
-      store.toggleLoading(true)
-    } else {
-      store.toggleLoading(false)
-    }
     emit("update:search-text", val)
-    runTimeout()
+    runTimeout(val)
   },
 })
 
@@ -77,12 +75,17 @@ const emitSearch = (term = "") => {
 let emitTimeout: number
 /**
  * Runs and updates a timeout so after that if fires emitSearch function
+ * @param value - searching value
  * @param delay - delay time for emiting search, defaults to 1000
  */
-const runTimeout = (delay = 1000) => {
+const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
   clearTimeout(emitTimeout)
-  const value = text.value || privateText.value
-  if (!value) return
+  if (!value) {
+    store.toggleLoading(false)
+    return
+  } else if (!store.state.loading) {
+    store.toggleLoading(true)
+  }
   emitTimeout = setTimeout(() => {
     emitSearch(value)
   }, delay)
