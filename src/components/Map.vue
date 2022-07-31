@@ -285,6 +285,7 @@ const search = async ({ term = "", coords }: SearchProps) => {
     if (!reliableCoords) return
     const result = await api.value.SEARCH(term, reliableCoords)
     store.toggleDrawerShowDetails(false)
+    
     clearMarkerLayer(searchMarkers)
     searchResults.value = result.items
     const points = createMapPoints(result.items)
@@ -293,6 +294,7 @@ const search = async ({ term = "", coords }: SearchProps) => {
       cluster: props.cluster,
       clusterThreshold: props.clusterThreshold,
     })
+    changeOverlayStats(undefined, 'persistant')
     searchMarkers.value = layer
     setTimeout(() => {
       // Apparently it takse some sync time to cluster the source
@@ -385,27 +387,6 @@ defineExpose({
 .map {
   height: 100%;
   direction: rtl;
-}
-
-.justify-between {
-  display: flex;
-  justify-content: space-between;
-}
-
-.select-none {
-  -webkit-touch-callout: none;
-  /* iOS Safari */
-  -webkit-user-select: none;
-  /* Safari */
-  -khtml-user-select: none;
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Old versions of Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Non-prefixed version, currently
-  supported by Chrome, Edge, Opera and Firefox */
 }
 
 .map-popup-container {
