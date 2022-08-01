@@ -113,16 +113,19 @@ export function eventsMixin({
   }
 
   const setupResizeEvents = () => {
-    window.addEventListener("resize", updateMapHeight)
+    window.addEventListener("resize", updateMapDimensions)
     window.addEventListener("resize", updateBreakpoints)
   }
   /**
    * Updates map height value on window resize
    */
-  const updateMapHeight = () => {
+  const updateMapDimensions = () => {
     const mapContainer = document.getElementById(mapId)
     if (!mapContainer) return
-    store.setMapHeight(mapContainer.clientHeight)
+    store.setMapDimenstions({
+      height: mapContainer.clientHeight,
+      width: mapContainer.clientWidth,
+    })
   }
   /**
    * Updates store breakpoints on windows resize
@@ -159,7 +162,7 @@ export function eventsMixin({
   const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
     let shouldReverse = true
     let point = event.coordinate
-    let text = ['']
+    let text = [""]
     const selectedFeature = getFeatureFromEvent(event)
     if (zoomOnMarkerClick && selectedFeature) {
       const isCluster = selectedFeature.get("isCluster")
@@ -170,7 +173,7 @@ export function eventsMixin({
           shouldReverse = false
         } else {
           point = getCoordsFromFeature(features[0])
-          text = selectedFeature.get('text')
+          text = selectedFeature.get("text")
         }
       }
     }
@@ -182,7 +185,7 @@ export function eventsMixin({
       const result = await reverseOnPoint(point, {
         useMarker: !selectedFeature,
         usePopup: !selectedFeature || Boolean(text[0]),
-        customText: text[0]
+        customText: text[0],
       })
       marker = result.marker
       data = result.data
@@ -201,7 +204,11 @@ export function eventsMixin({
    */
   const reverseOnPoint = async (
     point: CoordsArr,
-    { useMarker = true, usePopup = true, customText }: ReverseOnPointOptions = {}
+    {
+      useMarker = true,
+      usePopup = true,
+      customText,
+    }: ReverseOnPointOptions = {}
   ) => {
     try {
       changeOverlayStats(undefined, "persistant")
@@ -338,7 +345,7 @@ export function eventsMixin({
     zoomToExtent,
     zoomToCluster,
     zoomToLayer,
-    updateMapHeight,
+    updateMapDimensions,
     zoom,
     updateBreakpoints,
   }

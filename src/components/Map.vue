@@ -66,7 +66,7 @@ export default {
 </script>
 <script setup lang="ts">
 import Settings from "./settings/index.vue"
-import Drawer from "./drawer/index.vue"
+import Drawer from "./drawer/Drawer.vue"
 
 const props = defineProps({
   mapId: {
@@ -324,7 +324,7 @@ const {
   handleResultClick,
   zoomToLayer,
   zoomToCluster,
-  updateMapHeight,
+  updateMapDimensions,
   updateBreakpoints,
   zoom,
 } = eventsMixin({
@@ -367,7 +367,7 @@ onMounted(() => {
     startMap()
     setupMapEvents()
     updateBreakpoints()
-    updateMapHeight()
+    updateMapDimensions()
   }
 })
 

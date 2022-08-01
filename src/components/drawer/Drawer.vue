@@ -62,27 +62,28 @@ const emitResultHover = (item: SearchItem) => {
 const mapDrawer = ref<HTMLDivElement>()
 const searchSection = ref()
 /**
- * Changes drawer max-height according to whether its activated or not
- * between 100% and search section height
+ * Changes drawer max-height & max-width according to whether its activated or not
+ * between 100% and search section dimenstions
  * @param activated - whether the drawer is activated or not
  */
-const applyDrawerMaxHeight = (activated: boolean) => {
+const toggleDrawerMaxDimenstions = (activated: boolean) => {
   if (!activated) {
     if (!searchSection.value) return
     const height = searchSection.value.$el.clientHeight
-    mapDrawer.value?.setAttribute("style", `max-height: ${height}px;`)
+    const width = searchSection.value.$el.clientWidth
+    mapDrawer.value?.setAttribute("style", `max-height: ${height}px; max-width: ${width}px;`)
   } else {
-    mapDrawer.value?.setAttribute("style", `max-height: 100%;`)
+    mapDrawer.value?.setAttribute("style", `max-height: 100%; max-width: 100%;`)
   }
 }
 watch(
   () => store.state.drawerActivation,
   (nv) => {
-    applyDrawerMaxHeight(nv)
+    toggleDrawerMaxDimenstions(nv)
   }
 )
 onMounted(() => {
-  applyDrawerMaxHeight(store.state.drawerActivation)
+  toggleDrawerMaxDimenstions(store.state.drawerActivation)
 })
 </script>
 
@@ -98,18 +99,35 @@ onMounted(() => {
   display: flex;
   flex-flow: column;
   border-radius: 10px;
-  &.map-drawer[activated="true"] {
-  top: 0;
-  right: 0;
-  max-height: 100%;
-  overflow: hidden;
-  border-radius: 0;
+  &[activated="true"] {
+    top: 0;
+    right: 0;
+    max-height: 100%;
+    overflow: hidden;
+    border-radius: 0;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
 }
-}
-
-
 
 .map-drawer--mobile {
-  
+  position: absolute;
+  z-index: 2;
+  top: 5%;
+  background-color: white;
+  right: 50%;
+  transform: translateX(50%);
+  transition: 0.8s;
+  max-width: min-content;
+  display: flex;
+  flex-flow: column;
+  border-radius: 10px;
+  &[activated="true"] {
+    top: 0;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 0;
+  }
 }
 </style>

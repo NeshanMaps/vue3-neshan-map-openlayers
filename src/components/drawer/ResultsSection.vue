@@ -6,7 +6,9 @@
     ref="resultSection"
   >
     <Loading v-if="store.state.loading" dense color="blue" />
-    <template v-if="store.state.drawerShowDetails && store.state.selectedMarkerLocation">
+    <template
+      v-if="store.state.drawerShowDetails && store.state.selectedMarkerLocation"
+    >
       <ResultView :item="store.state.selectedMarkerLocation" />
     </template>
     <template v-else>
@@ -30,7 +32,7 @@ export default {
 <script setup lang="ts">
 import ResultItem from "./ResultItem.vue"
 import Loading from "../Loading.vue"
-import ResultView from './ResultView.vue'
+import ResultView from "./ResultView.vue"
 import { store } from "@/store"
 defineProps({
   resultBoxClass: Array,
@@ -50,11 +52,15 @@ const emitHover = (item: SearchItem) => {
 const emitClick = (item: SearchItem) => {
   emits("result-click", item)
 }
+
 watch(
-  () => store.state.mapHeight,
+  () => store.state.drawerActivation,
   (nv) => {
-    if (!resultSection.value) return
-    resultSection.value.setAttribute("style", `height: ${nv}px`)
+    const style =
+      store.getters.screen().small
+        ? `height: ${store.state.mapDimensions.height}px; width: ${store.state.mapDimensions.width}px;`
+        : `height: ${store.state.mapDimensions.height}px;`
+    resultSection.value?.setAttribute("style", style)
   }
 )
 </script>

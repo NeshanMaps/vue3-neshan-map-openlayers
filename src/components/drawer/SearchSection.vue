@@ -2,7 +2,7 @@
   <div
     :activated="store.state.drawerActivation"
     :style="searchBoxStyle"
-    class="map-search-box"
+    class="map-search-box justify-between align-center mx-auto"
     :class="searchBoxClass"
   >
     <input
@@ -100,10 +100,8 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
   background-color: white;
   box-shadow: 0px 2px 4px 1px #a8a8a8;
   transition: inherit;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  input {
+  width: 240px;
+  input[type="search"] {
     border: none;
     background: inherit;
     outline: none;
@@ -111,6 +109,7 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
     font-size: 1rem;
     height: 2rem;
     padding-right: 0.5rem;
+    width: 100%;
   }
   input[type="search"]:-webkit-autofill,
   input[type="search"]:-webkit-autofill:hover,
@@ -141,7 +140,8 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
   border-radius: 10px;
   box-shadow: none;
   // height: 40px;
-  margin: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   pointer-events: auto;
   // width: 308px;
 }

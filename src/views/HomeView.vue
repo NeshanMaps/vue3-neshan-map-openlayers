@@ -92,8 +92,4 @@ export default defineComponent({
   top: 4vh;
   left: 4vw;
 }
-.justify-between {
-  display: flex;
-  justify-content: space-between;
-}
 </style>

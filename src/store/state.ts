@@ -9,8 +9,11 @@ export const state = {
     lt: { ...breakpointsSegments },
     gt: { ...breakpointsSegments },
   } as BreakPoints,
-  mapHeight: 1000,
+  mapDimensions: {
+    width: 700,
+    height: 1000
+  },
   selectedMarkerLocation: null as ReverseResult | null,
   drawerActivation: false,
-  drawerShowDetails: false
+  drawerShowDetails: false,
 }
