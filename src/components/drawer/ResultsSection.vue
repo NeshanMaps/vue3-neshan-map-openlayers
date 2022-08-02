@@ -2,7 +2,7 @@
   <div
     :style="resultBoxStyle"
     :class="resultBoxClass"
-    class="map-result-box"
+    class="map-result-box mx-auto"
     ref="resultSection"
   >
     <Loading v-if="store.state.loading" dense color="blue" />
@@ -22,19 +22,14 @@
     </template>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { defineProps, PropType, defineEmits, watch, ref } from "vue"
 import { SearchItem } from "../Map.model"
-export default {
-  name: "ResultBox",
-}
-</script>
-<script setup lang="ts">
 import ResultItem from "./ResultItem.vue"
 import Loading from "../Loading.vue"
 import ResultView from "./ResultView.vue"
 import { store } from "@/store"
-defineProps({
+const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
   results: {
@@ -56,10 +51,10 @@ const emitClick = (item: SearchItem) => {
 watch(
   () => store.state.drawerActivation,
   (nv) => {
-    const style =
-      store.getters.screen().small
-        ? `height: ${store.state.mapDimensions.height}px; width: ${store.state.mapDimensions.width}px;`
-        : `height: ${store.state.mapDimensions.height}px;`
+    if (!nv) return
+    const style = store.getters.screen.small
+      ? `height: ${store.state.mapDimensions.height}px; width: ${store.getters.drawerWidth}px; ${props.resultBoxStyle}`
+      : `height: ${store.state.mapDimensions.height}px; width: ${store.getters.drawerWidth}px; ${props.resultBoxStyle}`
     resultSection.value?.setAttribute("style", style)
   }
 )
@@ -69,6 +64,7 @@ watch(
 .map-result-box {
   overflow: auto;
   background: none;
+  transition: inherit;
 }
 
 /* width */

@@ -53,3 +53,7 @@ export const breakpointsSegmentsPixels = {
   lg: 1440,
   xl: 1920,
 }
+
+export const drawerConstants = {
+  width: 240,
+}

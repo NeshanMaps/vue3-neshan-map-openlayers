@@ -1,7 +1,7 @@
 <template>
   <div
     :activated="store.state.drawerActivation"
-    :style="searchBoxStyle"
+    :style="searchBoxStyle || `width: ${width}px`"
     class="map-search-box justify-between align-center mx-auto"
     :class="searchBoxClass"
   >
@@ -24,16 +24,12 @@
     </button>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { defineProps, defineEmits, ref } from "vue"
 import { computed } from "@vue/reactivity"
 import { store } from "@/store"
-export default {
-  name: "SettingsComp",
-}
-</script>
-<script setup lang="ts">
 import Icon from "../icons/index.vue"
+import { drawerConstants } from "@/parameters"
 
 const props = defineProps({
   searchBoxClass: Array,
@@ -44,6 +40,7 @@ const props = defineProps({
   },
 })
 
+const width = ref(drawerConstants.width)
 const emit = defineEmits([
   "update:search-text",
   "update:search-coords",
@@ -92,15 +89,13 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .map-search-box {
   border-radius: 10px;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
   background-color: white;
-  box-shadow: 0px 2px 4px 1px #a8a8a8;
   transition: inherit;
-  width: 240px;
   input[type="search"] {
     border: none;
     background: inherit;

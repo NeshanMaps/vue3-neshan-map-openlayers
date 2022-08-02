@@ -300,9 +300,9 @@ const search = async ({ term = "", coords }: SearchProps) => {
       const features = layer.getSource().getFeatures()
       //To fix a problem with zooming on single feature layers extent
       if (features.length === 1) {
-        zoomToCluster(features[0], { duration: 1000 })
+        zoomToCluster(features[0], { duration: 3000 })
       } else {
-        zoomToLayer(layer, { duration: 1000 })
+        zoomToLayer(layer, { duration: 3000 })
       }
     }, 200)
   } catch (error) {

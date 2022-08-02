@@ -1,6 +1,11 @@
 <template>
   <div
-    :class="store.state.breakpoints.lt.md ? 'map-drawer--mobile' : 'map-drawer'"
+    :class="{
+      'map-drawer--mobile': store.getters.screen.small,
+      'map-drawer': !store.getters.screen.small,
+      'box-shadow': !store.state.drawerActivation,
+    }"
+    class="d-flex flex-column"
     :activated="store.state.drawerActivation"
     ref="mapDrawer"
   >
@@ -71,7 +76,10 @@ const toggleDrawerMaxDimenstions = (activated: boolean) => {
     if (!searchSection.value) return
     const height = searchSection.value.$el.clientHeight
     const width = searchSection.value.$el.clientWidth
-    mapDrawer.value?.setAttribute("style", `max-height: ${height}px; max-width: ${width}px;`)
+    mapDrawer.value?.setAttribute(
+      "style",
+      `max-height: ${height}px; max-width: ${width}px;`
+    )
   } else {
     mapDrawer.value?.setAttribute("style", `max-height: 100%; max-width: 100%;`)
   }
@@ -87,23 +95,21 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .map-drawer {
   position: absolute;
   z-index: 2;
   top: 5%;
   background-color: white;
   right: 2%;
-  transition: 0.8s;
+  transition: 0.6s;
   max-width: min-content;
-  display: flex;
-  flex-flow: column;
   border-radius: 10px;
+  overflow: hidden;
   &[activated="true"] {
     top: 0;
     right: 0;
     max-height: 100%;
-    overflow: hidden;
     border-radius: 0;
     padding-right: 1rem;
     padding-left: 1rem;
@@ -117,16 +123,14 @@ onMounted(() => {
   background-color: white;
   right: 50%;
   transform: translateX(50%);
-  transition: 0.8s;
+  transition: 0.6s;
   max-width: min-content;
-  display: flex;
-  flex-flow: column;
   border-radius: 10px;
+  overflow: hidden;
   &[activated="true"] {
     top: 0;
     max-height: 100%;
     max-width: 100%;
-    overflow: hidden;
     border-radius: 0;
   }
 }
