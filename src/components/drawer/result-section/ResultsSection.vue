@@ -7,7 +7,7 @@
   >
     <Loading v-if="store.state.loading" dense color="blue" />
     <template
-      v-if="store.state.drawerShowDetails && store.state.selectedMarkerLocation"
+      v-if="!store.getters.screen.small && store.state.drawerShowDetails && store.state.selectedMarkerLocation"
     >
       <ResultView :item="store.state.selectedMarkerLocation" />
     </template>
@@ -16,7 +16,7 @@
         v-for="item in results"
         :key="'' + item.location.x + item.location.y"
         :item="item"
-        @mouseenter="emitHover(item)"
+        @mouseenter="handleHoverEmit(item)"
         @click="emitClick(item)"
       />
     </template>
@@ -24,10 +24,10 @@
 </template>
 <script setup lang="ts">
 import { defineProps, PropType, defineEmits, watch, ref } from "vue"
-import { SearchItem } from "../Map.model"
+import { SearchItem } from "../../Map.model"
 import ResultItem from "./ResultItem.vue"
-import Loading from "../Loading.vue"
-import ResultView from "./ResultView.vue"
+import Loading from "../../Loading.vue"
+import ResultView from "./DesktopDetailsSection.vue"
 import { store } from "@/store"
 const props = defineProps({
   resultBoxClass: Array,
@@ -41,6 +41,11 @@ const props = defineProps({
 const resultSection = ref<HTMLDivElement>()
 
 const emits = defineEmits(["result-hover", "result-click"])
+const handleHoverEmit = (item: SearchItem) => {
+  if (!store.getters.screen.small) {
+    emitHover(item)
+  }
+}
 const emitHover = (item: SearchItem) => {
   emits("result-hover", item)
 }

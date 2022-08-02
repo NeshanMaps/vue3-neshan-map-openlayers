@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { computed, defineProps, onMounted, PropType, ref, watch } from "vue"
 import Icon from "@/components/icons/index.vue"
-import { ReverseResult } from "../Map.model"
+import { ReverseResult } from "../../Map.model"
 import { inlineSvgs } from "@/static"
 
 const props = defineProps({

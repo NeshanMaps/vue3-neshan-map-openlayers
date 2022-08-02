@@ -12,7 +12,7 @@
 </template>
 <script lang="ts">
 import { defineProps, PropType } from 'vue'
-import { SearchItem } from '../Map.model'
+import { SearchItem } from '../../Map.model'
 export default {
   name: 'ResultItem',
 }

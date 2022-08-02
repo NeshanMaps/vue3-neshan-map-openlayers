@@ -31,7 +31,7 @@ export default {
 </script>
 <script setup lang="ts">
 import SearchSection from "./SearchSection.vue"
-import ResultsSection from "./ResultsSection.vue"
+import ResultsSection from "./result-section/ResultsSection.vue"
 import { store } from "@/store"
 
 const props = defineProps({

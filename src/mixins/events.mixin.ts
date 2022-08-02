@@ -48,7 +48,9 @@ export function eventsMixin({
   const setupMapEvents = () => {
     setupClickEvent()
     setupZoomEvent()
-    setupMarkerHoverEvent()
+    if (!store.getters.screen.small) {
+      setupMarkerHoverEvent()
+    }
     setupResizeEvents()
   }
 
@@ -181,6 +183,9 @@ export function eventsMixin({
     let data
     let stdPoint
     if (shouldReverse) {
+      if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
+      else store.toggleDrawerActivation(true)
+      store.toggleLoading(true)
       if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
       const result = await reverseOnPoint(point, {
         useMarker: !selectedFeature,
@@ -190,6 +195,7 @@ export function eventsMixin({
       marker = result.marker
       data = result.data
       stdPoint = result.stdPoint
+      store.toggleLoading(false)
     }
     emits("on-click", { event, marker, stdPoint, data, map, selectedFeature })
   }
@@ -212,8 +218,6 @@ export function eventsMixin({
   ) => {
     try {
       changeOverlayStats(undefined, "persistant")
-      store.toggleDrawerActivation(true)
-      store.toggleLoading(true)
       const stdPoint = transformCoords(point)
       let marker: VectorLayer | null = null
       if (useMarker) {
@@ -233,8 +237,6 @@ export function eventsMixin({
     } catch (error) {
       console.log(error)
       return {}
-    } finally {
-      store.toggleLoading(false)
     }
   }
 
@@ -268,7 +270,7 @@ export function eventsMixin({
       size: map.value.getSize(),
       duration,
       minResolution: 0.3,
-      padding: [50, 400, 50, 50],
+      padding: [15, store.getters.screen.small ? 15 : 400, 15, 15],
     })
   }
 

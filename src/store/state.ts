@@ -12,9 +12,10 @@ export const state = reactive({
   } as BreakPoints,
   mapDimensions: {
     width: 700,
-    height: 1000
+    height: 1000,
   },
   selectedMarkerLocation: null as ReverseResult | null,
   drawerActivation: false,
   drawerShowDetails: false,
+  mobileDrawerShowDetails: false,
 })

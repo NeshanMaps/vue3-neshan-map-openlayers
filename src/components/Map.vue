@@ -1,6 +1,6 @@
 <template>
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
-  <div :id="mapId" class="map">
+  <div :id="mapId" class="map pos-relative">
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -27,6 +27,7 @@
       />
     </slot>
   </div>
+  <MobileDetailsSection></MobileDetailsSection>
   <div class="map-popup-container" ref="popupContainer"></div>
   <div class="map-popup-container" ref="persistantContainer"></div>
 </template>
@@ -67,6 +68,7 @@ export default {
 <script setup lang="ts">
 import Settings from "./settings/index.vue"
 import Drawer from "./drawer/Drawer.vue"
+import MobileDetailsSection from "./drawer/MobileDetailsSection.vue"
 
 const props = defineProps({
   mapId: {
@@ -293,16 +295,16 @@ const search = async ({ term = "", coords }: SearchProps) => {
       cluster: props.cluster,
       clusterThreshold: props.clusterThreshold,
     })
-    changeOverlayStats(undefined, 'persistant')
+    changeOverlayStats(undefined, "persistant")
     searchMarkers.value = layer
+    // Apparently it takse some async time to cluster the source
     setTimeout(() => {
-      // Apparently it takse some sync time to cluster the source
       const features = layer.getSource().getFeatures()
       //To fix a problem with zooming on single feature layers extent
       if (features.length === 1) {
-        zoomToCluster(features[0], { duration: 3000 })
+        zoomToCluster(features[0], { duration: 1500 })
       } else {
-        zoomToLayer(layer, { duration: 3000 })
+        zoomToLayer(layer, { duration: 1500 })
       }
     }, 200)
   } catch (error) {
@@ -316,7 +318,7 @@ const eventsEmits = defineEmits(["on-zoom", "on-click"])
 const { setupOverlays, changeOverlayStats } = overlayMixin({
   map,
   popupContainer,
-  persistantContainer
+  persistantContainer,
 })
 const {
   setupMapEvents,
