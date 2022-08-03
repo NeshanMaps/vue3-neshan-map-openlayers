@@ -25,10 +25,11 @@
 <script setup lang="ts">
 import { defineProps, PropType, defineEmits, watch, ref } from "vue"
 import { SearchItem } from "../../Map.model"
+import { store } from "@/store"
+
 import ResultItem from "./ResultItem.vue"
 import Loading from "../../Loading.vue"
 import ResultView from "./DesktopDetailsSection.vue"
-import { store } from "@/store"
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,

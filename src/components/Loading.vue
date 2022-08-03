@@ -15,7 +15,7 @@ export default {
 defineProps({
   color: {
     type: String,
-    default: 'black'
+    default: 'blue'
   },
   dense: Boolean,
 })
@@ -53,8 +53,7 @@ defineProps({
     left: 0;
     transform-origin: 0 100%;
     transform: translateX(100%) scale3d(-1, 1, 1);
-  }
-  div:nth-of-type(2)::before {
+  &::before {
     animation: loading-animation 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395)
       infinite;
     background: currentColor;
@@ -66,7 +65,7 @@ defineProps({
     left: 0;
     transform-origin: 0 0;
   }
-  div:nth-of-type(2)::after {
+  &::after {
     transform: translate3d(-101%, 0, 0) scale3d(1, 1, 1);
     animation: loading-animation-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
       infinite;
@@ -79,6 +78,7 @@ defineProps({
     bottom: 0;
     left: 0;
     transform-origin: 0 0;
+  }
   }
 }
 

@@ -45,37 +45,15 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, defineProps, onMounted, PropType, ref, watch } from "vue"
+import { defineProps, PropType, ref } from "vue"
 import Icon from "@/components/icons/index.vue"
 import { ReverseResult } from "../../Map.model"
-import { inlineSvgs } from "@/static"
+import { detailsSectionMixin } from "@/mixins";
 
 const props = defineProps({
   item: Object as PropType<ReverseResult>,
 })
 
 const resultViewContainer = ref<HTMLDivElement>()
-const width = ref(0)
-
-const iconName = computed(() => {
-  const name =
-    props.item?.route_type &&
-    Object.keys(inlineSvgs).includes(props.item?.route_type)
-      ? props.item.route_type
-      : props.item?.place
-      ? "local_government_office"
-      : "primary"
-  return name
-})
-
-watch(
-  () => resultViewContainer.value?.clientWidth,
-  (nv) => {
-    if (nv) width.value = nv
-  }
-)
-onMounted(() => {
-  const initialWidth = resultViewContainer.value?.clientWidth
-  if (initialWidth) width.value = initialWidth
-})
+const { iconName, width } = detailsSectionMixin({props, containerRef: resultViewContainer})
 </script>

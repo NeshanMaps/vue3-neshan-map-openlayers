@@ -7,6 +7,10 @@
   position: relative;
 }
 
+.d-block {
+  display: block;
+}
+
 .d-flex {
   display: flex;
 }
@@ -56,6 +60,15 @@
 .px-2 {
   padding-left: var(--lg);
   padding-right: var(--lg);
+}
+
+.mx-1 {
+  margin-left: var(--md);
+  margin-right: var(--md);
+}
+.mx-2 {
+  margin-left: var(--lg);
+  margin-right: var(--lg);
 }
 
 .box-shadow {

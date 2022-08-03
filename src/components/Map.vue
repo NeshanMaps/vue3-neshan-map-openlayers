@@ -27,7 +27,7 @@
       />
     </slot>
   </div>
-  <MobileDetailsSection></MobileDetailsSection>
+  <MobileDetailsSection :item="store.state.selectedMarkerLocation"></MobileDetailsSection>
   <div class="map-popup-container" ref="popupContainer"></div>
   <div class="map-popup-container" ref="persistantContainer"></div>
 </template>
@@ -68,7 +68,7 @@ export default {
 <script setup lang="ts">
 import Settings from "./settings/index.vue"
 import Drawer from "./drawer/Drawer.vue"
-import MobileDetailsSection from "./drawer/MobileDetailsSection.vue"
+import MobileDetailsSection from "./MobileDetailsSection.vue"
 
 const props = defineProps({
   mapId: {
