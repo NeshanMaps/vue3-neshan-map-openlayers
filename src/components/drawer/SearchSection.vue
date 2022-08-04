@@ -78,10 +78,10 @@ let emitTimeout: number
 const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
   clearTimeout(emitTimeout)
   if (!value) {
-    store.toggleLoading(false)
+    store.toggleSearchLoading(false)
     return
-  } else if (!store.state.loading) {
-    store.toggleLoading(true)
+  } else if (!store.state.searchLoading) {
+    store.toggleSearchLoading(true)
   }
   emitTimeout = setTimeout(() => {
     emitSearch(value)

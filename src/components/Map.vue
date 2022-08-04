@@ -27,7 +27,7 @@
       />
     </slot>
   </div>
-  <MobileDetailsSection :item="store.state.selectedMarkerLocation"></MobileDetailsSection>
+  <MobileDetailsSection></MobileDetailsSection>
   <div class="map-popup-container" ref="popupContainer"></div>
   <div class="map-popup-container" ref="persistantContainer"></div>
 </template>
@@ -281,7 +281,7 @@ const searchResults = ref<SearchItem[]>([])
  */
 const search = async ({ term = "", coords }: SearchProps) => {
   try {
-    store.toggleLoading(true)
+    store.toggleSearchLoading(true)
     const reliableCoords =
       coords || mainMarkerCoords.value || sanitizedCenter.value
     if (!reliableCoords) return
@@ -310,7 +310,7 @@ const search = async ({ term = "", coords }: SearchProps) => {
   } catch (error) {
     console.log(error)
   } finally {
-    store.toggleLoading(false)
+    store.toggleSearchLoading(false)
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div ref="resultViewContainer">
+  <div ref="pointDetailsContainer">
     <Icon :name="iconName" :size="width"></Icon>
     <div class="px-2">
       <div v-if="item?.place" class="d-flex align-center">
@@ -44,16 +44,23 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
-import { defineProps, PropType, ref } from "vue"
+import { ref, defineProps, PropType } from "vue"
+import { detailsSectionMixin } from "@/mixins"
+import { ReverseResult } from "@/components/Map.model.js"
+
 import Icon from "@/components/icons/index.vue"
-import { ReverseResult } from "../../Map.model"
-import { detailsSectionMixin } from "@/mixins";
 
 const props = defineProps({
-  item: Object as PropType<ReverseResult>,
+  item: Object as PropType<ReverseResult | null>,
 })
 
-const resultViewContainer = ref<HTMLDivElement>()
-const { iconName, width } = detailsSectionMixin({props, containerRef: resultViewContainer})
+const pointDetailsContainer = ref<HTMLDivElement>()
+const { iconName, width } = detailsSectionMixin({
+  props,
+  containerRef: pointDetailsContainer,
+})
 </script>
+
+<style></style>

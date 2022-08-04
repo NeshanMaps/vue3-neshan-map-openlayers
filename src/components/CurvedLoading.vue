@@ -51,9 +51,18 @@ onMounted(() => {
   0% {
     clip: rect(0px, 0px, var(--height), 0px);
   }
-  50% {
+  35% {
     clip: rect(0px, var(--container-width), var(--height), 0px);
   }
+  // 70% {
+  //   clip: rect(0px, var(--container-width), var(--height), var(--container-width));
+  // }
+  // 70.001% {
+  //   clip: rect(0px, 0px, var(--height), 0px);
+  // }
+  // 85% {
+  //   clip: rect(0px, var(--container-width), var(--height), 0px);
+  // }
   100% {
     clip: rect(0px, var(--container-width), var(--height), var(--container-width));
   }

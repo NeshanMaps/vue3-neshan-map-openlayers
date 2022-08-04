@@ -10,5 +10,8 @@ export const getters = {
   drawerWidth: computed(() => {
     const width = state.breakpoints.lt.md ? state.mapDimensions.width : drawerConstants.width
     return width
+  }),
+  loading: computed(() => {
+    return state.searchLoading || state.reverseLoading
   })
 }

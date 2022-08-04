@@ -185,7 +185,7 @@ export function eventsMixin({
     if (shouldReverse) {
       if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
       else store.toggleDrawerActivation(true)
-      store.toggleLoading(true)
+      store.toggleReverseLoading(true)
       if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
       const result = await reverseOnPoint(point, {
         useMarker: !selectedFeature,
@@ -195,7 +195,7 @@ export function eventsMixin({
       marker = result.marker
       data = result.data
       stdPoint = result.stdPoint
-      store.toggleLoading(false)
+      store.toggleReverseLoading(false)
     }
     emits("on-click", { event, marker, stdPoint, data, map, selectedFeature })
   }

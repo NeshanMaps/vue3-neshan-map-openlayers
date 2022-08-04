@@ -1,94 +1,45 @@
 <template>
-  <div ref="mobileResultViewContainer" class="mobile-details-section">
-    <div :style="`height: ${store.state.mapDimensions.height}px;`">
-      <div class="pos-relative">
-        <CurvedLoading v-if="!fullScreen"></CurvedLoading>
-        <Icon
-          v-else
-          name="close"
-          :size="40"
-          style="float: left"
-          @click="closeScreen"
-        ></Icon>
-        <span
-          class="dragButton d-block"
-          @touchmove="handleTouchMove"
-          @touchend="handleTouchEnd"
-        >
-          <span class="d-block" draggable />
-        </span>
-      </div>
-      <Icon :name="iconName" :size="width"></Icon>
-      <div class="px-2">
-        <div v-if="item?.place" class="d-flex align-center">
-          <Icon name="marker" :size="25" color="steelblue" class="px-1"></Icon>
-          {{ item.place }}
-        </div>
-        <br />
-        <div v-if="item?.formatted_address" class="d-flex align-center">
-          <Icon
-            name="secondary"
-            :size="25"
-            color="steelblue"
-            class="px-1"
-          ></Icon>
-          {{ item.formatted_address }}
-        </div>
-        <br />
-        <div v-if="item?.neighbourhood" class="d-flex align-center">
-          <Icon
-            name="neighborhood_landmark"
-            :size="25"
-            color="steelblue"
-            class="px-1"
-          ></Icon>
-          محله {{ item.neighbourhood }}
-        </div>
-        <br />
-        <div v-if="item?.city" class="d-flex align-center">
-          <Icon name="city" :size="25" color="steelblue" class="px-1"></Icon>
-          شهر {{ item.city }}
-        </div>
-        <br />
-        <div v-if="item?.village" class="d-flex align-center">
-          <Icon name="city" :size="25" color="steelblue" class="px-1"></Icon>
-          روستای {{ item.village }}
-        </div>
-        <br />
-        <div v-if="item?.neighbourhood" class="d-flex align-center">
-          {{ item.in_odd_even_zone ? "داخل" : "خارج از" }}
-          محدوده طرح زوج و فرد
-        </div>
-        <br />
-        <div v-if="item?.neighbourhood" class="d-flex align-center">
-          {{ item.in_traffic_zone ? "داخل" : "خارج از" }}
-          محدوده طرح ترافیک
-        </div>
-      </div>
+  <div
+    ref="mobileResultViewContainer"
+    class="mobile-details-section o-hidden pos-relative"
+  >
+    <CurvedLoading v-if="!fullScreen && store.state.reverseLoading" class="curved-loading pos-absolute"></CurvedLoading>
+    <Icon
+      name="close"
+      :size="40"
+      style="float: left"
+      :style="`visibility: ${fullScreen ? 'visible' : 'hidden'};`"
+      class="close-icon pos-absolute"
+      @click="closeScreen"
+    ></Icon>
+    <span
+      class="drag-button d-block pos-absolute"
+      @touchmove="handleTouchMove"
+      @touchend="handleTouchEnd"
+    >
+      <span class="d-block" />
+    </span>
+    <div
+      :style="`height: ${store.state.mapDimensions.height}px;`"
+      class="o-auto"
+    >
+      <PointDetails :item="store.state.selectedMarkerLocation"></PointDetails>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType, ref } from "vue"
-import { ReverseResult } from "./Map.model"
-import { detailsSectionMixin } from "@/mixins"
+import { ref } from "vue"
+import { store } from "@/store"
 
 import Icon from "@/components/icons/index.vue"
 import CurvedLoading from "./CurvedLoading.vue"
-import { store } from "@/store"
-
-const props = defineProps({
-  item: Object as PropType<ReverseResult | null>,
-})
+import PointDetails from "./drawer/result-section/PointDetails.vue"
 
 const mobileResultViewContainer = ref<HTMLDivElement>()
 const fullScreen = ref(false)
-const { iconName, width } = detailsSectionMixin({
-  props,
-  containerRef: mobileResultViewContainer,
-})
 
 const handleTouchMove = (evt: TouchEvent) => {
+  evt.preventDefault()
   const maxHeight =
     store.state.mapDimensions.height - Math.round(evt.targetTouches[0].clientY)
   mobileResultViewContainer.value?.style.setProperty(
@@ -99,6 +50,7 @@ const handleTouchMove = (evt: TouchEvent) => {
 
 const handleTouchEnd = () => {
   if (!mobileResultViewContainer.value) return
+  addTemporaryTransition()
   const maxHeight = window.getComputedStyle(
     mobileResultViewContainer.value
   ).maxHeight
@@ -106,6 +58,11 @@ const handleTouchEnd = () => {
   if (fullScreen.value) {
     if (maxHeightNumber < store.state.mapDimensions.height * 0.8) {
       closeScreen()
+    } else {
+      mobileResultViewContainer.value.style.setProperty(
+        "max-height",
+        store.state.mapDimensions.height + "px"
+      )
     }
   } else {
     if (maxHeightNumber > store.state.mapDimensions.height / 4) {
@@ -115,9 +72,8 @@ const handleTouchEnd = () => {
       )
       mobileResultViewContainer.value.style.setProperty("border-radius", "0")
       fullScreen.value = true
-      addTemporaryTransition()
-    } else if (maxHeightNumber < 70) {
-      mobileResultViewContainer.value.style.setProperty("max-height", "70px")
+    } else {
+      mobileResultViewContainer.value.style.setProperty("max-height", "3rem")
     }
   }
 }
@@ -145,27 +101,30 @@ const addTemporaryTransition = () => {
 .mobile-details-section {
   width: 100%;
   position: absolute;
-  z-index: 4;
+  z-index: 1000000;
   background-color: white;
   bottom: 0;
   border-radius: 50% / 50px 50px 0 0;
-  max-height: 5rem;
-  overflow: hidden;
+  max-height: 3rem;
   direction: rtl;
-  & > div {
-    padding-top: 0.2rem;
-    .dragButton {
-      padding-top: 1.5rem;
-      padding-bottom: 1.5rem;
-      z-index: calc(999999 + 1); //More that neshan map watermark and title z-index
-      position: absolute;
-      top: 0;
-      width: 50%;
-      margin-left: 25%;
-      margin-right: 25%;
-      & > span {
-        border-top: 1px solid black;
-      }
+  .curved-loading {
+    top: 0.3rem;
+  }
+  .close-icon {
+    left: 1rem;
+    top: 1rem;
+  }
+  .drag-button {
+    padding-top: 1.5rem;
+    padding-bottom: 4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6rem;
+    & > span {
+      border-top: 2px solid rgba(0, 0, 0, 0.38);
     }
   }
 }

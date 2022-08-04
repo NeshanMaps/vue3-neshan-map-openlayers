@@ -5,11 +5,23 @@
     class="map-result-box mx-auto"
     ref="resultSection"
   >
-    <Loading v-if="store.state.loading" dense color="blue" />
+    <Loading
+      v-if="
+        store.getters.screen.small
+          ? store.state.searchLoading
+          : store.getters.loading
+      "
+      dense
+      color="blue"
+    />
     <template
-      v-if="!store.getters.screen.small && store.state.drawerShowDetails && store.state.selectedMarkerLocation"
+      v-if="
+        !store.getters.screen.small &&
+        store.state.drawerShowDetails &&
+        store.state.selectedMarkerLocation
+      "
     >
-      <ResultView :item="store.state.selectedMarkerLocation" />
+      <PointDetails :item="store.state.selectedMarkerLocation" />
     </template>
     <template v-else>
       <ResultItem
@@ -29,7 +41,7 @@ import { store } from "@/store"
 
 import ResultItem from "./ResultItem.vue"
 import Loading from "../../Loading.vue"
-import ResultView from "./DesktopDetailsSection.vue"
+import PointDetails from "./PointDetails.vue"
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,

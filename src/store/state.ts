@@ -4,7 +4,8 @@ import { reactive } from "vue"
 import { BreakPoints } from "./state.model"
 
 export const state = reactive({
-  loading: false,
+  searchLoading: false,
+  reverseLoading: false,
   breakpoints: {
     ...breakpointsSegments,
     lt: { ...breakpointsSegments },

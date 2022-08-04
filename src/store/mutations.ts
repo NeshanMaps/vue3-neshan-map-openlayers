@@ -1,8 +1,11 @@
 import { ReverseResult } from "@/components/Map.model"
 import { state } from "./state"
 export const mutations = {
-  toggleLoading(value: boolean) {
-    state.loading = value
+  toggleSearchLoading(value: boolean) {
+    state.searchLoading = value
+  },
+  toggleReverseLoading(value: boolean) {
+    state.reverseLoading = value
   },
   toggleDrawerActivation(value: boolean) {
     state.drawerActivation = value
