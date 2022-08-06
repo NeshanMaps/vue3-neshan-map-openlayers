@@ -59,7 +59,7 @@ export function overlayMixin({
       element: container.value,
       map: map.value,
       positioning: "top-center",
-      offset: [0, -50],
+      offset: [0, -40],
     })
     overlay.set("persistant", persistant) // An attr to know that we should remove it on following hovers
     return overlay

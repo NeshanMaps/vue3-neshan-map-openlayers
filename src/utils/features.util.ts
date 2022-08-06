@@ -86,7 +86,7 @@ export const createIcon = ({
   color = "red",
   iconScale = 0.1,
   src = markerUrls[color],
-  anchor = [0.5, 1],
+  anchor = [0.5, 0.5],
 }: CreateIconProps = {}): Ol.style.Image => {
   return new ol.style.Icon({
     src,
