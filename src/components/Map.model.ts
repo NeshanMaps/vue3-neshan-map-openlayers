@@ -144,6 +144,7 @@ export declare interface EventsMixinProps {
   mainMarker: VectorLayerRef
   mainMarkerCoords: Ref<CoordsArr | undefined>
   api: Ref<Api>
+  mapContainer: Ref<HTMLDivElement | undefined>
   emits: (event: "on-zoom" | "on-click", arg: any) => void
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback
@@ -155,9 +156,11 @@ export declare interface EventsMixinProps {
   addMarkers: CreateMarkers
   setupOverlays: () => void
   changeOverlayStats: ChangeOverlayStats
-  mapId: string
   findMarkerByTitle: (title: string) => Feature | undefined
-  findClusterByTitle: (title: string) => Feature | undefined
+  findClusterByTitle: (title: string) => {
+    feature: Feature | undefined
+    cluster: Feature | undefined
+  }
 }
 export declare interface MarkersMixinProps {
   map: OlMapRef

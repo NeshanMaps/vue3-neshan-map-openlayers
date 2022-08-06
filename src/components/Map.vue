@@ -1,6 +1,6 @@
 <template>
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
-  <div :id="mapId" class="map pos-relative">
+  <div ref="mapContainer" class="map pos-relative">
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -27,7 +27,9 @@
       />
     </slot>
   </div>
-  <MobileDetailsSection></MobileDetailsSection>
+  <MobileDetailsSection
+    v-if="store.getters.screen.small"
+  ></MobileDetailsSection>
   <div class="map-popup-container" ref="popupContainer"></div>
   <div class="map-popup-container" ref="persistantContainer"></div>
 </template>
@@ -71,10 +73,6 @@ import Drawer from "./drawer/Drawer.vue"
 import MobileDetailsSection from "./MobileDetailsSection.vue"
 
 const props = defineProps({
-  mapId: {
-    type: String,
-    default: "map",
-  },
   mapKey: {
     type: String,
     required: true,
@@ -206,6 +204,7 @@ const toggleTraffic = (value: boolean) => {
   map.value?.switchTrafficLayer(value)
 }
 
+const mapContainer = ref<HTMLDivElement>()
 /**
  * Adds the map from given url to given script
  * @param url - Url of map or another script
@@ -229,9 +228,10 @@ const importMap = (url: string, tagName = "my-openlayer") => {
  * or Neshan building location.
  */
 const startMap = async () => {
+  if (!mapContainer.value) return
   const coords = sanitizedCenter.value || (await getLocation())
   const newMap = new ol.Map({
-    target: props.mapId,
+    target: mapContainer.value,
     key: props.mapKey,
     // mapType: 'standard-night',
     poi: poiLayer.value,
@@ -345,7 +345,7 @@ const {
   addMarkers,
   setupOverlays,
   changeOverlayStats,
-  mapId: props.mapId,
+  mapContainer,
   findMarkerByTitle,
   findClusterByTitle,
 })

@@ -18,7 +18,6 @@ import {
   getClusterExtent,
   transformCoords,
   getFeatureExtent,
-  getCoordsFromFeature,
 } from "../utils"
 import { ReverseOnPointOptions } from "./events.mixin.model"
 
@@ -38,7 +37,7 @@ export function eventsMixin({
   setupOverlays,
   changeOverlayStats,
   addMarkers,
-  mapId,
+  mapContainer,
   findMarkerByTitle,
   findClusterByTitle,
 }: EventsMixinProps) {
@@ -48,9 +47,7 @@ export function eventsMixin({
   const setupMapEvents = () => {
     setupClickEvent()
     setupZoomEvent()
-    if (!store.getters.screen.small) {
-      setupMarkerHoverEvent()
-    }
+    setupMarkerHoverEvent()
     setupResizeEvents()
   }
 
@@ -84,7 +81,7 @@ export function eventsMixin({
     map.value?.on("pointermove", function (evt) {
       const hoveredFeature = getFeatureFromEvent(<MapBrowserEvent>evt)
       if (hoveredFeature) {
-        const isCluster = hoveredFeature.get("isCluster")
+        const isCluster: boolean = hoveredFeature.get("isCluster")
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature)
         if (isCluster) {
@@ -122,11 +119,10 @@ export function eventsMixin({
    * Updates map height value on window resize
    */
   const updateMapDimensions = () => {
-    const mapContainer = document.getElementById(mapId)
-    if (!mapContainer) return
+    if (!mapContainer.value) return
     store.setMapDimenstions({
-      height: mapContainer.clientHeight,
-      width: mapContainer.clientWidth,
+      height: mapContainer.value.clientHeight,
+      width: mapContainer.value.clientWidth,
     })
   }
   /**
@@ -162,42 +158,37 @@ export function eventsMixin({
    * @param event - Map click event.
    */
   const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
-    let shouldReverse = true
-    let point = event.coordinate
-    let text = [""]
+    let emittingMarker
+    let emittingData
+    let emittingStdPoint
     const selectedFeature = getFeatureFromEvent(event)
     if (zoomOnMarkerClick && selectedFeature) {
-      const isCluster = selectedFeature.get("isCluster")
-      isCluster ? zoomToCluster(selectedFeature) : zoomToMarker(selectedFeature)
+      const isCluster: boolean = selectedFeature.get("isCluster")
       if (isCluster) {
-        const features: Feature[] = selectedFeature.get("features")
-        if (features.length !== 1) {
-          shouldReverse = false
-        } else {
-          point = getCoordsFromFeature(features[0])
-          text = selectedFeature.get("text")
-        }
+        zoomToCluster(selectedFeature)
+      } else {
+        zoomToMarker(selectedFeature)
       }
-    }
-    let marker
-    let data
-    let stdPoint
-    if (shouldReverse) {
+      changeOverlayStats(undefined, "persistant")
+    } else {
       if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
       else store.toggleDrawerActivation(true)
       store.toggleReverseLoading(true)
       if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
-      const result = await reverseOnPoint(point, {
-        useMarker: !selectedFeature,
-        usePopup: !selectedFeature || Boolean(text[0]),
-        customText: text[0],
-      })
-      marker = result.marker
-      data = result.data
-      stdPoint = result.stdPoint
+      const result = await reverseOnPoint(event.coordinate)
+      emittingMarker = result.marker
+      emittingData = result.data
+      emittingStdPoint = result.stdPoint
       store.toggleReverseLoading(false)
     }
-    emits("on-click", { event, marker, stdPoint, data, map, selectedFeature })
+    emits("on-click", {
+      event,
+      marker: emittingMarker,
+      stdPoint: emittingData,
+      data: emittingStdPoint,
+      map,
+      selectedFeature,
+    })
   }
 
   /**
@@ -241,7 +232,7 @@ export function eventsMixin({
   }
 
   /**
-   * Take the cluster and zooms on it
+   * Takes the cluster and zooms on it
    * @param cluster
    * @param options.duration - Zooming duration
    */
@@ -251,7 +242,7 @@ export function eventsMixin({
   }
 
   /**
-   * Take the marker and zooms on it
+   * Takes the marker and zooms on it
    * @param marker
    * @param options.duration - Zooming duration
    */
@@ -291,7 +282,7 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
-    let foundFeature = findClusterByTitle(item.title)
+    let foundFeature = findClusterByTitle(item.title).feature
     if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
     if (foundFeature) {
       if (popupOnResultHover) {
@@ -311,12 +302,11 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultClick = (item: SearchItem) => {
-    let foundFeature = findClusterByTitle(item.title)
+    let { feature: foundFeature } = findClusterByTitle(item.title)
     if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
     if (foundFeature) {
       if (zoomOnResultClick) {
-        const isCluster = foundFeature.get("isCluster")
-        isCluster ? zoomToCluster(foundFeature) : zoomToMarker(foundFeature)
+        zoomToMarker(foundFeature)
       }
       if (resultClickCallback) {
         resultClickCallback({ map: map.value, feature: foundFeature })

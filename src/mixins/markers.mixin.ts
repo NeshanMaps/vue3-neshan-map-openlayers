@@ -49,6 +49,7 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
     if (!layer.value) return
     const rawLayer = toRaw(layer.value)
     const clusterFeatures = rawLayer.getSource().getFeatures() || []
+    if (!clusterFeatures.some(cf => cf.get('isCluster'))) return
     const features = clusterFeatures.reduce((result: Feature[], cf) => {
       const features: Feature[] = cf.get("features")
       return [...result, ...features]
@@ -62,17 +63,35 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
   }
 
   /**
-   * Takes the title of a marker and returns its surrounding cluster
+   * Takes the title of a marker and returns the found cluster and its surrounding cluster
    * @param title - title of wanted feature
-   * @returns The found cluster
+   * @returns The found feature and its cluster
    */
   const findClusterByTitle = (title: string) => {
     const clusters = searchMarkers.value?.getSource().getFeatures()
-    return clusters?.find((cluster) =>
-      cluster
-        .get("features")
-        .find((feat: Feature) => feat.get("text") === title)
-    )
+    let foundFeature: Feature | undefined
+    const cluster = clusters?.find((cluster) => {
+      const feature = getMarkerInClusterByTitle(cluster, title)
+      if (feature) {
+        foundFeature = feature
+      }
+      return feature
+    })
+    return {
+      feature: foundFeature,
+      cluster,
+    }
+  }
+
+  /**
+   * Take a cluster and a title and returns the feature inside the cluster by its title
+   * @param cluster - The cluster we are looking for feature in it
+   * @param title - Title of wanted feature
+   * @returns The found feature
+   */
+  const getMarkerInClusterByTitle = (cluster: Feature, title: string) => {
+    const features: Feature[] | undefined = cluster.get("features")
+    return features?.find((feat) => feat.get("text") === title)
   }
 
   /**
@@ -91,5 +110,6 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
     toggleClusterSource,
     findClusterByTitle,
     findMarkerByTitle,
+    getMarkerInClusterByTitle,
   }
 }

@@ -10,16 +10,16 @@ export const mutations = {
   toggleDrawerActivation(value: boolean) {
     state.drawerActivation = value
   },
-  setSelectedMarkerLocation(value: ReverseResult) {
-    state.selectedMarkerLocation = value
-  },
-  setMapDimenstions(value: { width: number; height: number }) {
-    state.mapDimensions = value
-  },
   toggleDrawerShowDetails(value: boolean) {
     state.drawerShowDetails = value
   },
   toggleMobileDrawerShowDetails(value: boolean) {
     state.mobileDrawerShowDetails = value
+  },
+  setSelectedMarkerLocation(value: ReverseResult) {
+    state.selectedMarkerLocation = value
+  },
+  setMapDimenstions(value: { width: number; height: number }) {
+    state.mapDimensions = value
   },
 }

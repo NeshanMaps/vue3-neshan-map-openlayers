@@ -124,7 +124,7 @@ const addTemporaryTransition = () => {
     transform: translateX(-50%);
     width: 6rem;
     & > span {
-      border-top: 2px solid rgba(0, 0, 0, 0.38);
+      border-top: 2px solid rgba(0, 0, 0, 0.26);
     }
   }
 }
