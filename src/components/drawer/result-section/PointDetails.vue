@@ -50,7 +50,7 @@ import { ref, defineProps, PropType } from "vue"
 import { detailsSectionMixin } from "@/mixins"
 import { ReverseResult } from "@/components/Map.model.js"
 
-import Icon from "@/components/icons/index.vue"
+import Icon from "@/components/icons/IconComponent.vue"
 
 const props = defineProps({
   item: Object as PropType<ReverseResult | null>,

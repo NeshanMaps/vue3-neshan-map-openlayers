@@ -5,13 +5,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineProps } from 'vue'
-export default {
-  name: 'LoadingComp',
-}
-</script>
 <script setup lang="ts">
+import { defineProps } from 'vue'
 defineProps({
   color: {
     type: String,

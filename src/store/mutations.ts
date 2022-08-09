@@ -1,5 +1,6 @@
 import { ReverseResult } from "@/components/Map.model"
 import { state } from "./state"
+import { BreakPoints } from "./state.model"
 export const mutations = {
   toggleSearchLoading(value: boolean) {
     state.searchLoading = value
@@ -21,5 +22,8 @@ export const mutations = {
   },
   setMapDimenstions(value: { width: number; height: number }) {
     state.mapDimensions = value
+  },
+  setBreakPoints(value: BreakPoints) {
+    state.breakpoints = value
   },
 }

@@ -40,7 +40,7 @@ import { SearchItem } from "@/components/Map.model"
 import { store } from "@/store"
 
 import ResultItem from "./ResultItem.vue"
-import Loading from "@/components/Loading.vue"
+import Loading from "@/components/LoadingComp.vue"
 import PointDetails from "./PointDetails.vue"
 const props = defineProps({
   resultBoxClass: Array,

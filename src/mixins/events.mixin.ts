@@ -9,15 +9,16 @@ import {
 } from "@/components/Map.model"
 import { store } from "@/store"
 import { breakpointsSegments, breakpointsSegmentsPixels } from "@/parameters"
-import { BreakpointsSegments } from "@/store/state.model"
+import { BreakPoints, BreakpointsSegments } from "@/store/state.model"
 import { Feature, MapBrowserEvent } from "openlayers"
-import { ref } from "vue"
+import { ref, toRaw } from "vue"
 import {
   getCoordsAndTextFromFeature,
   getTitleFromData,
   getClusterExtent,
   transformCoords,
   getFeatureExtent,
+  getCoordsFromFeature,
 } from "../utils"
 import { ReverseOnPointOptions } from "./events.mixin.model"
 
@@ -131,22 +132,26 @@ export function eventsMixin({
   const updateBreakpoints = () => {
     const width = window.innerWidth
     const keys = <(keyof BreakpointsSegments)[]>Object.keys(breakpointsSegments)
+    const newBreakpoints: BreakPoints = JSON.parse(
+      JSON.stringify(toRaw(store.state.breakpoints))
+    )
     keys.forEach((brp, i) => {
       const nextBrp = keys[i + 1]
       if (width >= breakpointsSegmentsPixels[brp]) {
-        store.state.breakpoints.lt[brp] = false
+        newBreakpoints.lt[brp] = false
         if (!nextBrp || width < breakpointsSegmentsPixels[nextBrp]) {
-          store.state.breakpoints[brp] = true
-          store.state.breakpoints.gt[brp] = false
+          newBreakpoints[brp] = true
+          newBreakpoints.gt[brp] = false
         } else {
-          store.state.breakpoints[brp] = false
-          store.state.breakpoints.gt[brp] = true
+          newBreakpoints[brp] = false
+          newBreakpoints.gt[brp] = true
         }
       } else if (width < breakpointsSegmentsPixels[brp]) {
-        store.state.breakpoints.lt[brp] = true
-        store.state.breakpoints.gt[brp] = false
+        newBreakpoints.lt[brp] = true
+        newBreakpoints.gt[brp] = false
       }
     })
+    store.setBreakPoints(newBreakpoints)
   }
 
   /**
@@ -261,7 +266,7 @@ export function eventsMixin({
       size: map.value.getSize(),
       duration,
       minResolution: 0.3,
-      padding: [15, store.getters.screen.small ? 15 : 400, 15, 15],
+      padding: [15, store.getters.screen.small ? 15 : 300, 15, 15],
     })
   }
 
@@ -282,7 +287,7 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
-    let foundFeature = findClusterByTitle(item.title).feature
+    let foundFeature = findClusterByTitle(item.title).cluster
     if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
     if (foundFeature) {
       if (popupOnResultHover) {
@@ -297,6 +302,7 @@ export function eventsMixin({
 
   /**
    * Zooms on the relating marker
+   * and adds its overlay
    * whenever its result on result box
    * gets clicked
    * @param item - Search item
@@ -305,8 +311,14 @@ export function eventsMixin({
     let { feature: foundFeature } = findClusterByTitle(item.title)
     if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
     if (foundFeature) {
+      changeOverlayStats()
       if (zoomOnResultClick) {
         zoomToMarker(foundFeature)
+        const coords =
+          getCoordsFromFeature(foundFeature)
+        setTimeout(() => {
+          changeOverlayStats({ coords, text: item.title }, 'persistant')
+        }, 500)
       }
       if (resultClickCallback) {
         resultClickCallback({ map: map.value, feature: foundFeature })

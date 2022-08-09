@@ -21,15 +21,10 @@
     ></ResultsSection>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { ref, defineProps, PropType, defineEmits, onMounted, watch } from "vue"
 import { CoordsObj, SearchItem, SearchProps } from "../Map.model"
 import { createCoordsObject } from "@/utils"
-export default {
-  name: "DrawerComp",
-}
-</script>
-<script setup lang="ts">
 import SearchSection from "./SearchSection.vue"
 import ResultsSection from "./result-section/ResultsSection.vue"
 import { store } from "@/store"

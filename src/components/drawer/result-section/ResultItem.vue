@@ -10,14 +10,9 @@
     <hr />
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { defineProps, PropType } from 'vue'
 import { SearchItem } from '../../Map.model'
-export default {
-  name: 'ResultItem',
-}
-</script>
-<script setup lang="ts">
 defineProps({
   item: Object as PropType<SearchItem>,
 })

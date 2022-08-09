@@ -28,7 +28,7 @@
 import { defineProps, defineEmits, ref } from "vue"
 import { computed } from "@vue/reactivity"
 import { store } from "@/store"
-import Icon from "../icons/index.vue"
+import Icon from "../icons/IconComponent.vue"
 import { drawerConstants } from "@/parameters"
 
 const props = defineProps({

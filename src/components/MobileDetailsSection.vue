@@ -31,7 +31,7 @@
 import { ref } from "vue"
 import { store } from "@/store"
 
-import Icon from "@/components/icons/index.vue"
+import Icon from "@/components/icons/IconComponent.vue"
 import CurvedLoading from "./CurvedLoading.vue"
 import PointDetails from "./drawer/result-section/PointDetails.vue"
 

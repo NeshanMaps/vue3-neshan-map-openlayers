@@ -68,8 +68,8 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import Settings from "./settings/index.vue"
-import Drawer from "./drawer/Drawer.vue"
+import Settings from "./settings/SettingsComp.vue"
+import Drawer from "./drawer/DrawerComp.vue"
 import MobileDetailsSection from "./MobileDetailsSection.vue"
 
 const props = defineProps({

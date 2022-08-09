@@ -4,14 +4,9 @@
   </svg>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, defineProps } from "vue"
-import { RouteTypes } from "../../static/index.model"
-export default defineComponent({
-  name: "IconIndex",
-})
-</script>
 <script setup lang="ts">
+import { PropType, defineProps } from "vue"
+import { RouteTypes } from "../../static/index.model"
 import { inlineSvgs } from "../../static/index"
 defineProps({
   name: {
@@ -22,6 +17,6 @@ defineProps({
     type: Number,
     default: 15,
   },
-  color: String
+  color: String,
 })
 </script>
