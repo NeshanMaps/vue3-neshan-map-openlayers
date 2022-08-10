@@ -1,7 +1,6 @@
-import { ReverseResult } from "@/components/Map.model"
 import { breakpointsSegments } from "@/parameters"
 import { reactive } from "vue"
-import { BreakPoints } from "./state.model"
+import { BreakPoints, SelectedMarker } from "./state.model"
 
 export const state = reactive({
   searchLoading: false,
@@ -15,7 +14,7 @@ export const state = reactive({
     width: 700,
     height: 1000,
   },
-  selectedMarkerLocation: null as ReverseResult | null,
+  selectedMarker: null as SelectedMarker,
   drawerActivation: false,
   drawerShowDetails: false,
   mobileDrawerShowDetails: false,

@@ -1,18 +1,19 @@
 <template>
   <div>
     <div class="list-item">
-      <b>
+      <b class="text-lg">
         {{ item?.title }}
       </b>
-      <br />
-      {{ item?.neighbourhood }}
+      <div class="text-caption">
+        {{ item?.neighbourhood }}
+      </div>
     </div>
     <hr />
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue'
-import { SearchItem } from '../../Map.model'
+import { defineProps, PropType } from "vue"
+import { SearchItem } from "../../Map.model"
 defineProps({
   item: Object as PropType<SearchItem>,
 })
@@ -24,10 +25,6 @@ defineProps({
   border-radius: 0.3rem;
   text-align: start;
   cursor: pointer;
-  font-size: smaller;
-  b {
-    font-size: 0.9rem;
-  }
   &:hover {
     background-color: #ecf5fc;
   }

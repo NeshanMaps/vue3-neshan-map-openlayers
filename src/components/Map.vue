@@ -1,6 +1,12 @@
 <template>
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
-  <div ref="mapContainer" class="map pos-relative">
+  <div
+    ref="mapContainer"
+    class="map pos-relative"
+    :class="{
+      small: store.getters.screen.small,
+    }"
+  >
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -28,7 +34,7 @@
     </slot>
   </div>
   <MobileDetailsSection
-    v-if="store.getters.screen.small"
+    v-show="store.state.mobileDrawerShowDetails"
   ></MobileDetailsSection>
   <div class="map-popup-container" ref="popupContainer"></div>
   <div class="map-popup-container" ref="persistantContainer"></div>
@@ -48,6 +54,7 @@ import {
   watch,
   defineExpose,
   defineEmits,
+reactive,
 } from "vue"
 import {
   CoordsObj,
@@ -163,9 +170,7 @@ const mainMarker = ref<VectorLayer>()
 const mainMarkerCoords = ref<CoordsArr>()
 const searchMarkers = ref<VectorLayer>()
 const mapType = ref(props.defaultType)
-const reactiveTiles = ref(
-  tiles.filter((tile) => props.mapTypes.includes(tile.title))
-)
+const reactiveTiles = reactive(tiles.filter((tile) => props.mapTypes.includes(tile.title)))
 const popupContainer = ref<HTMLElement | null>(null)
 const persistantContainer = ref<HTMLElement | null>(null)
 
@@ -263,17 +268,19 @@ const shakeMap = () => {
   setTimeout(() => map.value?.updateSize(), 300)
 }
 
+const searchResults = ref<SearchItem[]>([])
 const {
   addMarkers,
   clearMarkerLayer,
   toggleClusterSource,
-  findMarkerByTitle,
-  findClusterByTitle,
+  getMarkerByTitle,
+  getClusterByTitle,
+  getSearchResultByFeature
 } = markersMixin({
   map,
   searchMarkers,
+  searchResults
 })
-const searchResults = ref<SearchItem[]>([])
 /**
  * Does a neshan search based on given parameters
  * @param searchParams.text - Part of or whole name of the place.
@@ -346,8 +353,9 @@ const {
   setupOverlays,
   changeOverlayStats,
   mapContainer,
-  findMarkerByTitle,
-  findClusterByTitle,
+  getMarkerByTitle,
+  getClusterByTitle,
+  getSearchResultByFeature
 })
 /**
  * Changes cluster source to marker source on cluster threshold passing and vice versa
@@ -381,7 +389,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
 @import url("@/assets/main.scss");
 
@@ -396,6 +404,7 @@ defineExpose({
   box-shadow: 0px 0px 4px 2px #00000046;
   border-radius: 5px;
   padding: 2px 5px;
+  font-size: var(--text-sm);
   &::after {
     content: " ";
     position: absolute;
@@ -408,6 +417,12 @@ defineExpose({
   }
 }
 
+.small .map-popup-container {
+  font-size: var(--text-xs);
+}
+</style>
+
+<style lang="scss">
 .ol-overlay-container {
   pointer-events: none;
 }

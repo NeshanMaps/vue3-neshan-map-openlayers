@@ -18,10 +18,10 @@
       v-if="
         !store.getters.screen.small &&
         store.state.drawerShowDetails &&
-        store.state.selectedMarkerLocation
+        store.state.selectedMarker
       "
     >
-      <PointDetails :item="store.state.selectedMarkerLocation" />
+      <PointDetails :item="store.state.selectedMarker" />
     </template>
     <template v-else>
       <ResultItem

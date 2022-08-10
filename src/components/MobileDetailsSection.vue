@@ -23,7 +23,7 @@
       :style="`height: ${store.state.mapDimensions.height}px;`"
       class="o-auto"
     >
-      <PointDetails :item="store.state.selectedMarkerLocation"></PointDetails>
+      <PointDetails :item="store.state.selectedMarker"></PointDetails>
     </div>
   </div>
 </template>
@@ -122,7 +122,7 @@ const addTemporaryTransition = () => {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 6rem;
+    width: 4rem;
     & > span {
       border-top: 2px solid rgba(0, 0, 0, 0.26);
     }

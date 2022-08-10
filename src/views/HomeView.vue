@@ -78,6 +78,8 @@ export default defineComponent({
 
 <style>
 /* @import url('../../dist/NeshanMap.css'); */
+@import url('@/assets/test.scss');
+
 .page {
   height: 100%;
 }

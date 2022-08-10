@@ -5,6 +5,7 @@ export type { Ol }
 import { Feature, Map, style } from "openlayers"
 import { RouteTypes } from "@/static/index.model"
 import { ChangeOverlayStats } from "@/mixins/overlay.mixin.model"
+import { GetMarkerByTitle, GetSearchResultByFeature } from "@/mixins/markers.mixin.model"
 
 export declare type NuString = null | string
 export declare type MapType =
@@ -73,7 +74,8 @@ export declare interface SearchItem {
   neighbourhood: string
   region: string
   title: string
-  type: string
+  type: RouteTypes
+  address: string
 }
 export declare interface SearchResult {
   count: number
@@ -156,15 +158,17 @@ export declare interface EventsMixinProps {
   addMarkers: CreateMarkers
   setupOverlays: () => void
   changeOverlayStats: ChangeOverlayStats
-  findMarkerByTitle: (title: string) => Feature | undefined
-  findClusterByTitle: (title: string) => {
+  getMarkerByTitle: GetMarkerByTitle
+  getClusterByTitle: (title: string) => {
     feature: Feature | undefined
     cluster: Feature | undefined
   }
+  getSearchResultByFeature: GetSearchResultByFeature
 }
 export declare interface MarkersMixinProps {
   map: OlMapRef
   searchMarkers: VectorLayerRef
+  searchResults: Ref<SearchItem[]>
 }
 
 export declare interface ZoomToExtentOptions {

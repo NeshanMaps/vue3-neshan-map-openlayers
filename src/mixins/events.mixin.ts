@@ -20,7 +20,10 @@ import {
   getFeatureExtent,
   getCoordsFromFeature,
 } from "../utils"
-import { ReverseOnPointOptions } from "./events.mixin.model"
+import {
+  ReverseOnPointOptions,
+  SelectFeautureOptions,
+} from "./events.mixin.model"
 
 export function eventsMixin({
   map,
@@ -39,8 +42,9 @@ export function eventsMixin({
   changeOverlayStats,
   addMarkers,
   mapContainer,
-  findMarkerByTitle,
-  findClusterByTitle,
+  getMarkerByTitle,
+  getClusterByTitle,
+  getSearchResultByFeature,
 }: EventsMixinProps) {
   /**
    * Sets the required events up for the map.
@@ -82,23 +86,18 @@ export function eventsMixin({
     map.value?.on("pointermove", function (evt) {
       const hoveredFeature = getFeatureFromEvent(<MapBrowserEvent>evt)
       if (hoveredFeature) {
-        const isCluster: boolean = hoveredFeature.get("isCluster")
+        const innerFeatures: Feature[] | undefined =
+          hoveredFeature.get("features")
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature)
-        if (isCluster) {
-          if (featText && featText.length === 1) {
-            if (popupOnMarkerHover) {
-              changeOverlayStats({ text: featText[0], coords: featCoords })
-            }
-            return
+        if (!innerFeatures || innerFeatures.length === 1) {
+          if (popupOnMarkerHover) {
+            changeOverlayStats({
+              text: Array.isArray(featText) ? featText[0] : featText,
+              coords: featCoords,
+            })
           }
-        } else {
-          if (featText && typeof featText === "string") {
-            if (popupOnMarkerHover) {
-              changeOverlayStats({ text: featText, coords: featCoords })
-            }
-            return
-          }
+          return
         }
         if (markerHoverCallback) {
           markerHoverCallback({
@@ -163,23 +162,18 @@ export function eventsMixin({
    * @param event - Map click event.
    */
   const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
+    changeOverlayStats(undefined, "persistant")
     let emittingMarker
     let emittingData
     let emittingStdPoint
     const selectedFeature = getFeatureFromEvent(event)
+    if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
     if (zoomOnMarkerClick && selectedFeature) {
-      const isCluster: boolean = selectedFeature.get("isCluster")
-      if (isCluster) {
-        zoomToCluster(selectedFeature)
-      } else {
-        zoomToMarker(selectedFeature)
-      }
-      changeOverlayStats(undefined, "persistant")
+      handleFeatureClick(selectedFeature)
     } else {
       if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
       else store.toggleDrawerActivation(true)
       store.toggleReverseLoading(true)
-      if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
       const result = await reverseOnPoint(event.coordinate)
       emittingMarker = result.marker
       emittingData = result.data
@@ -194,6 +188,19 @@ export function eventsMixin({
       map,
       selectedFeature,
     })
+  }
+
+  /**
+   * Zooms on feature and if its just a marker, shows it on details section
+   * @param feature
+   */
+  const handleFeatureClick = (feature: Feature) => {
+    const features: Feature[] | undefined = feature.get("features")
+    if (features && features.length > 1) {
+      zoomToCluster(feature)
+    } else {
+      selectFeauture(feature, { delay: 0 })
+    }
   }
 
   /**
@@ -223,7 +230,7 @@ export function eventsMixin({
         marker = layer
       }
       const data = await api.value.REVERSE(...stdPoint)
-      store.setSelectedMarkerLocation(data)
+      store.setSelectedMarker(data)
       store.toggleDrawerShowDetails(true)
       if (usePopup) {
         const text = customText || getTitleFromData(data)
@@ -281,14 +288,43 @@ export function eventsMixin({
   }
 
   /**
+   * Zooms on given feature and shows its details on detail section
+   * Adds a persistant overlay on it
+   * @param feature
+   * @param options
+   */
+  const selectFeauture = (
+    feature: Feature,
+    options?: SelectFeautureOptions
+  ) => {
+    zoomToMarker(feature)
+    const coords = options?.coords || getCoordsFromFeature(feature)
+    let text = options?.text || feature.getProperties().text
+    if (Array.isArray(text)) text = text[0]
+    if (options?.delay !== 0) {
+      setTimeout(() => {
+        changeOverlayStats({ coords, text }, "persistant")
+      }, options?.delay || 500)
+    } else {
+      changeOverlayStats({ coords, text }, "persistant")
+    }
+    const foundResult = getSearchResultByFeature(feature)
+    if (foundResult) {
+      store.setSelectedMarker(foundResult)
+      store.toggleDrawerShowDetails(true)
+      if (!store.state.drawerActivation) store.toggleDrawerActivation(true)
+    }
+  }
+
+  /**
    * Shows a popup on the relating marker
    * whenever mouse overs on its result on result box
    * also can get a callBack from user
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
-    let foundFeature = findClusterByTitle(item.title).cluster
-    if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
+    let foundFeature = getClusterByTitle(item.title).cluster
+    if (!foundFeature) foundFeature = getMarkerByTitle(item.title)
     if (foundFeature) {
       if (popupOnResultHover) {
         const { featCoords } = getCoordsAndTextFromFeature(foundFeature)
@@ -308,17 +344,12 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultClick = (item: SearchItem) => {
-    let { feature: foundFeature } = findClusterByTitle(item.title)
-    if (!foundFeature) foundFeature = findMarkerByTitle(item.title)
+    let foundFeature = getClusterByTitle(item.title).feature
+    if (!foundFeature) foundFeature = getMarkerByTitle(item.title)
     if (foundFeature) {
       changeOverlayStats()
       if (zoomOnResultClick) {
-        zoomToMarker(foundFeature)
-        const coords =
-          getCoordsFromFeature(foundFeature)
-        setTimeout(() => {
-          changeOverlayStats({ coords, text: item.title }, 'persistant')
-        }, 500)
+        selectFeauture(foundFeature, { text: item.title })
       }
       if (resultClickCallback) {
         resultClickCallback({ map: map.value, feature: foundFeature })

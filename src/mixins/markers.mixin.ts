@@ -6,8 +6,17 @@ import {
   VectorLayerRef,
 } from "../components/Map.model"
 import { createClusterSource, createMarkers } from "../utils"
+import {
+  GetClusterByTitle,
+  GetMarkerByTitle,
+  GetSearchResultByFeature,
+} from "./markers.mixin.model"
 
-export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
+export function markersMixin({
+  map,
+  searchMarkers,
+  searchResults,
+}: MarkersMixinProps) {
   /**
    * Receives an array of points and marks them on map.
    * @param points - Array of points.
@@ -49,7 +58,7 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
     if (!layer.value) return
     const rawLayer = toRaw(layer.value)
     const clusterFeatures = rawLayer.getSource().getFeatures() || []
-    if (!clusterFeatures.some(cf => cf.get('isCluster'))) return
+    if (!clusterFeatures.some((cf) => cf.get("isCluster"))) return
     const features = clusterFeatures.reduce((result: Feature[], cf) => {
       const features: Feature[] = cf.get("features")
       return [...result, ...features]
@@ -67,7 +76,7 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
    * @param title - title of wanted feature
    * @returns The found feature and its cluster
    */
-  const findClusterByTitle = (title: string) => {
+  const getClusterByTitle: GetClusterByTitle = (title: string) => {
     const clusters = searchMarkers.value?.getSource().getFeatures()
     let foundFeature: Feature | undefined
     const cluster = clusters?.find((cluster) => {
@@ -99,17 +108,30 @@ export function markersMixin({ map, searchMarkers }: MarkersMixinProps) {
    * @param title - title of wanted feature
    * @returns The found marker
    */
-  const findMarkerByTitle = (title: string) => {
+  const getMarkerByTitle: GetMarkerByTitle = (title: string) => {
     const markers = searchMarkers.value?.getSource().getFeatures()
     return markers?.find((feature) => feature.get("text") === title)
+  }
+
+  /**
+   * Takes a feature and returns its relating search item
+   * @param feature
+   * @returns Search Item
+   */
+  const getSearchResultByFeature: GetSearchResultByFeature = (feature) => {
+    const title = feature.get("text")
+    return searchResults.value.find(
+      (si) => si.title === (Array.isArray(title) ? title[0] : title)
+    )
   }
 
   return {
     addMarkers,
     clearMarkerLayer,
     toggleClusterSource,
-    findClusterByTitle,
-    findMarkerByTitle,
+    getClusterByTitle,
+    getMarkerByTitle,
     getMarkerInClusterByTitle,
+    getSearchResultByFeature,
   }
 }

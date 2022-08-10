@@ -1,4 +1,4 @@
-import { ReverseResult } from "@/components/Map.model"
+import { SelectedMarker } from "@/store/state.model"
 import { state } from "./state"
 import { BreakPoints } from "./state.model"
 export const mutations = {
@@ -17,8 +17,8 @@ export const mutations = {
   toggleMobileDrawerShowDetails(value: boolean) {
     state.mobileDrawerShowDetails = value
   },
-  setSelectedMarkerLocation(value: ReverseResult) {
-    state.selectedMarkerLocation = value
+  setSelectedMarker(value: SelectedMarker) {
+    state.selectedMarker = value
   },
   setMapDimenstions(value: { width: number; height: number }) {
     state.mapDimensions = value

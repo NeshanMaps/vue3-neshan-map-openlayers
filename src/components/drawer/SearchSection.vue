@@ -14,6 +14,12 @@
       @focus="store.toggleDrawerActivation(true)"
     />
     <button
+      v-if="store.state.drawerShowDetails"
+      @click="store.toggleDrawerShowDetails(false)"
+    >
+      <Icon name="back" :size="15"></Icon>
+    </button>
+    <button
       v-if="!store.state.drawerActivation"
       @click="store.toggleDrawerActivation(true)"
     >
@@ -105,6 +111,7 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
     height: 2rem;
     padding-right: 0.5rem;
     width: 100%;
+    font-family: inherit;
   }
   input[type="search"]:-webkit-autofill,
   input[type="search"]:-webkit-autofill:hover,
