@@ -1,5 +1,5 @@
-import { PropType } from 'vue';
-import { SearchItem } from '../../Map.model';
+import { SearchItem } from "@/store/markers/markers.model";
+import { PropType } from "vue";
 declare const _default: import("vue").DefineComponent<{
     item: PropType<SearchItem>;
 }, (_ctx: any, _cache: any) => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {

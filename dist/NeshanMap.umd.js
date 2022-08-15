@@ -3830,7 +3830,7 @@ function deferredComputed(getter) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/index.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/SettingsComp.vue?vue&type=script&setup=true&lang=ts
 
 
 const _hoisted_1 = {
@@ -3857,7 +3857,7 @@ const _hoisted_8 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_
 const __default__ = {
   name: "SettingsComp"
 };
-/* harmony default export */ var settingsvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({ ...__default__,
+/* harmony default export */ var SettingsCompvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({ ...__default__,
   props: {
     poi: Boolean,
     traffic: Boolean,
@@ -3914,492 +3914,22 @@ const __default__ = {
   }
 
 }));
-;// CONCATENATED MODULE: ./src/components/settings/index.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./src/components/settings/SettingsComp.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/index.vue?vue&type=style&index=0&id=fae4378e&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/settings/SettingsComp.vue?vue&type=style&index=0&id=65bddcb1&lang=scss
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/settings/index.vue?vue&type=style&index=0&id=fae4378e&lang=scss
+;// CONCATENATED MODULE: ./src/components/settings/SettingsComp.vue?vue&type=style&index=0&id=65bddcb1&lang=scss
 
-;// CONCATENATED MODULE: ./src/components/settings/index.vue
+;// CONCATENATED MODULE: ./src/components/settings/SettingsComp.vue
 
 
 
 ;
 
-const __exports__ = settingsvue_type_script_setup_true_lang_ts;
+const __exports__ = SettingsCompvue_type_script_setup_true_lang_ts;
 
-/* harmony default export */ var settings = (__exports__);
-;// CONCATENATED MODULE: ./src/parameters/index.ts
-const urls = {
-  reverse: "https://api.neshan.org/v4/reverse",
-  search: "https://api.neshan.org/v1/search",
-  map: "https://static.neshan.org/sdk/openlayers/5.3.0/ol.js"
-};
-const markerUrls = {
-  red: "https://img.icons8.com/color/344/marker--v1.png",
-  // blue: "https://img.icons8.com/ultraviolet/344/marker.png",
-  blue: "/images/search-marker.png",
-  white: "/images/search-marker-prev.png"
-};
-const tiles = [{
-  title: "osm-bright",
-  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-bright.png"
-}, {
-  title: "standard-night",
-  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-standard-night.png"
-}, {
-  title: "standard-day",
-  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-standard-day.png"
-}, {
-  title: "neshan",
-  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-neshan.png"
-}, {
-  title: "dreamy-gold",
-  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-dreamy-gold.png"
-}, {
-  title: "dreamy",
-  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-dreamy.png"
-}];
-const breakpointsSegments = {
-  xs: false,
-  sm: false,
-  md: false,
-  lg: false,
-  xl: false
-};
-const breakpointsSegmentsPixels = {
-  xs: 0,
-  sm: 600,
-  md: 1024,
-  lg: 1440,
-  xl: 1920
-};
-const drawerConstants = {
-  width: 240
-};
-;// CONCATENATED MODULE: ./src/store/state.ts
-
-
-const state = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.reactive)({
-  searchLoading: false,
-  reverseLoading: false,
-  breakpoints: { ...breakpointsSegments,
-    lt: { ...breakpointsSegments
-    },
-    gt: { ...breakpointsSegments
-    }
-  },
-  mapDimensions: {
-    width: 700,
-    height: 1000
-  },
-  selectedMarkerLocation: null,
-  drawerActivation: false,
-  drawerShowDetails: false,
-  mobileDrawerShowDetails: false
-});
-;// CONCATENATED MODULE: ./src/store/getters.ts
-
-
-
-const getters = {
-  screen: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
-    return {
-      small: state.breakpoints.lt.md
-    };
-  }),
-  drawerWidth: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
-    const width = state.breakpoints.lt.md ? state.mapDimensions.width : drawerConstants.width;
-    return width;
-  }),
-  loading: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
-    return state.searchLoading || state.reverseLoading;
-  })
-};
-;// CONCATENATED MODULE: ./src/store/mutations.ts
-
-const mutations = {
-  toggleSearchLoading(value) {
-    state.searchLoading = value;
-  },
-
-  toggleReverseLoading(value) {
-    state.reverseLoading = value;
-  },
-
-  toggleDrawerActivation(value) {
-    state.drawerActivation = value;
-  },
-
-  toggleDrawerShowDetails(value) {
-    state.drawerShowDetails = value;
-  },
-
-  toggleMobileDrawerShowDetails(value) {
-    state.mobileDrawerShowDetails = value;
-  },
-
-  setSelectedMarkerLocation(value) {
-    state.selectedMarkerLocation = value;
-  },
-
-  setMapDimenstions(value) {
-    state.mapDimensions = value;
-  },
-
-  setBreakPoints(value) {
-    state.breakpoints = value;
-  }
-
-};
-;// CONCATENATED MODULE: ./src/store/index.ts
-
-
-
-
-const store = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.reactive)({
-  state: state,
-  getters: getters,
-  ...mutations
-});
-;// CONCATENATED MODULE: ./src/static/index.ts
-const inlineSvgs = {
-  close: {
-    d: "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-  },
-  magnet: {
-    d: "M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
-  },
-  neighborhood_landmark: {
-    d: "M17,16H15V22H12V17H8V22H5V16H3L10,10L17,16M6,2L10,6H9V9H7V6H5V9H3V6H2L6,2M18,3L23,8H22V12H19V9H17V12H15.34L14,10.87V8H13L18,3Z"
-  },
-  formal_school: {
-    d: "M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
-  },
-  university: {
-    d: "M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
-  },
-  primary: {
-    d: "M18.1,4.8C18,4.3 17.6,4 17.1,4H13L13.2,7H10.8L11,4H6.8C6.3,4 5.9,4.4 5.8,4.8L3.1,18.8C3,19.4 3.5,20 4.1,20H10L10.3,15H13.7L14,20H19.8C20.4,20 20.9,19.4 20.8,18.8L18.1,4.8M10.4,13L10.6,9H13.2L13.4,13H10.4Z"
-  },
-  secondary: {
-    d: "M18.1,4.8C18,4.3 17.6,4 17.1,4H13L13.2,7H10.8L11,4H6.8C6.3,4 5.9,4.4 5.8,4.8L3.1,18.8C3,19.4 3.5,20 4.1,20H10L10.3,15H13.7L14,20H19.8C20.4,20 20.9,19.4 20.8,18.8L18.1,4.8M10.4,13L10.6,9H13.2L13.4,13H10.4Z",
-    scale: 0.8
-  },
-  tertiary: {
-    d: "M18.1,4.8C18,4.3 17.6,4 17.1,4H13L13.2,7H10.8L11,4H6.8C6.3,4 5.9,4.4 5.8,4.8L3.1,18.8C3,19.4 3.5,20 4.1,20H10L10.3,15H13.7L14,20H19.8C20.4,20 20.9,19.4 20.8,18.8L18.1,4.8M10.4,13L10.6,9H13.2L13.4,13H10.4Z",
-    scale: 0.6
-  },
-  vaccine: {
-    d: "M11.15,15.18L9.73,13.77L11.15,12.35L12.56,13.77L13.97,12.35L12.56,10.94L13.97,9.53L15.39,10.94L16.8,9.53L13.97,6.7L6.9,13.77L9.73,16.6L11.15,15.18M3.08,19L6.2,15.89L4.08,13.77L13.97,3.87L16.1,6L17.5,4.58L16.1,3.16L17.5,1.75L21.75,6L20.34,7.4L18.92,6L17.5,7.4L19.63,9.53L9.73,19.42L7.61,17.3L3.08,21.84V19Z"
-  },
-  subway_station: {
-    d: "M8.5,15A1,1 0 0,1 9.5,16A1,1 0 0,1 8.5,17A1,1 0 0,1 7.5,16A1,1 0 0,1 8.5,15M7,9H17V14H7V9M15.5,15A1,1 0 0,1 16.5,16A1,1 0 0,1 15.5,17A1,1 0 0,1 14.5,16A1,1 0 0,1 15.5,15M18,15.88V9C18,6.38 15.32,6 12,6C9,6 6,6.37 6,9V15.88A2.62,2.62 0 0,0 8.62,18.5L7.5,19.62V20H9.17L10.67,18.5H13.5L15,20H16.5V19.62L15.37,18.5C16.82,18.5 18,17.33 18,15.88M17.8,2.8C20.47,3.84 22,6.05 22,8.86V22H2V8.86C2,6.05 3.53,3.84 6.2,2.8C8,2.09 10.14,2 12,2C13.86,2 16,2.09 17.8,2.8Z"
-  },
-  metro_entrance: {
-    d: "M6 11V13H4V11H6M22 5H17V19H22V5M7 5H2L2 19H7V5M22 3C23.11 3 24 3.89 24 5V21H0V5C0 3.89 .894 3 2 3H9V19H15V3H22M20 11H18V13H20V11Z",
-    scale: 0.8
-  },
-  footway: {
-    d: "M10.74,11.72C11.21,12.95 11.16,14.23 9.75,14.74C6.85,15.81 6.2,13 6.16,12.86L10.74,11.72M5.71,10.91L10.03,9.84C9.84,8.79 10.13,7.74 10.13,6.5C10.13,4.82 8.8,1.53 6.68,2.06C4.26,2.66 3.91,5.35 4,6.65C4.12,7.95 5.64,10.73 5.71,10.91M17.85,19.85C17.82,20 17.16,22.8 14.26,21.74C12.86,21.22 12.8,19.94 13.27,18.71L17.85,19.85M20,13.65C20.1,12.35 19.76,9.65 17.33,9.05C15.22,8.5 13.89,11.81 13.89,13.5C13.89,14.73 14.17,15.78 14,16.83L18.3,17.9C18.38,17.72 19.89,14.94 20,13.65Z"
-  },
-  department_store: {
-    d: "M12,18H6V14H12M21,14V12L20,7H4L3,12V14H4V20H14V14H18V20H20V14M20,4H4V6H20V4Z"
-  },
-  internet_cafe: {
-    d: "M8.95 13.4H6.58A5.5 5.5 0 0 1 6.58 10.6H8.95A11.56 11.56 0 0 0 8.85 12A11.56 11.56 0 0 0 8.95 13.4M7.16 9.2H9.2A12.06 12.06 0 0 1 10.18 6.71A5.55 5.55 0 0 0 7.16 9.2M16.84 9.2A5.59 5.59 0 0 0 13.81 6.71A10.95 10.95 0 0 1 14.78 9.2M12 17.57A9.5 9.5 0 0 0 13.34 14.8H10.66A9.5 9.5 0 0 0 12 17.57M12 6.42A9.53 9.53 0 0 0 10.66 9.2H13.34A9.53 9.53 0 0 0 12 6.42M7.16 14.8A5.61 5.61 0 0 0 10.18 17.29A12.06 12.06 0 0 1 9.2 14.8M21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19A2 2 0 0 1 21 5M19 12A7 7 0 1 0 12 19A7 7 0 0 0 19 12M15.15 12A11.56 11.56 0 0 1 15.05 13.4H17.42A5.5 5.5 0 0 0 17.42 10.6H15.05A11.56 11.56 0 0 1 15.15 12M13.81 17.29A5.62 5.62 0 0 0 16.84 14.8H14.78A10.95 10.95 0 0 1 13.81 17.29M10.36 10.6A8.81 8.81 0 0 0 10.36 13.4H13.64A10.3 10.3 0 0 0 13.75 12A10.21 10.21 0 0 0 13.64 10.6Z"
-  },
-  park: {
-    d: "M10,21V18H3L8,13H5L10,8H7L12,3L17,8H14L19,13H16L21,18H14V21H10Z"
-  },
-  hotel: {
-    d: "M480 0C497.7 0 512 14.33 512 32C512 49.67 497.7 64 480 64V448C497.7 448 512 462.3 512 480C512 497.7 497.7 512 480 512H304V448H208V512H32C14.33 512 0 497.7 0 480C0 462.3 14.33 448 32 448V64C14.33 64 0 49.67 0 32C0 14.33 14.33 0 32 0H480zM112 96C103.2 96 96 103.2 96 112V144C96 152.8 103.2 160 112 160H144C152.8 160 160 152.8 160 144V112C160 103.2 152.8 96 144 96H112zM224 144C224 152.8 231.2 160 240 160H272C280.8 160 288 152.8 288 144V112C288 103.2 280.8 96 272 96H240C231.2 96 224 103.2 224 112V144zM368 96C359.2 96 352 103.2 352 112V144C352 152.8 359.2 160 368 160H400C408.8 160 416 152.8 416 144V112C416 103.2 408.8 96 400 96H368zM96 240C96 248.8 103.2 256 112 256H144C152.8 256 160 248.8 160 240V208C160 199.2 152.8 192 144 192H112C103.2 192 96 199.2 96 208V240zM240 192C231.2 192 224 199.2 224 208V240C224 248.8 231.2 256 240 256H272C280.8 256 288 248.8 288 240V208C288 199.2 280.8 192 272 192H240zM352 240C352 248.8 359.2 256 368 256H400C408.8 256 416 248.8 416 240V208C416 199.2 408.8 192 400 192H368C359.2 192 352 199.2 352 208V240zM256 288C211.2 288 173.5 318.7 162.1 360.2C159.7 373.1 170.7 384 184 384H328C341.3 384 352.3 373.1 349 360.2C338.5 318.7 300.8 288 256 288z"
-  },
-  local_government_office: {
-    d: "M5,3V21H11V17.5H13V21H19V3H5M7,5H9V7H7V5M11,5H13V7H11V5M15,5H17V7H15V5M7,9H9V11H7V9M11,9H13V11H11V9M15,9H17V11H15V9M7,13H9V15H7V13M11,13H13V15H11V13M15,13H17V15H15V13M7,17H9V19H7V17M15,17H17V19H15V17Z"
-  },
-  marker: {
-    d: "M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"
-  },
-  city: {
-    d: "M19,15H17V13H19M19,19H17V17H19M13,7H11V5H13M13,11H11V9H13M13,15H11V13H13M13,19H11V17H13M7,11H5V9H7M7,15H5V13H7M7,19H5V17H7M15,11V5L12,2L9,5V7H3V21H21V11H15Z"
-  },
-  residential: {
-    d: "M17,16H15V22H12V17H8V22H5V16H3L10,10L17,16M6,2L10,6H9V9H7V6H5V9H3V6H2L6,2M18,3L23,8H22V12H19V9H17V12H15.34L14,10.87V8H13L18,3Z"
-  }
-};
-const defaultIcons = {
-  place: {
-    d: inlineSvgs.neighborhood_landmark.d
-  },
-  municipal: {
-    d: inlineSvgs.primary.d
-  }
-};
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/icons/IconComponent.vue?vue&type=script&setup=true&lang=ts
-
-
-const IconComponentvue_type_script_setup_true_lang_ts_hoisted_1 = ["fill", "d"];
-
-/* harmony default export */ var IconComponentvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
-  __name: 'IconComponent',
-  props: {
-    name: {
-      type: String,
-      default: "close"
-    },
-    size: {
-      type: Number,
-      default: 15
-    },
-    color: String
-  },
-
-  setup(__props) {
-    return (_ctx, _cache) => {
-      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("svg", {
-        style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeStyle)(`width: ${__props.size}px; height: ${__props.size}px`),
-        viewBox: "0 0 24 24"
-      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
-        fill: __props.color || 'currentColor',
-        d: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(inlineSvgs)[__props.name].d
-      }, null, 8, IconComponentvue_type_script_setup_true_lang_ts_hoisted_1)], 4);
-    };
-  }
-
-}));
-;// CONCATENATED MODULE: ./src/components/icons/IconComponent.vue?vue&type=script&setup=true&lang=ts
- 
-;// CONCATENATED MODULE: ./src/components/icons/IconComponent.vue
-
-
-
-const IconComponent_exports_ = IconComponentvue_type_script_setup_true_lang_ts;
-
-/* harmony default export */ var IconComponent = (IconComponent_exports_);
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/SearchSection.vue?vue&type=script&setup=true&lang=ts
-
-
-
-const _withScopeId = n => (_pushScopeId("data-v-9795e0a4"), n = n(), _popScopeId(), n);
-
-const SearchSectionvue_type_script_setup_true_lang_ts_hoisted_1 = ["activated"];
-
-
-
-
-
-/* harmony default export */ var SearchSectionvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
-  __name: 'SearchSection',
-  props: {
-    searchBoxClass: Array,
-    searchBoxStyle: Object,
-    typesClass: Array,
-    searchText: {
-      type: String
-    }
-  },
-  emits: ["update:search-text", "update:search-coords", "submit"],
-
-  setup(__props, {
-    emit
-  }) {
-    const props = __props;
-    const width = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(drawerConstants.width);
-    const text = computed({
-      get: () => props.searchText,
-      set: val => {
-        if (!props.searchText) {
-          privateText.value = val;
-        }
-
-        emit("update:search-text", val);
-        runTimeout(val);
-      }
-    }); // Defined them in case of not wanting to use with v-model
-
-    const privateText = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(props.searchText);
-    /**
-     * Emits Search Term to the parent component
-     * @param term search text
-     */
-
-    const emitSearch = (term = "") => {
-      const inputText = term || text.value?.trim() || privateText.value?.trim();
-      emit("submit", inputText);
-    };
-
-    let emitTimeout;
-    /**
-     * Runs and updates a timeout so after that if fires emitSearch function
-     * @param value - searching value
-     * @param delay - delay time for emiting search, defaults to 1000
-     */
-
-    const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
-      clearTimeout(emitTimeout);
-
-      if (!value) {
-        store.toggleSearchLoading(false);
-        return;
-      } else if (!store.state.searchLoading) {
-        store.toggleSearchLoading(true);
-      }
-
-      emitTimeout = setTimeout(() => {
-        emitSearch(value);
-      }, delay);
-    };
-
-    return (_ctx, _cache) => {
-      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", {
-        activated: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.drawerActivation,
-        style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeStyle)(__props.searchBoxStyle || `width: ${width.value}px`),
-        class: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeClass)(["map-search-box justify-between align-center mx-auto", __props.searchBoxClass])
-      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.withDirectives)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("input", {
-        type: "search",
-        name: "search",
-        placeholder: "جستجو",
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.isRef)(text) ? text.value = $event : null),
-        onKeydown: _cache[1] || (_cache[1] = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withKeys)($event => runTimeout((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(text) || privateText.value, 0), ["enter"])),
-        onFocus: _cache[2] || (_cache[2] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).toggleDrawerActivation(true))
-      }, null, 544), [[external_commonjs_vue_commonjs2_vue_root_Vue_.vModelText, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(text)]]), !(0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.drawerActivation ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("button", {
-        key: 0,
-        onClick: _cache[3] || (_cache[3] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).toggleDrawerActivation(true))
-      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
-        name: "magnet",
-        size: 15
-      })])) : ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("button", {
-        key: 1,
-        onClick: _cache[4] || (_cache[4] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).toggleDrawerActivation(false))
-      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
-        name: "close",
-        size: 15
-      })]))], 14, SearchSectionvue_type_script_setup_true_lang_ts_hoisted_1);
-    };
-  }
-
-}));
-;// CONCATENATED MODULE: ./src/components/drawer/SearchSection.vue?vue&type=script&setup=true&lang=ts
- 
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/SearchSection.vue?vue&type=style&index=0&id=9795e0a4&lang=scss&scoped=true
-// extracted by mini-css-extract-plugin
-
-;// CONCATENATED MODULE: ./src/components/drawer/SearchSection.vue?vue&type=style&index=0&id=9795e0a4&lang=scss&scoped=true
-
-// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
-var exportHelper = __webpack_require__(1794);
-;// CONCATENATED MODULE: ./src/components/drawer/SearchSection.vue
-
-
-
-;
-
-
-const SearchSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SearchSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-9795e0a4"]])
-
-/* harmony default export */ var SearchSection = (SearchSection_exports_);
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultItem.vue?vue&type=script&setup=true&lang=ts
-
-
-
-const ResultItemvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-3977fb9c"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
-
-const ResultItemvue_type_script_setup_true_lang_ts_hoisted_1 = {
-  class: "list-item"
-};
-
-const ResultItemvue_type_script_setup_true_lang_ts_hoisted_2 = /*#__PURE__*/ResultItemvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("br", null, null, -1));
-
-const ResultItemvue_type_script_setup_true_lang_ts_hoisted_3 = /*#__PURE__*/ResultItemvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("hr", null, null, -1));
-
-const ResultItemvue_type_script_setup_true_lang_ts_default_ = {
-  name: 'ResultItem'
-};
-/* harmony default export */ var ResultItemvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({ ...ResultItemvue_type_script_setup_true_lang_ts_default_,
-  props: {
-    item: Object
-  },
-
-  setup(__props) {
-    return (_ctx, _cache) => {
-      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", null, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", ResultItemvue_type_script_setup_true_lang_ts_hoisted_1, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("b", null, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item?.title), 1), ResultItemvue_type_script_setup_true_lang_ts_hoisted_2, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item?.neighbourhood), 1)]), ResultItemvue_type_script_setup_true_lang_ts_hoisted_3]);
-    };
-  }
-
-}));
-;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue?vue&type=script&setup=true&lang=ts
- 
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=3977fb9c&lang=scss&scoped=true
-// extracted by mini-css-extract-plugin
-
-;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=3977fb9c&lang=scss&scoped=true
-
-;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue
-
-
-
-;
-
-
-const ResultItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultItemvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-3977fb9c"]])
-
-/* harmony default export */ var ResultItem = (ResultItem_exports_);
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Loading.vue?vue&type=script&setup=true&lang=ts
-
-
-
-const Loadingvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-1e5b8fe4"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
-
-const Loadingvue_type_script_setup_true_lang_ts_hoisted_1 = ["dense"];
-
-const Loadingvue_type_script_setup_true_lang_ts_hoisted_2 = /*#__PURE__*/Loadingvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", null, null, -1));
-
-const Loadingvue_type_script_setup_true_lang_ts_hoisted_3 = /*#__PURE__*/Loadingvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", null, null, -1));
-
-const Loadingvue_type_script_setup_true_lang_ts_hoisted_4 = [Loadingvue_type_script_setup_true_lang_ts_hoisted_2, Loadingvue_type_script_setup_true_lang_ts_hoisted_3];
-const Loadingvue_type_script_setup_true_lang_ts_default_ = {
-  name: 'LoadingComp'
-};
-/* harmony default export */ var Loadingvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({ ...Loadingvue_type_script_setup_true_lang_ts_default_,
-  props: {
-    color: {
-      type: String,
-      default: 'blue'
-    },
-    dense: Boolean
-  },
-
-  setup(__props) {
-    return (_ctx, _cache) => {
-      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", {
-        role: "status",
-        class: "loading-bar",
-        dense: __props.dense,
-        style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeStyle)(`color: ${__props.color}`)
-      }, Loadingvue_type_script_setup_true_lang_ts_hoisted_4, 12, Loadingvue_type_script_setup_true_lang_ts_hoisted_1);
-    };
-  }
-
-}));
-;// CONCATENATED MODULE: ./src/components/Loading.vue?vue&type=script&setup=true&lang=ts
- 
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Loading.vue?vue&type=style&index=0&id=1e5b8fe4&lang=scss&scoped=true
-// extracted by mini-css-extract-plugin
-
-;// CONCATENATED MODULE: ./src/components/Loading.vue?vue&type=style&index=0&id=1e5b8fe4&lang=scss&scoped=true
-
-;// CONCATENATED MODULE: ./src/components/Loading.vue
-
-
-
-;
-
-
-const Loading_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Loadingvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-1e5b8fe4"]])
-
-/* harmony default export */ var Loading = (Loading_exports_);
+/* harmony default export */ var SettingsComp = (__exports__);
 ;// CONCATENATED MODULE: ./src/utils/location.util.ts
 /**
  * Creates the sufficent title based on result data.
@@ -4457,6 +3987,58 @@ const createCoordsObject = () => {
 const transformCoords = (point, from = 'EPSG:3857', to = 'EPSG:4326') => {
   return ol.proj.transform(point, from, to);
 };
+;// CONCATENATED MODULE: ./src/parameters/index.ts
+const urls = {
+  reverse: "https://api.neshan.org/v4/reverse",
+  search: "https://api.neshan.org/v1/search",
+  map: "https://static.neshan.org/sdk/openlayers/5.3.0/ol.js"
+};
+const markerUrls = {
+  red: "https://img.icons8.com/color/344/marker--v1.png",
+  // blue: "https://img.icons8.com/ultraviolet/344/marker.png",
+  blue: "/images/search-marker.png",
+  white: "/images/search-marker-prev.png"
+};
+const tiles = [{
+  title: "osm-bright",
+  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-bright.png"
+}, {
+  title: "standard-night",
+  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-standard-night.png"
+}, {
+  title: "standard-day",
+  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-standard-day.png"
+}, {
+  title: "neshan",
+  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-neshan.png"
+}, {
+  title: "dreamy-gold",
+  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-dreamy-gold.png"
+}, {
+  title: "dreamy",
+  url: "https://static.neshan.org/sdk/examples/maptypes/images/map-types-dreamy.png"
+}];
+const breakpointsSegments = {
+  xs: false,
+  sm: false,
+  md: false,
+  lg: false,
+  xl: false
+};
+const breakpointsSegmentsPixels = {
+  xs: 0,
+  sm: 600,
+  md: 1024,
+  lg: 1440,
+  xl: 1920
+};
+const drawerConstants = {
+  width: 240
+};
+const unsetMapDimnensions = {
+  width: 700,
+  height: 1000
+};
 ;// CONCATENATED MODULE: ./src/utils/features.util.ts
 
 
@@ -4496,7 +4078,8 @@ const createMarkers = (points, options) => {
   } else {
     const _image = image || createIcon({
       color,
-      iconScale
+      iconScale,
+      anchor: options?.anchor
     });
 
     const {
@@ -4710,7 +4293,7 @@ const createClusterStyleFunc = hidePopup => {
       clusterFeature.set("text", innerFeatures.map(feat => feat.get("text")));
     }
 
-    clusterFeature.set('isCluster', innerFeatures[0].get('isCluster'));
+    clusterFeature.set("isCluster", innerFeatures[0].get("isCluster"));
     const size = innerFeatures.length;
     let style = styleCache[size];
 
@@ -4812,16 +4395,1007 @@ const createFeaturesFromPoints = (points, markersIconCallback, props) => {
 ;// CONCATENATED MODULE: ./src/utils/index.ts
 
 
+;// CONCATENATED MODULE: ./src/store/dimensions/state.ts
+
+
+const stateGen = () => {
+  return {
+    breakpoints: { ...breakpointsSegments,
+      lt: { ...breakpointsSegments
+      },
+      gt: { ...breakpointsSegments
+      }
+    },
+    mapDimensions: unsetMapDimnensions
+  };
+};
+
+const dimenstionsState = stateGen();
+;// CONCATENATED MODULE: ./src/store/markers/state.ts
+
+
+const state_stateGen = () => {
+  return {
+    selectedMarker: null,
+    mainMarker: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(),
+    mainMarkerCoords: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(),
+    reverseResult: null,
+    searchMarkers: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(),
+    searchResults: []
+  };
+};
+
+const markersState = state_stateGen();
+;// CONCATENATED MODULE: ./src/store/overlays/state.ts
+const overlays_state_stateGen = () => {
+  return {
+    overlay: null,
+    persistantOverlay: null
+  };
+};
+
+const overlayState = overlays_state_stateGen();
+;// CONCATENATED MODULE: ./src/store/state.ts
+
+
+
+
+const state = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.reactive)({ ...dimenstionsState,
+  ...markersState,
+  ...overlayState,
+  map: null,
+  api: null,
+  searchLoading: false,
+  reverseLoading: false,
+  drawerActivation: false,
+  drawerShowDetails: false,
+  mobileDrawerShowDetails: false
+});
+;// CONCATENATED MODULE: ./src/store/getters.ts
+
+
+
+const getters = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.reactive)({
+  screen: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
+    return {
+      small: state.breakpoints.lt.md
+    };
+  }),
+  drawerWidth: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
+    const width = state.breakpoints.lt.md ? state.mapDimensions.width : drawerConstants.width;
+    return width;
+  }),
+  loading: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
+    return state.searchLoading || state.reverseLoading;
+  })
+});
+;// CONCATENATED MODULE: ./src/store/dimensions/mutations.ts
+
+const dimensionsMutations = {
+  setBreakPoints(value) {
+    state.breakpoints = value;
+  },
+
+  setMapDimenstions(value) {
+    state.mapDimensions = value;
+  }
+
+};
+;// CONCATENATED MODULE: ./src/store/markers/mutations.ts
+
+const markersMutations = {
+  setSelectedMarker(value) {
+    state.selectedMarker = value;
+  },
+
+  setMainMarker(value) {
+    state.mainMarker = value;
+  },
+
+  setSearchMarkers(value) {
+    state.searchMarkers = value;
+  },
+
+  setMainMarkerCoords(value) {
+    state.mainMarkerCoords = value;
+  },
+
+  setSearchResults(value) {
+    state.searchResults = value;
+  },
+
+  setReverseResult(value) {
+    state.reverseResult = value;
+  }
+
+};
+;// CONCATENATED MODULE: ./src/store/mutations.ts
+
+
+
+const mutations = {
+  toggleSearchLoading(value) {
+    state.searchLoading = value;
+  },
+
+  toggleReverseLoading(value) {
+    state.reverseLoading = value;
+  },
+
+  toggleDrawerActivation(value) {
+    state.drawerActivation = value;
+  },
+
+  toggleDrawerShowDetails(value) {
+    state.drawerShowDetails = value;
+  },
+
+  toggleMobileDrawerShowDetails(value) {
+    state.mobileDrawerShowDetails = value;
+  },
+
+  setMap(value) {
+    state.map = value;
+  },
+
+  setApi(value) {
+    state.api = value;
+  },
+
+  ...markersMutations,
+  ...dimensionsMutations
+};
+;// CONCATENATED MODULE: ./src/store/markers/actions.ts
+
+
+
+
+/**
+ * Receives an array of points and marks them on map.
+ * @param points - Array of points.
+ * @param point.coords - Coordinates of that point.
+ * @param point.text - If you have a particular text for the point.
+ * @param point.style - If you have a particular style for that point (only checks the first point for now).
+ * @param point.color - If you have a particular color for that point (only checks the first point for now).
+ * @param point.image - If you have a particular image for that point (only checks the first point for now).
+ * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
+ * @param point.originalItem - original item from neshan search result
+ * @param point.props - props to set for point feature
+ * @param options.cluster - If these markers need to be clusterd on given zoom number
+ * @param options.clusterThreshold - Zoom number that markers should be clusterd on zoom condition above that given zoom
+ * @param options.showPopup - If you want show the text as popup
+ * @param options.props - Props to set for all features
+ * @returns style and layer.
+ */
+
+const addMarkers = (points, options) => {
+  const {
+    layer,
+    style
+  } = createMarkers(points, options);
+  state.map?.addLayer(layer);
+  return {
+    layer,
+    style
+  };
+};
+/**
+ * Removes markers from map
+ */
+
+
+const clearMarkerLayer = layer => {
+  if (!layer) return;
+  state.map?.removeLayer(layer);
+};
+/**
+ * Toggles cluster source to deactivate or apply clustering (The layer will remain a cluster layer)
+ * @param layer
+ * @param deactivate - whether to deactivate clustering or apply it.
+ */
+
+
+const toggleClusterSource = (layer, deactivate) => {
+  if (!layer) return;
+  const rawLayer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toRaw)(layer);
+  const clusterFeatures = rawLayer.getSource().getFeatures() || [];
+  if (!clusterFeatures.some(cf => cf.get("isCluster"))) return;
+  const features = clusterFeatures.reduce((result, cf) => {
+    const features = cf.get("features");
+    return [...result, ...features];
+  }, []);
+  const newDistance = deactivate ? 0 : 30;
+  const newSource = createClusterSource(features, {
+    distance: newDistance,
+    minDistance: newDistance
+  });
+  layer.setSource(newSource);
+};
+/**
+ * Takes the title of a marker and returns the found cluster and its surrounding cluster
+ * @param title - title of wanted feature
+ * @returns The found feature and its cluster
+ */
+
+
+const getClusterByTitle = title => {
+  const clusters = state.searchMarkers.getSource().getFeatures();
+  let foundFeature;
+  const cluster = clusters?.find(cluster => {
+    const feature = getMarkerInClusterByTitle(cluster, title);
+
+    if (feature) {
+      foundFeature = feature;
+    }
+
+    return feature;
+  });
+  return {
+    feature: foundFeature,
+    cluster
+  };
+};
+/**
+ * Take a cluster and a title and returns the feature inside the cluster by its title
+ * @param cluster - The cluster we are looking for feature in it
+ * @param title - Title of wanted feature
+ * @returns The found feature
+ */
+
+
+const getMarkerInClusterByTitle = (cluster, title) => {
+  const features = cluster.get("features");
+  return features?.find(feat => feat.get("text") === title);
+};
+/**
+ * Takes the title of a marker and returns it.
+ * @param title - title of wanted feature
+ * @returns The found marker
+ */
+
+
+const getMarkerByTitle = title => {
+  const markers = state.searchMarkers?.getSource().getFeatures();
+  return markers?.find(feature => feature.get("text") === title);
+};
+/**
+ * Takes a feature and returns its relating search item
+ * @param feature
+ * @returns Search Item
+ */
+
+
+const getSearchResultByFeature = feature => {
+  const title = feature.get("text");
+  return state.searchResults.find(si => si.title === (Array.isArray(title) ? title[0] : title));
+};
+/**
+ * Take the layer and zooms on its features
+ * @param layer
+ * @param options.duration - Zooming duration
+ */
+
+
+const zoomToLayer = (layer, options) => {
+  const extent = layer.getSource().getExtent();
+  zoomToExtent(extent, options);
+};
+/**
+ * Gets the desired extent and zooms on it
+ * @param extent - Extent of the area to zoom on
+ * @param options.duration - Zooming duration
+ */
+
+
+const zoomToExtent = (extent, options) => {
+  const duration = options?.duration || 500;
+  state.map?.getView().fit(extent, {
+    size: state.map.getSize(),
+    duration,
+    minResolution: 0.3,
+    padding: [15, store.getters.screen.small ? 15 : 300, 15, 15]
+  });
+};
+/**
+ * Takes the marker and zooms on it
+ * @param marker
+ * @param options.duration - Zooming duration
+ */
+
+
+const zoomToMarker = (marker, options) => {
+  const extent = getFeatureExtent(marker);
+  zoomToExtent(extent, options);
+};
+/**
+ * Takes the cluster and zooms on it
+ * @param cluster
+ * @param options.duration - Zooming duration
+ */
+
+
+const zoomToCluster = (cluster, options) => {
+  const extent = getClusterExtent(cluster);
+  zoomToExtent(extent, options);
+};
+/**
+ * Zooms on given feature and shows its details on detail section
+ * Adds a persistant overlay on it
+ * @param feature
+ * @param options
+ */
+
+
+const selectFeauture = (feature, options) => {
+  zoomToMarker(feature);
+  const coords = options?.coords || getCoordsFromFeature(feature);
+  const isMainMarker = feature?.getProperties().mainMarker;
+  let text = options?.text || feature.getProperties().text;
+  if (Array.isArray(text)) text = text[0];
+
+  if (options?.delay !== 0) {
+    setTimeout(() => {
+      store.actions.overlays.changeOverlayStats({
+        coords,
+        text,
+        offset: isMainMarker ? [0, -60] : [0, -40]
+      }, "persistant");
+    }, options?.delay || 500);
+  } else {
+    store.actions.overlays.changeOverlayStats({
+      coords,
+      text,
+      offset: isMainMarker ? [0, -60] : [0, -40]
+    }, "persistant");
+  }
+
+  const foundResult = isMainMarker ? state.reverseResult : store.actions.markers.getSearchResultByFeature(feature);
+
+  if (foundResult) {
+    store.setSelectedMarker(foundResult);
+    store.toggleDrawerShowDetails(true);
+    if (!store.state.mobileDrawerShowDetails) store.toggleMobileDrawerShowDetails(true);
+  }
+};
+/**
+ * Looks for features in current hover or click event of map
+ * @param evt - Map hover or click event
+ * @returns feature (If found)
+ */
+
+
+const getFeatureFromEvent = evt => {
+  return store.state.map?.forEachFeatureAtPixel(evt.pixel, feature => feature);
+};
+/**
+ * Places a marker on a point on ol map
+ * Sends a reverse request on that position
+ * and adds a title based on returned value
+ * @param point - OL Coords
+ * @param putMarker - Whether to put marker on locating area
+ * @returns marker, standard coords of point and api result data
+ */
+
+
+const reverseOnPoint = async (point, {
+  useMarker = true,
+  usePopup = true,
+  customText
+} = {}) => {
+  try {
+    const stdPoint = transformCoords(point);
+    let marker = null;
+
+    if (useMarker) {
+      const {
+        layer
+      } = store.actions.markers.addMarkers([{
+        coords: point,
+        text: ""
+      }], {
+        props: {
+          mainMarker: true,
+          isCluster: false
+        },
+        anchor: [0.5, 1]
+      });
+      store.setMainMarkerCoords(stdPoint);
+      store.setMainMarker(layer);
+      marker = layer;
+    }
+
+    if (!store.state.api) throw "No reverse api";
+    const data = await store.state.api.REVERSE(...stdPoint);
+    store.setSelectedMarker(data);
+    store.setReverseResult(data);
+    store.toggleDrawerShowDetails(true);
+    const text = customText || getTitleFromData(data);
+    store.state.mainMarker?.getSource().getFeatures()[0].set("text", text);
+
+    if (usePopup) {
+      store.actions.overlays.changeOverlayStats({
+        coords: point,
+        text,
+        offset: [0, -60]
+      }, "persistant");
+    }
+
+    return {
+      marker,
+      stdPoint,
+      data
+    };
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+/**
+ * Does a neshan search based on given parameters
+ * @param searchParams.text - Part of or whole name of the place.
+ * @param searchParams.coords - Coordinates you want to search around.
+ */
+
+
+const search = async ({
+  term = "",
+  coords
+}, options) => {
+  try {
+    store.toggleSearchLoading(true);
+    if (!store.state.api) return;
+    const result = await store.state.api.SEARCH(term, coords);
+    store.toggleDrawerShowDetails(false);
+    clearMarkerLayer(store.state.searchMarkers);
+    store.setSearchResults(result.items);
+    const points = createMapPoints(result.items);
+    const {
+      layer
+    } = store.actions.markers.addMarkers(points, {
+      markersIconCallback: options?.markersIconCallback,
+      cluster: options?.cluster,
+      clusterThreshold: options?.clusterThreshold
+    });
+    store.actions.overlays.changeOverlayStats(undefined, "persistant");
+    store.state.searchMarkers = layer; // Apparently it takse some async time to cluster the source
+
+    setTimeout(() => {
+      const features = layer.getSource().getFeatures(); //To fix a problem with zooming on single feature layers extent
+
+      if (features.length === 1) {
+        store.actions.markers.zoomToCluster(features[0], {
+          duration: 1500
+        });
+      } else {
+        store.actions.markers.zoomToLayer(layer, {
+          duration: 1500
+        });
+      }
+    }, 200);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    store.toggleSearchLoading(false);
+  }
+};
+
+const markersActions = {
+  addMarkers,
+  clearMarkerLayer,
+  toggleClusterSource,
+  getClusterByTitle,
+  getMarkerInClusterByTitle,
+  getMarkerByTitle,
+  getSearchResultByFeature,
+  zoomToLayer,
+  zoomToExtent,
+  zoomToMarker,
+  zoomToCluster,
+  selectFeauture,
+  getFeatureFromEvent,
+  reverseOnPoint,
+  search
+};
+;// CONCATENATED MODULE: ./src/store/dimensions/actions.ts
+
+
+
+/**
+ * Updates map height value on window resize
+ */
+
+const updateMapDimensions = mapContainer => {
+  if (!mapContainer.value) return;
+  store.setMapDimenstions({
+    height: mapContainer.value.clientHeight,
+    width: mapContainer.value.clientWidth
+  });
+};
+/**
+ * Updates store breakpoints on windows resize
+ */
+
+
+const updateBreakpoints = () => {
+  const width = window.innerWidth;
+  const keys = Object.keys(breakpointsSegments);
+  const newBreakpoints = JSON.parse(JSON.stringify((0,external_commonjs_vue_commonjs2_vue_root_Vue_.toRaw)(store.state.breakpoints)));
+  keys.forEach((brp, i) => {
+    const nextBrp = keys[i + 1];
+
+    if (width >= breakpointsSegmentsPixels[brp]) {
+      newBreakpoints.lt[brp] = false;
+
+      if (!nextBrp || width < breakpointsSegmentsPixels[nextBrp]) {
+        newBreakpoints[brp] = true;
+        newBreakpoints.gt[brp] = false;
+      } else {
+        newBreakpoints[brp] = false;
+        newBreakpoints.gt[brp] = true;
+      }
+    } else if (width < breakpointsSegmentsPixels[brp]) {
+      newBreakpoints.lt[brp] = true;
+      newBreakpoints.gt[brp] = false;
+    }
+  });
+  store.setBreakPoints(newBreakpoints);
+};
+
+const dimensionsActions = {
+  updateMapDimensions,
+  updateBreakpoints
+};
+;// CONCATENATED MODULE: ./src/store/overlays/actions.ts
+
+let privatePopupContainer;
+let privatePersistantContainer;
+/**
+ * Sets up overlay on map
+ */
+
+const setupOverlays = ({
+  popupContainer,
+  persistantContainer
+}) => {
+  privatePopupContainer = popupContainer;
+  privatePersistantContainer = persistantContainer;
+  const overlay = createOverlay(popupContainer);
+  state.overlay = overlay;
+  const persistantOverlay = createOverlay(persistantContainer, true);
+  state.persistantOverlay = persistantOverlay;
+  state.map?.addOverlay(overlay);
+  state.map?.addOverlay(persistantOverlay);
+};
+/**
+ * Changes overlay coords and text
+ * @param stats.coords
+ * @param stats.text
+ * @param target - Whether to manipulated temporary or persistant overlay stats
+ */
+
+
+const changeOverlayStats = (stats, target = "temporary") => {
+  const targetContainer = target === "temporary" ? privatePopupContainer : privatePersistantContainer;
+  const targetOverlay = target === "temporary" ? state.overlay : state.persistantOverlay;
+  if (!targetContainer.value) return;
+
+  if (stats) {
+    const {
+      coords,
+      text,
+      offset
+    } = stats;
+    targetContainer.value.innerHTML = text;
+
+    if (offset) {
+      targetOverlay?.setOffset(offset);
+    }
+
+    targetOverlay?.setPosition(coords);
+  } else {
+    targetOverlay?.setPosition(undefined);
+  }
+};
+/**
+ * Creates an ol overlay on container element
+ * @param persistant - Whether it should not disappear on mouse leaving
+ * @returns overlay
+ */
+
+
+const createOverlay = (container, persistant = false) => {
+  const overlay = new ol.Overlay({
+    element: container.value,
+    map: state.map,
+    positioning: "top-center",
+    offset: [0, -40]
+  });
+  overlay.set("persistant", persistant); // An attr to know that we should remove it on following hovers
+
+  return overlay;
+};
+
+const overlaysActions = {
+  setupOverlays,
+  createOverlay,
+  changeOverlayStats
+};
+;// CONCATENATED MODULE: ./src/store/actions.ts
+
+
+
+const actions = {
+  markers: markersActions,
+  dimensions: dimensionsActions,
+  overlays: overlaysActions
+};
+;// CONCATENATED MODULE: ./src/store/index.ts
+
+
+
+
+
+const storeGen = () => {
+  return {
+    state: state,
+    getters: getters,
+    actions: actions,
+    ...mutations
+  };
+};
+
+const store = storeGen();
+;// CONCATENATED MODULE: ./src/static/index.ts
+const inlineSvgs = {
+  close: {
+    d: "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+  },
+  magnet: {
+    d: "M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
+  },
+  neighborhood_landmark: {
+    d: "M17,16H15V22H12V17H8V22H5V16H3L10,10L17,16M6,2L10,6H9V9H7V6H5V9H3V6H2L6,2M18,3L23,8H22V12H19V9H17V12H15.34L14,10.87V8H13L18,3Z"
+  },
+  formal_school: {
+    d: "M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
+  },
+  university: {
+    d: "M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
+  },
+  primary: {
+    d: "M18.1,4.8C18,4.3 17.6,4 17.1,4H13L13.2,7H10.8L11,4H6.8C6.3,4 5.9,4.4 5.8,4.8L3.1,18.8C3,19.4 3.5,20 4.1,20H10L10.3,15H13.7L14,20H19.8C20.4,20 20.9,19.4 20.8,18.8L18.1,4.8M10.4,13L10.6,9H13.2L13.4,13H10.4Z"
+  },
+  secondary: {
+    d: "M18.1,4.8C18,4.3 17.6,4 17.1,4H13L13.2,7H10.8L11,4H6.8C6.3,4 5.9,4.4 5.8,4.8L3.1,18.8C3,19.4 3.5,20 4.1,20H10L10.3,15H13.7L14,20H19.8C20.4,20 20.9,19.4 20.8,18.8L18.1,4.8M10.4,13L10.6,9H13.2L13.4,13H10.4Z",
+    scale: 0.8
+  },
+  tertiary: {
+    d: "M18.1,4.8C18,4.3 17.6,4 17.1,4H13L13.2,7H10.8L11,4H6.8C6.3,4 5.9,4.4 5.8,4.8L3.1,18.8C3,19.4 3.5,20 4.1,20H10L10.3,15H13.7L14,20H19.8C20.4,20 20.9,19.4 20.8,18.8L18.1,4.8M10.4,13L10.6,9H13.2L13.4,13H10.4Z",
+    scale: 0.6
+  },
+  vaccine: {
+    d: "M11.15,15.18L9.73,13.77L11.15,12.35L12.56,13.77L13.97,12.35L12.56,10.94L13.97,9.53L15.39,10.94L16.8,9.53L13.97,6.7L6.9,13.77L9.73,16.6L11.15,15.18M3.08,19L6.2,15.89L4.08,13.77L13.97,3.87L16.1,6L17.5,4.58L16.1,3.16L17.5,1.75L21.75,6L20.34,7.4L18.92,6L17.5,7.4L19.63,9.53L9.73,19.42L7.61,17.3L3.08,21.84V19Z"
+  },
+  subway_station: {
+    d: "M8.5,15A1,1 0 0,1 9.5,16A1,1 0 0,1 8.5,17A1,1 0 0,1 7.5,16A1,1 0 0,1 8.5,15M7,9H17V14H7V9M15.5,15A1,1 0 0,1 16.5,16A1,1 0 0,1 15.5,17A1,1 0 0,1 14.5,16A1,1 0 0,1 15.5,15M18,15.88V9C18,6.38 15.32,6 12,6C9,6 6,6.37 6,9V15.88A2.62,2.62 0 0,0 8.62,18.5L7.5,19.62V20H9.17L10.67,18.5H13.5L15,20H16.5V19.62L15.37,18.5C16.82,18.5 18,17.33 18,15.88M17.8,2.8C20.47,3.84 22,6.05 22,8.86V22H2V8.86C2,6.05 3.53,3.84 6.2,2.8C8,2.09 10.14,2 12,2C13.86,2 16,2.09 17.8,2.8Z"
+  },
+  metro_entrance: {
+    d: "M6 11V13H4V11H6M22 5H17V19H22V5M7 5H2L2 19H7V5M22 3C23.11 3 24 3.89 24 5V21H0V5C0 3.89 .894 3 2 3H9V19H15V3H22M20 11H18V13H20V11Z",
+    scale: 0.8
+  },
+  footway: {
+    d: "M10.74,11.72C11.21,12.95 11.16,14.23 9.75,14.74C6.85,15.81 6.2,13 6.16,12.86L10.74,11.72M5.71,10.91L10.03,9.84C9.84,8.79 10.13,7.74 10.13,6.5C10.13,4.82 8.8,1.53 6.68,2.06C4.26,2.66 3.91,5.35 4,6.65C4.12,7.95 5.64,10.73 5.71,10.91M17.85,19.85C17.82,20 17.16,22.8 14.26,21.74C12.86,21.22 12.8,19.94 13.27,18.71L17.85,19.85M20,13.65C20.1,12.35 19.76,9.65 17.33,9.05C15.22,8.5 13.89,11.81 13.89,13.5C13.89,14.73 14.17,15.78 14,16.83L18.3,17.9C18.38,17.72 19.89,14.94 20,13.65Z"
+  },
+  department_store: {
+    d: "M12,18H6V14H12M21,14V12L20,7H4L3,12V14H4V20H14V14H18V20H20V14M20,4H4V6H20V4Z"
+  },
+  internet_cafe: {
+    d: "M8.95 13.4H6.58A5.5 5.5 0 0 1 6.58 10.6H8.95A11.56 11.56 0 0 0 8.85 12A11.56 11.56 0 0 0 8.95 13.4M7.16 9.2H9.2A12.06 12.06 0 0 1 10.18 6.71A5.55 5.55 0 0 0 7.16 9.2M16.84 9.2A5.59 5.59 0 0 0 13.81 6.71A10.95 10.95 0 0 1 14.78 9.2M12 17.57A9.5 9.5 0 0 0 13.34 14.8H10.66A9.5 9.5 0 0 0 12 17.57M12 6.42A9.53 9.53 0 0 0 10.66 9.2H13.34A9.53 9.53 0 0 0 12 6.42M7.16 14.8A5.61 5.61 0 0 0 10.18 17.29A12.06 12.06 0 0 1 9.2 14.8M21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19A2 2 0 0 1 21 5M19 12A7 7 0 1 0 12 19A7 7 0 0 0 19 12M15.15 12A11.56 11.56 0 0 1 15.05 13.4H17.42A5.5 5.5 0 0 0 17.42 10.6H15.05A11.56 11.56 0 0 1 15.15 12M13.81 17.29A5.62 5.62 0 0 0 16.84 14.8H14.78A10.95 10.95 0 0 1 13.81 17.29M10.36 10.6A8.81 8.81 0 0 0 10.36 13.4H13.64A10.3 10.3 0 0 0 13.75 12A10.21 10.21 0 0 0 13.64 10.6Z"
+  },
+  park: {
+    d: "M10,21V18H3L8,13H5L10,8H7L12,3L17,8H14L19,13H16L21,18H14V21H10Z"
+  },
+  hotel: {
+    d: "M480 0C497.7 0 512 14.33 512 32C512 49.67 497.7 64 480 64V448C497.7 448 512 462.3 512 480C512 497.7 497.7 512 480 512H304V448H208V512H32C14.33 512 0 497.7 0 480C0 462.3 14.33 448 32 448V64C14.33 64 0 49.67 0 32C0 14.33 14.33 0 32 0H480zM112 96C103.2 96 96 103.2 96 112V144C96 152.8 103.2 160 112 160H144C152.8 160 160 152.8 160 144V112C160 103.2 152.8 96 144 96H112zM224 144C224 152.8 231.2 160 240 160H272C280.8 160 288 152.8 288 144V112C288 103.2 280.8 96 272 96H240C231.2 96 224 103.2 224 112V144zM368 96C359.2 96 352 103.2 352 112V144C352 152.8 359.2 160 368 160H400C408.8 160 416 152.8 416 144V112C416 103.2 408.8 96 400 96H368zM96 240C96 248.8 103.2 256 112 256H144C152.8 256 160 248.8 160 240V208C160 199.2 152.8 192 144 192H112C103.2 192 96 199.2 96 208V240zM240 192C231.2 192 224 199.2 224 208V240C224 248.8 231.2 256 240 256H272C280.8 256 288 248.8 288 240V208C288 199.2 280.8 192 272 192H240zM352 240C352 248.8 359.2 256 368 256H400C408.8 256 416 248.8 416 240V208C416 199.2 408.8 192 400 192H368C359.2 192 352 199.2 352 208V240zM256 288C211.2 288 173.5 318.7 162.1 360.2C159.7 373.1 170.7 384 184 384H328C341.3 384 352.3 373.1 349 360.2C338.5 318.7 300.8 288 256 288z"
+  },
+  local_government_office: {
+    d: "M5,3V21H11V17.5H13V21H19V3H5M7,5H9V7H7V5M11,5H13V7H11V5M15,5H17V7H15V5M7,9H9V11H7V9M11,9H13V11H11V9M15,9H17V11H15V9M7,13H9V15H7V13M11,13H13V15H11V13M15,13H17V15H15V13M7,17H9V19H7V17M15,17H17V19H15V17Z"
+  },
+  marker: {
+    d: "M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"
+  },
+  city: {
+    d: "M19,15H17V13H19M19,19H17V17H19M13,7H11V5H13M13,11H11V9H13M13,15H11V13H13M13,19H11V17H13M7,11H5V9H7M7,15H5V13H7M7,19H5V17H7M15,11V5L12,2L9,5V7H3V21H21V11H15Z"
+  },
+  residential: {
+    d: "M17,16H15V22H12V17H8V22H5V16H3L10,10L17,16M6,2L10,6H9V9H7V6H5V9H3V6H2L6,2M18,3L23,8H22V12H19V9H17V12H15.34L14,10.87V8H13L18,3Z"
+  },
+  back: {
+    d: "M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
+  }
+};
+const defaultIcons = {
+  place: {
+    d: inlineSvgs.neighborhood_landmark.d
+  },
+  municipal: {
+    d: inlineSvgs.primary.d
+  }
+};
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/icons/IconComponent.vue?vue&type=script&setup=true&lang=ts
+
+
+const IconComponentvue_type_script_setup_true_lang_ts_hoisted_1 = ["fill", "d"];
+
+/* harmony default export */ var IconComponentvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  __name: 'IconComponent',
+  props: {
+    name: {
+      type: String,
+      default: "close"
+    },
+    size: {
+      type: Number,
+      default: 15
+    },
+    color: String
+  },
+
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("svg", {
+        style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeStyle)(`width: ${__props.size}px; height: ${__props.size}px`),
+        viewBox: "0 0 24 24"
+      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
+        fill: __props.color || 'currentColor',
+        d: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(inlineSvgs)[__props.name].d
+      }, null, 8, IconComponentvue_type_script_setup_true_lang_ts_hoisted_1)], 4);
+    };
+  }
+
+}));
+;// CONCATENATED MODULE: ./src/components/icons/IconComponent.vue?vue&type=script&setup=true&lang=ts
+ 
+;// CONCATENATED MODULE: ./src/components/icons/IconComponent.vue
+
+
+
+const IconComponent_exports_ = IconComponentvue_type_script_setup_true_lang_ts;
+
+/* harmony default export */ var IconComponent = (IconComponent_exports_);
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/SearchSection.vue?vue&type=script&setup=true&lang=ts
+
+
+
+const _withScopeId = n => (_pushScopeId("data-v-079304d9"), n = n(), _popScopeId(), n);
+
+const SearchSectionvue_type_script_setup_true_lang_ts_hoisted_1 = ["activated"];
+
+
+
+
+
+/* harmony default export */ var SearchSectionvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  __name: 'SearchSection',
+  props: {
+    searchBoxClass: Array,
+    searchBoxStyle: Object,
+    typesClass: Array,
+    searchText: {
+      type: String
+    }
+  },
+  emits: ["update:search-text", "update:search-coords", "submit"],
+
+  setup(__props, {
+    emit
+  }) {
+    const props = __props;
+    const width = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(drawerConstants.width);
+    const text = computed({
+      get: () => props.searchText,
+      set: val => {
+        if (!props.searchText) {
+          privateText.value = val;
+        }
+
+        emit("update:search-text", val);
+        runTimeout(val);
+      }
+    }); // Defined them in case of not wanting to use with v-model
+
+    const privateText = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(props.searchText);
+    /**
+     * Emits Search Term to the parent component
+     * @param term search text
+     */
+
+    const emitSearch = (term = "") => {
+      const inputText = term || text.value?.trim() || privateText.value?.trim();
+      emit("submit", inputText);
+    };
+
+    let emitTimeout;
+    /**
+     * Runs and updates a timeout so after that if fires emitSearch function
+     * @param value - searching value
+     * @param delay - delay time for emiting search, defaults to 1000
+     */
+
+    const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
+      clearTimeout(emitTimeout);
+
+      if (!value) {
+        store.toggleSearchLoading(false);
+        return;
+      } else if (!store.state.searchLoading) {
+        store.toggleSearchLoading(true);
+      }
+
+      emitTimeout = setTimeout(() => {
+        emitSearch(value);
+      }, delay);
+    };
+
+    return (_ctx, _cache) => {
+      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", {
+        activated: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.drawerActivation,
+        style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeStyle)(__props.searchBoxStyle || `width: ${width.value}px`),
+        class: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeClass)(["map-search-box justify-between align-center mx-auto", __props.searchBoxClass])
+      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.withDirectives)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("input", {
+        type: "search",
+        name: "search",
+        placeholder: "جستجو",
+        "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.isRef)(text) ? text.value = $event : null),
+        onKeydown: _cache[1] || (_cache[1] = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withKeys)($event => runTimeout((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(text) || privateText.value, 0), ["enter"])),
+        onFocus: _cache[2] || (_cache[2] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).toggleDrawerActivation(true))
+      }, null, 544), [[external_commonjs_vue_commonjs2_vue_root_Vue_.vModelText, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(text)]]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.drawerShowDetails && !(0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("button", {
+        key: 0,
+        onClick: _cache[3] || (_cache[3] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).toggleDrawerShowDetails(false))
+      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
+        name: "back",
+        size: 15
+      })])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), !(0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.drawerActivation ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("button", {
+        key: 1,
+        onClick: _cache[4] || (_cache[4] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).toggleDrawerActivation(true))
+      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
+        name: "magnet",
+        size: 15
+      })])) : ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("button", {
+        key: 2,
+        onClick: _cache[5] || (_cache[5] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).toggleDrawerActivation(false))
+      }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
+        name: "close",
+        size: 15
+      })]))], 14, SearchSectionvue_type_script_setup_true_lang_ts_hoisted_1);
+    };
+  }
+
+}));
+;// CONCATENATED MODULE: ./src/components/drawer/SearchSection.vue?vue&type=script&setup=true&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/SearchSection.vue?vue&type=style&index=0&id=079304d9&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/drawer/SearchSection.vue?vue&type=style&index=0&id=079304d9&lang=scss&scoped=true
+
+// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
+var exportHelper = __webpack_require__(1794);
+;// CONCATENATED MODULE: ./src/components/drawer/SearchSection.vue
+
+
+
+;
+
+
+const SearchSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(SearchSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-079304d9"]])
+
+/* harmony default export */ var SearchSection = (SearchSection_exports_);
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultItem.vue?vue&type=script&setup=true&lang=ts
+
+
+
+const ResultItemvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-47d71eba"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
+
+const ResultItemvue_type_script_setup_true_lang_ts_hoisted_1 = {
+  class: "list-item"
+};
+const ResultItemvue_type_script_setup_true_lang_ts_hoisted_2 = {
+  class: "text-lg"
+};
+const ResultItemvue_type_script_setup_true_lang_ts_hoisted_3 = {
+  class: "text-caption"
+};
+
+const ResultItemvue_type_script_setup_true_lang_ts_hoisted_4 = /*#__PURE__*/ResultItemvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("hr", null, null, -1));
+
+/* harmony default export */ var ResultItemvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  __name: 'ResultItem',
+  props: {
+    item: Object
+  },
+
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", null, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", ResultItemvue_type_script_setup_true_lang_ts_hoisted_1, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("b", ResultItemvue_type_script_setup_true_lang_ts_hoisted_2, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item?.title), 1), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", ResultItemvue_type_script_setup_true_lang_ts_hoisted_3, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item?.neighbourhood), 1)]), ResultItemvue_type_script_setup_true_lang_ts_hoisted_4]);
+    };
+  }
+
+}));
+;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue?vue&type=script&setup=true&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=47d71eba&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=47d71eba&lang=scss&scoped=true
+
+;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue
+
+
+
+;
+
+
+const ResultItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultItemvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-47d71eba"]])
+
+/* harmony default export */ var ResultItem = (ResultItem_exports_);
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/LoadingComp.vue?vue&type=script&setup=true&lang=ts
+
+
+
+const LoadingCompvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-734ba7ad"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
+
+const LoadingCompvue_type_script_setup_true_lang_ts_hoisted_1 = ["dense"];
+
+const LoadingCompvue_type_script_setup_true_lang_ts_hoisted_2 = /*#__PURE__*/LoadingCompvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", null, null, -1));
+
+const LoadingCompvue_type_script_setup_true_lang_ts_hoisted_3 = /*#__PURE__*/LoadingCompvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", null, null, -1));
+
+const LoadingCompvue_type_script_setup_true_lang_ts_hoisted_4 = [LoadingCompvue_type_script_setup_true_lang_ts_hoisted_2, LoadingCompvue_type_script_setup_true_lang_ts_hoisted_3];
+/* harmony default export */ var LoadingCompvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  __name: 'LoadingComp',
+  props: {
+    color: {
+      type: String,
+      default: 'blue'
+    },
+    dense: Boolean
+  },
+
+  setup(__props) {
+    return (_ctx, _cache) => {
+      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", {
+        role: "status",
+        class: "loading-bar",
+        dense: __props.dense,
+        style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeStyle)(`color: ${__props.color}`)
+      }, LoadingCompvue_type_script_setup_true_lang_ts_hoisted_4, 12, LoadingCompvue_type_script_setup_true_lang_ts_hoisted_1);
+    };
+  }
+
+}));
+;// CONCATENATED MODULE: ./src/components/LoadingComp.vue?vue&type=script&setup=true&lang=ts
+ 
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/LoadingComp.vue?vue&type=style&index=0&id=734ba7ad&lang=scss&scoped=true
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/LoadingComp.vue?vue&type=style&index=0&id=734ba7ad&lang=scss&scoped=true
+
+;// CONCATENATED MODULE: ./src/components/LoadingComp.vue
+
+
+
+;
+
+
+const LoadingComp_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(LoadingCompvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-734ba7ad"]])
+
+/* harmony default export */ var LoadingComp = (LoadingComp_exports_);
 ;// CONCATENATED MODULE: ./src/mixins/events.mixin.ts
 
 
 
-
 function eventsMixin({
-  map,
-  mainMarker,
-  mainMarkerCoords,
-  api,
   emits,
   resultHoverCallback,
   resultClickCallback,
@@ -4830,12 +5404,9 @@ function eventsMixin({
   zoomOnResultClick,
   popupOnMarkerHover,
   popupOnResultHover,
-  setupOverlays,
-  changeOverlayStats,
-  addMarkers,
   mapContainer,
-  findMarkerByTitle,
-  findClusterByTitle
+  popupContainer,
+  persistantContainer
 }) {
   /**
    * Sets the required events up for the map.
@@ -4848,7 +5419,7 @@ function eventsMixin({
   };
 
   const setupClickEvent = () => {
-    map.value?.on("click", event => {
+    store.state.map?.on("click", event => {
       handleClickEvent(event);
     });
   };
@@ -4859,11 +5430,11 @@ function eventsMixin({
    */
 
   const setupZoomEvent = () => {
-    if (!map.value) return;
-    zoom.value = map.value.getView().getZoom();
-    map.value.on("moveend", () => {
-      if (!map.value) return;
-      const newZoom = map.value.getView().getZoom();
+    if (!store.state.map) return;
+    zoom.value = store.state.map.getView().getZoom();
+    store.state.map.on("moveend", () => {
+      if (!store.state.map) return;
+      const newZoom = store.state.map.getView().getZoom();
 
       if (zoom.value != newZoom) {
         emits("on-zoom", newZoom);
@@ -4877,98 +5448,49 @@ function eventsMixin({
 
 
   const setupMarkerHoverEvent = () => {
-    setupOverlays();
-    map.value?.on("pointermove", function (evt) {
-      const hoveredFeature = getFeatureFromEvent(evt);
+    store.actions.overlays.setupOverlays({
+      popupContainer,
+      persistantContainer
+    });
+    store.state.map?.on("pointermove", function (evt) {
+      const hoveredFeature = store.actions.markers.getFeatureFromEvent(evt);
 
       if (hoveredFeature) {
-        const isCluster = hoveredFeature.get("isCluster");
+        const isMainMarker = hoveredFeature.getProperties().mainMarker;
+        const innerFeatures = hoveredFeature.get("features");
         const {
           featCoords,
           featText
         } = getCoordsAndTextFromFeature(hoveredFeature);
 
-        if (isCluster) {
-          if (featText && featText.length === 1) {
-            if (popupOnMarkerHover) {
-              changeOverlayStats({
-                text: featText[0],
-                coords: featCoords
-              });
-            }
-
-            return;
+        if (!innerFeatures || innerFeatures.length === 1) {
+          if (popupOnMarkerHover) {
+            store.actions.overlays.changeOverlayStats({
+              text: Array.isArray(featText) ? featText[0] : featText,
+              coords: featCoords,
+              offset: isMainMarker ? [0, -60] : [0, -40]
+            });
           }
-        } else {
-          if (featText && typeof featText === "string") {
-            if (popupOnMarkerHover) {
-              changeOverlayStats({
-                text: featText,
-                coords: featCoords
-              });
-            }
 
-            return;
-          }
+          return;
         }
 
         if (markerHoverCallback) {
           markerHoverCallback({
-            changeOverlayStats,
-            map,
+            changeOverlayStats: store.actions.overlays.changeOverlayStats,
+            map: store.state.map,
             feature: hoveredFeature
           });
         }
       }
 
-      changeOverlayStats();
+      store.actions.overlays.changeOverlayStats();
     });
   };
 
   const setupResizeEvents = () => {
-    window.addEventListener("resize", updateMapDimensions);
-    window.addEventListener("resize", updateBreakpoints);
-  };
-  /**
-   * Updates map height value on window resize
-   */
-
-
-  const updateMapDimensions = () => {
-    if (!mapContainer.value) return;
-    store.setMapDimenstions({
-      height: mapContainer.value.clientHeight,
-      width: mapContainer.value.clientWidth
-    });
-  };
-  /**
-   * Updates store breakpoints on windows resize
-   */
-
-
-  const updateBreakpoints = () => {
-    const width = window.innerWidth;
-    const keys = Object.keys(breakpointsSegments);
-    const newBreakpoints = JSON.parse(JSON.stringify(store.state.breakpoints));
-    keys.forEach((brp, i) => {
-      const nextBrp = keys[i + 1];
-
-      if (width >= breakpointsSegmentsPixels[brp]) {
-        newBreakpoints.lt[brp] = false;
-
-        if (!nextBrp || width < breakpointsSegmentsPixels[nextBrp]) {
-          newBreakpoints[brp] = true;
-          newBreakpoints.gt[brp] = false;
-        } else {
-          newBreakpoints[brp] = false;
-          newBreakpoints.gt[brp] = true;
-        }
-      } else if (width < breakpointsSegmentsPixels[brp]) {
-        newBreakpoints.lt[brp] = true;
-        newBreakpoints.gt[brp] = false;
-      }
-    });
-    store.setBreakPoints(newBreakpoints);
+    window.addEventListener("resize", () => store.actions.dimensions.updateMapDimensions(mapContainer));
+    window.addEventListener("resize", store.actions.dimensions.updateBreakpoints);
   };
   /**
    * After clicking on map, if there is no feature in there,
@@ -4984,23 +5506,17 @@ function eventsMixin({
     let emittingMarker;
     let emittingData;
     let emittingStdPoint;
-    const selectedFeature = getFeatureFromEvent(event);
+    const selectedFeature = store.actions.markers.getFeatureFromEvent(event);
+    const isMainMarker = selectedFeature?.getProperties().mainMarker;
+    if (!isMainMarker && store.state.mainMarker) store.state.map?.removeLayer(store.state.mainMarker);
+    store.actions.overlays.changeOverlayStats(undefined, "persistant");
 
     if (zoomOnMarkerClick && selectedFeature) {
-      const isCluster = selectedFeature.get("isCluster");
-
-      if (isCluster) {
-        zoomToCluster(selectedFeature);
-      } else {
-        zoomToMarker(selectedFeature);
-      }
-
-      changeOverlayStats(undefined, "persistant");
+      handleFeatureClick(selectedFeature);
     } else {
       if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true);else store.toggleDrawerActivation(true);
       store.toggleReverseLoading(true);
-      if (mainMarker.value) map.value?.removeLayer(mainMarker.value);
-      const result = await reverseOnPoint(event.coordinate);
+      const result = await store.actions.markers.reverseOnPoint(event.coordinate);
       emittingMarker = result.marker;
       emittingData = result.data;
       emittingStdPoint = result.stdPoint;
@@ -5012,112 +5528,26 @@ function eventsMixin({
       marker: emittingMarker,
       stdPoint: emittingData,
       data: emittingStdPoint,
-      map,
+      map: store.state.map,
       selectedFeature
     });
   };
   /**
-   * Places a marker on a point on ol map
-   * Sends a reverse request on that position
-   * and adds a title based on returned value
-   * @param point - OL Coords
-   * @param putMarker - Whether to put marker on locating area
-   * @returns marker, standard coords of point and api result data
+   * Zooms on feature and if its just a marker, shows it on details section
+   * @param feature
    */
 
 
-  const reverseOnPoint = async (point, {
-    useMarker = true,
-    usePopup = true,
-    customText
-  } = {}) => {
-    try {
-      changeOverlayStats(undefined, "persistant");
-      const stdPoint = transformCoords(point);
-      let marker = null;
+  const handleFeatureClick = feature => {
+    const features = feature.get("features");
 
-      if (useMarker) {
-        const {
-          layer
-        } = addMarkers([{
-          coords: point,
-          text: ""
-        }]);
-        mainMarkerCoords.value = stdPoint;
-        mainMarker.value = layer;
-        marker = layer;
-      }
-
-      const data = await api.value.REVERSE(...stdPoint);
-      store.setSelectedMarkerLocation(data);
-      store.toggleDrawerShowDetails(true);
-
-      if (usePopup) {
-        const text = customText || getTitleFromData(data);
-        changeOverlayStats({
-          coords: point,
-          text
-        }, "persistant");
-      }
-
-      return {
-        marker,
-        stdPoint,
-        data
-      };
-    } catch (error) {
-      console.log(error);
-      return {};
+    if (features && features.length > 1) {
+      store.actions.markers.zoomToCluster(feature);
+    } else {
+      store.actions.markers.selectFeauture(feature, {
+        delay: 0
+      });
     }
-  };
-  /**
-   * Takes the cluster and zooms on it
-   * @param cluster
-   * @param options.duration - Zooming duration
-   */
-
-
-  const zoomToCluster = (cluster, options) => {
-    const extent = getClusterExtent(cluster);
-    zoomToExtent(extent, options);
-  };
-  /**
-   * Takes the marker and zooms on it
-   * @param marker
-   * @param options.duration - Zooming duration
-   */
-
-
-  const zoomToMarker = (marker, options) => {
-    const extent = getFeatureExtent(marker);
-    zoomToExtent(extent, options);
-  };
-  /**
-   * Gets the desired extent and zooms on it
-   * @param extent - Extent of the area to zoom on
-   * @param options.duration - Zooming duration
-   */
-
-
-  const zoomToExtent = (extent, options) => {
-    const duration = options?.duration || 500;
-    map.value?.getView().fit(extent, {
-      size: map.value.getSize(),
-      duration,
-      minResolution: 0.3,
-      padding: [15, store.getters.screen.small ? 15 : 300, 15, 15]
-    });
-  };
-  /**
-   * Take the layer and zooms on it
-   * @param layer
-   * @param options.duration - Zooming duration
-   */
-
-
-  const zoomToLayer = (layer, options) => {
-    const extent = layer.getSource().getExtent();
-    zoomToExtent(extent, options);
   };
   /**
    * Shows a popup on the relating marker
@@ -5128,15 +5558,15 @@ function eventsMixin({
 
 
   const handleResultHover = item => {
-    let foundFeature = findClusterByTitle(item.title).feature;
-    if (!foundFeature) foundFeature = findMarkerByTitle(item.title);
+    let foundFeature = store.actions.markers.getClusterByTitle(item.title).cluster;
+    if (!foundFeature) foundFeature = store.actions.markers.getMarkerByTitle(item.title);
 
     if (foundFeature) {
       if (popupOnResultHover) {
         const {
           featCoords
         } = getCoordsAndTextFromFeature(foundFeature);
-        changeOverlayStats({
+        store.actions.overlays.changeOverlayStats({
           coords: featCoords,
           text: item.title
         });
@@ -5144,7 +5574,7 @@ function eventsMixin({
 
       if (resultHoverCallback) {
         resultHoverCallback({
-          map: map.value,
+          map: store.state.map,
           feature: foundFeature
         });
       }
@@ -5152,6 +5582,7 @@ function eventsMixin({
   };
   /**
    * Zooms on the relating marker
+   * and adds its overlay
    * whenever its result on result box
    * gets clicked
    * @param item - Search item
@@ -5159,33 +5590,25 @@ function eventsMixin({
 
 
   const handleResultClick = item => {
-    let {
-      feature: foundFeature
-    } = findClusterByTitle(item.title);
-    if (!foundFeature) foundFeature = findMarkerByTitle(item.title);
+    let foundFeature = store.actions.markers.getClusterByTitle(item.title).feature;
+    if (!foundFeature) foundFeature = store.actions.markers.getMarkerByTitle(item.title);
 
     if (foundFeature) {
+      store.actions.overlays.changeOverlayStats();
+
       if (zoomOnResultClick) {
-        zoomToMarker(foundFeature);
+        store.actions.markers.selectFeauture(foundFeature, {
+          text: item.title
+        });
       }
 
       if (resultClickCallback) {
         resultClickCallback({
-          map: map.value,
+          map: store.state.map,
           feature: foundFeature
         });
       }
     }
-  };
-  /**
-   * Looks for features in current hover or click event of map
-   * @param evt - Map hover or click event
-   * @returns feature (If found)
-   */
-
-
-  const getFeatureFromEvent = evt => {
-    return map.value?.forEachFeatureAtPixel(evt.pixel, feature => feature);
   };
 
   return {
@@ -5197,207 +5620,7 @@ function eventsMixin({
     handleResultHover,
     handleResultClick,
     getClusterExtent: getClusterExtent,
-    zoomToExtent,
-    zoomToCluster,
-    zoomToLayer,
-    updateMapDimensions,
-    zoom,
-    updateBreakpoints
-  };
-}
-;// CONCATENATED MODULE: ./src/mixins/overlay.mixin.ts
-
-function overlayMixin({
-  map,
-  popupContainer,
-  persistantContainer
-}) {
-  const overlay = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
-  const persistantOverlay = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
-  /**
-   * Sets up overlay on map
-   */
-
-  const setupOverlays = () => {
-    overlay.value = createOverlay(popupContainer);
-    persistantOverlay.value = createOverlay(persistantContainer, true);
-    map.value?.addOverlay(overlay.value);
-    map.value?.addOverlay(persistantOverlay.value);
-  };
-  /**
-   * Changes overlay coords and text
-   * @param stats.coords
-   * @param stats.text
-   * @param target - Whether to manipulated temporary or persistant overlay stats
-   */
-
-
-  const changeOverlayStats = (stats, target = "temporary") => {
-    const targetContainer = target === "temporary" ? popupContainer : persistantContainer;
-    const targetOverlay = target === "temporary" ? overlay : persistantOverlay;
-    if (!targetContainer.value) return;
-
-    if (stats) {
-      const {
-        coords,
-        text
-      } = stats;
-      targetContainer.value.innerHTML = text;
-      targetOverlay.value?.setPosition(coords);
-    } else {
-      targetOverlay.value?.setPosition(undefined);
-    }
-  };
-  /**
-   * Creates an ol overlay on container element
-   * @param persistant - Whether it should not disappear on mouse leaving
-   * @returns overlay
-   */
-
-
-  const createOverlay = (container, persistant = false) => {
-    const overlay = new ol.Overlay({
-      element: container.value,
-      map: map.value,
-      positioning: "top-center",
-      offset: [0, -40]
-    });
-    overlay.set("persistant", persistant); // An attr to know that we should remove it on following hovers
-
-    return overlay;
-  };
-
-  return {
-    setupOverlays,
-    createOverlay,
-    changeOverlayStats,
-    overlay,
-    persistantOverlay
-  };
-}
-;// CONCATENATED MODULE: ./src/mixins/markers.mixin.ts
-
-
-function markersMixin({
-  map,
-  searchMarkers
-}) {
-  /**
-   * Receives an array of points and marks them on map.
-   * @param points - Array of points.
-   * @param point.coords - Coordinates of that point.
-   * @param point.text - If you have a particular text for the point.
-   * @param point.style - If you have a particular style for that point (only checks the first point for now).
-   * @param point.color - If you have a particular color for that point (only checks the first point for now).
-   * @param point.image - If you have a particular image for that point (only checks the first point for now).
-   * @param point.iconScale - If you have a particular icon scale for that point (only checks the first point for now).
-   * @param point.originalItem - original item from neshan search result
-   * @param point.props - props to set for point feature
-   * @param options.cluster - If these markers need to be clusterd on given zoom number
-   * @param options.clusterThreshold - Zoom number that markers should be clusterd on zoom condition above that given zoom
-   * @param options.showPopup - If you want show the text as popup
-   * @param options.props - Props to set for all features
-   * @returns style and layer.
-   */
-  const addMarkers = (points, options) => {
-    const {
-      layer,
-      style
-    } = createMarkers(points, options);
-    map.value?.addLayer(layer);
-    return {
-      layer,
-      style
-    };
-  };
-  /**
-   * Removes markers from map
-   */
-
-
-  const clearMarkerLayer = layer => {
-    if (!layer.value) return;
-    map.value?.removeLayer(layer.value);
-    layer.value = undefined;
-  };
-  /**
-   * Toggles cluster source to deactivate or apply clustering (The layer will remain a cluster layer)
-   * @param layer
-   * @param deactivate - whether to deactivate clustering or apply it.
-   */
-
-
-  const toggleClusterSource = (layer, deactivate) => {
-    if (!layer.value) return;
-    const rawLayer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toRaw)(layer.value);
-    const clusterFeatures = rawLayer.getSource().getFeatures() || [];
-    if (!clusterFeatures.some(cf => cf.get('isCluster'))) return;
-    const features = clusterFeatures.reduce((result, cf) => {
-      const features = cf.get("features");
-      return [...result, ...features];
-    }, []);
-    const newDistance = deactivate ? 0 : 30;
-    const newSource = createClusterSource(features, {
-      distance: newDistance,
-      minDistance: newDistance
-    });
-    layer.value.setSource(newSource);
-  };
-  /**
-   * Takes the title of a marker and returns the found cluster and its surrounding cluster
-   * @param title - title of wanted feature
-   * @returns The found feature and its cluster
-   */
-
-
-  const findClusterByTitle = title => {
-    const clusters = searchMarkers.value?.getSource().getFeatures();
-    let foundFeature;
-    const cluster = clusters?.find(cluster => {
-      const feature = getMarkerInClusterByTitle(cluster, title);
-
-      if (feature) {
-        foundFeature = feature;
-      }
-
-      return feature;
-    });
-    return {
-      feature: foundFeature,
-      cluster
-    };
-  };
-  /**
-   * Take a cluster and a title and returns the feature inside the cluster by its title
-   * @param cluster - The cluster we are looking for feature in it
-   * @param title - Title of wanted feature
-   * @returns The found feature
-   */
-
-
-  const getMarkerInClusterByTitle = (cluster, title) => {
-    const features = cluster.get("features");
-    return features?.find(feat => feat.get("text") === title);
-  };
-  /**
-   * Takes the title of a marker and returns it.
-   * @param title - title of wanted feature
-   * @returns The found marker
-   */
-
-
-  const findMarkerByTitle = title => {
-    const markers = searchMarkers.value?.getSource().getFeatures();
-    return markers?.find(feature => feature.get("text") === title);
-  };
-
-  return {
-    addMarkers,
-    clearMarkerLayer,
-    toggleClusterSource,
-    findClusterByTitle,
-    findMarkerByTitle,
-    getMarkerInClusterByTitle
+    zoom
   };
 }
 ;// CONCATENATED MODULE: ./src/mixins/detailsSection.mixin.ts
@@ -5410,8 +5633,24 @@ function detailsSectionMixin({
   containerRef
 }) {
   const iconName = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
-    const name = props.item?.route_type && Object.keys(inlineSvgs).includes(props.item?.route_type) ? props.item.route_type : props.item?.place ? "local_government_office" : "primary";
+    if (!props.item) return;
+    const isReverse = ("route_type" in props.item);
+    const name = isReverse ? props.item.route_type && Object.keys(inlineSvgs).includes(props.item.route_type) ? props.item.route_type : props.item.place ? "local_government_office" : "primary" : props.item.type && Object.keys(inlineSvgs).includes(props.item.type) ? props.item.type : props.item.category === "place" ? "local_government_office" : "primary";
     return name;
+  });
+  const formattedItem = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.computed)(() => {
+    if (!props.item) return;
+    const isReverse = ("route_type" in props.item);
+    const region = isReverse ? props.item.city || props.item.village ? props.item.state ? (props.item.city || props.item.village) + ", " + props.item.state : props.item.city || props.item.village : props.item.state : props.item.region;
+    const item = {
+      place: isReverse ? props.item.place : props.item.title,
+      address: isReverse ? props.item.formatted_address : props.item.address,
+      region,
+      neighbourhood: isReverse ? 'محله ' + props.item.neighbourhood : props.item.neighbourhood,
+      in_odd_even_zone: isReverse ? props.item.in_odd_even_zone : null,
+      in_traffic_zone: isReverse ? props.item.in_traffic_zone : null
+    };
+    return item;
   });
   const {
     width
@@ -5420,7 +5659,8 @@ function detailsSectionMixin({
   });
   return {
     iconName,
-    width
+    width,
+    formattedItem
   };
 }
 ;// CONCATENATED MODULE: ./src/mixins/dimensions.mixin.ts
@@ -5432,17 +5672,23 @@ function dimensionsMixin({
   (0,external_commonjs_vue_commonjs2_vue_root_Vue_.watch)(() => containerRef.value?.clientWidth, nv => {
     if (nv) width.value = nv;
   });
-  (0,external_commonjs_vue_commonjs2_vue_root_Vue_.onMounted)(() => {
+
+  const updateWidth = () => {
     const initialWidth = containerRef.value?.clientWidth;
     if (initialWidth) width.value = initialWidth;
+  };
+
+  (0,external_commonjs_vue_commonjs2_vue_root_Vue_.onMounted)(() => {
+    updateWidth();
+  });
+  (0,external_commonjs_vue_commonjs2_vue_root_Vue_.onUpdated)(() => {
+    updateWidth();
   });
   return {
     width
   };
 }
 ;// CONCATENATED MODULE: ./src/mixins/index.ts
-
-
 
 
 
@@ -5492,19 +5738,15 @@ const _hoisted_12 = {
   class: "d-flex align-center"
 };
 
-const _hoisted_13 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("br", null, null, -1);
-
-const _hoisted_14 = {
-  key: 6,
-  class: "d-flex align-center"
-};
-
 
 
 /* harmony default export */ var PointDetailsvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
   __name: 'PointDetails',
   props: {
-    item: Object
+    item: {
+      type: Object,
+      default: null
+    }
   },
 
   setup(__props) {
@@ -5512,7 +5754,8 @@ const _hoisted_14 = {
     const pointDetailsContainer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
     const {
       iconName,
-      width
+      width,
+      formattedItem
     } = detailsSectionMixin({
       props,
       containerRef: pointDetailsContainer
@@ -5524,32 +5767,27 @@ const _hoisted_14 = {
       }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
         name: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(iconName),
         size: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(width)
-      }, null, 8, ["name", "size"]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_1, [__props.item?.place ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_2, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
+      }, null, 8, ["name", "size"]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_1, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem)?.place ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_2, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
         name: "marker",
         size: 25,
         color: "steelblue",
         class: "px-1"
-      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item.place), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), PointDetailsvue_type_script_setup_true_lang_ts_hoisted_3, __props.item?.formatted_address ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_4, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
+      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem).place), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), PointDetailsvue_type_script_setup_true_lang_ts_hoisted_3, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem)?.address ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_4, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
         name: "secondary",
         size: 25,
         color: "steelblue",
         class: "px-1"
-      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item.formatted_address), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), PointDetailsvue_type_script_setup_true_lang_ts_hoisted_5, __props.item?.neighbourhood ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_6, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
+      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem).address), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), PointDetailsvue_type_script_setup_true_lang_ts_hoisted_5, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem)?.neighbourhood ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_6, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
         name: "neighborhood_landmark",
         size: 25,
         color: "steelblue",
         class: "px-1"
-      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" محله " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item.neighbourhood), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), PointDetailsvue_type_script_setup_true_lang_ts_hoisted_7, __props.item?.city ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_8, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
+      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem).neighbourhood), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), PointDetailsvue_type_script_setup_true_lang_ts_hoisted_7, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem)?.region ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", PointDetailsvue_type_script_setup_true_lang_ts_hoisted_8, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
         name: "city",
         size: 25,
         color: "steelblue",
         class: "px-1"
-      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" شهر " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item.city), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), _hoisted_9, __props.item?.village ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", _hoisted_10, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(IconComponent, {
-        name: "city",
-        size: 25,
-        color: "steelblue",
-        class: "px-1"
-      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" روستای " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item.village), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), _hoisted_11, __props.item?.neighbourhood ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", _hoisted_12, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item.in_odd_even_zone ? "داخل" : "خارج از") + " محدوده طرح زوج و فرد ", 1)) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), _hoisted_13, __props.item?.neighbourhood ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", _hoisted_14, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)(__props.item.in_traffic_zone ? "داخل" : "خارج از") + " محدوده طرح ترافیک ", 1)) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true)])], 512);
+      }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" " + (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem).region), 1)])) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), _hoisted_9, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem)?.in_odd_even_zone ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", _hoisted_10, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem).in_odd_even_zone ? "داخل" : "خارج از") + " محدوده طرح زوج و فرد ", 1)) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), _hoisted_11, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem)?.in_traffic_zone ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("div", _hoisted_12, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.toDisplayString)((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(formattedItem).in_traffic_zone ? "داخل" : "خارج از") + " محدوده طرح ترافیک ", 1)) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true)])], 512);
     };
   }
 
@@ -5614,13 +5852,13 @@ const PointDetails_exports_ = PointDetailsvue_type_script_setup_true_lang_ts;
         class: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeClass)([__props.resultBoxClass, "map-result-box mx-auto"]),
         ref_key: "resultSection",
         ref: resultSection
-      }, [((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.searchLoading : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.loading) ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createBlock)(Loading, {
+      }, [((0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.searchLoading : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.loading) ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createBlock)(LoadingComp, {
         key: 0,
         dense: "",
         color: "blue"
-      })) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), !(0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small && (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.drawerShowDetails && (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.selectedMarkerLocation ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createBlock)(PointDetails, {
+      })) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), !(0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small && (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.drawerShowDetails && (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.selectedMarker ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createBlock)(PointDetails, {
         key: 1,
-        item: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.selectedMarkerLocation
+        item: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.selectedMarker
       }, null, 8, ["item"])) : ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(true), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)(external_commonjs_vue_commonjs2_vue_root_Vue_.Fragment, {
         key: 2
       }, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.renderList)(__props.results, item => {
@@ -5637,10 +5875,10 @@ const PointDetails_exports_ = PointDetailsvue_type_script_setup_true_lang_ts;
 }));
 ;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=56f3136c&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=afe289c2&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=56f3136c&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=afe289c2&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue
 
@@ -5649,25 +5887,23 @@ const PointDetails_exports_ = PointDetailsvue_type_script_setup_true_lang_ts;
 ;
 
 
-const ResultsSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultsSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-56f3136c"]])
+const ResultsSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultsSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-afe289c2"]])
 
 /* harmony default export */ var ResultsSection = (ResultsSection_exports_);
-;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/Drawer.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/DrawerComp.vue?vue&type=script&setup=true&lang=ts
 
 
 
-const Drawervue_type_script_setup_true_lang_ts_withScopeId = n => (_pushScopeId("data-v-e791acc0"), n = n(), _popScopeId(), n);
+const DrawerCompvue_type_script_setup_true_lang_ts_withScopeId = n => (_pushScopeId("data-v-bf85d500"), n = n(), _popScopeId(), n);
 
-const Drawervue_type_script_setup_true_lang_ts_hoisted_1 = ["activated"];
-
-
+const DrawerCompvue_type_script_setup_true_lang_ts_hoisted_1 = ["activated"];
 
 
 
-const Drawervue_type_script_setup_true_lang_ts_default_ = {
-  name: "DrawerComp"
-};
-/* harmony default export */ var Drawervue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({ ...Drawervue_type_script_setup_true_lang_ts_default_,
+
+
+/* harmony default export */ var DrawerCompvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  __name: 'DrawerComp',
   props: {
     results: Array,
     searchCoords: {
@@ -5748,28 +5984,28 @@ const Drawervue_type_script_setup_true_lang_ts_default_ = {
         results: __props.results,
         onResultClick: emitResultClick,
         onResultHover: emitResultHover
-      }, null, 8, ["results"])], 10, Drawervue_type_script_setup_true_lang_ts_hoisted_1);
+      }, null, 8, ["results"])], 10, DrawerCompvue_type_script_setup_true_lang_ts_hoisted_1);
     };
   }
 
 }));
-;// CONCATENATED MODULE: ./src/components/drawer/Drawer.vue?vue&type=script&setup=true&lang=ts
+;// CONCATENATED MODULE: ./src/components/drawer/DrawerComp.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/Drawer.vue?vue&type=style&index=0&id=e791acc0&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/DrawerComp.vue?vue&type=style&index=0&id=bf85d500&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/drawer/Drawer.vue?vue&type=style&index=0&id=e791acc0&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/drawer/DrawerComp.vue?vue&type=style&index=0&id=bf85d500&lang=scss&scoped=true
 
-;// CONCATENATED MODULE: ./src/components/drawer/Drawer.vue
+;// CONCATENATED MODULE: ./src/components/drawer/DrawerComp.vue
 
 
 
 ;
 
 
-const Drawer_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Drawervue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-e791acc0"]])
+const DrawerComp_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DrawerCompvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-bf85d500"]])
 
-/* harmony default export */ var Drawer = (Drawer_exports_);
+/* harmony default export */ var DrawerComp = (DrawerComp_exports_);
 ;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-86.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/CurvedLoading.vue?vue&type=script&setup=true&lang=ts
 
 
@@ -5843,7 +6079,7 @@ const CurvedLoading_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Curv
 
 
 
-const MobileDetailsSectionvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-49e42c4a"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
+const MobileDetailsSectionvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-07bde7b3"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
 
 const MobileDetailsSectionvue_type_script_setup_true_lang_ts_hoisted_1 = /*#__PURE__*/MobileDetailsSectionvue_type_script_setup_true_lang_ts_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("span", {
   class: "d-block"
@@ -5930,7 +6166,7 @@ const MobileDetailsSectionvue_type_script_setup_true_lang_ts_hoisted_2 = [Mobile
         style: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeStyle)(`height: ${(0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.mapDimensions.height}px;`),
         class: "o-auto"
       }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(PointDetails, {
-        item: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.selectedMarkerLocation
+        item: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.selectedMarker
       }, null, 8, ["item"])], 4)], 512);
     };
   }
@@ -5938,10 +6174,10 @@ const MobileDetailsSectionvue_type_script_setup_true_lang_ts_hoisted_2 = [Mobile
 }));
 ;// CONCATENATED MODULE: ./src/components/MobileDetailsSection.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/MobileDetailsSection.vue?vue&type=style&index=0&id=49e42c4a&scoped=true&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/MobileDetailsSection.vue?vue&type=style&index=0&id=07bde7b3&scoped=true&lang=scss
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/MobileDetailsSection.vue?vue&type=style&index=0&id=49e42c4a&scoped=true&lang=scss
+;// CONCATENATED MODULE: ./src/components/MobileDetailsSection.vue?vue&type=style&index=0&id=07bde7b3&scoped=true&lang=scss
 
 ;// CONCATENATED MODULE: ./src/components/MobileDetailsSection.vue
 
@@ -5950,7 +6186,7 @@ const MobileDetailsSectionvue_type_script_setup_true_lang_ts_hoisted_2 = [Mobile
 ;
 
 
-const MobileDetailsSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(MobileDetailsSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-49e42c4a"]])
+const MobileDetailsSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(MobileDetailsSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-07bde7b3"]])
 
 /* harmony default export */ var MobileDetailsSection = (MobileDetailsSection_exports_);
 ;// CONCATENATED MODULE: ./src/apis/index.ts
@@ -6065,14 +6301,14 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
     emit: eventsEmits
   }) {
     const props = __props;
-    const api = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(createApi(props.serviceKey));
+    store.setApi(createApi(props.serviceKey));
     /**
      * Sets the given token for api
      * @param token
      */
 
     const setToken = token => {
-      api.value = createApi(token);
+      store.setApi(createApi(token));
     };
     /**
      * Whenever service token changes,
@@ -6084,14 +6320,10 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
       setToken(nv);
     });
     const sanitizedCenter = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(sanitizeLocation(props.center));
-    const map = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
-    const mainMarker = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
-    const mainMarkerCoords = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
-    const searchMarkers = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
     const mapType = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(props.defaultType);
-    const reactiveTiles = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(tiles.filter(tile => props.mapTypes.includes(tile.title)));
-    const popupContainer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(null);
-    const persistantContainer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(null);
+    const reactiveTiles = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.reactive)(tiles.filter(tile => props.mapTypes.includes(tile.title)));
+    const popupContainer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
+    const persistantContainer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
     const trafficLayer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(props.traffic);
     const poiLayer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)(props.poi);
     (0,external_commonjs_vue_commonjs2_vue_root_Vue_.watch)(() => props.traffic, nv => {
@@ -6112,7 +6344,7 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
      */
 
     const togglePoi = value => {
-      map.value?.switchPoiLayer(value);
+      store.state.map?.switchPoiLayer(value);
     };
     /**
      * Switches traffic layer
@@ -6121,16 +6353,15 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
 
     const toggleTraffic = value => {
-      map.value?.switchTrafficLayer(value);
+      store.state.map?.switchTrafficLayer(value);
     };
-
-    const mapContainer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
     /**
      * Adds the map from given url to given script
      * @param url - Url of map or another script
      * @param tagName - Name of the expected tag
      * @returns Created tag
      */
+
 
     const importMap = (url, tagName = "my-openlayer") => {
       const foundDoc = document.getElementById(tagName);
@@ -6142,13 +6373,14 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
       document.getElementsByTagName("head")[0].appendChild(scriptTag);
       return scriptTag;
     };
+
+    const mapContainer = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)();
     /**
      * Starts the map and adds it to element with id='map'
      * Gets the mapKey, zoom, traffic and poi from props.
      * Gets the center from either sanitizedCenter variable or gets it from divice location
      * or Neshan building location.
      */
-
 
     const startMap = async () => {
       if (!mapContainer.value) return;
@@ -6166,7 +6398,7 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
         })
       });
-      map.value = newMap; // Currently there is a problem with assigning different map type on initilization
+      store.setMap(newMap); // Currently there is a problem with assigning different map type on initilization
 
       changeMapType(mapType.value);
       shakeMap();
@@ -6178,7 +6410,7 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
 
     const changeMapType = type => {
-      map.value?.setMapType(type);
+      store.state.map?.setMapType(type);
       mapType.value = type;
     };
     /**
@@ -6187,91 +6419,15 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
 
     const shakeMap = () => {
-      setTimeout(() => map.value?.updateSize(), 300);
+      setTimeout(() => store.state.map?.updateSize(), 300);
     };
 
-    const {
-      addMarkers,
-      clearMarkerLayer,
-      toggleClusterSource,
-      findMarkerByTitle,
-      findClusterByTitle
-    } = markersMixin({
-      map,
-      searchMarkers
-    });
-    const searchResults = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.ref)([]);
-    /**
-     * Does a neshan search based on given parameters
-     * @param searchParams.text - Part of or whole name of the place.
-     * @param searchParams.coords - Coordinates you want to search around.
-     */
-
-    const search = async ({
-      term = "",
-      coords
-    }) => {
-      try {
-        store.toggleSearchLoading(true);
-        const reliableCoords = coords || mainMarkerCoords.value || sanitizedCenter.value;
-        if (!reliableCoords) return;
-        const result = await api.value.SEARCH(term, reliableCoords);
-        store.toggleDrawerShowDetails(false);
-        clearMarkerLayer(searchMarkers);
-        searchResults.value = result.items;
-        const points = createMapPoints(result.items);
-        const {
-          layer
-        } = addMarkers(points, {
-          markersIconCallback: props.markersIconCallback,
-          cluster: props.cluster,
-          clusterThreshold: props.clusterThreshold
-        });
-        changeOverlayStats(undefined, "persistant");
-        searchMarkers.value = layer; // Apparently it takse some async time to cluster the source
-
-        setTimeout(() => {
-          const features = layer.getSource().getFeatures(); //To fix a problem with zooming on single feature layers extent
-
-          if (features.length === 1) {
-            zoomToCluster(features[0], {
-              duration: 1500
-            });
-          } else {
-            zoomToLayer(layer, {
-              duration: 1500
-            });
-          }
-        }, 200);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        store.toggleSearchLoading(false);
-      }
-    };
-
-    const {
-      setupOverlays,
-      changeOverlayStats
-    } = overlayMixin({
-      map,
-      popupContainer,
-      persistantContainer
-    });
     const {
       setupMapEvents,
       handleResultHover,
       handleResultClick,
-      zoomToLayer,
-      zoomToCluster,
-      updateMapDimensions,
-      updateBreakpoints,
       zoom
     } = eventsMixin({
-      map,
-      mainMarker,
-      mainMarkerCoords,
-      api,
       emits: eventsEmits,
       resultHoverCallback: props.resultHoverCallback,
       resultClickCallback: props.resultClickCallback,
@@ -6280,12 +6436,9 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
       zoomOnResultClick: props.zoomOnResultClick,
       popupOnMarkerHover: props.popupOnMarkerHover,
       popupOnResultHover: props.popupOnResultHover,
-      addMarkers,
-      setupOverlays,
-      changeOverlayStats,
       mapContainer,
-      findMarkerByTitle,
-      findClusterByTitle
+      popupContainer,
+      persistantContainer
     });
     /**
      * Changes cluster source to marker source on cluster threshold passing and vice versa
@@ -6293,9 +6446,9 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
     (0,external_commonjs_vue_commonjs2_vue_root_Vue_.watch)(zoom, (nv, ov) => {
       if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
-        toggleClusterSource(searchMarkers, true);
+        store.actions.markers.toggleClusterSource(store.state.searchMarkers, true);
       } else if (nv < props.clusterThreshold && ov >= props.clusterThreshold) {
-        toggleClusterSource(searchMarkers, false);
+        store.actions.markers.toggleClusterSource(store.state.searchMarkers, false);
       }
     });
     /**
@@ -6308,30 +6461,50 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
       scriptTag.onload = () => {
         startMap();
         setupMapEvents();
-        updateBreakpoints();
-        updateMapDimensions();
+        store.actions.dimensions.updateBreakpoints();
+        store.actions.dimensions.updateMapDimensions(mapContainer);
       };
     });
+
+    const handleSearch = ({
+      term = "",
+      coords
+    }) => {
+      const reliableCoords = coords || store.state.mainMarkerCoords || sanitizedCenter.value;
+      if (!reliableCoords || !store.state.api) return;
+      const options = {
+        cluster: props.cluster,
+        clusterThreshold: props.clusterThreshold,
+        markersIconCallback: props.markersIconCallback
+      };
+      store.actions.markers.search({
+        term,
+        coords: reliableCoords
+      }, options);
+    };
     /**
      * Makes it possible to have access to search function from outside of the component
      */
 
+
     expose({
-      search
+      search: handleSearch
     });
     return (_ctx, _cache) => {
       return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)(external_commonjs_vue_commonjs2_vue_root_Vue_.Fragment, null, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", {
         ref_key: "mapContainer",
         ref: mapContainer,
-        class: "map pos-relative"
+        class: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.normalizeClass)(["map pos-relative", {
+          small: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small
+        }])
       }, [!__props.hideSettings ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_.renderSlot)(_ctx.$slots, "settings", {
         key: 0,
-        tiles: reactiveTiles.value,
+        tiles: reactiveTiles,
         mapType: mapType.value,
         poi: poiLayer.value,
         traffic: trafficLayer.value
-      }, () => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(settings, {
-        tiles: reactiveTiles.value,
+      }, () => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(SettingsComp, {
+        tiles: reactiveTiles,
         mapType: mapType.value,
         "onUpdate:mapType": _cache[0] || (_cache[0] = $event => changeMapType($event)),
         settingsBoxClass: __props.settingsBoxClass,
@@ -6341,14 +6514,14 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
         "onUpdate:poi": _cache[2] || (_cache[2] = $event => poiLayer.value = $event)
       }, null, 8, ["tiles", "mapType", "settingsBoxClass", "traffic", "poi"])]) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), !__props.hideSearchContainer ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_.renderSlot)(_ctx.$slots, "search-container", {
         key: 1
-      }, () => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(Drawer, {
-        results: searchResults.value,
-        onSearch: search,
+      }, () => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(DrawerComp, {
+        results: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.searchResults,
+        onSearch: handleSearch,
         onResultClick: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(handleResultClick),
         onResultHover: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(handleResultHover)
-      }, null, 8, ["results", "onResultClick", "onResultHover"])]) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true)], 512), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small ? ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createBlock)(MobileDetailsSection, {
+      }, null, 8, ["results", "onResultClick", "onResultHover"])]) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true)], 2), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).getters.screen.small ? (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withDirectives)(((0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createBlock)(MobileDetailsSection, {
         key: 0
-      })) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", {
+      }, null, 512)), [[external_commonjs_vue_commonjs2_vue_root_Vue_.vShow, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.unref)(store).state.mobileDrawerShowDetails]]) : (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createCommentVNode)("", true), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", {
         class: "map-popup-container",
         ref_key: "popupContainer",
         ref: popupContainer
@@ -6363,10 +6536,15 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 }));
 ;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=5edcb7aa&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=1cf9bd3a&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=5edcb7aa&lang=scss
+;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=1cf9bd3a&lang=scss&scoped=true
+
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-67.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-67.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-67.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-67.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=1&id=1cf9bd3a&lang=scss
+// extracted by mini-css-extract-plugin
+
+;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=1&id=1cf9bd3a&lang=scss
 
 ;// CONCATENATED MODULE: ./src/components/Map.vue
 
@@ -6374,7 +6552,9 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
 ;
 
-const Map_exports_ = Mapvue_type_script_setup_true_lang_ts;
+
+
+const Map_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Mapvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-1cf9bd3a"]])
 
 /* harmony default export */ var components_Map = (Map_exports_);
 ;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js

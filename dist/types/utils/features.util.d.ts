@@ -1,4 +1,5 @@
-import { CreateIconProps, CreateLayerProps, CreateMapPointsOptions, CreateMarkers, CreateMarkersPoints, CreateRawStyleProps, CreateStyleProps, IconColor, MarkersIconCallback, Ol, SearchItem, Source, Style, Text, VectorLayer } from "@/components/Map.model";
+import { CreateIconProps, CreateLayerProps, CreateMapPointsOptions, CreateMarkers, CreateMarkersPoints, CreateRawStyleProps, CreateStyleProps, IconColor, MarkersIconCallback, Ol, Source, Style, Text, VectorLayer } from "@/components/Map.model";
+import { SearchItem } from "@/store/markers/markers.model";
 import { Feature } from "openlayers";
 /**
  * Receives an array of points and returns a layer of markers.
@@ -35,7 +36,7 @@ export declare const createLayer: ({ target, style, source, }: CreateLayerProps)
  * @param options.color - color of the markers
  * @param options.iconScale - scale of the markers
  */
-export declare const createMapPoints: (items: SearchItem[], options?: CreateMapPointsOptions | undefined) => {
+export declare const createMapPoints: (items: SearchItem[], options?: CreateMapPointsOptions) => {
     coords: Ol.Coordinate;
     text: string;
     color: IconColor;
@@ -43,8 +44,8 @@ export declare const createMapPoints: (items: SearchItem[], options?: CreateMapP
     originalItem: SearchItem;
 }[];
 export declare const createClusterSource: (features: Feature[], { minDistance, distance }?: {
-    minDistance?: number | undefined;
-    distance?: number | undefined;
+    minDistance?: number;
+    distance?: number;
 }) => Source;
 /**
  * Gets the sufficent extent to zoom on a cluster or marker
@@ -82,4 +83,4 @@ export declare const getCoordsFromFeature: (feature: Feature) => Ol.Coordinate;
  * @param props - Props to set for features
  * @returns array of features.
  */
-export declare const createFeaturesFromPoints: (points: CreateMarkersPoints, markersIconCallback?: MarkersIconCallback | undefined, props?: any) => Feature[];
+export declare const createFeaturesFromPoints: (points: CreateMarkersPoints, markersIconCallback?: MarkersIconCallback, props?: any) => Feature[];

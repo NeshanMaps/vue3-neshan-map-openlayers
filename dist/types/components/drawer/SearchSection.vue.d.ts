@@ -15,8 +15,8 @@ declare const _default: import("vue").DefineComponent<{
         type: StringConstructor;
     };
 }>> & {
-    onSubmit?: ((...args: any[]) => any) | undefined;
-    "onUpdate:search-text"?: ((...args: any[]) => any) | undefined;
-    "onUpdate:search-coords"?: ((...args: any[]) => any) | undefined;
+    onSubmit?: (...args: any[]) => any;
+    "onUpdate:search-text"?: (...args: any[]) => any;
+    "onUpdate:search-coords"?: (...args: any[]) => any;
 }, {}>;
 export default _default;

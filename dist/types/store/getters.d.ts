@@ -1,7 +1,7 @@
 export declare const getters: {
-    screen: import("vue").ComputedRef<{
+    screen: {
         small: boolean;
-    }>;
-    drawerWidth: import("vue").ComputedRef<number>;
-    loading: import("vue").ComputedRef<boolean>;
+    };
+    drawerWidth: number;
+    loading: boolean;
 };

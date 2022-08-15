@@ -11,7 +11,7 @@ declare const _default: import("vue").DefineComponent<{
     };
     center: {
         type: PropType<CoordsObj>;
-        default: null;
+        default: any;
     };
     zoom: {
         type: NumberConstructor;
@@ -75,7 +75,7 @@ declare const _default: import("vue").DefineComponent<{
     };
     center: {
         type: PropType<CoordsObj>;
-        default: null;
+        default: any;
     };
     zoom: {
         type: NumberConstructor;
@@ -127,14 +127,13 @@ declare const _default: import("vue").DefineComponent<{
         default: number;
     };
 }>> & {
-    "onOn-zoom"?: ((...args: any[]) => any) | undefined;
-    "onOn-click"?: ((...args: any[]) => any) | undefined;
+    "onOn-zoom"?: (...args: any[]) => any;
+    "onOn-click"?: (...args: any[]) => any;
 }, {
     zoomOnMarkerClick: boolean;
     zoomOnResultClick: boolean;
     popupOnMarkerHover: boolean;
     popupOnResultHover: boolean;
-    cluster: boolean;
     serviceKey: string;
     center: CoordsObj;
     zoom: number;
@@ -146,6 +145,7 @@ declare const _default: import("vue").DefineComponent<{
     hideSearchBox: boolean;
     hideSearchContainer: boolean;
     hideResultBox: boolean;
+    cluster: boolean;
     clusterThreshold: number;
 }>;
 export default _default;

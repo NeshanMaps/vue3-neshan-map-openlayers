@@ -1,35 +1,16 @@
 import {
-  CoordsArr,
   EventsMixinProps,
-  Extent,
-  Ol,
-  SearchItem,
-  VectorLayer,
-  ZoomToExtentOptions,
 } from "@/components/Map.model"
 import { store } from "@/store"
-import { breakpointsSegments, breakpointsSegmentsPixels } from "@/parameters"
-import { BreakPoints, BreakpointsSegments } from "@/store/state.model"
+import { SearchItem } from "@/store/markers/markers.model"
 import { Feature, MapBrowserEvent } from "openlayers"
-import { ref, toRaw } from "vue"
+import { ref } from "vue"
 import {
   getCoordsAndTextFromFeature,
-  getTitleFromData,
   getClusterExtent,
-  transformCoords,
-  getFeatureExtent,
-  getCoordsFromFeature,
 } from "../utils"
-import {
-  ReverseOnPointOptions,
-  SelectFeautureOptions,
-} from "./events.mixin.model"
 
 export function eventsMixin({
-  map,
-  mainMarker,
-  mainMarkerCoords,
-  api,
   emits,
   resultHoverCallback,
   resultClickCallback,
@@ -38,13 +19,9 @@ export function eventsMixin({
   zoomOnResultClick,
   popupOnMarkerHover,
   popupOnResultHover,
-  setupOverlays,
-  changeOverlayStats,
-  addMarkers,
   mapContainer,
-  getMarkerByTitle,
-  getClusterByTitle,
-  getSearchResultByFeature,
+  popupContainer,
+  persistantContainer,
 }: EventsMixinProps) {
   /**
    * Sets the required events up for the map.
@@ -57,8 +34,8 @@ export function eventsMixin({
   }
 
   const setupClickEvent = () => {
-    map.value?.on("click", (event) => {
-      handleClickEvent(<Ol.MapBrowserEvent>event)
+    store.state.map?.on("click", (event) => {
+      handleClickEvent(<MapBrowserEvent>event)
     })
   }
 
@@ -67,11 +44,11 @@ export function eventsMixin({
    * Emits the new zoom value
    */
   const setupZoomEvent = () => {
-    if (!map.value) return
-    zoom.value = map.value.getView().getZoom()
-    map.value.on("moveend", () => {
-      if (!map.value) return
-      const newZoom = map.value.getView().getZoom()
+    if (!store.state.map) return
+    zoom.value = store.state.map.getView().getZoom()
+    store.state.map.on("moveend", () => {
+      if (!store.state.map) return
+      const newZoom = store.state.map.getView().getZoom()
       if (zoom.value != newZoom) {
         emits("on-zoom", newZoom)
         zoom.value = newZoom
@@ -82,75 +59,50 @@ export function eventsMixin({
    * Sets up hover event for marker popups
    */
   const setupMarkerHoverEvent = () => {
-    setupOverlays()
-    map.value?.on("pointermove", function (evt) {
-      const hoveredFeature = getFeatureFromEvent(<MapBrowserEvent>evt)
+    store.actions.overlays.setupOverlays({
+      popupContainer,
+      persistantContainer,
+    })
+    store.state.map?.on("pointermove", function (evt) {
+      const hoveredFeature = store.actions.markers.getFeatureFromEvent(
+        <MapBrowserEvent>evt
+      )
       if (hoveredFeature) {
+        const isMainMarker: boolean = hoveredFeature.getProperties().mainMarker
         const innerFeatures: Feature[] | undefined =
           hoveredFeature.get("features")
         const { featCoords, featText } =
           getCoordsAndTextFromFeature(hoveredFeature)
         if (!innerFeatures || innerFeatures.length === 1) {
           if (popupOnMarkerHover) {
-            changeOverlayStats({
+            store.actions.overlays.changeOverlayStats({
               text: Array.isArray(featText) ? featText[0] : featText,
               coords: featCoords,
+              offset: isMainMarker ? [0, -60] : [0, -40],
             })
           }
           return
         }
         if (markerHoverCallback) {
           markerHoverCallback({
-            changeOverlayStats,
-            map,
+            changeOverlayStats: store.actions.overlays.changeOverlayStats,
+            map: store.state.map,
             feature: hoveredFeature,
           })
         }
       }
-      changeOverlayStats()
+      store.actions.overlays.changeOverlayStats()
     })
   }
 
   const setupResizeEvents = () => {
-    window.addEventListener("resize", updateMapDimensions)
-    window.addEventListener("resize", updateBreakpoints)
-  }
-  /**
-   * Updates map height value on window resize
-   */
-  const updateMapDimensions = () => {
-    if (!mapContainer.value) return
-    store.setMapDimenstions({
-      height: mapContainer.value.clientHeight,
-      width: mapContainer.value.clientWidth,
-    })
-  }
-  /**
-   * Updates store breakpoints on windows resize
-   */
-  const updateBreakpoints = () => {
-    const width = window.innerWidth
-    const keys = <(keyof BreakpointsSegments)[]>Object.keys(breakpointsSegments)
-    const newBreakpoints: BreakPoints = JSON.parse(
-      JSON.stringify(toRaw(store.state.breakpoints))
+    window.addEventListener("resize", () =>
+      store.actions.dimensions.updateMapDimensions(mapContainer)
     )
-    keys.forEach((brp, i) => {
-      const nextBrp = keys[i + 1]
-      if (width >= breakpointsSegmentsPixels[brp]) {
-        newBreakpoints.lt[brp] = false
-        if (!nextBrp || width < breakpointsSegmentsPixels[nextBrp]) {
-          newBreakpoints[brp] = true
-          newBreakpoints.gt[brp] = false
-        } else {
-          newBreakpoints[brp] = false
-          newBreakpoints.gt[brp] = true
-        }
-      } else if (width < breakpointsSegmentsPixels[brp]) {
-        newBreakpoints.lt[brp] = true
-        newBreakpoints.gt[brp] = false
-      }
-    })
-    store.setBreakPoints(newBreakpoints)
+    window.addEventListener(
+      "resize",
+      store.actions.dimensions.updateBreakpoints
+    )
   }
 
   /**
@@ -161,20 +113,22 @@ export function eventsMixin({
    * In both cases emits an event named 'on-click' afterwards.
    * @param event - Map click event.
    */
-  const handleClickEvent = async (event: Ol.MapBrowserEvent) => {
-    changeOverlayStats(undefined, "persistant")
+  const handleClickEvent = async (event: MapBrowserEvent) => {
     let emittingMarker
     let emittingData
     let emittingStdPoint
-    const selectedFeature = getFeatureFromEvent(event)
-    if (mainMarker.value) map.value?.removeLayer(mainMarker.value)
+    const selectedFeature = store.actions.markers.getFeatureFromEvent(event)
+    const isMainMarker: boolean = selectedFeature?.getProperties().mainMarker
+    if (!isMainMarker && store.state.mainMarker)
+      store.state.map?.removeLayer(store.state.mainMarker)
+    store.actions.overlays.changeOverlayStats(undefined, "persistant")
     if (zoomOnMarkerClick && selectedFeature) {
       handleFeatureClick(selectedFeature)
     } else {
       if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
       else store.toggleDrawerActivation(true)
       store.toggleReverseLoading(true)
-      const result = await reverseOnPoint(event.coordinate)
+      const result = await store.actions.markers.reverseOnPoint(event.coordinate)
       emittingMarker = result.marker
       emittingData = result.data
       emittingStdPoint = result.stdPoint
@@ -185,7 +139,7 @@ export function eventsMixin({
       marker: emittingMarker,
       stdPoint: emittingData,
       data: emittingStdPoint,
-      map,
+      map: store.state.map,
       selectedFeature,
     })
   }
@@ -197,122 +151,9 @@ export function eventsMixin({
   const handleFeatureClick = (feature: Feature) => {
     const features: Feature[] | undefined = feature.get("features")
     if (features && features.length > 1) {
-      zoomToCluster(feature)
+      store.actions.markers.zoomToCluster(feature)
     } else {
-      selectFeauture(feature, { delay: 0 })
-    }
-  }
-
-  /**
-   * Places a marker on a point on ol map
-   * Sends a reverse request on that position
-   * and adds a title based on returned value
-   * @param point - OL Coords
-   * @param putMarker - Whether to put marker on locating area
-   * @returns marker, standard coords of point and api result data
-   */
-  const reverseOnPoint = async (
-    point: CoordsArr,
-    {
-      useMarker = true,
-      usePopup = true,
-      customText,
-    }: ReverseOnPointOptions = {}
-  ) => {
-    try {
-      changeOverlayStats(undefined, "persistant")
-      const stdPoint = transformCoords(point)
-      let marker: VectorLayer | null = null
-      if (useMarker) {
-        const { layer } = addMarkers([{ coords: point, text: "" }])
-        mainMarkerCoords.value = stdPoint
-        mainMarker.value = layer
-        marker = layer
-      }
-      const data = await api.value.REVERSE(...stdPoint)
-      store.setSelectedMarker(data)
-      store.toggleDrawerShowDetails(true)
-      if (usePopup) {
-        const text = customText || getTitleFromData(data)
-        changeOverlayStats({ coords: point, text }, "persistant")
-      }
-      return { marker, stdPoint, data }
-    } catch (error) {
-      console.log(error)
-      return {}
-    }
-  }
-
-  /**
-   * Takes the cluster and zooms on it
-   * @param cluster
-   * @param options.duration - Zooming duration
-   */
-  const zoomToCluster = (cluster: Feature, options?: ZoomToExtentOptions) => {
-    const extent = getClusterExtent(cluster)
-    zoomToExtent(extent, options)
-  }
-
-  /**
-   * Takes the marker and zooms on it
-   * @param marker
-   * @param options.duration - Zooming duration
-   */
-  const zoomToMarker = (marker: Feature, options?: ZoomToExtentOptions) => {
-    const extent = getFeatureExtent(marker)
-    zoomToExtent(extent, options)
-  }
-  /**
-   * Gets the desired extent and zooms on it
-   * @param extent - Extent of the area to zoom on
-   * @param options.duration - Zooming duration
-   */
-  const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
-    const duration = options?.duration || 500
-    map.value?.getView().fit(extent, {
-      size: map.value.getSize(),
-      duration,
-      minResolution: 0.3,
-      padding: [15, store.getters.screen.small ? 15 : 300, 15, 15],
-    })
-  }
-
-  /**
-   * Take the layer and zooms on it
-   * @param layer
-   * @param options.duration - Zooming duration
-   */
-  const zoomToLayer = (layer: VectorLayer, options?: ZoomToExtentOptions) => {
-    const extent: Extent = layer.getSource().getExtent()
-    zoomToExtent(extent, options)
-  }
-
-  /**
-   * Zooms on given feature and shows its details on detail section
-   * Adds a persistant overlay on it
-   * @param feature
-   * @param options
-   */
-  const selectFeauture = (
-    feature: Feature,
-    options?: SelectFeautureOptions
-  ) => {
-    zoomToMarker(feature)
-    const coords = options?.coords || getCoordsFromFeature(feature)
-    let text = options?.text || feature.getProperties().text
-    if (Array.isArray(text)) text = text[0]
-    if (options?.delay !== 0) {
-      setTimeout(() => {
-        changeOverlayStats({ coords, text }, "persistant")
-      }, options?.delay || 500)
-    } else {
-      changeOverlayStats({ coords, text }, "persistant")
-    }
-    const foundResult = getSearchResultByFeature(feature)
-    if (foundResult) {
-      store.setSelectedMarker(foundResult)
-      store.toggleDrawerShowDetails(true)
-      if (!store.state.drawerActivation) store.toggleDrawerActivation(true)
+      store.actions.markers.selectFeauture(feature, { delay: 0 })
     }
   }
 
@@ -323,15 +164,21 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
-    let foundFeature = getClusterByTitle(item.title).cluster
-    if (!foundFeature) foundFeature = getMarkerByTitle(item.title)
+    let foundFeature = store.actions.markers.getClusterByTitle(
+      item.title
+    ).cluster
+    if (!foundFeature)
+      foundFeature = store.actions.markers.getMarkerByTitle(item.title)
     if (foundFeature) {
       if (popupOnResultHover) {
         const { featCoords } = getCoordsAndTextFromFeature(foundFeature)
-        changeOverlayStats({ coords: featCoords, text: item.title })
+        store.actions.overlays.changeOverlayStats({
+          coords: featCoords,
+          text: item.title,
+        })
       }
       if (resultHoverCallback) {
-        resultHoverCallback({ map: map.value, feature: foundFeature })
+        resultHoverCallback({ map: store.state.map, feature: foundFeature })
       }
     }
   }
@@ -344,28 +191,20 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultClick = (item: SearchItem) => {
-    let foundFeature = getClusterByTitle(item.title).feature
-    if (!foundFeature) foundFeature = getMarkerByTitle(item.title)
+    let foundFeature = store.actions.markers.getClusterByTitle(
+      item.title
+    ).feature
+    if (!foundFeature)
+      foundFeature = store.actions.markers.getMarkerByTitle(item.title)
     if (foundFeature) {
-      changeOverlayStats()
+      store.actions.overlays.changeOverlayStats()
       if (zoomOnResultClick) {
-        selectFeauture(foundFeature, { text: item.title })
+        store.actions.markers.selectFeauture(foundFeature, { text: item.title })
       }
       if (resultClickCallback) {
-        resultClickCallback({ map: map.value, feature: foundFeature })
+        resultClickCallback({ map: store.state.map, feature: foundFeature })
       }
     }
-  }
-
-  /**
-   * Looks for features in current hover or click event of map
-   * @param evt - Map hover or click event
-   * @returns feature (If found)
-   */
-  const getFeatureFromEvent = (evt: MapBrowserEvent) => {
-    return <Feature | undefined>(
-      map.value?.forEachFeatureAtPixel(evt.pixel, (feature) => feature)
-    )
   }
 
   return {
@@ -377,11 +216,6 @@ export function eventsMixin({
     handleResultHover,
     handleResultClick,
     getClusterExtent,
-    zoomToExtent,
-    zoomToCluster,
-    zoomToLayer,
-    updateMapDimensions,
     zoom,
-    updateBreakpoints,
   }
 }

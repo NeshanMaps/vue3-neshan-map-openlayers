@@ -1,6 +1,5 @@
 declare const ol: any
 import {
-  CoordsArr,
   CreateIconProps,
   CreateLayerProps,
   CreateMapPointsOptions,
@@ -10,18 +9,17 @@ import {
   CreateMarkersPointsItem,
   CreateRawStyleProps,
   CreateStyleProps,
-  Extent,
   IconColor,
   MarkersIconCallback,
   Ol,
-  SearchItem,
   Source,
   Style,
   Text,
   VectorLayer,
 } from "@/components/Map.model"
 import { markerUrls } from "@/parameters"
-import { Feature, geom } from "openlayers"
+import { SearchItem } from "@/store/markers/markers.model"
+import { Coordinate, Feature, geom, Extent } from "openlayers"
 import { transformCoords } from "./location.util"
 
 /**
@@ -47,7 +45,7 @@ export const createMarkers: CreateMarkers = (points, options) => {
     options?.markersIconCallback,
     {
       isCluster: options?.cluster,
-      ...options?.props
+      ...options?.props,
     }
   )
   let layer: VectorLayer
@@ -55,7 +53,7 @@ export const createMarkers: CreateMarkers = (points, options) => {
   if (options?.cluster) {
     layer = createClusterLayer(features, options)
   } else {
-    const _image = image || createIcon({ color, iconScale })
+    const _image = image || createIcon({ color, iconScale, anchor: options?.anchor })
     const { styleFunc, style } = createStyle({
       image: _image,
       hidePopup: options?.hidePopup,
@@ -151,7 +149,7 @@ export const createMapPoints = (
   options?: CreateMapPointsOptions
 ) => {
   return items.map((item) => {
-    const point: CoordsArr = [item.location.x, item.location.y]
+    const point: Coordinate = [item.location.x, item.location.y]
     const mapPoint = transformCoords(point, "EPSG:4326", "EPSG:3857")
     return {
       coords: mapPoint,
@@ -169,7 +167,10 @@ export const createMapPoints = (
  * @param options.hidePopup - Will not use popups and just hard text
  * @returns
  */
-const styleFuncGen = (style: Style, { hidePopup = false }): Ol.StyleFunction => {
+const styleFuncGen = (
+  style: Style,
+  { hidePopup = false }
+): Ol.StyleFunction => {
   return (feature) => {
     if (hidePopup) {
       style.getText().setText(feature.get("text"))
@@ -240,7 +241,7 @@ const createClusterStyleFunc = (hidePopup?: boolean) => {
         innerFeatures.map((feat: Feature) => feat.get("text"))
       )
     }
-    clusterFeature.set('isCluster', innerFeatures[0].get('isCluster'))
+    clusterFeature.set("isCluster", innerFeatures[0].get("isCluster"))
     const size = innerFeatures.length
     let style = styleCache[size]
     if (!style) {
@@ -315,7 +316,7 @@ export const getCoordsAndTextFromFeature = (feature: Feature) => {
  */
 export const getCoordsFromFeature = (feature: Feature) => {
   const geometry: geom.Point = <geom.Point>feature.getGeometry()
-  return <CoordsArr>geometry.getCoordinates().slice(0, 2) //slice because it return array of 3 args idk why
+  return <Coordinate>geometry.getCoordinates().slice(0, 2) //slice because it return array of 3 args idk why
 }
 
 /**

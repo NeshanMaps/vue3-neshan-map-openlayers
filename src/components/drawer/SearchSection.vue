@@ -14,7 +14,7 @@
       @focus="store.toggleDrawerActivation(true)"
     />
     <button
-      v-if="store.state.drawerShowDetails"
+      v-if="store.state.drawerShowDetails && !store.getters.screen.small"
       @click="store.toggleDrawerShowDetails(false)"
     >
       <Icon name="back" :size="15"></Icon>

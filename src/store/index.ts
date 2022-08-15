@@ -1,10 +1,9 @@
-import { reactive } from "vue"
 import { state } from "./state"
 import { getters } from "./getters"
 import { mutations } from "./mutations"
+import { actions } from "./actions"
 
-export const store = reactive({
-  state,
-  getters,
-  ...mutations
-})
+const storeGen = () => {
+  return { state, getters, actions, ...mutations }
+}
+export const store = storeGen()

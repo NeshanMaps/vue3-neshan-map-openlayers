@@ -2,10 +2,9 @@ import { Ref } from "vue"
 import type Ol from "openlayers"
 
 export type { Ol }
-import { Feature, Map, style } from "openlayers"
-import { RouteTypes } from "@/static/index.model"
-import { ChangeOverlayStats } from "@/mixins/overlay.mixin.model"
-import { GetMarkerByTitle, GetSearchResultByFeature } from "@/mixins/markers.mixin.model"
+import { Feature, Map, style, Coordinate } from "openlayers"
+import { ChangeOverlayStats } from "@/store/overlays/overlays.model"
+import { ReverseResult, SearchResult } from "@/store/markers/markers.model"
 
 export declare type NuString = null | string
 export declare type MapType =
@@ -20,9 +19,7 @@ export declare interface OlMap extends Map {
   switchPoiLayer(value: boolean): void
   switchTrafficLayer(value: boolean): void
 }
-export declare type OlMapRef = Ref<OlMap | undefined>
-export declare type DoubleNums = Ol.Coordinate
-export declare type Extent = Ol.Extent
+export declare type DoubleNums = [number, number]
 export declare type Style = style.Style
 export declare type Image = Ol.style.Image
 export declare type Text = style.Text
@@ -34,7 +31,7 @@ export declare interface CoordsObj {
   latitude: number
   longitude: number
 }
-export declare type CoordsArr = Ol.Coordinate
+export declare type DivElementRef = Ref<HTMLDivElement | undefined>
 
 export declare interface Tile {
   title: MapType
@@ -65,46 +62,14 @@ export declare interface CreateLayerProps {
   source?: Source
 }
 
-export declare interface SearchItem {
-  category: string
-  location: {
-    x: number
-    y: number
-  }
-  neighbourhood: string
-  region: string
-  title: string
-  type: RouteTypes
-  address: string
-}
-export declare interface SearchResult {
-  count: number
-  items: SearchItem[]
-}
-
-export declare interface ReverseResult {
-  city: NuString
-  district: NuString
-  formatted_address: NuString
-  in_odd_even_zone: boolean
-  in_traffic_zone: boolean
-  municipality_zone: NuString
-  neighbourhood: NuString
-  place: NuString
-  route_name: NuString
-  route_type: null | RouteTypes
-  state: NuString
-  status: NuString
-  village: NuString
-}
-
-export declare interface SearchProps {
-  term?: string
-  coords?: CoordsArr
-}
 export declare interface Api {
   REVERSE: (lng: number, lat: number) => Promise<ReverseResult>
-  SEARCH: (term: string, coords: CoordsArr) => Promise<SearchResult>
+  SEARCH: (term: string, coords: Coordinate) => Promise<SearchResult>
+}
+
+export declare interface HandleSearchProps {
+  term?: string
+  coords?: Coordinate
 }
 
 export declare interface CreateMarkersPointsItem {
@@ -113,7 +78,7 @@ export declare interface CreateMarkersPointsItem {
   color?: IconColor
   iconScale?: number
   text?: string
-  coords?: CoordsArr
+  coords?: Coordinate
   props?: any
 }
 export declare type CreateMarkersPoints = CreateMarkersPointsItem[]
@@ -131,7 +96,7 @@ export declare type ResultClickCallback = (...[arg]: any[]) => any
 
 export declare interface MarkerHoverCallbackProps {
   changeOverlayStats: ChangeOverlayStats
-  map: OlMapRef
+  map: OlMap | null
   feature: Feature
 }
 export declare type MarkerHoverCallback = (
@@ -142,11 +107,9 @@ export declare type MarkersIconCallback = (
 ) => CreateIconProps
 
 export declare interface EventsMixinProps {
-  map: OlMapRef
-  mainMarker: VectorLayerRef
-  mainMarkerCoords: Ref<CoordsArr | undefined>
-  api: Ref<Api>
-  mapContainer: Ref<HTMLDivElement | undefined>
+  mapContainer: DivElementRef
+  popupContainer: DivElementRef
+  persistantContainer: DivElementRef
   emits: (event: "on-zoom" | "on-click", arg: any) => void
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback
@@ -155,29 +118,11 @@ export declare interface EventsMixinProps {
   popupOnResultHover: boolean
   zoomOnMarkerClick: boolean
   zoomOnResultClick: boolean
-  addMarkers: CreateMarkers
-  setupOverlays: () => void
-  changeOverlayStats: ChangeOverlayStats
-  getMarkerByTitle: GetMarkerByTitle
-  getClusterByTitle: (title: string) => {
-    feature: Feature | undefined
-    cluster: Feature | undefined
-  }
-  getSearchResultByFeature: GetSearchResultByFeature
 }
-export declare interface MarkersMixinProps {
-  map: OlMapRef
-  searchMarkers: VectorLayerRef
-  searchResults: Ref<SearchItem[]>
-}
-
-export declare interface ZoomToExtentOptions {
-  duration?: number
-}
-
 
 export declare interface CreateMarkersOptions {
   markersIconCallback?: MarkersIconCallback
+  anchor?: DoubleNums
   hidePopup?: boolean
   cluster?: boolean
   clusterThreshold?: number

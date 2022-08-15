@@ -1,11 +1,11 @@
 import { PropType } from "vue";
-import { SearchItem } from "@/components/Map.model";
+import { SearchItem } from "@/store/markers/markers.model";
 declare const _default: import("vue").DefineComponent<{
     resultBoxClass: ArrayConstructor;
     resultBoxStyle: ObjectConstructor;
     results: {
         type: PropType<SearchItem[]>;
-        default: () => never[];
+        default: () => any[];
     };
 }, (_ctx: any, _cache: any) => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
     [key: string]: any;
@@ -14,11 +14,11 @@ declare const _default: import("vue").DefineComponent<{
     resultBoxStyle: ObjectConstructor;
     results: {
         type: PropType<SearchItem[]>;
-        default: () => never[];
+        default: () => any[];
     };
 }>> & {
-    "onResult-click"?: ((...args: any[]) => any) | undefined;
-    "onResult-hover"?: ((...args: any[]) => any) | undefined;
+    "onResult-click"?: (...args: any[]) => any;
+    "onResult-hover"?: (...args: any[]) => any;
 }, {
     results: SearchItem[];
 }>;

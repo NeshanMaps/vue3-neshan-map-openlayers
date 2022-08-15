@@ -26,14 +26,15 @@
     </slot>
     <slot v-if="!hideSearchContainer" name="search-container">
       <Drawer
-        :results="searchResults"
-        @search="search"
+        :results="store.state.searchResults"
+        @search="handleSearch"
         @result-click="handleResultClick"
         @result-hover="handleResultHover"
       />
     </slot>
   </div>
   <MobileDetailsSection
+    v-if="store.getters.screen.small"
     v-show="store.state.mobileDrawerShowDetails"
   ></MobileDetailsSection>
   <div class="map-popup-container" ref="popupContainer"></div>
@@ -42,8 +43,8 @@
 <script lang="ts">
 declare const ol: any
 import { tiles, urls } from "../parameters"
-import { sanitizeLocation, getLocation, createMapPoints } from "../utils"
-import { eventsMixin, overlayMixin, markersMixin } from "../mixins"
+import { sanitizeLocation, getLocation } from "../utils"
+import { eventsMixin } from "../mixins"
 import { createApi } from "../apis"
 import { store } from "../store"
 import {
@@ -54,22 +55,21 @@ import {
   watch,
   defineExpose,
   defineEmits,
-reactive,
+  reactive,
 } from "vue"
 import {
   CoordsObj,
-  Api,
-  CoordsArr,
-  SearchProps,
   MapType,
-  SearchItem,
   ResultHoverCallback,
   ResultClickCallback,
   MarkersIconCallback,
   MarkerHoverCallback,
   OlMap,
-  VectorLayer,
+  DivElementRef,
+  HandleSearchProps,
 } from "./Map.model"
+import { Coordinate } from "openlayers"
+import { SearchOptions } from "@/store/markers/markers.model"
 export default {
   name: "NeshanMap",
 }
@@ -143,13 +143,13 @@ const props = defineProps({
   },
 })
 
-const api = ref<Api>(createApi(props.serviceKey))
+store.setApi(createApi(props.serviceKey))
 /**
  * Sets the given token for api
  * @param token
  */
 const setToken = (token: string) => {
-  api.value = createApi(token)
+  store.setApi(createApi(token))
 }
 /**
  * Whenever service token changes,
@@ -162,17 +162,15 @@ watch(
   }
 )
 
-const sanitizedCenter = ref<CoordsArr | undefined>(
+const sanitizedCenter = ref<Coordinate | undefined>(
   sanitizeLocation(props.center)
 )
-const map = ref<OlMap>()
-const mainMarker = ref<VectorLayer>()
-const mainMarkerCoords = ref<CoordsArr>()
-const searchMarkers = ref<VectorLayer>()
 const mapType = ref(props.defaultType)
-const reactiveTiles = reactive(tiles.filter((tile) => props.mapTypes.includes(tile.title)))
-const popupContainer = ref<HTMLElement | null>(null)
-const persistantContainer = ref<HTMLElement | null>(null)
+const reactiveTiles = reactive(
+  tiles.filter((tile) => props.mapTypes.includes(tile.title))
+)
+const popupContainer: DivElementRef = ref()
+const persistantContainer: DivElementRef = ref()
 
 const trafficLayer = ref(props.traffic)
 const poiLayer = ref(props.poi)
@@ -199,17 +197,28 @@ watch(poiLayer, (nv) => {
  * @param value - Whether it should be on or off
  */
 const togglePoi = (value: boolean) => {
-  map.value?.switchPoiLayer(value)
+  store.state.map?.switchPoiLayer(value)
 }
 /**
  * Switches traffic layer
  * @param value - Whether it should be on or off
  */
 const toggleTraffic = (value: boolean) => {
-  map.value?.switchTrafficLayer(value)
+  store.state.map?.switchTrafficLayer(value)
 }
 
-const mapContainer = ref<HTMLDivElement>()
+/**
+ * Setups Map, adds serviceToken to api
+ */
+onMounted(() => {
+  const scriptTag = importMap(urls.map)
+  scriptTag.onload = () => {
+    startMap()
+    setupMapEvents()
+    store.actions.dimensions.updateBreakpoints()
+    store.actions.dimensions.updateMapDimensions(mapContainer)
+  }
+})
 /**
  * Adds the map from given url to given script
  * @param url - Url of map or another script
@@ -226,6 +235,7 @@ const importMap = (url: string, tagName = "my-openlayer") => {
   return scriptTag
 }
 
+const mapContainer = ref<HTMLDivElement>()
 /**
  * Starts the map and adds it to element with id='map'
  * Gets the mapKey, zoom, traffic and poi from props.
@@ -235,7 +245,7 @@ const importMap = (url: string, tagName = "my-openlayer") => {
 const startMap = async () => {
   if (!mapContainer.value) return
   const coords = sanitizedCenter.value || (await getLocation())
-  const newMap = new ol.Map({
+  const newMap: OlMap = new ol.Map({
     target: mapContainer.value,
     key: props.mapKey,
     // mapType: 'standard-night',
@@ -248,7 +258,7 @@ const startMap = async () => {
       // projection: 'EPSG:4326' //Default was EPSG:3857
     }),
   })
-  map.value = newMap
+  store.setMap(newMap)
   // Currently there is a problem with assigning different map type on initilization
   changeMapType(mapType.value)
   shakeMap()
@@ -258,134 +268,60 @@ const startMap = async () => {
  * @param type - Exact name of a given map name
  */
 const changeMapType = (type: MapType) => {
-  map.value?.setMapType(type)
+  store.state.map?.setMapType(type)
   mapType.value = type
 }
 /**
  * Updates map frame so the offset problem is no more.
  */
 const shakeMap = () => {
-  setTimeout(() => map.value?.updateSize(), 300)
-}
-
-const searchResults = ref<SearchItem[]>([])
-const {
-  addMarkers,
-  clearMarkerLayer,
-  toggleClusterSource,
-  getMarkerByTitle,
-  getClusterByTitle,
-  getSearchResultByFeature
-} = markersMixin({
-  map,
-  searchMarkers,
-  searchResults
-})
-/**
- * Does a neshan search based on given parameters
- * @param searchParams.text - Part of or whole name of the place.
- * @param searchParams.coords - Coordinates you want to search around.
- */
-const search = async ({ term = "", coords }: SearchProps) => {
-  try {
-    store.toggleSearchLoading(true)
-    const reliableCoords =
-      coords || mainMarkerCoords.value || sanitizedCenter.value
-    if (!reliableCoords) return
-    const result = await api.value.SEARCH(term, reliableCoords)
-    store.toggleDrawerShowDetails(false)
-    clearMarkerLayer(searchMarkers)
-    searchResults.value = result.items
-    const points = createMapPoints(result.items)
-    const { layer } = addMarkers(points, {
-      markersIconCallback: props.markersIconCallback,
-      cluster: props.cluster,
-      clusterThreshold: props.clusterThreshold,
-    })
-    changeOverlayStats(undefined, "persistant")
-    searchMarkers.value = layer
-    // Apparently it takse some async time to cluster the source
-    setTimeout(() => {
-      const features = layer.getSource().getFeatures()
-      //To fix a problem with zooming on single feature layers extent
-      if (features.length === 1) {
-        zoomToCluster(features[0], { duration: 1500 })
-      } else {
-        zoomToLayer(layer, { duration: 1500 })
-      }
-    }, 200)
-  } catch (error) {
-    console.log(error)
-  } finally {
-    store.toggleSearchLoading(false)
-  }
+  setTimeout(() => store.state.map?.updateSize(), 300)
 }
 
 const eventsEmits = defineEmits(["on-zoom", "on-click"])
-const { setupOverlays, changeOverlayStats } = overlayMixin({
-  map,
-  popupContainer,
-  persistantContainer,
-})
-const {
-  setupMapEvents,
-  handleResultHover,
-  handleResultClick,
-  zoomToLayer,
-  zoomToCluster,
-  updateMapDimensions,
-  updateBreakpoints,
-  zoom,
-} = eventsMixin({
-  map,
-  mainMarker,
-  mainMarkerCoords,
-  api,
-  emits: eventsEmits,
-  resultHoverCallback: props.resultHoverCallback,
-  resultClickCallback: props.resultClickCallback,
-  markerHoverCallback: props.markerHoverCallback,
-  zoomOnMarkerClick: props.zoomOnMarkerClick,
-  zoomOnResultClick: props.zoomOnResultClick,
-  popupOnMarkerHover: props.popupOnMarkerHover,
-  popupOnResultHover: props.popupOnResultHover,
-  addMarkers,
-  setupOverlays,
-  changeOverlayStats,
-  mapContainer,
-  getMarkerByTitle,
-  getClusterByTitle,
-  getSearchResultByFeature
-})
+const { setupMapEvents, handleResultHover, handleResultClick, zoom } =
+  eventsMixin({
+    emits: eventsEmits,
+    resultHoverCallback: props.resultHoverCallback,
+    resultClickCallback: props.resultClickCallback,
+    markerHoverCallback: props.markerHoverCallback,
+    zoomOnMarkerClick: props.zoomOnMarkerClick,
+    zoomOnResultClick: props.zoomOnResultClick,
+    popupOnMarkerHover: props.popupOnMarkerHover,
+    popupOnResultHover: props.popupOnResultHover,
+    mapContainer,
+    popupContainer,
+    persistantContainer,
+  })
+
 /**
  * Changes cluster source to marker source on cluster threshold passing and vice versa
  */
 watch(zoom, (nv, ov) => {
   if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
-    toggleClusterSource(searchMarkers, true)
+    store.actions.markers.toggleClusterSource(store.state.searchMarkers, true)
   } else if (nv < props.clusterThreshold && ov >= props.clusterThreshold) {
-    toggleClusterSource(searchMarkers, false)
+    store.actions.markers.toggleClusterSource(store.state.searchMarkers, false)
   }
 })
 
-/**
- * Setups Map, adds serviceToken to api
- */
-onMounted(() => {
-  const scriptTag = importMap(urls.map)
-  scriptTag.onload = () => {
-    startMap()
-    setupMapEvents()
-    updateBreakpoints()
-    updateMapDimensions()
+const handleSearch = ({ term = "", coords }: HandleSearchProps) => {
+  const reliableCoords =
+    coords || store.state.mainMarkerCoords || sanitizedCenter.value
+  if (!reliableCoords || !store.state.api) return
+  const options: SearchOptions = {
+    cluster: props.cluster,
+    clusterThreshold: props.clusterThreshold,
+    markersIconCallback: props.markersIconCallback,
   }
-})
+  store.actions.markers.search({ term, coords: reliableCoords }, options)
+}
 
 /**
  * Makes it possible to have access to search function from outside of the component
  */
 defineExpose({
-  search,
+  search: handleSearch,
 })
 </script>
 

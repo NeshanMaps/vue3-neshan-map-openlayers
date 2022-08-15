@@ -36,12 +36,12 @@
 </template>
 <script setup lang="ts">
 import { defineProps, PropType, defineEmits, watch, ref } from "vue"
-import { SearchItem } from "@/components/Map.model"
 import { store } from "@/store"
 
 import ResultItem from "./ResultItem.vue"
 import Loading from "@/components/LoadingComp.vue"
 import PointDetails from "./PointDetails.vue"
+import { SearchItem } from "@/store/markers/markers.model"
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,

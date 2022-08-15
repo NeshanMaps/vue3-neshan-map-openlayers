@@ -23,11 +23,12 @@
 </template>
 <script setup lang="ts">
 import { ref, defineProps, PropType, defineEmits, onMounted, watch } from "vue"
-import { CoordsObj, SearchItem, SearchProps } from "../Map.model"
+import { CoordsObj, HandleSearchProps } from "../Map.model"
 import { createCoordsObject } from "@/utils"
 import SearchSection from "./SearchSection.vue"
 import ResultsSection from "./result-section/ResultsSection.vue"
 import { store } from "@/store"
+import { SearchItem } from "@/store/markers/markers.model"
 
 const props = defineProps({
   results: Array as PropType<SearchItem[]>,
@@ -40,7 +41,7 @@ const props = defineProps({
 const searchText = ref("")
 const emits = defineEmits(["search", "result-click", "result-hover"])
 
-const emitSearch = (searchData: SearchProps) => {
+const emitSearch = (searchData: HandleSearchProps) => {
   const coordsArr = searchData?.coords || [
     props.searchCoords.longitude,
     props.searchCoords.latitude,

@@ -27,3 +27,7 @@ export declare const breakpointsSegmentsPixels: {
 export declare const drawerConstants: {
     width: number;
 };
+export declare const unsetMapDimnensions: {
+    width: number;
+    height: number;
+};

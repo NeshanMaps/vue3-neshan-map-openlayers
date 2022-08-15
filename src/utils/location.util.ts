@@ -1,8 +1,8 @@
 declare const ol: any // eslint-disable-line
+import { ReverseResult } from '@/store/markers/markers.model'
+import { Coordinate } from 'openlayers'
 import {
-  ReverseResult,
   CoordsObj,
-  CoordsArr,
 } from '../components/Map.model'
 /**
  * Creates the sufficent title based on result data.
@@ -29,7 +29,7 @@ export const getTitleFromData = (data: ReverseResult) => {
 export const sanitizeLocation = (loc?: CoordsObj) => {
   return loc
     ? loc instanceof Object
-      ? ([loc.longitude, loc.latitude] as CoordsArr)
+      ? ([loc.longitude, loc.latitude] as Coordinate)
       : loc
     : undefined
 }
@@ -51,7 +51,7 @@ export const getLocation = async () => {
   const position = await positionPromise
   return (
     (position && sanitizeLocation(position.coords)) ||
-    (Object.values(createCoordsObject()) as CoordsArr)
+    (Object.values(createCoordsObject()) as Coordinate)
   )
 }
 
@@ -73,9 +73,9 @@ export const createCoordsObject = () => {
  * @returns points
  */
 export const transformCoords = (
-  point: CoordsArr,
+  point: Coordinate,
   from = 'EPSG:3857',
   to = 'EPSG:4326'
-): CoordsArr => {
+): Coordinate => {
   return ol.proj.transform(point, from, to)
 }

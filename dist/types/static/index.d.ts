@@ -62,6 +62,9 @@ export declare const inlineSvgs: {
     residential: {
         d: string;
     };
+    back: {
+        d: string;
+    };
 };
 export declare const defaultIcons: {
     place: {

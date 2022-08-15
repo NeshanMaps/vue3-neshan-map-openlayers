@@ -1,4 +1,6 @@
-import { ReverseResult, CoordsObj } from '../components/Map.model';
+import { ReverseResult } from '@/store/markers/markers.model';
+import { Coordinate } from 'openlayers';
+import { CoordsObj } from '../components/Map.model';
 /**
  * Creates the sufficent title based on result data.
  * @param data - result of neshan web search
@@ -10,14 +12,14 @@ export declare const getTitleFromData: (data: ReverseResult) => string;
  * @param loc - location object
  * @returns
  */
-export declare const sanitizeLocation: (loc?: CoordsObj | undefined) => import("openlayers").Coordinate | undefined;
+export declare const sanitizeLocation: (loc?: CoordsObj) => Coordinate;
 /**
  * Gets the device location
  * if it was succesfull, formats it and returns
  * otherwise, sends Neshan locaton
  * @returns location array
  */
-export declare const getLocation: () => Promise<import("openlayers").Coordinate>;
+export declare const getLocation: () => Promise<Coordinate>;
 /**
  * Create an object for a quick lat lng access
  */
@@ -32,4 +34,4 @@ export declare const createCoordsObject: () => {
  * @param to
  * @returns points
  */
-export declare const transformCoords: (point: import("openlayers").Coordinate, from?: string, to?: string) => import("openlayers").Coordinate;
+export declare const transformCoords: (point: Coordinate, from?: string, to?: string) => Coordinate;

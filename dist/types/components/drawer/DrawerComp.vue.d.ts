@@ -1,5 +1,6 @@
 import { PropType } from "vue";
-import { CoordsObj, SearchItem } from "../Map.model";
+import { CoordsObj } from "../Map.model";
+import { SearchItem } from "@/store/markers/markers.model";
 declare const _default: import("vue").DefineComponent<{
     results: PropType<SearchItem[]>;
     searchCoords: {
@@ -23,9 +24,9 @@ declare const _default: import("vue").DefineComponent<{
     };
     loading: BooleanConstructor;
 }>> & {
-    onSearch?: ((...args: any[]) => any) | undefined;
-    "onResult-click"?: ((...args: any[]) => any) | undefined;
-    "onResult-hover"?: ((...args: any[]) => any) | undefined;
+    onSearch?: (...args: any[]) => any;
+    "onResult-click"?: (...args: any[]) => any;
+    "onResult-hover"?: (...args: any[]) => any;
 }, {
     loading: boolean;
     searchCoords: CoordsObj;

@@ -1,6 +1,7 @@
-import { SelectedMarker } from "@/store/state.model"
+import { Api, OlMap } from "@/components/Map.model"
+import { dimensionsMutations } from "./dimensions/mutations"
+import { markersMutations } from "./markers/mutations"
 import { state } from "./state"
-import { BreakPoints } from "./state.model"
 export const mutations = {
   toggleSearchLoading(value: boolean) {
     state.searchLoading = value
@@ -17,13 +18,12 @@ export const mutations = {
   toggleMobileDrawerShowDetails(value: boolean) {
     state.mobileDrawerShowDetails = value
   },
-  setSelectedMarker(value: SelectedMarker) {
-    state.selectedMarker = value
+  setMap(value: OlMap) {
+    state.map = value
   },
-  setMapDimenstions(value: { width: number; height: number }) {
-    state.mapDimensions = value
+  setApi(value: Api) {
+    state.api = value
   },
-  setBreakPoints(value: BreakPoints) {
-    state.breakpoints = value
-  },
+  ...markersMutations,
+  ...dimensionsMutations,
 }

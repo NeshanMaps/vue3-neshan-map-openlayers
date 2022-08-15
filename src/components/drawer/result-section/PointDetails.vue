@@ -43,11 +43,12 @@
 <script setup lang="ts">
 import { ref, defineProps, PropType } from "vue"
 import { detailsSectionMixin } from "@/mixins"
-import { SelectedMarker } from "@/store/state.model"
 import Icon from "@/components/icons/IconComponent.vue"
+import { SelectedMarker } from "@/store/markers/markers.model";
 
 const props = defineProps({
-  item: Object as PropType<SelectedMarker>,
+  item: Object as PropType<SelectedMarker>
+  ,
 })
 
 const pointDetailsContainer = ref<HTMLDivElement>()

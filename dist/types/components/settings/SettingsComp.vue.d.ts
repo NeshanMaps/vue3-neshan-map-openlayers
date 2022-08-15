@@ -9,7 +9,7 @@ declare const _default: import("vue").DefineComponent<{
     };
     tiles: {
         type: PropType<Tile[]>;
-        default: () => never[];
+        default: () => any[];
     };
     settingsBoxClass: ArrayConstructor;
     settingsBoxStyle: ObjectConstructor;
@@ -25,15 +25,15 @@ declare const _default: import("vue").DefineComponent<{
     };
     tiles: {
         type: PropType<Tile[]>;
-        default: () => never[];
+        default: () => any[];
     };
     settingsBoxClass: ArrayConstructor;
     settingsBoxStyle: ObjectConstructor;
     typesClass: ArrayConstructor;
 }>> & {
-    "onUpdate:mapType"?: ((...args: any[]) => any) | undefined;
-    "onUpdate:traffic"?: ((...args: any[]) => any) | undefined;
-    "onUpdate:poi"?: ((...args: any[]) => any) | undefined;
+    "onUpdate:mapType"?: (...args: any[]) => any;
+    "onUpdate:traffic"?: (...args: any[]) => any;
+    "onUpdate:poi"?: (...args: any[]) => any;
 }, {
     poi: boolean;
     traffic: boolean;

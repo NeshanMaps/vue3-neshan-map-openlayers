@@ -1,20 +1,17 @@
-import { breakpointsSegments } from "@/parameters"
+import { Api, OlMap } from "@/components/Map.model"
 import { reactive } from "vue"
-import { BreakPoints, SelectedMarker } from "./state.model"
+import { dimenstionsState } from "./dimensions/state"
+import { markersState } from "./markers/state"
+import { overlayState } from "./overlays/state"
 
 export const state = reactive({
+  ...dimenstionsState,
+  ...markersState,
+  ...overlayState,
+  map: null as OlMap | null,
+  api: null as Api | null,
   searchLoading: false,
   reverseLoading: false,
-  breakpoints: {
-    ...breakpointsSegments,
-    lt: { ...breakpointsSegments },
-    gt: { ...breakpointsSegments },
-  } as BreakPoints,
-  mapDimensions: {
-    width: 700,
-    height: 1000,
-  },
-  selectedMarker: null as SelectedMarker,
   drawerActivation: false,
   drawerShowDetails: false,
   mobileDrawerShowDetails: false,
