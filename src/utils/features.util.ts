@@ -18,7 +18,7 @@ import {
   VectorLayer,
 } from "../components/Map.model"
 import { markerUrls } from "@/parameters"
-import { SearchItem } from "../store/markers/markers.model"
+import { PrimarySearchItem } from "../store/markers/markers.model"
 import { Coordinate, Feature, geom, Extent } from "openlayers"
 import { transformCoords } from "./location.util"
 
@@ -145,7 +145,7 @@ export const createLayer = ({
  * @param options.iconScale - scale of the markers
  */
 export const createMapPoints = (
-  items: SearchItem[],
+  items: PrimarySearchItem[],
   options?: CreateMapPointsOptions
 ) => {
   return items.map((item) => {

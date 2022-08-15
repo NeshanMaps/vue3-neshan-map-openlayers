@@ -33,4 +33,7 @@ export declare const actions: {
         createOverlay: (container: import("../components/Map.model").DivElementRef, persistant?: boolean) => import("openlayers").Overlay;
         changeOverlayStats: import("./overlays/overlays.model").ChangeOverlayStats;
     };
+    drawers: {
+        openResultDrawers: () => void;
+    };
 };

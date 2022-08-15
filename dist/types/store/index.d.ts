@@ -1,4 +1,7 @@
 export declare const store: {
+    toggleDrawerActivation(value: boolean): void;
+    toggleDrawerShowDetails(value: boolean): void;
+    toggleMobileDrawerShowDetails(value: boolean): void;
     setBreakPoints(value: import("./dimensions/dimensions.model").BreakPoints): void;
     setMapDimenstions(value: {
         width: number;
@@ -12,9 +15,6 @@ export declare const store: {
     setReverseResult(value: import("./markers/markers.model").ReverseResult): void;
     toggleSearchLoading(value: boolean): void;
     toggleReverseLoading(value: boolean): void;
-    toggleDrawerActivation(value: boolean): void;
-    toggleDrawerShowDetails(value: boolean): void;
-    toggleMobileDrawerShowDetails(value: boolean): void;
     setMap(value: import("../components/Map.model").OlMap): void;
     setApi(value: import("../components/Map.model").Api): void;
     state: {
@@ -263,6 +263,9 @@ export declare const store: {
             setupOverlays: import("./overlays/overlays.model").SetupOverlay;
             createOverlay: (container: import("../components/Map.model").DivElementRef, persistant?: boolean) => import("openlayers").Overlay;
             changeOverlayStats: import("./overlays/overlays.model").ChangeOverlayStats;
+        };
+        drawers: {
+            openResultDrawers: () => void;
         };
     };
 };

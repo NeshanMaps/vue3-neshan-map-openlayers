@@ -1,5 +1,8 @@
-import { Api, OlMap } from "@/components/Map.model";
+import { Api, OlMap } from "../components/Map.model";
 export declare const mutations: {
+    toggleDrawerActivation(value: boolean): void;
+    toggleDrawerShowDetails(value: boolean): void;
+    toggleMobileDrawerShowDetails(value: boolean): void;
     setBreakPoints(value: import("./dimensions/dimensions.model").BreakPoints): void;
     setMapDimenstions(value: {
         width: number;
@@ -13,9 +16,6 @@ export declare const mutations: {
     setReverseResult(value: import("./markers/markers.model").ReverseResult): void;
     toggleSearchLoading(value: boolean): void;
     toggleReverseLoading(value: boolean): void;
-    toggleDrawerActivation(value: boolean): void;
-    toggleDrawerShowDetails(value: boolean): void;
-    toggleMobileDrawerShowDetails(value: boolean): void;
     setMap(value: OlMap): void;
     setApi(value: Api): void;
 };

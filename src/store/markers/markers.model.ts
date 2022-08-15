@@ -1,7 +1,7 @@
 import { MarkersIconCallback, NuString } from "../../components/Map.model"
 import { RouteTypes } from "../../static/index.model"
 import { Coordinate, Feature } from "openlayers"
-export declare interface SearchItem {
+export declare interface PrimarySearchItem {
   category: string
   location: {
     x: number
@@ -13,12 +13,15 @@ export declare interface SearchItem {
   type: RouteTypes
   address: string
 }
+export declare interface SearchItem extends PrimarySearchItem {
+  mapCoords: Coordinate
+}
 export declare interface SearchResult {
   count: number
-  items: SearchItem[]
+  items: PrimarySearchItem[]
 }
 
-export declare interface ReverseResult {
+export declare interface PrimaryReverseResult {
   city: NuString
   district: NuString
   formatted_address: NuString
@@ -33,6 +36,9 @@ export declare interface ReverseResult {
   status: NuString
   village: NuString
 }
+export declare interface ReverseResult extends PrimaryReverseResult {
+  mapCoords: Coordinate
+}
 
 export declare interface SearchProps {
   term: string
@@ -41,8 +47,10 @@ export declare interface SearchProps {
 export declare type GetSearchResultByFeature = (
   feature: Feature
 ) => SearchItem | undefined
-export declare type GetMarkerByTitle = (title: string) => Feature | undefined
-export declare type GetClusterByTitle = (title: string) => {
+export declare type GetMarkerByCoords = (
+  coords: Coordinate
+) => Feature | undefined
+export declare type GetClusterByCoords = (coords: Coordinate) => {
   feature: Feature | undefined
   cluster: Feature | undefined
 }

@@ -1,5 +1,5 @@
-import { EventsMixinProps } from "@/components/Map.model";
-import { SearchItem } from "@/store/markers/markers.model";
+import { EventsMixinProps } from "../components/Map.model";
+import { SearchItem } from "../store/markers/markers.model";
 import { Feature, MapBrowserEvent } from "openlayers";
 export declare function eventsMixin({ emits, resultHoverCallback, resultClickCallback, markerHoverCallback, zoomOnMarkerClick, zoomOnResultClick, popupOnMarkerHover, popupOnResultHover, mapContainer, popupContainer, persistantContainer, }: EventsMixinProps): {
     setupMapEvents: () => void;

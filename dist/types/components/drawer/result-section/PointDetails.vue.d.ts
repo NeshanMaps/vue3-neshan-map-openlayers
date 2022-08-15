@@ -1,5 +1,5 @@
 import { PropType } from "vue";
-import { SelectedMarker } from "@/store/markers/markers.model";
+import { SelectedMarker } from "../../../store/markers/markers.model";
 declare const _default: import("vue").DefineComponent<{
     item: PropType<SelectedMarker>;
 }, (_ctx: any, _cache: any) => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {

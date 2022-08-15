@@ -1,7 +1,7 @@
-import { CreateMarkers, VectorLayer } from "@/components/Map.model";
+import { CreateMarkers, VectorLayer } from "../../components/Map.model";
 import { GetClusterByTitle, GetMarkerByTitle, GetSearchResultByFeature, SearchOptions, SearchProps, SelectFeautureOptions, ZoomToExtentOptions } from "./markers.model";
 import { Coordinate, Extent, Feature, MapBrowserEvent } from "openlayers";
-import { ReverseOnPointOptions } from "@/mixins/events.mixin.model";
+import { ReverseOnPointOptions } from "../../mixins/events.mixin.model";
 export declare const markersActions: {
     addMarkers: CreateMarkers;
     clearMarkerLayer: (layer: VectorLayer) => void;

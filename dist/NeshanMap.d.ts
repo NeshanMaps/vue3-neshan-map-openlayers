@@ -313,6 +313,9 @@ export declare const actions: {
         createOverlay: (container: import("../components/Map.model").DivElementRef, persistant?: boolean) => import("openlayers").Overlay;
         changeOverlayStats: import("./overlays/overlays.model").ChangeOverlayStats;
     };
+    drawers: {
+        openResultDrawers: () => void;
+    };
 };
 
 export declare const getters: {
@@ -324,6 +327,9 @@ export declare const getters: {
 };
 
 export declare const store: {
+    toggleDrawerActivation(value: boolean): void;
+    toggleDrawerShowDetails(value: boolean): void;
+    toggleMobileDrawerShowDetails(value: boolean): void;
     setBreakPoints(value: import("./dimensions/dimensions.model").BreakPoints): void;
     setMapDimenstions(value: {
         width: number;
@@ -337,9 +343,6 @@ export declare const store: {
     setReverseResult(value: import("./markers/markers.model").ReverseResult): void;
     toggleSearchLoading(value: boolean): void;
     toggleReverseLoading(value: boolean): void;
-    toggleDrawerActivation(value: boolean): void;
-    toggleDrawerShowDetails(value: boolean): void;
-    toggleMobileDrawerShowDetails(value: boolean): void;
     setMap(value: import("../components/Map.model").OlMap): void;
     setApi(value: import("../components/Map.model").Api): void;
     state: {
@@ -589,10 +592,16 @@ export declare const store: {
             createOverlay: (container: import("../components/Map.model").DivElementRef, persistant?: boolean) => import("openlayers").Overlay;
             changeOverlayStats: import("./overlays/overlays.model").ChangeOverlayStats;
         };
+        drawers: {
+            openResultDrawers: () => void;
+        };
     };
 };
 
 export declare const mutations: {
+    toggleDrawerActivation(value: boolean): void;
+    toggleDrawerShowDetails(value: boolean): void;
+    toggleMobileDrawerShowDetails(value: boolean): void;
     setBreakPoints(value: import("./dimensions/dimensions.model").BreakPoints): void;
     setMapDimenstions(value: {
         width: number;
@@ -606,9 +615,6 @@ export declare const mutations: {
     setReverseResult(value: import("./markers/markers.model").ReverseResult): void;
     toggleSearchLoading(value: boolean): void;
     toggleReverseLoading(value: boolean): void;
-    toggleDrawerActivation(value: boolean): void;
-    toggleDrawerShowDetails(value: boolean): void;
-    toggleMobileDrawerShowDetails(value: boolean): void;
     setMap(value: OlMap): void;
     setApi(value: Api): void;
 };
@@ -870,6 +876,22 @@ export declare const dimenstionsState: {
         width: number;
         height: number;
     };
+};
+
+export declare const drawersActions: {
+    openResultDrawers: () => void;
+};
+
+export declare const drawersMutations: {
+    toggleDrawerActivation(value: boolean): void;
+    toggleDrawerShowDetails(value: boolean): void;
+    toggleMobileDrawerShowDetails(value: boolean): void;
+};
+
+export declare const drawersState: {
+    drawerActivation: boolean;
+    drawerShowDetails: boolean;
+    mobileDrawerShowDetails: boolean;
 };
 
 export declare const markersActions: {
@@ -1367,6 +1389,29 @@ export declare const _default: import("vue").DefineComponent<{
 export default _default;
 
 export declare const _default: import("vue").DefineComponent<{
+    searchBoxClass: ArrayConstructor;
+    searchBoxStyle: ObjectConstructor;
+    typesClass: ArrayConstructor;
+    searchText: {
+        type: StringConstructor;
+    };
+}, (_ctx: any, _cache: any) => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+    [key: string]: any;
+}>, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("submit" | "update:search-text" | "update:search-coords")[], "submit" | "update:search-text" | "update:search-coords", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    searchBoxClass: ArrayConstructor;
+    searchBoxStyle: ObjectConstructor;
+    typesClass: ArrayConstructor;
+    searchText: {
+        type: StringConstructor;
+    };
+}>> & {
+    onSubmit?: (...args: any[]) => any;
+    "onUpdate:search-text"?: (...args: any[]) => any;
+    "onUpdate:search-coords"?: (...args: any[]) => any;
+}, {}>;
+export default _default;
+
+export declare const _default: import("vue").DefineComponent<{
     name: {
         type: PropType<"close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back">;
         default: string;
@@ -1401,29 +1446,6 @@ export declare const _default: import("vue").DefineComponent<{
 }>, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     item: PropType<SelectedMarker>;
 }>>, {}>;
-export default _default;
-
-export declare const _default: import("vue").DefineComponent<{
-    searchBoxClass: ArrayConstructor;
-    searchBoxStyle: ObjectConstructor;
-    typesClass: ArrayConstructor;
-    searchText: {
-        type: StringConstructor;
-    };
-}, (_ctx: any, _cache: any) => import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
-    [key: string]: any;
-}>, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("submit" | "update:search-text" | "update:search-coords")[], "submit" | "update:search-text" | "update:search-coords", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
-    searchBoxClass: ArrayConstructor;
-    searchBoxStyle: ObjectConstructor;
-    typesClass: ArrayConstructor;
-    searchText: {
-        type: StringConstructor;
-    };
-}>> & {
-    onSubmit?: (...args: any[]) => any;
-    "onUpdate:search-text"?: (...args: any[]) => any;
-    "onUpdate:search-coords"?: (...args: any[]) => any;
-}, {}>;
 export default _default;
 
 export declare const _default: import("vue").DefineComponent<{

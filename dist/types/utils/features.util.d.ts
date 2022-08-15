@@ -1,5 +1,5 @@
-import { CreateIconProps, CreateLayerProps, CreateMapPointsOptions, CreateMarkers, CreateMarkersPoints, CreateRawStyleProps, CreateStyleProps, IconColor, MarkersIconCallback, Ol, Source, Style, Text, VectorLayer } from "@/components/Map.model";
-import { SearchItem } from "@/store/markers/markers.model";
+import { CreateIconProps, CreateLayerProps, CreateMapPointsOptions, CreateMarkers, CreateMarkersPoints, CreateRawStyleProps, CreateStyleProps, IconColor, MarkersIconCallback, Ol, Source, Style, Text, VectorLayer } from "../components/Map.model";
+import { SearchItem } from "../store/markers/markers.model";
 import { Feature } from "openlayers";
 /**
  * Receives an array of points and returns a layer of markers.

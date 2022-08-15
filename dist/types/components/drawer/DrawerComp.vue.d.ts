@@ -1,6 +1,6 @@
 import { PropType } from "vue";
 import { CoordsObj } from "../Map.model";
-import { SearchItem } from "@/store/markers/markers.model";
+import { SearchItem } from "../../store/markers/markers.model";
 declare const _default: import("vue").DefineComponent<{
     results: PropType<SearchItem[]>;
     searchCoords: {

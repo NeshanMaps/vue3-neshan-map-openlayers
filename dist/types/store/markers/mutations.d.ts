@@ -1,4 +1,4 @@
-import { VectorLayer } from "@/components/Map.model";
+import { VectorLayer } from "../../components/Map.model";
 import { Coordinate } from "openlayers";
 import { ReverseResult, SearchItem, SelectedMarker } from "./markers.model";
 export declare const markersMutations: {

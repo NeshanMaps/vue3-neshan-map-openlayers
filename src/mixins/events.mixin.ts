@@ -1,14 +1,9 @@
-import {
-  EventsMixinProps,
-} from "../components/Map.model"
+import { EventsMixinProps } from "../components/Map.model"
 import { store } from "@/store"
 import { SearchItem } from "../store/markers/markers.model"
 import { Feature, MapBrowserEvent } from "openlayers"
 import { ref } from "vue"
-import {
-  getCoordsAndTextFromFeature,
-  getClusterExtent,
-} from "../utils"
+import { getCoordsAndTextFromFeature, getClusterExtent } from "../utils"
 
 export function eventsMixin({
   emits,
@@ -128,7 +123,9 @@ export function eventsMixin({
       if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
       else store.toggleDrawerActivation(true)
       store.toggleReverseLoading(true)
-      const result = await store.actions.markers.reverseOnPoint(event.coordinate)
+      const result = await store.actions.markers.reverseOnPoint(
+        event.coordinate
+      )
       emittingMarker = result.marker
       emittingData = result.data
       emittingStdPoint = result.stdPoint
@@ -164,22 +161,14 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
-    let foundFeature = store.actions.markers.getClusterByTitle(
-      item.title
-    ).cluster
-    if (!foundFeature)
-      foundFeature = store.actions.markers.getMarkerByTitle(item.title)
-    if (foundFeature) {
-      if (popupOnResultHover) {
-        const { featCoords } = getCoordsAndTextFromFeature(foundFeature)
-        store.actions.overlays.changeOverlayStats({
-          coords: featCoords,
-          text: item.title,
-        })
-      }
-      if (resultHoverCallback) {
-        resultHoverCallback({ map: store.state.map, feature: foundFeature })
-      }
+    if (popupOnResultHover) {
+      store.actions.overlays.changeOverlayStats({
+        coords: item.mapCoords,
+        text: item.title,
+      })
+    }
+    if (resultHoverCallback) {
+      resultHoverCallback({ map: store.state.map, item })
     }
   }
 
@@ -191,19 +180,11 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultClick = (item: SearchItem) => {
-    let foundFeature = store.actions.markers.getClusterByTitle(
-      item.title
-    ).feature
-    if (!foundFeature)
-      foundFeature = store.actions.markers.getMarkerByTitle(item.title)
-    if (foundFeature) {
-      store.actions.overlays.changeOverlayStats()
-      if (zoomOnResultClick) {
-        store.actions.markers.selectFeauture(foundFeature, { text: item.title })
-      }
-      if (resultClickCallback) {
-        resultClickCallback({ map: store.state.map, feature: foundFeature })
-      }
+    if (zoomOnResultClick) {
+      store.actions.markers.selectFeauture(item)
+    }
+    if (resultClickCallback) {
+      resultClickCallback({ map: store.state.map, item })
     }
   }
 

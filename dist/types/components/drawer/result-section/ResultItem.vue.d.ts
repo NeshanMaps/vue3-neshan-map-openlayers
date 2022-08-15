@@ -1,4 +1,4 @@
-import { SearchItem } from "@/store/markers/markers.model";
+import { SearchItem } from "../../../store/markers/markers.model";
 import { PropType } from "vue";
 declare const _default: import("vue").DefineComponent<{
     item: PropType<SearchItem>;

@@ -1,8 +1,10 @@
 import { CreateMarkers, VectorLayer } from "../../components/Map.model"
 import {
-  GetClusterByTitle,
-  GetMarkerByTitle,
+  GetClusterByCoords,
+  GetMarkerByCoords,
   GetSearchResultByFeature,
+  ReverseResult,
+  SearchItem,
   SearchOptions,
   SearchProps,
   SelectFeautureOptions,
@@ -78,14 +80,14 @@ const toggleClusterSource = (layer: VectorLayer, deactivate: boolean) => {
 
 /**
  * Takes the title of a marker and returns the found cluster and its surrounding cluster
- * @param title - title of wanted feature
+ * @param coords - Coorinates of wanted feature
  * @returns The found feature and its cluster
  */
-const getClusterByTitle: GetClusterByTitle = (title: string) => {
+const getClusterByCoords: GetClusterByCoords = (coords) => {
   const clusters = state.searchMarkers.getSource().getFeatures()
   let foundFeature: Feature | undefined
   const cluster = clusters?.find((cluster) => {
-    const feature = getMarkerInClusterByTitle(cluster, title)
+    const feature = getMarkerInClusterByCoords(cluster, coords)
     if (feature) {
       foundFeature = feature
     }
@@ -100,22 +102,21 @@ const getClusterByTitle: GetClusterByTitle = (title: string) => {
 /**
  * Take a cluster and a title and returns the feature inside the cluster by its title
  * @param cluster - The cluster we are looking for feature in it
- * @param title - Title of wanted feature
+ * @param coords - Coordinate of wanted feature
  * @returns The found feature
  */
-const getMarkerInClusterByTitle = (cluster: Feature, title: string) => {
+const getMarkerInClusterByCoords = (cluster: Feature, coords: Coordinate) => {
   const features: Feature[] | undefined = cluster.get("features")
-  return features?.find((feat) => feat.get("text") === title)
+  return features?.find((feat) => feat.getId() === coords.join("-"))
 }
 
 /**
  * Takes the title of a marker and returns it.
- * @param title - title of wanted feature
+ * @param coords - Coordinate of wanted feature
  * @returns The found marker
  */
-const getMarkerByTitle: GetMarkerByTitle = (title: string) => {
-  const markers = state.searchMarkers?.getSource().getFeatures()
-  return markers?.find((feature) => feature.get("text") === title)
+const getMarkerByCoords: GetMarkerByCoords = (coords) => {
+  return state.searchMarkers?.getSource().getFeatureById(coords.join("-"))
 }
 
 /**
@@ -176,17 +177,44 @@ const zoomToCluster = (cluster: Feature, options?: ZoomToExtentOptions) => {
 }
 
 /**
+ * Takes the coordinates and zooms on it
+ * @param coords
+ * @param options.duration - Zooming duration
+ */
+const zoomToCoords = (coords: Coordinate, options?: ZoomToExtentOptions) => {
+  const extent: Extent = [...coords, ...coords]
+  zoomToExtent(extent, options)
+}
+
+/**
  * Zooms on given feature and shows its details on detail section
  * Adds a persistant overlay on it
  * @param feature
  * @param options
  */
-const selectFeauture = (feature: Feature, options?: SelectFeautureOptions) => {
-  zoomToMarker(feature)
-  const coords = options?.coords || getCoordsFromFeature(feature)
-  const isMainMarker: boolean = feature?.getProperties().mainMarker
-  let text = options?.text || feature.getProperties().text
-  if (Array.isArray(text)) text = text[0]
+const selectFeauture = (
+  feature: Feature | SearchItem | ReverseResult,
+  options?: SelectFeautureOptions
+) => {
+  let isMainMarker = false
+  let coords = options?.coords
+  let text = options?.text
+  if ("mapCoords" in feature) {
+    coords = feature.mapCoords
+    zoomToCoords(coords)
+    if ("title" in feature) {
+      text = feature.title
+    } else {
+      isMainMarker = true
+      text = getTitleFromData(feature)
+    }
+  } else {
+    zoomToMarker(feature)
+    coords ||= getCoordsFromFeature(feature)
+    isMainMarker = feature?.getProperties().mainMarker
+    text ||= feature.getProperties().text
+    if (Array.isArray(text)) text = text[0]
+  }
   if (options?.delay !== 0) {
     setTimeout(() => {
       store.actions.overlays.changeOverlayStats(
@@ -202,7 +230,9 @@ const selectFeauture = (feature: Feature, options?: SelectFeautureOptions) => {
   }
   const foundResult = isMainMarker
     ? state.reverseResult
-    : store.actions.markers.getSearchResultByFeature(feature)
+    : !("mapCoords" in feature)
+    ? store.actions.markers.getSearchResultByFeature(feature)
+    : feature
   if (foundResult) {
     store.setSelectedMarker(foundResult)
     store.actions.drawers.openResultDrawers()
@@ -251,10 +281,11 @@ const reverseOnPoint = async (
     }
     if (!store.state.api) throw "No reverse api"
     const data = await store.state.api.REVERSE(...stdPoint)
-    store.setSelectedMarker(data)
-    store.setReverseResult(data)
+    const extendedData = { ...data, mapCoords: stdPoint }
+    store.setSelectedMarker(extendedData)
+    store.setReverseResult(extendedData)
     store.actions.drawers.openResultDrawers()
-    const text = customText || getTitleFromData(data)
+    const text = customText || getTitleFromData(extendedData)
     store.state.mainMarker?.getSource().getFeatures()[0].set("text", text)
     if (usePopup) {
       store.actions.overlays.changeOverlayStats(
@@ -284,8 +315,12 @@ const search = async (
     const result = await store.state.api.SEARCH(term, coords)
     store.toggleDrawerShowDetails(false)
     clearMarkerLayer(store.state.searchMarkers)
-    store.setSearchResults(result.items)
     const points = createMapPoints(result.items)
+    const resultsWithMapCoords = points.map((point) => ({
+      ...point.originalItem,
+      mapCoords: point.coords,
+    }))
+    store.setSearchResults(resultsWithMapCoords)
     const { layer } = store.actions.markers.addMarkers(points, {
       markersIconCallback: options?.markersIconCallback,
       cluster: options?.cluster,
@@ -314,12 +349,13 @@ export const markersActions = {
   addMarkers,
   clearMarkerLayer,
   toggleClusterSource,
-  getClusterByTitle,
-  getMarkerInClusterByTitle,
-  getMarkerByTitle,
+  getClusterByCoords,
+  getMarkerInClusterByCoords,
+  getMarkerByCoords,
   getSearchResultByFeature,
   zoomToLayer,
   zoomToExtent,
+  zoomToCoords,
   zoomToMarker,
   zoomToCluster,
   selectFeauture,

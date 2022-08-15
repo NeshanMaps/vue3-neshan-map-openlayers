@@ -4,7 +4,7 @@ import type Ol from "openlayers"
 export type { Ol }
 import { Feature, Map, style, Coordinate } from "openlayers"
 import { ChangeOverlayStats } from "../store/overlays/overlays.model"
-import { ReverseResult, SearchResult } from "../store/markers/markers.model"
+import { PrimaryReverseResult, SearchResult } from "../store/markers/markers.model"
 
 export declare type NuString = null | string
 export declare type MapType =
@@ -63,7 +63,7 @@ export declare interface CreateLayerProps {
 }
 
 export declare interface Api {
-  REVERSE: (lng: number, lat: number) => Promise<ReverseResult>
+  REVERSE: (lng: number, lat: number) => Promise<PrimaryReverseResult>
   SEARCH: (term: string, coords: Coordinate) => Promise<SearchResult>
 }
 

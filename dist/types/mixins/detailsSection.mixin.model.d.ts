@@ -1,4 +1,4 @@
-import { SelectedMarker } from "@/store/markers/markers.model";
+import { SelectedMarker } from "../store/markers/markers.model";
 import { ExtractPropTypes, PropType, Ref } from "vue";
 export interface DetailsSectionMixin {
     props: Readonly<ExtractPropTypes<{

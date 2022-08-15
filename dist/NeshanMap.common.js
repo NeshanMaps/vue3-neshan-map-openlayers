@@ -4366,13 +4366,17 @@ const getCoordsFromFeature = feature => {
  */
 
 const createFeaturesFromPoints = (points, markersIconCallback, props) => {
-  return points.map(point => new ol.Feature({
-    geometry: new ol.geom.Point(point.coords),
-    text: point.text,
-    iconProps: markersIconCallback && markersIconCallback(point),
-    ...point.props,
-    ...props
-  }));
+  return points.map(point => {
+    const feature = new ol.Feature({
+      geometry: new ol.geom.Point(point.coords),
+      text: point.text,
+      iconProps: markersIconCallback && markersIconCallback(point),
+      ...point.props,
+      ...props
+    });
+    feature.setId(props.id || point.coords.join('-'));
+    return feature;
+  });
 };
 ;// CONCATENATED MODULE: ./src/utils/index.ts
 
@@ -4417,7 +4421,18 @@ const overlays_state_stateGen = () => {
 };
 
 const overlayState = overlays_state_stateGen();
+;// CONCATENATED MODULE: ./src/store/drawers/state.ts
+const drawers_state_stateGen = () => {
+  return {
+    drawerActivation: false,
+    drawerShowDetails: false,
+    mobileDrawerShowDetails: false
+  };
+};
+
+const drawersState = drawers_state_stateGen();
 ;// CONCATENATED MODULE: ./src/store/state.ts
+
 
 
 
@@ -4425,13 +4440,11 @@ const overlayState = overlays_state_stateGen();
 const state = (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.reactive)({ ...dimenstionsState,
   ...markersState,
   ...overlayState,
+  ...drawersState,
   map: null,
   api: null,
   searchLoading: false,
-  reverseLoading: false,
-  drawerActivation: false,
-  drawerShowDetails: false,
-  mobileDrawerShowDetails: false
+  reverseLoading: false
 });
 ;// CONCATENATED MODULE: ./src/store/getters.ts
 
@@ -4491,7 +4504,24 @@ const markersMutations = {
   }
 
 };
+;// CONCATENATED MODULE: ./src/store/drawers/mutations.ts
+
+const drawersMutations = {
+  toggleDrawerActivation(value) {
+    state.drawerActivation = value;
+  },
+
+  toggleDrawerShowDetails(value) {
+    state.drawerShowDetails = value;
+  },
+
+  toggleMobileDrawerShowDetails(value) {
+    state.mobileDrawerShowDetails = value;
+  }
+
+};
 ;// CONCATENATED MODULE: ./src/store/mutations.ts
+
 
 
 
@@ -4504,18 +4534,6 @@ const mutations = {
     state.reverseLoading = value;
   },
 
-  toggleDrawerActivation(value) {
-    state.drawerActivation = value;
-  },
-
-  toggleDrawerShowDetails(value) {
-    state.drawerShowDetails = value;
-  },
-
-  toggleMobileDrawerShowDetails(value) {
-    state.mobileDrawerShowDetails = value;
-  },
-
   setMap(value) {
     state.map = value;
   },
@@ -4525,7 +4543,8 @@ const mutations = {
   },
 
   ...markersMutations,
-  ...dimensionsMutations
+  ...dimensionsMutations,
+  ...drawersMutations
 };
 ;// CONCATENATED MODULE: ./src/store/markers/actions.ts
 
@@ -4735,9 +4754,7 @@ const selectFeauture = (feature, options) => {
 
   if (foundResult) {
     store.setSelectedMarker(foundResult);
-    store.toggleDrawerShowDetails(true);
-    if (!store.state.mobileDrawerShowDetails) store.toggleMobileDrawerShowDetails(true);
-    if (!store.getters.screen.small && !store.state.drawerActivation) store.toggleDrawerActivation(true);
+    store.actions.drawers.openResultDrawers();
   }
 };
 /**
@@ -4791,7 +4808,7 @@ const reverseOnPoint = async (point, {
     const data = await store.state.api.REVERSE(...stdPoint);
     store.setSelectedMarker(data);
     store.setReverseResult(data);
-    store.toggleDrawerShowDetails(true);
+    store.actions.drawers.openResultDrawers();
     const text = customText || getTitleFromData(data);
     store.state.mainMarker?.getSource().getFeatures()[0].set("text", text);
 
@@ -5003,14 +5020,31 @@ const overlaysActions = {
   createOverlay,
   changeOverlayStats
 };
+;// CONCATENATED MODULE: ./src/store/drawers/actions.ts
+
+/**
+ * Opens result view drawers based on screen
+ */
+
+const openResultDrawers = () => {
+  store.toggleDrawerShowDetails(true);
+  if (!store.state.mobileDrawerShowDetails) store.toggleMobileDrawerShowDetails(true);
+  if (!store.getters.screen.small && !store.state.drawerActivation) store.toggleDrawerActivation(true);
+};
+
+const drawersActions = {
+  openResultDrawers
+};
 ;// CONCATENATED MODULE: ./src/store/actions.ts
+
 
 
 
 const actions = {
   markers: markersActions,
   dimensions: dimensionsActions,
-  overlays: overlaysActions
+  overlays: overlaysActions,
+  drawers: drawersActions
 };
 ;// CONCATENATED MODULE: ./src/store/index.ts
 
@@ -5278,7 +5312,7 @@ const SearchSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Sear
 
 
 
-const ResultItemvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.pushScopeId)("data-v-47d71eba"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.popScopeId)(), n);
+const ResultItemvue_type_script_setup_true_lang_ts_withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.pushScopeId)("data-v-73fd5140"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.popScopeId)(), n);
 
 const ResultItemvue_type_script_setup_true_lang_ts_hoisted_1 = {
   class: "list-item"
@@ -5307,10 +5341,10 @@ const ResultItemvue_type_script_setup_true_lang_ts_hoisted_4 = /*#__PURE__*/Resu
 }));
 ;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=47d71eba&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=73fd5140&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=47d71eba&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue?vue&type=style&index=0&id=73fd5140&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultItem.vue
 
@@ -5319,7 +5353,7 @@ const ResultItemvue_type_script_setup_true_lang_ts_hoisted_4 = /*#__PURE__*/Resu
 ;
 
 
-const ResultItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultItemvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-47d71eba"]])
+const ResultItem_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultItemvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-73fd5140"]])
 
 /* harmony default export */ var ResultItem = (ResultItem_exports_);
 ;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/LoadingComp.vue?vue&type=script&setup=true&lang=ts
@@ -5661,11 +5695,8 @@ function dimensionsMixin({
     if (initialWidth) width.value = initialWidth;
   };
 
-  (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.onMounted)(() => {
-    updateWidth();
-  });
   (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.onUpdated)(() => {
-    updateWidth();
+    (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.nextTick)(() => updateWidth());
   });
   return {
     width
@@ -5855,10 +5886,10 @@ const PointDetails_exports_ = PointDetailsvue_type_script_setup_true_lang_ts;
 }));
 ;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=afe289c2&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=e4535912&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=afe289c2&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue?vue&type=style&index=0&id=e4535912&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/drawer/result-section/ResultsSection.vue
 
@@ -5867,14 +5898,14 @@ const PointDetails_exports_ = PointDetailsvue_type_script_setup_true_lang_ts;
 ;
 
 
-const ResultsSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultsSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-afe289c2"]])
+const ResultsSection_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(ResultsSectionvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-e4535912"]])
 
 /* harmony default export */ var ResultsSection = (ResultsSection_exports_);
 ;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/DrawerComp.vue?vue&type=script&setup=true&lang=ts
 
 
 
-const DrawerCompvue_type_script_setup_true_lang_ts_withScopeId = n => (_pushScopeId("data-v-bf85d500"), n = n(), _popScopeId(), n);
+const DrawerCompvue_type_script_setup_true_lang_ts_withScopeId = n => (_pushScopeId("data-v-27d333f1"), n = n(), _popScopeId(), n);
 
 const DrawerCompvue_type_script_setup_true_lang_ts_hoisted_1 = ["activated"];
 
@@ -5971,10 +6002,10 @@ const DrawerCompvue_type_script_setup_true_lang_ts_hoisted_1 = ["activated"];
 }));
 ;// CONCATENATED MODULE: ./src/components/drawer/DrawerComp.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/DrawerComp.vue?vue&type=style&index=0&id=bf85d500&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/drawer/DrawerComp.vue?vue&type=style&index=0&id=27d333f1&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/drawer/DrawerComp.vue?vue&type=style&index=0&id=bf85d500&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/drawer/DrawerComp.vue?vue&type=style&index=0&id=27d333f1&lang=scss&scoped=true
 
 ;// CONCATENATED MODULE: ./src/components/drawer/DrawerComp.vue
 
@@ -5983,7 +6014,7 @@ const DrawerCompvue_type_script_setup_true_lang_ts_hoisted_1 = ["activated"];
 ;
 
 
-const DrawerComp_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DrawerCompvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-bf85d500"]])
+const DrawerComp_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(DrawerCompvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-27d333f1"]])
 
 /* harmony default export */ var DrawerComp = (DrawerComp_exports_);
 ;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js!./node_modules/ts-loader/index.js??clonedRuleSet-41.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/CurvedLoading.vue?vue&type=script&setup=true&lang=ts
@@ -6516,15 +6547,15 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 }));
 ;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=387476da&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=3be017e0&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=387476da&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=3be017e0&lang=scss&scoped=true
 
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=1&id=387476da&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=1&id=3be017e0&lang=scss
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=1&id=387476da&lang=scss
+;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=1&id=3be017e0&lang=scss
 
 ;// CONCATENATED MODULE: ./src/components/Map.vue
 
@@ -6534,7 +6565,7 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
 
 
-const Map_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Mapvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-387476da"]])
+const Map_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Mapvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-3be017e0"]])
 
 /* harmony default export */ var components_Map = (Map_exports_);
 ;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js

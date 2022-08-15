@@ -1,5 +1,5 @@
 import { PropType } from "vue";
-import { SearchItem } from "@/store/markers/markers.model";
+import { SearchItem } from "../../../store/markers/markers.model";
 declare const _default: import("vue").DefineComponent<{
     resultBoxClass: ArrayConstructor;
     resultBoxStyle: ObjectConstructor;
