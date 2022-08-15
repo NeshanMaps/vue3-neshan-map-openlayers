@@ -28,7 +28,7 @@ import { createCoordsObject } from "@/utils"
 import SearchSection from "./SearchSection.vue"
 import ResultsSection from "./result-section/ResultsSection.vue"
 import { store } from "@/store"
-import { SearchItem } from "@/store/markers/markers.model"
+import { SearchItem } from "../../store/markers/markers.model"
 
 const props = defineProps({
   results: Array as PropType<SearchItem[]>,

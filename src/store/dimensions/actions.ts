@@ -1,4 +1,4 @@
-import { DivElementRef } from "@/components/Map.model"
+import { DivElementRef } from "../../components/Map.model"
 import { breakpointsSegments, breakpointsSegmentsPixels } from "@/parameters"
 import { toRaw } from "vue"
 import { store } from ".."

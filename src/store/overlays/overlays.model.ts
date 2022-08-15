@@ -1,4 +1,4 @@
-import { DivElementRef, Ol, OlMap } from "@/components/Map.model"
+import { DivElementRef, Ol, OlMap } from "../../components/Map.model"
 import { Coordinate } from "openlayers"
 import { Ref } from "vue"
 

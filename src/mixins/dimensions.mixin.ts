@@ -1,4 +1,4 @@
-import { onUpdated, onMounted, ref, watch } from "vue"
+import { onUpdated, ref, watch, nextTick } from "vue"
 import { DimensionsMixin } from "./dimensions.mixin.model"
 
 export function dimensionsMixin({
@@ -18,12 +18,9 @@ export function dimensionsMixin({
     const initialWidth = containerRef.value?.clientWidth
     if (initialWidth) width.value = initialWidth
   }
-  onMounted(() => {
-    updateWidth()
-  })
 
   onUpdated(() => {
-    updateWidth()
+    nextTick(() => updateWidth())
   })
   return {
     width

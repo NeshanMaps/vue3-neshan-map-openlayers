@@ -16,9 +16,9 @@ import {
   Style,
   Text,
   VectorLayer,
-} from "@/components/Map.model"
+} from "../components/Map.model"
 import { markerUrls } from "@/parameters"
-import { SearchItem } from "@/store/markers/markers.model"
+import { SearchItem } from "../store/markers/markers.model"
 import { Coordinate, Feature, geom, Extent } from "openlayers"
 import { transformCoords } from "./location.util"
 
@@ -333,13 +333,16 @@ export const createFeaturesFromPoints = (
   props?: any
 ): Feature[] => {
   return points.map(
-    (point) =>
-      new ol.Feature({
+    (point) => {
+      const feature: Feature = new ol.Feature({
         geometry: new ol.geom.Point(point.coords) as geom.Point,
         text: point.text,
         iconProps: markersIconCallback && markersIconCallback(point),
         ...point.props,
         ...props,
       })
+      feature.setId(props.id || point.coords.join('-'))
+      return feature
+    }
   )
 }

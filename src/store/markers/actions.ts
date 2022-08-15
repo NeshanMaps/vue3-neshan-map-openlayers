@@ -1,4 +1,4 @@
-import { CreateMarkers, VectorLayer } from "@/components/Map.model"
+import { CreateMarkers, VectorLayer } from "../../components/Map.model"
 import {
   GetClusterByTitle,
   GetMarkerByTitle,
@@ -22,7 +22,7 @@ import { Coordinate, Extent, Feature, MapBrowserEvent } from "openlayers"
 import { toRaw } from "vue"
 import { state } from "../state"
 import { store } from ".."
-import { ReverseOnPointOptions } from "@/mixins/events.mixin.model"
+import { ReverseOnPointOptions } from "../../mixins/events.mixin.model"
 
 /**
  * Receives an array of points and marks them on map.
@@ -205,11 +205,7 @@ const selectFeauture = (feature: Feature, options?: SelectFeautureOptions) => {
     : store.actions.markers.getSearchResultByFeature(feature)
   if (foundResult) {
     store.setSelectedMarker(foundResult)
-    store.toggleDrawerShowDetails(true)
-    if (!store.state.mobileDrawerShowDetails)
-      store.toggleMobileDrawerShowDetails(true)
-    if (!store.getters.screen.small && !store.state.drawerActivation)
-      store.toggleDrawerActivation(true)
+    store.actions.drawers.openResultDrawers()
   }
 }
 
@@ -257,7 +253,7 @@ const reverseOnPoint = async (
     const data = await store.state.api.REVERSE(...stdPoint)
     store.setSelectedMarker(data)
     store.setReverseResult(data)
-    store.toggleDrawerShowDetails(true)
+    store.actions.drawers.openResultDrawers()
     const text = customText || getTitleFromData(data)
     store.state.mainMarker?.getSource().getFeatures()[0].set("text", text)
     if (usePopup) {
@@ -278,7 +274,10 @@ const reverseOnPoint = async (
  * @param searchParams.text - Part of or whole name of the place.
  * @param searchParams.coords - Coordinates you want to search around.
  */
-const search = async ({ term = "", coords }: SearchProps, options?: SearchOptions) => {
+const search = async (
+  { term = "", coords }: SearchProps,
+  options?: SearchOptions
+) => {
   try {
     store.toggleSearchLoading(true)
     if (!store.state.api) return
@@ -326,5 +325,5 @@ export const markersActions = {
   selectFeauture,
   getFeatureFromEvent,
   reverseOnPoint,
-  search
+  search,
 }

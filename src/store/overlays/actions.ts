@@ -1,4 +1,4 @@
-import { DivElementRef } from "@/components/Map.model"
+import { DivElementRef } from "../../components/Map.model"
 import { Overlay } from "openlayers"
 import { state } from "../state"
 import {

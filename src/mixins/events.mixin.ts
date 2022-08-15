@@ -1,8 +1,8 @@
 import {
   EventsMixinProps,
-} from "@/components/Map.model"
+} from "../components/Map.model"
 import { store } from "@/store"
-import { SearchItem } from "@/store/markers/markers.model"
+import { SearchItem } from "../store/markers/markers.model"
 import { Feature, MapBrowserEvent } from "openlayers"
 import { ref } from "vue"
 import {

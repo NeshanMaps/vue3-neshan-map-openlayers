@@ -41,7 +41,7 @@ import { store } from "@/store"
 import ResultItem from "./ResultItem.vue"
 import Loading from "@/components/LoadingComp.vue"
 import PointDetails from "./PointDetails.vue"
-import { SearchItem } from "@/store/markers/markers.model"
+import { SearchItem } from "../../../store/markers/markers.model"
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,

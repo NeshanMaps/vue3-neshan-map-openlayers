@@ -69,7 +69,7 @@ import {
   HandleSearchProps,
 } from "./Map.model"
 import { Coordinate } from "openlayers"
-import { SearchOptions } from "@/store/markers/markers.model"
+import { SearchOptions } from "../store/markers/markers.model"
 export default {
   name: "NeshanMap",
 }

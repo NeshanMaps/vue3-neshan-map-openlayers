@@ -1,4 +1,4 @@
-import { VectorLayer } from "@/components/Map.model"
+import { VectorLayer } from "../../components/Map.model"
 import { Coordinate } from "openlayers"
 import { state } from "../state"
 import { ReverseResult, SearchItem, SelectedMarker } from "./markers.model"

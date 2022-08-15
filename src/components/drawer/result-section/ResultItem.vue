@@ -12,7 +12,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { SearchItem } from "@/store/markers/markers.model";
+import { SearchItem } from "../../../store/markers/markers.model";
 import { defineProps, PropType } from "vue"
 defineProps({
   item: Object as PropType<SearchItem>,

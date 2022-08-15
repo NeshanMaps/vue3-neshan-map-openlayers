@@ -4737,6 +4737,7 @@ const selectFeauture = (feature, options) => {
     store.setSelectedMarker(foundResult);
     store.toggleDrawerShowDetails(true);
     if (!store.state.mobileDrawerShowDetails) store.toggleMobileDrawerShowDetails(true);
+    if (!store.getters.screen.small && !store.state.drawerActivation) store.toggleDrawerActivation(true);
   }
 };
 /**
@@ -5725,10 +5726,7 @@ const _hoisted_12 = {
 /* harmony default export */ var PointDetailsvue_type_script_setup_true_lang_ts = (/*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.defineComponent)({
   __name: 'PointDetails',
   props: {
-    item: {
-      type: Object,
-      default: null
-    }
+    item: Object
   },
 
   setup(__props) {
@@ -6338,12 +6336,26 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
       store.state.map?.switchTrafficLayer(value);
     };
     /**
+     * Setups Map, adds serviceToken to api
+     */
+
+
+    (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.onMounted)(() => {
+      const scriptTag = importMap(urls.map);
+
+      scriptTag.onload = () => {
+        startMap();
+        setupMapEvents();
+        store.actions.dimensions.updateBreakpoints();
+        store.actions.dimensions.updateMapDimensions(mapContainer);
+      };
+    });
+    /**
      * Adds the map from given url to given script
      * @param url - Url of map or another script
      * @param tagName - Name of the expected tag
      * @returns Created tag
      */
-
 
     const importMap = (url, tagName = "my-openlayer") => {
       const foundDoc = document.getElementById(tagName);
@@ -6433,20 +6445,6 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
         store.actions.markers.toggleClusterSource(store.state.searchMarkers, false);
       }
     });
-    /**
-     * Setups Map, adds serviceToken to api
-     */
-
-    (0,external_commonjs_vue_commonjs2_vue_root_Vue_namespaceObject.onMounted)(() => {
-      const scriptTag = importMap(urls.map);
-
-      scriptTag.onload = () => {
-        startMap();
-        setupMapEvents();
-        store.actions.dimensions.updateBreakpoints();
-        store.actions.dimensions.updateMapDimensions(mapContainer);
-      };
-    });
 
     const handleSearch = ({
       term = "",
@@ -6518,15 +6516,15 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 }));
 ;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=script&setup=true&lang=ts
  
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=1cf9bd3a&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=0&id=387476da&lang=scss&scoped=true
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=1cf9bd3a&lang=scss&scoped=true
+;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=0&id=387476da&lang=scss&scoped=true
 
-;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=1&id=1cf9bd3a&lang=scss
+;// CONCATENATED MODULE: ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-22.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-22.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-22.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-22.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/Map.vue?vue&type=style&index=1&id=387476da&lang=scss
 // extracted by mini-css-extract-plugin
 
-;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=1&id=1cf9bd3a&lang=scss
+;// CONCATENATED MODULE: ./src/components/Map.vue?vue&type=style&index=1&id=387476da&lang=scss
 
 ;// CONCATENATED MODULE: ./src/components/Map.vue
 
@@ -6536,7 +6534,7 @@ const Mapvue_type_script_setup_true_lang_ts_default_ = {
 
 
 
-const Map_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Mapvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-1cf9bd3a"]])
+const Map_exports_ = /*#__PURE__*/(0,exportHelper/* default */.Z)(Mapvue_type_script_setup_true_lang_ts, [['__scopeId',"data-v-387476da"]])
 
 /* harmony default export */ var components_Map = (Map_exports_);
 ;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js

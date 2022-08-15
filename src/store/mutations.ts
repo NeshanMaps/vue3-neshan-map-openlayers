@@ -1,22 +1,15 @@
-import { Api, OlMap } from "@/components/Map.model"
+import { Api, OlMap } from "../components/Map.model"
 import { dimensionsMutations } from "./dimensions/mutations"
 import { markersMutations } from "./markers/mutations"
+import { drawersMutations } from "./drawers/mutations"
 import { state } from "./state"
+
 export const mutations = {
   toggleSearchLoading(value: boolean) {
     state.searchLoading = value
   },
   toggleReverseLoading(value: boolean) {
     state.reverseLoading = value
-  },
-  toggleDrawerActivation(value: boolean) {
-    state.drawerActivation = value
-  },
-  toggleDrawerShowDetails(value: boolean) {
-    state.drawerShowDetails = value
-  },
-  toggleMobileDrawerShowDetails(value: boolean) {
-    state.mobileDrawerShowDetails = value
   },
   setMap(value: OlMap) {
     state.map = value
@@ -26,4 +19,5 @@ export const mutations = {
   },
   ...markersMutations,
   ...dimensionsMutations,
+  ...drawersMutations,
 }

@@ -1,5 +1,5 @@
-import { MarkersIconCallback, NuString } from "@/components/Map.model"
-import { RouteTypes } from "@/static/index.model"
+import { MarkersIconCallback, NuString } from "../../components/Map.model"
+import { RouteTypes } from "../../static/index.model"
 import { Coordinate, Feature } from "openlayers"
 export declare interface SearchItem {
   category: string

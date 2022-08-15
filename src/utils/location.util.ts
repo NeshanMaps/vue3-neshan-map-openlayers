@@ -1,5 +1,5 @@
 declare const ol: any // eslint-disable-line
-import { ReverseResult } from '@/store/markers/markers.model'
+import { ReverseResult } from '../store/markers/markers.model'
 import { Coordinate } from 'openlayers'
 import {
   CoordsObj,
