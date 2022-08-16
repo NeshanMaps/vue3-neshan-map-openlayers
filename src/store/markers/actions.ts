@@ -25,6 +25,7 @@ import { toRaw } from "vue"
 import { state } from "../state"
 import { store } from ".."
 import { ReverseOnPointOptions } from "../../mixins/events.mixin.model"
+import { markersOffset, zoomConstants } from "@/parameters"
 
 /**
  * Receives an array of points and marks them on map.
@@ -151,7 +152,10 @@ const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
   state.map?.getView().fit(extent, {
     size: state.map.getSize(),
     duration,
-    minResolution: 0.3,
+    maxZoom:
+      store.state.zoom > zoomConstants.maxZoom
+        ? store.state.zoom
+        : zoomConstants.maxZoom,
     padding: [15, store.getters.screen.small ? 15 : 300, 15, 15],
   })
 }
@@ -197,10 +201,10 @@ const selectFeauture = (
   options?: SelectFeautureOptions
 ) => {
   let isMainMarker = false
-  let coords = options?.coords
-  let text = options?.text
+  let coords = <Coordinate>options?.coords
+  let text = <string>options?.text
   if ("mapCoords" in feature) {
-    coords = feature.mapCoords
+    coords ||= feature.mapCoords
     zoomToCoords(coords)
     if ("title" in feature) {
       text = feature.title
@@ -218,13 +222,13 @@ const selectFeauture = (
   if (options?.delay !== 0) {
     setTimeout(() => {
       store.actions.overlays.changeOverlayStats(
-        { coords, text, offset: isMainMarker ? [0, -60] : [0, -40] },
+        { coords, text, offset: isMainMarker ? markersOffset.high : markersOffset.short },
         "persistant"
       )
     }, options?.delay || 500)
   } else {
     store.actions.overlays.changeOverlayStats(
-      { coords, text, offset: isMainMarker ? [0, -60] : [0, -40] },
+      { coords, text, offset: isMainMarker ? markersOffset.high : markersOffset.short },
       "persistant"
     )
   }
@@ -289,7 +293,7 @@ const reverseOnPoint = async (
     store.state.mainMarker?.getSource().getFeatures()[0].set("text", text)
     if (usePopup) {
       store.actions.overlays.changeOverlayStats(
-        { coords: point, text, offset: [0, -60] },
+        { coords: point, text, offset: markersOffset.high },
         "persistant"
       )
     }

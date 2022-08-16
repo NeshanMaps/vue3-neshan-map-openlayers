@@ -4,6 +4,7 @@ import { dimenstionsState } from "./dimensions/state"
 import { markersState } from "./markers/state"
 import { overlayState } from "./overlays/state"
 import { drawersState } from "./drawers/state"
+import { zoomConstants } from "@/parameters"
 
 export const state = reactive({
   ...dimenstionsState,
@@ -11,6 +12,7 @@ export const state = reactive({
   ...overlayState,
   ...drawersState,
   map: null as OlMap | null,
+  zoom: zoomConstants.initialZoom,
   api: null as Api | null,
   searchLoading: false,
   reverseLoading: false,

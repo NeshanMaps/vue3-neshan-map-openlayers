@@ -2,8 +2,12 @@ import { EventsMixinProps } from "../components/Map.model"
 import { store } from "@/store"
 import { SearchItem } from "../store/markers/markers.model"
 import { Feature, MapBrowserEvent } from "openlayers"
-import { ref } from "vue"
-import { getCoordsAndTextFromFeature, getClusterExtent } from "../utils"
+import {
+  getCoordsAndTextFromFeature,
+  getClusterExtent,
+  getCoordsFromFeature,
+} from "../utils"
+import { markersOffset } from "@/parameters"
 
 export function eventsMixin({
   emits,
@@ -34,19 +38,18 @@ export function eventsMixin({
     })
   }
 
-  const zoom = ref(0)
   /**
    * Emits the new zoom value
    */
   const setupZoomEvent = () => {
     if (!store.state.map) return
-    zoom.value = store.state.map.getView().getZoom()
+    store.setZoom(store.state.map.getView().getZoom())
     store.state.map.on("moveend", () => {
       if (!store.state.map) return
       const newZoom = store.state.map.getView().getZoom()
-      if (zoom.value != newZoom) {
+      if (store.state.zoom != newZoom) {
         emits("on-zoom", newZoom)
-        zoom.value = newZoom
+        store.setZoom(newZoom)
       }
     })
   }
@@ -73,7 +76,7 @@ export function eventsMixin({
             store.actions.overlays.changeOverlayStats({
               text: Array.isArray(featText) ? featText[0] : featText,
               coords: featCoords,
-              offset: isMainMarker ? [0, -60] : [0, -40],
+              offset: isMainMarker ? markersOffset.high : markersOffset.short,
             })
           }
           return
@@ -146,6 +149,7 @@ export function eventsMixin({
    * @param feature
    */
   const handleFeatureClick = (feature: Feature) => {
+    store.actions.overlays.changeOverlayStats()
     const features: Feature[] | undefined = feature.get("features")
     if (features && features.length > 1) {
       store.actions.markers.zoomToCluster(feature)
@@ -161,9 +165,16 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
+    let feature = store.actions.markers.getClusterByCoords(
+      item.mapCoords
+    ).cluster
+    if (!feature)
+      feature = store.actions.markers.getMarkerByCoords(item.mapCoords)
+    if (!feature) return
+    const coords = getCoordsFromFeature(feature)
     if (popupOnResultHover) {
       store.actions.overlays.changeOverlayStats({
-        coords: item.mapCoords,
+        coords,
         text: item.title,
       })
     }
@@ -180,6 +191,7 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultClick = (item: SearchItem) => {
+    store.actions.overlays.changeOverlayStats()
     if (zoomOnResultClick) {
       store.actions.markers.selectFeauture(item)
     }
@@ -197,6 +209,5 @@ export function eventsMixin({
     handleResultHover,
     handleResultClick,
     getClusterExtent,
-    zoom,
   }
 }

@@ -1,18 +1,26 @@
 <template>
   <div>
-    <div class="list-item">
+    <div v-if="item" class="list-item">
       <b class="text-lg">
-        {{ item?.title }}
+        {{ item.title }}
       </b>
       <div class="text-caption">
-        {{ item?.neighbourhood }}
+        {{
+          item.region
+            ?.split("،")
+            .map((reg) => " " + reg.trim())
+            .reverse()
+            .join("،")
+        }}،
+        {{ item.address?.split("-").join("،") }}
+        {{ item.neighbourhood ? `(${item.neighbourhood})` : "" }}
       </div>
     </div>
     <hr />
   </div>
 </template>
 <script setup lang="ts">
-import { SearchItem } from "../../../store/markers/markers.model";
+import { SearchItem } from "../../../store/markers/markers.model"
 import { defineProps, PropType } from "vue"
 defineProps({
   item: Object as PropType<SearchItem>,

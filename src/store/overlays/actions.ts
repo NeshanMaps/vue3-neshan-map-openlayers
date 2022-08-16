@@ -6,6 +6,7 @@ import {
   SetupOverlay,
   SetupOverlayProps,
 } from "./overlays.model"
+import { markersOffset } from "@/parameters"
 
 declare const ol: any
 
@@ -65,7 +66,7 @@ const createOverlay = (container: DivElementRef, persistant = false) => {
     element: container.value,
     map: state.map,
     positioning: "top-center",
-    offset: [0, -40],
+    offset: markersOffset.short,
   })
   overlay.set("persistant", persistant) // An attr to know that we should remove it on following hovers
   return overlay

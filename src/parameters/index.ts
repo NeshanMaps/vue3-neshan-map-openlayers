@@ -63,3 +63,13 @@ export const unsetMapDimnensions = {
   width: 700,
   height: 1000,
 }
+
+export const zoomConstants = {
+  initialZoom: 12,
+  maxZoom: 18.5
+}
+
+export const markersOffset = {
+  high: [0, -60],
+  short: [0, -40]
+}

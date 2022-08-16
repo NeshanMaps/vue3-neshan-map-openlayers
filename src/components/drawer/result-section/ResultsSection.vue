@@ -11,8 +11,6 @@
           ? store.state.searchLoading
           : store.getters.loading
       "
-      dense
-      color="blue"
     />
     <template
       v-if="

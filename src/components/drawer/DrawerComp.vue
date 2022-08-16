@@ -2,7 +2,9 @@
   <div
     :class="{
       'map-drawer--mobile': store.getters.screen.small,
-      'map-drawer': !store.getters.screen.small,
+      'map-drawer--desktop': !store.getters.screen.small,
+      'map-drawer--desktop---activated':
+        !store.getters.screen.small && store.state.drawerActivation,
       'box-shadow': !store.state.drawerActivation,
     }"
     class="d-flex flex-column"
@@ -68,16 +70,15 @@ const searchSection = ref()
  * @param activated - whether the drawer is activated or not
  */
 const toggleDrawerMaxDimenstions = (activated: boolean) => {
+  if (!searchSection.value || !mapDrawer.value) return
   if (!activated) {
-    if (!searchSection.value) return
     const height = searchSection.value.$el.clientHeight
     const width = searchSection.value.$el.clientWidth
-    mapDrawer.value?.setAttribute(
-      "style",
-      `max-height: ${height}px; max-width: ${width}px;`
-    )
+    mapDrawer.value.style.setProperty("max-height", `${height}px`)
+    mapDrawer.value.style.setProperty("max-width", `${width}px`)
   } else {
-    mapDrawer.value?.setAttribute("style", `max-height: 100%; max-width: 100%;`)
+    mapDrawer.value.style.setProperty("max-height", "100%")
+    mapDrawer.value.style.setProperty("max-width", "100%")
   }
 }
 watch(
@@ -92,7 +93,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.map-drawer {
+.map-drawer--desktop {
   position: absolute;
   z-index: 2;
   top: 5%;
@@ -110,6 +111,10 @@ onMounted(() => {
     padding-right: 1rem;
     padding-left: 1rem;
   }
+}
+
+.map-drawer--desktop---activated {
+  box-shadow: 0 4px 25px rgb(0 0 0 / 25%);
 }
 
 .map-drawer--mobile {

@@ -341,6 +341,7 @@ export const createFeaturesFromPoints = (
         ...point.props,
         ...props,
       })
+      
       feature.setId(props.id || point.coords.join('-'))
       return feature
     }

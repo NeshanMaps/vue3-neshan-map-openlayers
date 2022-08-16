@@ -42,7 +42,7 @@
 </template>
 <script lang="ts">
 declare const ol: any
-import { tiles, urls } from "../parameters"
+import { zoomConstants, tiles, urls } from "../parameters"
 import { sanitizeLocation, getLocation } from "../utils"
 import { eventsMixin } from "../mixins"
 import { createApi } from "../apis"
@@ -94,7 +94,7 @@ const props = defineProps({
   },
   zoom: {
     type: Number,
-    default: 12,
+    default: zoomConstants.initialZoom,
   },
   poi: Boolean,
   traffic: Boolean,
@@ -279,7 +279,7 @@ const shakeMap = () => {
 }
 
 const eventsEmits = defineEmits(["on-zoom", "on-click"])
-const { setupMapEvents, handleResultHover, handleResultClick, zoom } =
+const { setupMapEvents, handleResultHover, handleResultClick } =
   eventsMixin({
     emits: eventsEmits,
     resultHoverCallback: props.resultHoverCallback,
@@ -297,7 +297,7 @@ const { setupMapEvents, handleResultHover, handleResultClick, zoom } =
 /**
  * Changes cluster source to marker source on cluster threshold passing and vice versa
  */
-watch(zoom, (nv, ov) => {
+watch(() => store.state.zoom, (nv, ov) => {
   if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
     store.actions.markers.toggleClusterSource(store.state.searchMarkers, true)
   } else if (nv < props.clusterThreshold && ov >= props.clusterThreshold) {

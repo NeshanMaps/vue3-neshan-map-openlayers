@@ -78,7 +78,7 @@ export declare interface CreateMarkersPointsItem {
   color?: IconColor
   iconScale?: number
   text?: string
-  coords?: Coordinate
+  coords: Coordinate
   props?: any
 }
 export declare type CreateMarkersPoints = CreateMarkersPointsItem[]

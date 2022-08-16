@@ -14,6 +14,9 @@ export const mutations = {
   setMap(value: OlMap) {
     state.map = value
   },
+  setZoom(value: number) {
+    state.zoom = value
+  },
   setApi(value: Api) {
     state.api = value
   },

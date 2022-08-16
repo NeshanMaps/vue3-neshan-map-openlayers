@@ -1,7 +1,7 @@
 <template>
   <div
     :activated="store.state.drawerActivation"
-    :style="searchBoxStyle || `width: ${width}px`"
+    :style="`width: ${width}px; ${searchBoxStyle}`"
     class="map-search-box justify-between align-center mx-auto"
     :class="searchBoxClass"
   >
@@ -17,16 +17,16 @@
       v-if="store.state.drawerShowDetails && !store.getters.screen.small"
       @click="store.toggleDrawerShowDetails(false)"
     >
-      <Icon name="back" :size="15"></Icon>
+      <Icon name="back" :size="19"></Icon>
     </button>
     <button
       v-if="!store.state.drawerActivation"
       @click="store.toggleDrawerActivation(true)"
     >
-      <Icon name="magnet" :size="15"></Icon>
+      <Icon name="magnet" :size="19"></Icon>
     </button>
     <button v-else @click="store.toggleDrawerActivation(false)">
-      <Icon name="close" :size="15"></Icon>
+      <Icon name="close" :size="19"></Icon>
     </button>
   </div>
 </template>
@@ -108,7 +108,7 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
     outline: none;
     line-height: 1.5rem;
     font-size: 1rem;
-    height: 2rem;
+    height: 2.3rem;
     padding-right: 0.5rem;
     width: 100%;
     font-family: inherit;
