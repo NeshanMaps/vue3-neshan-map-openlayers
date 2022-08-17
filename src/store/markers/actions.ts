@@ -25,7 +25,7 @@ import { toRaw } from "vue"
 import { state } from "../state"
 import { store } from ".."
 import { ReverseOnPointOptions } from "../../mixins/events.mixin.model"
-import { markersOffset, zoomConstants } from "@/parameters"
+import { markersOffset, markerUrls, zoomConstants } from "@/parameters"
 
 /**
  * Receives an array of points and marks them on map.
@@ -222,13 +222,21 @@ const selectFeauture = (
   if (options?.delay !== 0) {
     setTimeout(() => {
       store.actions.overlays.changeOverlayStats(
-        { coords, text, offset: isMainMarker ? markersOffset.high : markersOffset.short },
+        {
+          coords,
+          text,
+          offset: isMainMarker ? markersOffset.high : markersOffset.short,
+        },
         "persistant"
       )
     }, options?.delay || 500)
   } else {
     store.actions.overlays.changeOverlayStats(
-      { coords, text, offset: isMainMarker ? markersOffset.high : markersOffset.short },
+      {
+        coords,
+        text,
+        offset: isMainMarker ? markersOffset.high : markersOffset.short,
+      },
       "persistant"
     )
   }
@@ -270,7 +278,7 @@ const reverseOnPoint = async (
     let marker: VectorLayer | null = null
     if (useMarker) {
       const { layer } = store.actions.markers.addMarkers(
-        [{ coords: point, text: "", iconScale: 0.1 }],
+        [{ coords: point, text: "", iconScale: 0.1, iconUrl: markerUrls.main }],
         {
           props: {
             mainMarker: true,
@@ -285,7 +293,10 @@ const reverseOnPoint = async (
     }
     if (!store.state.api) throw "No reverse api"
     const data = await store.state.api.REVERSE(...stdPoint)
-    const extendedData = { ...data, mapCoords: stdPoint }
+    const extendedData = {
+      ...data,
+      mapCoords: stdPoint,
+    }
     store.setSelectedMarker(extendedData)
     store.setReverseResult(extendedData)
     store.actions.drawers.openResultDrawers()
@@ -322,6 +333,7 @@ const search = async (
     const points = await createMapPoints(result.items)
     const resultsWithMapCoords = points.map((point) => ({
       ...point.originalItem,
+      iconUrl: point.iconUrl,
       mapCoords: point.coords,
     }))
     store.setSearchResults(resultsWithMapCoords)

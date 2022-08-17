@@ -15,6 +15,7 @@ export declare interface PrimarySearchItem {
 }
 export declare interface SearchItem extends PrimarySearchItem {
   mapCoords: Coordinate
+  iconUrl: string
 }
 export declare interface SearchResult {
   count: number

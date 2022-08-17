@@ -1,6 +1,16 @@
 <template>
   <div ref="pointDetailsContainer">
-    <Icon :name="iconName" :size="width"></Icon>
+    <img
+      v-if="
+        item &&
+        'type' in item &&
+        item.iconUrl &&
+        !item.iconUrl.endsWith('general.png')
+      "
+      :src="item?.iconUrl"
+      :width="width"
+    />
+    <Icon v-else :name="iconName" :size="width" color="steelblue"></Icon>
     <div class="px-2">
       <div v-if="formattedItem?.place" class="d-flex align-center">
         <Icon name="marker" :size="25" color="steelblue" class="px-1"></Icon>
@@ -44,11 +54,10 @@
 import { ref, defineProps, PropType } from "vue"
 import { detailsSectionMixin } from "@/mixins"
 import Icon from "@/components/icons/IconComponent.vue"
-import { SelectedMarker } from "../../../store/markers/markers.model";
+import { SelectedMarker } from "../../../store/markers/markers.model"
 
 const props = defineProps({
-  item: Object as PropType<SelectedMarker>
-  ,
+  item: Object as PropType<SelectedMarker>,
 })
 
 const pointDetailsContainer = ref<HTMLDivElement>()

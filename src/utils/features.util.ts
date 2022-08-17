@@ -55,7 +55,7 @@ export const createMarkers: CreateMarkers = (points, options) => {
     const { styleFunc, style } = createStyle({
       hidePopup: options?.hidePopup,
       iconScale,
-      anchor: options?.anchor
+      anchor: options?.anchor,
     })
     _style = style
     const source = createSource(features)
@@ -101,13 +101,13 @@ export const createRawStyle = ({ image, text }: CreateRawStyleProps): Style => {
 export const createStyle = ({
   hidePopup = false,
   iconScale,
-  anchor
+  anchor,
 }: CreateStyleProps) => {
   const _style = createRawStyle({})
   const styleFunc = styleFuncGen(_style, {
     hidePopup,
     iconScale,
-    anchor
+    anchor,
   })
   return { style: _style, styleFunc }
 }
@@ -155,9 +155,9 @@ export const createMapPoints = async (
     items.map(async (item) => {
       const point: Coordinate = [item.location.x, item.location.y]
       const mapPoint = transformCoords(point, "EPSG:4326", "EPSG:3857")
-      const url = markerUrls.search + item.type + ".png"
-      const iconUrl = (await urlExists(url))
-        ? url
+      const iconImageExists = await checkIconImageExistance(item.type)
+      const iconUrl = (iconImageExists.exists)
+        ? iconImageExists.searchUrl
         : markerUrls.search + "general.png"
       return {
         coords: mapPoint,
@@ -168,6 +168,15 @@ export const createMapPoints = async (
       }
     })
   )
+}
+/**
+ * Checks if icon url exists or not
+ * @param iconName
+ * @returns
+ */
+export const checkIconImageExistance = async (iconName: string) => {
+  const searchUrl = markerUrls.search + iconName + ".png"
+  return { searchUrl, exists: await urlExists(searchUrl) }
 }
 
 const urlExists = (url: string) => {
@@ -196,7 +205,9 @@ const styleFuncGen = (
     if (iconProps) {
       style.setImage(createIcon(iconProps))
     } else {
-      style.setImage(createIcon({ src: feature.get("iconUrl"), iconScale, anchor }))
+      style.setImage(
+        createIcon({ src: feature.get("iconUrl"), iconScale, anchor })
+      )
     }
     return style
   }
