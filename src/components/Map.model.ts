@@ -4,7 +4,10 @@ import type Ol from "openlayers"
 export type { Ol }
 import { Feature, Map, style, Coordinate } from "openlayers"
 import { ChangeOverlayStats } from "../store/overlays/overlays.model"
-import { PrimaryReverseResult, SearchResult } from "../store/markers/markers.model"
+import {
+  PrimaryReverseResult,
+  SearchResult,
+} from "../store/markers/markers.model"
 
 export declare type NuString = null | string
 export declare type MapType =
@@ -38,9 +41,7 @@ export declare interface Tile {
   url: string
 }
 
-export declare type IconColor = "red" | "blue"
 export declare interface CreateIconProps {
-  color?: IconColor
   iconScale?: number
   src?: string
   anchor?: DoubleNums
@@ -54,6 +55,9 @@ export declare interface CreateRawStyleProps {
 export declare interface CreateStyleProps {
   hidePopup?: boolean
   image?: Image
+  iconUrl?: string
+  iconScale?: number
+  anchor?: DoubleNums
 }
 
 export declare interface CreateLayerProps {
@@ -75,7 +79,7 @@ export declare interface HandleSearchProps {
 export declare interface CreateMarkersPointsItem {
   style?: Style
   image?: Image
-  color?: IconColor
+  iconUrl?: string
   iconScale?: number
   text?: string
   coords: Coordinate
@@ -132,6 +136,6 @@ export declare interface CreateMarkersOptions {
 }
 
 export declare interface CreateMapPointsOptions {
-  color?: IconColor
+  iconUrl?: string
   iconScale: number
 }

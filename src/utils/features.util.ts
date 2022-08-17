@@ -9,7 +9,6 @@ import {
   CreateMarkersPointsItem,
   CreateRawStyleProps,
   CreateStyleProps,
-  IconColor,
   MarkersIconCallback,
   Ol,
   Source,
@@ -39,7 +38,7 @@ import { transformCoords } from "./location.util"
  * @returns style and layer.
  */
 export const createMarkers: CreateMarkers = (points, options) => {
-  const [{ image, color, iconScale } = {} as CreateMarkersPointsItem] = points
+  const [{ iconScale } = {} as CreateMarkersPointsItem] = points
   const features = createFeaturesFromPoints(
     points,
     options?.markersIconCallback,
@@ -53,10 +52,10 @@ export const createMarkers: CreateMarkers = (points, options) => {
   if (options?.cluster) {
     layer = createClusterLayer(features, options)
   } else {
-    const _image = image || createIcon({ color, iconScale, anchor: options?.anchor })
     const { styleFunc, style } = createStyle({
-      image: _image,
       hidePopup: options?.hidePopup,
+      iconScale,
+      anchor: options?.anchor
     })
     _style = style
     const source = createSource(features)
@@ -81,9 +80,8 @@ export const createText = (): Text => {
 }
 
 export const createIcon = ({
-  color = "red",
-  iconScale = 0.1,
-  src = markerUrls[color],
+  iconScale = 0.24,
+  src = markerUrls.main,
   anchor = [0.5, 0.5],
 }: CreateIconProps = {}): Ol.style.Image => {
   return new ol.style.Icon({
@@ -100,12 +98,16 @@ export const createRawStyle = ({ image, text }: CreateRawStyleProps): Style => {
   })
 }
 
-export const createStyle = ({ hidePopup = false, image }: CreateStyleProps) => {
-  const _text = createText()
-  const _image = image || createIcon({ color: "blue", iconScale: 0.15 })
-  const _style = createRawStyle({ text: _text, image: _image })
+export const createStyle = ({
+  hidePopup = false,
+  iconScale,
+  anchor
+}: CreateStyleProps) => {
+  const _style = createRawStyle({})
   const styleFunc = styleFuncGen(_style, {
     hidePopup,
+    iconScale,
+    anchor
   })
   return { style: _style, styleFunc }
 }
@@ -140,24 +142,39 @@ export const createLayer = ({
 
 /**
  * Converts points given from neshan server to openlayers-friendly points
+ * checks if icon type has a respective icon url
  * @param items - Items from search result
  * @param options.color - color of the markers
  * @param options.iconScale - scale of the markers
  */
-export const createMapPoints = (
+export const createMapPoints = async (
   items: PrimarySearchItem[],
   options?: CreateMapPointsOptions
 ) => {
-  return items.map((item) => {
-    const point: Coordinate = [item.location.x, item.location.y]
-    const mapPoint = transformCoords(point, "EPSG:4326", "EPSG:3857")
-    return {
-      coords: mapPoint,
-      text: item.title,
-      color: options?.color || ("blue" as IconColor),
-      iconScale: options?.iconScale || 0.15,
-      originalItem: item,
-    }
+  return await Promise.all(
+    items.map(async (item) => {
+      const point: Coordinate = [item.location.x, item.location.y]
+      const mapPoint = transformCoords(point, "EPSG:4326", "EPSG:3857")
+      const url = markerUrls.search + item.type + ".png"
+      const iconUrl = (await urlExists(url))
+        ? url
+        : markerUrls.search + "general.png"
+      return {
+        coords: mapPoint,
+        text: item.title,
+        iconUrl,
+        iconScale: options?.iconScale || 0.25,
+        originalItem: item,
+      }
+    })
+  )
+}
+
+const urlExists = (url: string) => {
+  return new Promise((resolve) => {
+    fetch(url, { method: "head" })
+      .then((status) => resolve(status.ok))
+      .catch(() => resolve(false))
   })
 }
 
@@ -169,7 +186,7 @@ export const createMapPoints = (
  */
 const styleFuncGen = (
   style: Style,
-  { hidePopup = false }
+  { hidePopup = false, iconScale, anchor }: CreateStyleProps
 ): Ol.StyleFunction => {
   return (feature) => {
     if (hidePopup) {
@@ -178,6 +195,8 @@ const styleFuncGen = (
     const iconProps = feature.get("iconProps")
     if (iconProps) {
       style.setImage(createIcon(iconProps))
+    } else {
+      style.setImage(createIcon({ src: feature.get("iconUrl"), iconScale, anchor }))
     }
     return style
   }
@@ -249,7 +268,8 @@ const createClusterStyleFunc = (hidePopup?: boolean) => {
         style = createClusterStyle(size)
         styleCache[size] = style
       } else {
-        const { styleFunc } = createStyle({ hidePopup })
+        const iconUrl: string = innerFeatures[0].get("iconUrl")
+        const { styleFunc } = createStyle({ iconUrl, hidePopup })
         style = styleFunc(innerFeatures[0], 100) // 100 is to shut its type up
       }
     }
@@ -332,18 +352,17 @@ export const createFeaturesFromPoints = (
   markersIconCallback?: MarkersIconCallback,
   props?: any
 ): Feature[] => {
-  return points.map(
-    (point) => {
-      const feature: Feature = new ol.Feature({
-        geometry: new ol.geom.Point(point.coords) as geom.Point,
-        text: point.text,
-        iconProps: markersIconCallback && markersIconCallback(point),
-        ...point.props,
-        ...props,
-      })
-      
-      feature.setId(props.id || point.coords.join('-'))
-      return feature
-    }
-  )
+  return points.map((point) => {
+    const feature: Feature = new ol.Feature({
+      geometry: new ol.geom.Point(point.coords) as geom.Point,
+      text: point.text,
+      iconUrl: point.iconUrl,
+      iconProps: markersIconCallback && markersIconCallback(point),
+      ...point.props,
+      ...props,
+    })
+
+    feature.setId(props.id || point.coords.join("-"))
+    return feature
+  })
 }

@@ -270,7 +270,7 @@ const reverseOnPoint = async (
     let marker: VectorLayer | null = null
     if (useMarker) {
       const { layer } = store.actions.markers.addMarkers(
-        [{ coords: point, text: "" }],
+        [{ coords: point, text: "", iconScale: 0.1 }],
         {
           props: {
             mainMarker: true,
@@ -319,7 +319,7 @@ const search = async (
     const result = await store.state.api.SEARCH(term, coords)
     store.toggleDrawerShowDetails(false)
     clearMarkerLayer(store.state.searchMarkers)
-    const points = createMapPoints(result.items)
+    const points = await createMapPoints(result.items)
     const resultsWithMapCoords = points.map((point) => ({
       ...point.originalItem,
       mapCoords: point.coords,

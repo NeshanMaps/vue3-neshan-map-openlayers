@@ -7,10 +7,10 @@ export const urls = {
 }
 
 export const markerUrls = {
-  red: "https://img.icons8.com/color/344/marker--v1.png",
+  main: "https://img.icons8.com/color/344/marker--v1.png",
   // blue: "https://img.icons8.com/ultraviolet/344/marker.png",
-  blue: "/images/search-marker.png",
-  white: "/images/search-marker-prev.png",
+  search: "https://static.neshanmap.ir/poi/square/",
+  searchPrev: "/images/search-marker-prev.png",
 }
 
 export const tiles: Tile[] = [
