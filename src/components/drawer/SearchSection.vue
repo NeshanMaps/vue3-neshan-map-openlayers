@@ -2,7 +2,7 @@
   <div
     :activated="store.state.drawerActivation"
     :style="`width: ${width}px; ${searchBoxStyle}`"
-    class="map-search-box justify-between align-center mx-auto"
+    class="map-search-box d-flex justify-between align-center mx-auto"
     :class="searchBoxClass"
   >
     <input

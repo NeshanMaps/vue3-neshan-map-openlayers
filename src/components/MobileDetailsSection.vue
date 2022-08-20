@@ -1,9 +1,12 @@
 <template>
   <div
     ref="mobileResultViewContainer"
-    class="mobile-details-section o-hidden pos-relative"
+    class="mobile-details-section pos-relative"
   >
-    <CurvedLoading v-if="!fullScreen && store.state.reverseLoading" class="curved-loading pos-absolute"></CurvedLoading>
+    <button class="close-modal-button pos-absolute d-flex justify-center align-center" @click="hideModal">
+      <Icon :size="25"></Icon>
+    </button>
+    <Loading v-show="store.state.reverseLoading" class="curved-loading pos-absolute" />
     <Icon
       name="close"
       :size="40"
@@ -23,7 +26,7 @@
       :style="`height: ${store.state.mapDimensions.height}px;`"
       class="o-auto"
     >
-      <PointDetails :item="store.state.selectedMarker"></PointDetails>
+      <PointDetails :item="store.state.selectedMarker" :collapse="!fullScreen"></PointDetails>
     </div>
   </div>
 </template>
@@ -32,8 +35,8 @@ import { ref } from "vue"
 import { store } from "@/store"
 
 import Icon from "@/components/icons/IconComponent.vue"
-import CurvedLoading from "./CurvedLoading.vue"
 import PointDetails from "./drawer/result-section/PointDetails.vue"
+import Loading from "./LoadingComp.vue"
 
 const mobileResultViewContainer = ref<HTMLDivElement>()
 const fullScreen = ref(false)
@@ -95,6 +98,11 @@ const addTemporaryTransition = () => {
     mobileResultViewContainer.value?.style.removeProperty("transition")
   }, transitionTime * 1000)
 }
+
+const hideModal = () => {
+  store.actions.markers.deselectAll()
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -104,28 +112,44 @@ const addTemporaryTransition = () => {
   z-index: 1000000;
   background-color: white;
   bottom: 0;
-  border-radius: 50% / 50px 50px 0 0;
+  border-radius: 1rem 1rem 0 0;
   max-height: 3rem;
   direction: rtl;
   .curved-loading {
-    top: 0.3rem;
+    top: 0;
   }
   .close-icon {
     left: 1rem;
     top: 1rem;
+    z-index: 2;
   }
   .drag-button {
     padding-top: 1.5rem;
     padding-bottom: 4rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 4rem;
+    width: 100%;
     & > span {
-      border-top: 2px solid rgba(0, 0, 0, 0.26);
+      background-color: #cecece;
+      border-radius: 25px;
+      height: 5px;
+      width: 30px;
+      margin: auto;
     }
+  }
+  .close-modal-button {
+    top: calc(-2rem - 20px);
+    right: 1rem;
+    z-index: 2;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
   }
 }
 </style>

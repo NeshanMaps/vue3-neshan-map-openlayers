@@ -10,6 +10,9 @@ export const markerUrls = {
   main: "https://img.icons8.com/color/344/marker--v1.png",
   // blue: "https://img.icons8.com/ultraviolet/344/marker.png",
   search: "https://static.neshanmap.ir/poi/square/",
+  colorSvg: "https://static.neshanmap.ir/poi/svg/color/",
+  greySvg: "https://static.neshanmap.ir/poi/svg/grey/",
+  preview256: "https://static.neshanmap.ir/poi/256/",
   searchPrev: "/images/search-marker-prev.png",
 }
 

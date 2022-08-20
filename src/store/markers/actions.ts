@@ -247,8 +247,14 @@ const selectFeauture = (
     : feature
   if (foundResult) {
     store.setSelectedMarker(foundResult)
-    store.actions.drawers.openResultDrawers()
+    store.actions.drawers.toggleResultDrawers(true)
   }
+}
+
+const deselectAll = () => {
+  store.actions.overlays.changeOverlayStats()
+  store.setSelectedMarker(null)
+  store.actions.drawers.toggleResultDrawers(false)
 }
 
 /**
@@ -299,7 +305,7 @@ const reverseOnPoint = async (
     }
     store.setSelectedMarker(extendedData)
     store.setReverseResult(extendedData)
-    store.actions.drawers.openResultDrawers()
+    store.actions.drawers.toggleResultDrawers(true)
     const text = customText || getTitleFromData(extendedData)
     store.state.mainMarker?.getSource().getFeatures()[0].set("text", text)
     if (usePopup) {
@@ -375,6 +381,7 @@ export const markersActions = {
   zoomToMarker,
   zoomToCluster,
   selectFeauture,
+  deselectAll,
   getFeatureFromEvent,
   reverseOnPoint,
   search,

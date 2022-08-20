@@ -13,7 +13,7 @@ import {
   Ol,
   Source,
   Style,
-  Text,
+  // Text,
   VectorLayer,
 } from "../components/Map.model"
 import { markerUrls } from "@/parameters"
@@ -64,20 +64,20 @@ export const createMarkers: CreateMarkers = (points, options) => {
   return { layer, style: _style }
 }
 
-export const createText = (): Text => {
-  return new ol.style.Text({
-    overflow: true,
-    scale: 1.6,
-    offsetY: -43,
-    fill: new ol.style.Fill({
-      color: "#fff",
-    }),
-    stroke: new ol.style.Stroke({
-      color: "0",
-      width: 2,
-    }),
-  })
-}
+// const createText = (): Text => {
+//   return new ol.style.Text({
+//     overflow: true,
+//     scale: 1.6,
+//     offsetY: -43,
+//     fill: new ol.style.Fill({
+//       color: "#fff",
+//     }),
+//     stroke: new ol.style.Stroke({
+//       color: "0",
+//       width: 2,
+//     }),
+//   })
+// }
 
 export const createIcon = ({
   iconScale = 0.24,
@@ -156,9 +156,7 @@ export const createMapPoints = async (
       const point: Coordinate = [item.location.x, item.location.y]
       const mapPoint = transformCoords(point, "EPSG:4326", "EPSG:3857")
       const iconImageExists = await checkIconImageExistance(item.type)
-      const iconUrl = (iconImageExists.exists)
-        ? iconImageExists.searchUrl
-        : markerUrls.search + "general.png"
+      const iconUrl = iconImageExists.url
       return {
         coords: mapPoint,
         text: item.title,
@@ -169,6 +167,7 @@ export const createMapPoints = async (
     })
   )
 }
+
 /**
  * Checks if icon url exists or not
  * @param iconName
@@ -176,11 +175,13 @@ export const createMapPoints = async (
  */
 export const checkIconImageExistance = async (iconName: string) => {
   const searchUrl = markerUrls.search + iconName + ".png"
-  return { searchUrl, exists: await urlExists(searchUrl) }
+  const exists = await urlExists(searchUrl)
+  const url = exists ? searchUrl : markerUrls.search + "general.png"
+  return { url, exists }
 }
 
 const urlExists = (url: string) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve: (val: boolean) => void) => {
     fetch(url, { method: "head" })
       .then((status) => resolve(status.ok))
       .catch(() => resolve(false))
