@@ -3,10 +3,15 @@
     ref="mobileResultViewContainer"
     class="mobile-details-section pos-relative"
   >
-    <button class="close-modal-button pos-absolute d-flex justify-center align-center" @click="hideModal">
+    <button
+      class="close-modal-button pos-absolute d-flex justify-center align-center"
+      @click="hideModal"
+    >
       <Icon :size="25"></Icon>
     </button>
-    <Loading v-show="store.state.reverseLoading" class="curved-loading pos-absolute" />
+    <div class="curved-loading pos-absolute o-hidden">
+      <Loading v-show="store.state.reverseLoading" />
+    </div>
     <Icon
       name="close"
       :size="40"
@@ -17,26 +22,33 @@
     ></Icon>
     <span
       class="drag-button d-block pos-absolute"
+      :style="`padding-top: calc(${drawerConstants.bottomSheetloadingHeight}/2)`"
       @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
     >
       <span class="d-block" />
     </span>
     <div
-      :style="`height: ${store.state.mapDimensions.height}px;`"
+      :style="`
+      height: ${store.state.mapDimensions.height}px;
+      margin-top: ${drawerConstants.bottomSheetloadingHeight};`"
       class="o-auto"
     >
-      <PointDetails :item="store.state.selectedMarker" :collapse="!fullScreen"></PointDetails>
+      <PointDetails
+        :item="store.state.selectedMarker"
+        :collapse="!fullScreen"
+      ></PointDetails>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { store } from "@/store"
 
 import Icon from "@/components/icons/IconComponent.vue"
 import PointDetails from "./drawer/result-section/PointDetails.vue"
 import Loading from "./LoadingComp.vue"
+import { drawerConstants } from "@/parameters"
 
 const mobileResultViewContainer = ref<HTMLDivElement>()
 const fullScreen = ref(false)
@@ -76,7 +88,10 @@ const handleTouchEnd = () => {
       mobileResultViewContainer.value.style.setProperty("border-radius", "0")
       fullScreen.value = true
     } else {
-      mobileResultViewContainer.value.style.setProperty("max-height", "3rem")
+      mobileResultViewContainer.value.style.setProperty(
+        "max-height",
+        drawerConstants.bottomSheetNormalHeight
+      )
     }
   }
 }
@@ -88,8 +103,7 @@ const closeScreen = () => {
   addTemporaryTransition()
 }
 
-const addTemporaryTransition = () => {
-  const transitionTime = 0.5
+const addTemporaryTransition = (transitionTime = 0.5) => {
   mobileResultViewContainer.value?.style.setProperty(
     "transition",
     transitionTime + "s"
@@ -103,6 +117,43 @@ const hideModal = () => {
   store.actions.markers.deselectAll()
 }
 
+const collapseSheet = () => {
+  mobileResultViewContainer.value?.style.setProperty(
+    "max-height",
+    drawerConstants.bottomSheetloadingHeight
+  )
+}
+
+const openSheet = () => {
+  mobileResultViewContainer.value?.style.setProperty(
+    "max-height",
+    drawerConstants.bottomSheetNormalHeight
+  )
+}
+
+watch(
+  () => store.state.reverseLoading,
+  (nv) => {
+    addTemporaryTransition(0.2)
+    if (nv) {
+      collapseSheet()
+    } else if (!fullScreen.value) {
+      openSheet()
+    }
+  }
+)
+
+watch(
+  () => store.state.selectedMarker,
+  (nv) => {
+    if (!nv) return
+    addTemporaryTransition(0.4)
+    collapseSheet()
+    setTimeout(() => {
+      openSheet()
+    }, 200)
+  }
+)
 </script>
 
 <style scoped lang="scss">
@@ -116,7 +167,10 @@ const hideModal = () => {
   max-height: 3rem;
   direction: rtl;
   .curved-loading {
-    top: 0;
+    top: 0px;
+    width: 100%;
+    height: 4rem;
+    border-radius: 1rem 1rem 0 0;
   }
   .close-icon {
     left: 1rem;
@@ -124,7 +178,6 @@ const hideModal = () => {
     z-index: 2;
   }
   .drag-button {
-    padding-top: 1.5rem;
     padding-bottom: 4rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -132,6 +185,7 @@ const hideModal = () => {
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
+    box-sizing: border-box;
     & > span {
       background-color: #cecece;
       border-radius: 25px;

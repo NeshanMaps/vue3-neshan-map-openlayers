@@ -26,15 +26,10 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineProps, PropType, defineEmits } from "vue";
-import { MapType, Tile } from "../Map.model";
-import { computed } from "@vue/reactivity";
-export default {
-  name: "SettingsComp",
-};
-</script>
 <script setup lang="ts">
+import { defineProps, PropType, defineEmits } from "vue"
+import { MapType, Tile } from "../Map.model"
+import { computed } from "@vue/reactivity"
 const props = defineProps({
   poi: Boolean,
   traffic: Boolean,
@@ -44,23 +39,23 @@ const props = defineProps({
   },
   tiles: {
     type: Array as PropType<Tile[]>,
-    default: () => []
+    default: () => [],
   },
   settingsBoxClass: Array,
   settingsBoxStyle: Object,
   typesClass: Array,
-});
+})
 
-const emit = defineEmits(["update:mapType", "update:poi", "update:traffic"]);
+const emit = defineEmits(["update:mapType", "update:poi", "update:traffic"])
 
 const poiLayer = computed({
   get: () => props.poi,
   set: (val) => emit("update:poi", val),
-});
+})
 const trafficLayer = computed({
   get: () => props.traffic,
   set: (val) => emit("update:traffic", val),
-});
+})
 </script>
 
 <style lang="scss">

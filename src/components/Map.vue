@@ -15,7 +15,7 @@
       :poi="poiLayer"
       :traffic="trafficLayer"
     >
-      <Settings
+      <DesktopLayers
         :tiles="reactiveTiles"
         :mapType="mapType"
         @update:map-type="changeMapType($event)"
@@ -23,6 +23,7 @@
         v-model:traffic="trafficLayer"
         v-model:poi="poiLayer"
       />
+      <MobileLayers class="mobile-layers pos-absolute"></MobileLayers>
     </slot>
     <slot v-if="!hideSearchContainer" name="search-container">
       <Drawer
@@ -75,7 +76,8 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import Settings from "./settings/SettingsComp.vue"
+import DesktopLayers from "./settings/DesktopLayers.vue"
+import MobileLayers from "./settings/MobileLayers.vue"
 import Drawer from "./drawer/DrawerComp.vue"
 import MobileDetailsSection from "./MobileDetailsSection.vue"
 
@@ -257,6 +259,7 @@ const startMap = async () => {
       smoothExtentConstraint: true,
       // projection: 'EPSG:4326' //Default was EPSG:3857
     }),
+    controls: []
   })
   store.setMap(newMap)
   // Currently there is a problem with assigning different map type on initilization
@@ -355,6 +358,12 @@ defineExpose({
 
 .small .map-popup-container {
   font-size: var(--text-xs);
+}
+
+.mobile-layers {
+  top: 20%;
+  right: 20%;
+  z-index: 2;
 }
 </style>
 

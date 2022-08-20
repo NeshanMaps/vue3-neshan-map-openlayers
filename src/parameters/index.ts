@@ -60,6 +60,8 @@ export const breakpointsSegmentsPixels = {
 
 export const drawerConstants = {
   width: 240,
+  bottomSheetNormalHeight: "3rem",
+  bottomSheetloadingHeight: "2rem",
 }
 
 export const unsetMapDimnensions = {
@@ -69,10 +71,10 @@ export const unsetMapDimnensions = {
 
 export const zoomConstants = {
   initialZoom: 12,
-  maxZoom: 18.5
+  maxZoom: 18.5,
 }
 
 export const markersOffset = {
   high: [0, -60],
-  short: [0, -40]
+  short: [0, -40],
 }
