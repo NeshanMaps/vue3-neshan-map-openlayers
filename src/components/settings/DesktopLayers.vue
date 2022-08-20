@@ -58,7 +58,7 @@ const trafficLayer = computed({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .map-settings {
   background-color: white;
   border-radius: 0.5vw;

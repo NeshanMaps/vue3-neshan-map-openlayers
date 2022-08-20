@@ -10,20 +10,25 @@
     <slot
       v-if="!hideSettings"
       name="settings"
-      :tiles="reactiveTiles"
+      :tiles="filteredTiles"
       :mapType="mapType"
       :poi="poiLayer"
       :traffic="trafficLayer"
     >
       <DesktopLayers
-        :tiles="reactiveTiles"
+        :tiles="filteredTiles"
         :mapType="mapType"
         @update:map-type="changeMapType($event)"
         :settingsBoxClass="settingsBoxClass"
         v-model:traffic="trafficLayer"
         v-model:poi="poiLayer"
       />
-      <MobileLayers class="mobile-layers pos-absolute"></MobileLayers>
+      <button
+        class="mobile-layers-button pos-absolute justify-center align-center d-flex"
+        @click="mobileDrawerModel = true"
+      >
+        <img :src="require('@/static/layers-outline.svg')" />
+      </button>
     </slot>
     <slot v-if="!hideSearchContainer" name="search-container">
       <Drawer
@@ -38,6 +43,11 @@
     v-if="store.getters.screen.small"
     v-show="store.state.mobileDrawerShowDetails"
   ></MobileDetailsSection>
+  <MobileLayers
+    v-model:value="mobileDrawerModel"
+    :map-type="mapType"
+    :tiles="filteredTiles"
+  ></MobileLayers>
   <div class="map-popup-container" ref="popupContainer"></div>
   <div class="map-popup-container" ref="persistantContainer"></div>
 </template>
@@ -164,16 +174,11 @@ watch(
   }
 )
 
-const sanitizedCenter = ref<Coordinate | undefined>(
-  sanitizeLocation(props.center)
-)
+const mobileDrawerModel = ref(false)
 const mapType = ref(props.defaultType)
-const reactiveTiles = reactive(
+const filteredTiles = reactive(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
 )
-const popupContainer: DivElementRef = ref()
-const persistantContainer: DivElementRef = ref()
-
 const trafficLayer = ref(props.traffic)
 const poiLayer = ref(props.poi)
 watch(
@@ -237,6 +242,9 @@ const importMap = (url: string, tagName = "my-openlayer") => {
   return scriptTag
 }
 
+const sanitizedCenter = ref<Coordinate | undefined>(
+  sanitizeLocation(props.center)
+)
 const mapContainer = ref<HTMLDivElement>()
 /**
  * Starts the map and adds it to element with id='map'
@@ -259,7 +267,7 @@ const startMap = async () => {
       smoothExtentConstraint: true,
       // projection: 'EPSG:4326' //Default was EPSG:3857
     }),
-    controls: []
+    controls: [],
   })
   store.setMap(newMap)
   // Currently there is a problem with assigning different map type on initilization
@@ -281,32 +289,39 @@ const shakeMap = () => {
   setTimeout(() => store.state.map?.updateSize(), 300)
 }
 
+const popupContainer: DivElementRef = ref()
+const persistantContainer: DivElementRef = ref()
 const eventsEmits = defineEmits(["on-zoom", "on-click"])
-const { setupMapEvents, handleResultHover, handleResultClick } =
-  eventsMixin({
-    emits: eventsEmits,
-    resultHoverCallback: props.resultHoverCallback,
-    resultClickCallback: props.resultClickCallback,
-    markerHoverCallback: props.markerHoverCallback,
-    zoomOnMarkerClick: props.zoomOnMarkerClick,
-    zoomOnResultClick: props.zoomOnResultClick,
-    popupOnMarkerHover: props.popupOnMarkerHover,
-    popupOnResultHover: props.popupOnResultHover,
-    mapContainer,
-    popupContainer,
-    persistantContainer,
-  })
+const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
+  emits: eventsEmits,
+  resultHoverCallback: props.resultHoverCallback,
+  resultClickCallback: props.resultClickCallback,
+  markerHoverCallback: props.markerHoverCallback,
+  zoomOnMarkerClick: props.zoomOnMarkerClick,
+  zoomOnResultClick: props.zoomOnResultClick,
+  popupOnMarkerHover: props.popupOnMarkerHover,
+  popupOnResultHover: props.popupOnResultHover,
+  mapContainer,
+  popupContainer,
+  persistantContainer,
+})
 
 /**
  * Changes cluster source to marker source on cluster threshold passing and vice versa
  */
-watch(() => store.state.zoom, (nv, ov) => {
-  if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
-    store.actions.markers.toggleClusterSource(store.state.searchMarkers, true)
-  } else if (nv < props.clusterThreshold && ov >= props.clusterThreshold) {
-    store.actions.markers.toggleClusterSource(store.state.searchMarkers, false)
+watch(
+  () => store.state.zoom,
+  (nv, ov) => {
+    if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
+      store.actions.markers.toggleClusterSource(store.state.searchMarkers, true)
+    } else if (nv < props.clusterThreshold && ov >= props.clusterThreshold) {
+      store.actions.markers.toggleClusterSource(
+        store.state.searchMarkers,
+        false
+      )
+    }
   }
-})
+)
 
 const handleSearch = ({ term = "", coords }: HandleSearchProps) => {
   const reliableCoords =
@@ -360,10 +375,20 @@ defineExpose({
   font-size: var(--text-xs);
 }
 
-.mobile-layers {
+.mobile-layers-button {
   top: 20%;
-  right: 20%;
+  right: 10%;
   z-index: 2;
+  background: rgba(255, 255, 255, 0.701);
+  border: none;
+  border-radius: 50%;
+  height: 2rem;
+  width: 2rem;
+  padding: 0.25rem;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+  img {
+    width: 100%;
+  }
 }
 </style>
 
