@@ -19,6 +19,7 @@
         v-if="!store.getters.screen.small"
         :tiles="filteredTiles"
         :settingsBoxClass="settingsBoxClass"
+        :settingsBoxStyle="settingsBoxStyle"
       />
       <button
         v-if="store.getters.screen.small"

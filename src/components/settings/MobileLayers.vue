@@ -5,7 +5,7 @@
     @click="close"
   >
     <div
-      class="mobile-layers pos-absolute"
+      class="mobile-layers pos-absolute px-1"
       :activated="showTiles"
       @click.prevent.stop="() => {}"
     >
@@ -19,7 +19,7 @@
         >
           <img :src="tile.url" />
           <div class="desc">
-            {{ tile.title }}
+            {{ tile.title[0].toUpperCase() + tile.title.slice(1) }}
           </div>
         </div>
       </div>
@@ -101,6 +101,7 @@ const close = () => {
     background-color: white;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
+    box-sizing: border-box;
     &[activated="true"] {
       max-height: 60%;
     }

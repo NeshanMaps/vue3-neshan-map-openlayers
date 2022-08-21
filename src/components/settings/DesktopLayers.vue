@@ -1,57 +1,48 @@
 <template>
-  <div :style="settingsBoxStyle" class="map-settings" :class="settingsBoxClass">
-    <div class="map-tiles">
+  <div :style="settingsBoxStyle" class="map-settings o-hidden pos-absolute" :class="settingsBoxClass">
+    <div class="map-tiles justify-between">
       <div
         v-for="tile of tiles"
         :key="tile.title"
         @click="store.setMapType(tile.title)"
-        class="tile"
+        class="tile pointer"
         :class="{ 'selected-tile': tile.title == store.state.mapType }"
       >
         <img :src="tile.url" />
         <div class="desc">
-          {{ tile.title }}
+          {{ tile.title[0].toUpperCase() + tile.title.slice(1) }}
         </div>
       </div>
     </div>
-    <div class="map-checkboxes">
-      <label
-        >poi
-        <input type="checkbox" name="poi" v-model="poiLayer" />
-      </label>
-      <label for="traffic"
-        >traffic
-        <input type="checkbox" name="traffic" v-model="trafficLayer" />
-      </label>
+    <div class="map-layers d-flex mt-1">
+      <div
+        class="d-flex justify-center align-center pointer"
+        :selected="store.state.poiLayer"
+        @click="store.togglePoiLayer()"
+      >
+        <img :src="require('@/static/poi.png')" />
+      </div>
+      <div
+        class="d-flex justify-center align-center pointer"
+        :selected="store.state.trafficLayer"
+        @click="store.toggleTrafficLayer()"
+      >
+        <img :src="require('@/static/traffic.png')" />
+      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType, defineEmits } from "vue"
+import { defineProps, PropType } from "vue"
 import { Tile } from "../Map.model"
-import { computed } from "@vue/reactivity"
 import { store } from "@/store"
-const props = defineProps({
-  poi: Boolean,
-  traffic: Boolean,
+defineProps({
   tiles: {
     type: Array as PropType<Tile[]>,
     default: () => [],
   },
   settingsBoxClass: Array,
   settingsBoxStyle: Object,
-  typesClass: Array,
-})
-
-const emit = defineEmits(["update:poi", "update:traffic"])
-
-const poiLayer = computed({
-  get: () => props.poi,
-  set: (val) => emit("update:poi", val),
-})
-const trafficLayer = computed({
-  get: () => props.traffic,
-  set: (val) => emit("update:traffic", val),
 })
 </script>
 
@@ -60,18 +51,33 @@ const trafficLayer = computed({
   background-color: white;
   border-radius: 0.5vw;
   border: 1px solid rgb(178, 178, 178);
-  position: absolute;
   z-index: 10;
   bottom: 3.5vh;
   left: 1vw;
   max-width: 8.6vw;
   max-height: 8vw;
-  overflow: hidden;
   transition: 0.5s;
   &:hover {
-    max-width: 100%;
+    max-width: 700px;
     max-height: 100%;
     transition: 1s;
+  }
+  .map-layers {
+    flex-wrap: wrap;
+    & > div {
+      flex: 0 0 auto;
+      width: 25%;
+      box-sizing: border-box;
+      margin: 0 auto 10px auto;
+      &[selected="true"] {
+        border: 1px solid var(--primary);
+        border-radius: 0.5rem;
+        color: var(--primary);
+      }
+      img {
+        width: 40%;
+      }
+    }
   }
 }
 
@@ -87,7 +93,6 @@ const trafficLayer = computed({
 }
 
 .tile {
-  cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0);
   img {
     width: 8vw;
