@@ -1,18 +1,17 @@
-import { Api, OlMap } from "@/components/Map.model"
+import { Api } from "@/components/Map.model"
 import { reactive } from "vue"
 import { dimenstionsState } from "./dimensions/state"
 import { markersState } from "./markers/state"
 import { overlayState } from "./overlays/state"
 import { drawersState } from "./drawers/state"
-import { zoomConstants } from "@/parameters"
+import { mapState } from "./map/state"
 
 export const state = reactive({
   ...dimenstionsState,
   ...markersState,
   ...overlayState,
   ...drawersState,
-  map: null as OlMap | null,
-  zoom: zoomConstants.initialZoom,
+  ...mapState,
   api: null as Api | null,
   searchLoading: false,
   reverseLoading: false,

@@ -4,9 +4,9 @@
       <div
         v-for="tile of tiles"
         :key="tile.title"
-        @click="emit('update:mapType', tile.title)"
+        @click="store.setMapType(tile.title)"
         class="tile"
-        :class="{ 'selected-tile': tile.title == mapType }"
+        :class="{ 'selected-tile': tile.title == store.state.mapType }"
       >
         <img :src="tile.url" />
         <div class="desc">
@@ -28,15 +28,12 @@
 </template>
 <script setup lang="ts">
 import { defineProps, PropType, defineEmits } from "vue"
-import { MapType, Tile } from "../Map.model"
+import { Tile } from "../Map.model"
 import { computed } from "@vue/reactivity"
+import { store } from "@/store"
 const props = defineProps({
   poi: Boolean,
   traffic: Boolean,
-  mapType: {
-    type: String as PropType<MapType>,
-    default: "neshan",
-  },
   tiles: {
     type: Array as PropType<Tile[]>,
     default: () => [],
@@ -46,7 +43,7 @@ const props = defineProps({
   typesClass: Array,
 })
 
-const emit = defineEmits(["update:mapType", "update:poi", "update:traffic"])
+const emit = defineEmits(["update:poi", "update:traffic"])
 
 const poiLayer = computed({
   get: () => props.poi,
@@ -91,6 +88,7 @@ const trafficLayer = computed({
 
 .tile {
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0);
   img {
     width: 8vw;
     height: 8vw;
@@ -109,6 +107,8 @@ const trafficLayer = computed({
 }
 
 .selected-tile {
-  border: 1px solid rgb(145, 145, 145);
+  border: 1px solid var(--primary);
+  border-radius: 0.5rem;
+  color: var(--primary);
 }
 </style>

@@ -252,7 +252,8 @@ const selectFeauture = (
 }
 
 const deselectAll = () => {
-  store.actions.overlays.changeOverlayStats()
+  store.actions.overlays.changeOverlayStats(undefined, 'persistant')
+  store.actions.markers.clearMarkerLayer(store.state.mainMarker)
   store.setSelectedMarker(null)
   store.actions.drawers.toggleResultDrawers(false)
 }

@@ -1,43 +1,40 @@
 <template>
-  <div
-    ref="mobileResultViewContainer"
-    class="mobile-details-section pos-relative"
-  >
+  <div class="mobile-details-section pos-absolute">
     <button
       class="close-modal-button pos-absolute d-flex justify-center align-center"
       @click="hideModal"
     >
       <Icon :size="25"></Icon>
     </button>
-    <div class="curved-loading pos-absolute o-hidden">
-      <Loading v-show="store.state.reverseLoading" />
-    </div>
-    <Icon
-      name="close"
-      :size="40"
-      style="float: left"
-      :style="`visibility: ${fullScreen ? 'visible' : 'hidden'};`"
-      class="close-icon pos-absolute"
-      @click="closeScreen"
-    ></Icon>
-    <span
-      class="drag-button d-block pos-absolute"
-      :style="`padding-top: calc(${drawerConstants.bottomSheetloadingHeight}/2)`"
-      @touchmove="handleTouchMove"
-      @touchend="handleTouchEnd"
-    >
-      <span class="d-block" />
-    </span>
-    <div
-      :style="`
+    <div class="o-hidden details-container" ref="mobileResultViewContainer">
+      <Loading v-show="store.state.reverseLoading" class="curved-loading" />
+      <Icon
+        name="close"
+        :size="40"
+        style="float: left"
+        :style="`visibility: ${fullScreen ? 'visible' : 'hidden'};`"
+        class="close-icon pos-absolute"
+        @click="closeScreen"
+      ></Icon>
+      <span
+        class="drag-button d-block pos-absolute"
+        :style="`padding-top: calc(${drawerConstants.bottomSheetloadingHeight}/2)`"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
+      >
+        <span class="d-block" />
+      </span>
+      <div
+        :style="`
       height: ${store.state.mapDimensions.height}px;
       margin-top: ${drawerConstants.bottomSheetloadingHeight};`"
-      class="o-auto"
-    >
-      <PointDetails
-        :item="store.state.selectedMarker"
-        :collapse="!fullScreen"
-      ></PointDetails>
+        class="o-auto"
+      >
+        <PointDetails
+          :item="store.state.selectedMarker"
+          :collapse="!fullScreen"
+        ></PointDetails>
+      </div>
     </div>
   </div>
 </template>
@@ -159,17 +156,16 @@ watch(
 <style scoped lang="scss">
 .mobile-details-section {
   width: 100%;
-  position: absolute;
   z-index: 1000000;
-  background-color: white;
   bottom: 0;
-  border-radius: 1rem 1rem 0 0;
-  max-height: 3rem;
   direction: rtl;
+  .details-container {
+    background-color: white;
+    max-height: 3rem;
+    border-radius: 1rem 1rem 0 0;
+  }
   .curved-loading {
-    top: 0px;
     width: 100%;
-    height: 4rem;
     border-radius: 1rem 1rem 0 0;
   }
   .close-icon {

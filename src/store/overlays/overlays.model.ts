@@ -1,6 +1,7 @@
-import { DivElementRef, Ol, OlMap } from "../../components/Map.model"
+import { DivElementRef, Ol } from "../../components/Map.model"
 import { Coordinate } from "openlayers"
 import { Ref } from "vue"
+import { OlMap } from "../map/map.model"
 
 export declare type Overlay = Ol.Overlay
 

@@ -9,13 +9,13 @@
       :activated="showTiles"
       @click.prevent.stop="() => {}"
     >
-      <div class="map-tiles d-flex justify-center">
+      <div class="map-types d-flex justify-center">
         <!-- @click="emit('update:mapType', tile.title)" -->
         <div
           v-for="tile of tiles"
           :key="tile.title"
-          class="tile"
-          :class="{ 'selected-tile': tile.title == mapType }"
+          :selected="tile.title == store.state.mapType"
+          @click="store.setMapType(tile.title)"
         >
           <img :src="tile.url" />
           <div class="desc">
@@ -23,15 +23,21 @@
           </div>
         </div>
       </div>
-      <div class="map-checkboxes">
-        <label
-          >poi
-          <input type="checkbox" name="poi" />
-        </label>
-        <label for="traffic"
-          >traffic
-          <input type="checkbox" name="traffic" />
-        </label>
+      <div class="map-layers d-flex justify-center">
+        <div
+          class="d-flex justify-center align-center"
+          :selected="store.state.poiLayer"
+          @click="store.togglePoiLayer()"
+        >
+          <img :src="require('@/static/poi.png')" />
+        </div>
+        <div
+          class="d-flex justify-center align-center"
+          :selected="store.state.trafficLayer"
+          @click="store.toggleTrafficLayer()"
+        >
+          <img :src="require('@/static/traffic.png')" />
+        </div>
       </div>
     </div>
   </div>
@@ -40,21 +46,22 @@
 import { computed, ref } from "@vue/reactivity"
 import { Tile } from "../Map.model"
 import { defineEmits, defineProps, PropType, watch } from "vue"
-import { MapType } from "../Map.model"
+import { store } from "@/store"
 
 const props = defineProps({
   value: Boolean,
-  mapType: {
-    type: String as PropType<MapType>,
-    default: "neshan",
-  },
   tiles: {
     type: Array as PropType<Tile[]>,
     default: () => [],
   },
 })
 
-const emit = defineEmits(["update:value"])
+const emit = defineEmits([
+  "update:value",
+  "update:mapType",
+  "update:traffice",
+  "update:poi",
+])
 const model = computed({
   get() {
     return props.value
@@ -97,17 +104,36 @@ const close = () => {
     &[activated="true"] {
       max-height: 60%;
     }
-    .map-tiles {
+    .map-types {
       flex-wrap: wrap;
       padding-top: 1rem;
       padding-bottom: 1rem;
-      .tile {
+      & > div {
         flex: 0 0 auto;
         width: 33.333333%;
         box-sizing: border-box;
+        border: 1px solid rgba(255, 255, 255, 0);
+        &[selected="true"] {
+          border: 1px solid var(--primary);
+          border-radius: 0.5rem;
+          color: var(--primary);
+        }
+      }
+    }
+    .map-layers {
+      flex-wrap: wrap;
+      & > div {
+        flex: 0 0 auto;
+        width: 33.333333%;
+        box-sizing: border-box;
+        margin: 0 auto 10px auto;
+        &[selected="true"] {
+          border: 1px solid var(--primary);
+          border-radius: 0.5rem;
+          color: var(--primary);
+        }
         img {
-          width: 15vw;
-          height: 15vw;
+          width: 80%;
         }
       }
     }

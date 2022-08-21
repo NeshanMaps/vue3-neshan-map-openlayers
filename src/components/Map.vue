@@ -11,21 +11,19 @@
       v-if="!hideSettings"
       name="settings"
       :tiles="filteredTiles"
-      :mapType="mapType"
-      :poi="poiLayer"
-      :traffic="trafficLayer"
+      :mapType="store.state.mapType"
+      :poi="store.state.poiLayer"
+      :traffic="store.state.trafficLayer"
     >
       <DesktopLayers
+        v-if="!store.getters.screen.small"
         :tiles="filteredTiles"
-        :mapType="mapType"
-        @update:map-type="changeMapType($event)"
         :settingsBoxClass="settingsBoxClass"
-        v-model:traffic="trafficLayer"
-        v-model:poi="poiLayer"
       />
       <button
+        v-if="store.getters.screen.small"
         class="mobile-layers-button pos-absolute justify-center align-center d-flex"
-        @click="mobileDrawerModel = true"
+        @click="handleMobileDrawerClick"
       >
         <img :src="require('@/static/layers-outline.svg')" />
       </button>
@@ -45,7 +43,6 @@
   ></MobileDetailsSection>
   <MobileLayers
     v-model:value="mobileDrawerModel"
-    :map-type="mapType"
     :tiles="filteredTiles"
   ></MobileLayers>
   <div class="map-popup-container" ref="popupContainer"></div>
@@ -70,17 +67,16 @@ import {
 } from "vue"
 import {
   CoordsObj,
-  MapType,
   ResultHoverCallback,
   ResultClickCallback,
   MarkersIconCallback,
   MarkerHoverCallback,
-  OlMap,
   DivElementRef,
   HandleSearchProps,
 } from "./Map.model"
 import { Coordinate } from "openlayers"
 import { SearchOptions } from "../store/markers/markers.model"
+import { MapType, OlMap } from "@/store/map/map.model"
 export default {
   name: "NeshanMap",
 }
@@ -175,30 +171,35 @@ watch(
 )
 
 const mobileDrawerModel = ref(false)
-const mapType = ref(props.defaultType)
 const filteredTiles = reactive(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
 )
-const trafficLayer = ref(props.traffic)
-const poiLayer = ref(props.poi)
+store.togglePoiLayer(props.poi)
+store.toggleTrafficLayer(props.traffic)
 watch(
   () => props.traffic,
   (nv) => {
-    trafficLayer.value = nv
+    store.toggleTrafficLayer(nv)
   }
 )
 watch(
   () => props.poi,
   (nv) => {
-    poiLayer.value = nv
+    store.togglePoiLayer(nv)
   }
 )
-watch(trafficLayer, (nv) => {
-  toggleTraffic(nv)
-})
-watch(poiLayer, (nv) => {
-  togglePoi(nv)
-})
+watch(
+  () => store.state.trafficLayer,
+  (nv) => {
+    toggleTraffic(nv)
+  }
+)
+watch(
+  () => store.state.poiLayer,
+  (nv) => {
+    togglePoi(nv)
+  }
+)
 /**
  * Switches poi layer
  * @param value - Whether it should be on or off
@@ -259,8 +260,8 @@ const startMap = async () => {
     target: mapContainer.value,
     key: props.mapKey,
     // mapType: 'standard-night',
-    poi: poiLayer.value,
-    traffic: trafficLayer.value,
+    poi: store.state.poiLayer,
+    traffic: store.state.trafficLayer,
     view: new ol.View({
       center: ol.proj.fromLonLat(coords),
       zoom: props.zoom,
@@ -271,16 +272,8 @@ const startMap = async () => {
   })
   store.setMap(newMap)
   // Currently there is a problem with assigning different map type on initilization
-  changeMapType(mapType.value)
+  store.setMapType(props.defaultType)
   shakeMap()
-}
-/**
- * Changes Map type
- * @param type - Exact name of a given map name
- */
-const changeMapType = (type: MapType) => {
-  store.state.map?.setMapType(type)
-  mapType.value = type
 }
 /**
  * Updates map frame so the offset problem is no more.
@@ -341,6 +334,13 @@ const handleSearch = ({ term = "", coords }: HandleSearchProps) => {
 defineExpose({
   search: handleSearch,
 })
+
+const handleMobileDrawerClick = (event: MouseEvent) => {
+  const target: any = event.composedPath()[1]
+  target.classList.add('floaten')
+  setTimeout(() => target.classList.remove('floaten'), 350)
+  mobileDrawerModel.value = true
+}
 </script>
 
 <style lang="scss" scoped>
@@ -388,6 +388,21 @@ defineExpose({
   box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
   img {
     width: 100%;
+  }
+  &.floaten {
+    animation-name: float;
+    animation-duration: 0.35s;
+    animation-iteration-count: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
   }
 }
 </style>

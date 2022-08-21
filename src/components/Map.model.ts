@@ -2,26 +2,15 @@ import { Ref } from "vue"
 import type Ol from "openlayers"
 
 export type { Ol }
-import { Feature, Map, style, Coordinate } from "openlayers"
+import { Feature, style, Coordinate } from "openlayers"
 import { ChangeOverlayStats } from "../store/overlays/overlays.model"
 import {
   PrimaryReverseResult,
   SearchResult,
 } from "../store/markers/markers.model"
+import { MapType, OlMap } from "@/store/map/map.model"
 
 export declare type NuString = null | string
-export declare type MapType =
-  | "neshan"
-  | "dreamy"
-  | "dreamy-gold"
-  | "standard-night"
-  | "standard-day"
-  | "osm-bright"
-export declare interface OlMap extends Map {
-  setMapType(value: MapType): void
-  switchPoiLayer(value: boolean): void
-  switchTrafficLayer(value: boolean): void
-}
 export declare type DoubleNums = [number, number]
 export declare type Style = style.Style
 export declare type Image = Ol.style.Image
