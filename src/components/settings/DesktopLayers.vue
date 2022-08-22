@@ -1,12 +1,16 @@
 <template>
-  <div :style="settingsBoxStyle" class="map-settings o-hidden pos-absolute" :class="settingsBoxClass">
-    <div class="map-tiles justify-between">
+  <div
+    :style="settingsBoxStyle"
+    class="map-settings o-hidden pos-absolute"
+    :class="settingsBoxClass"
+  >
+    <div class="map-tiles justify-between d-flex">
       <div
         v-for="tile of tiles"
         :key="tile.title"
         @click="store.setMapType(tile.title)"
-        class="tile pointer"
-        :class="{ 'selected-tile': tile.title == store.state.mapType }"
+        class="pointer"
+        :selected="tile.title == store.state.mapType"
       >
         <img :src="tile.url" />
         <div class="desc">
@@ -41,7 +45,7 @@ defineProps({
     type: Array as PropType<Tile[]>,
     default: () => [],
   },
-  settingsBoxClass: Array,
+  settingsBoxClass: [Array, Object],
   settingsBoxStyle: Object,
 })
 </script>
@@ -49,71 +53,58 @@ defineProps({
 <style lang="scss" scoped>
 .map-settings {
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 0.5rem;
   border: 1px solid rgb(178, 178, 178);
   z-index: 10;
-  bottom: 3.5vh;
-  left: 1vw;
-  max-width: 8.6vw;
-  max-height: 8vw;
+  bottom: 4%;
+  left: 1%;
+  max-width: 6rem;
+  max-height: 6rem;
   transition: 0.5s;
+  box-sizing: border-box;
   &:hover {
-    max-width: 700px;
+    max-width: 38rem;
     max-height: 100%;
     transition: 1s;
   }
-  .map-layers {
-    flex-wrap: wrap;
+  div [selected="true"] {
+    border: 1px solid var(--primary);
+    border-radius: 0.5rem;
+    color: var(--primary);
+  }
+  .map-tiles {
     & > div {
-      flex: 0 0 auto;
-      width: 25%;
-      box-sizing: border-box;
-      margin: 0 auto 10px auto;
-      &[selected="true"] {
-        border: 1px solid var(--primary);
-        border-radius: 0.5rem;
-        color: var(--primary);
+      &:not([selected="true"]) {
+        border: 1px solid rgba(255, 255, 255, 0);
       }
       img {
-        width: 40%;
+        width: 6rem;
+        height: 6rem;
+        border-radius: 1rem;
+      }
+      .desc {
+        overflow: hidden;
+        padding-right: 0.1rem;
+        padding-left: 0.1rem;
+        text-align: center;
+        font-size: small;
       }
     }
   }
-}
-
-.map-checkboxes {
-  display: flex;
-  justify-content: space-around;
-  padding-top: 1vw;
-  padding-bottom: 1vw;
-}
-
-.map-tiles {
-  display: flex;
-}
-
-.tile {
-  border: 1px solid rgba(255, 255, 255, 0);
-  img {
-    width: 8vw;
-    height: 8vw;
-    border-radius: 1vw;
-    margin-left: 0.3vw;
-    margin-right: 0.3vw;
+  .map-layers {
+    & > div {
+      width: 45%;
+      box-sizing: border-box;
+      margin: 0 auto 10px auto;
+      transition: 0.2s;
+      img {
+        width: 4rem;
+      }
+      &:not([selected="true"]) {
+        border: 1px solid rgba(255, 255, 255, 0);
+        filter: grayscale(1);
+      }
+    }
   }
-}
-
-.desc {
-  overflow: hidden;
-  padding-right: 0.1vw;
-  padding-left: 0.1vw;
-  text-align: center;
-  font-size: small;
-}
-
-.selected-tile {
-  border: 1px solid var(--primary);
-  border-radius: 0.5rem;
-  color: var(--primary);
 }
 </style>

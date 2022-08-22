@@ -192,6 +192,7 @@ export function eventsMixin({
    */
   const handleResultClick = (item: SearchItem) => {
     store.actions.overlays.changeOverlayStats()
+    store.toggleDrawerActivation(false)
     if (zoomOnResultClick) {
       store.actions.markers.selectFeauture(item)
     }

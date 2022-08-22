@@ -10,22 +10,24 @@
       name="search"
       placeholder="جستجو"
       v-model="text"
-      @keydown.enter="runTimeout(text || privateText, 0)"
+      @keydown.enter="runTimeout(text, 0)"
       @focus="store.toggleDrawerActivation(true)"
     />
     <button
       v-if="store.state.drawerShowDetails && !store.getters.screen.small"
       @click="store.toggleDrawerShowDetails(false)"
+      class="pointer"
     >
       <Icon name="back" :size="19"></Icon>
     </button>
     <button
       v-if="!store.state.drawerActivation"
       @click="store.toggleDrawerActivation(true)"
+      class="pointer"
     >
       <Icon name="magnet" :size="19"></Icon>
     </button>
-    <button v-else @click="store.toggleDrawerActivation(false)">
+    <button v-else class="pointer" @click="store.toggleDrawerActivation(false)">
       <Icon name="close" :size="19"></Icon>
     </button>
   </div>
@@ -38,7 +40,7 @@ import Icon from "../icons/IconComponent.vue"
 import { drawerConstants } from "@/parameters"
 
 const props = defineProps({
-  searchBoxClass: Array,
+  searchBoxClass: [String, Array, Object],
   searchBoxStyle: Object,
   typesClass: Array,
   searchText: {
@@ -55,23 +57,17 @@ const emit = defineEmits([
 const text = computed({
   get: () => props.searchText,
   set: (val) => {
-    if (!props.searchText) {
-      privateText.value = val
-    }
     emit("update:search-text", val)
     runTimeout(val)
   },
 })
-
-// Defined them in case of not wanting to use with v-model
-const privateText = ref(props.searchText)
 
 /**
  * Emits Search Term to the parent component
  * @param term search text
  */
 const emitSearch = (term = "") => {
-  const inputText = term || text.value?.trim() || privateText.value?.trim()
+  const inputText = term || text.value?.trim()
   emit("submit", inputText)
 }
 
@@ -81,7 +77,7 @@ let emitTimeout: number
  * @param value - searching value
  * @param delay - delay time for emiting search, defaults to 1000
  */
-const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
+const runTimeout = (value = text.value, delay = 1000) => {
   clearTimeout(emitTimeout)
   if (!value) {
     store.toggleSearchLoading(false)
@@ -96,6 +92,11 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
 </script>
 
 <style lang="scss" scoped>
+.small .map-search-box input[type="search"] {
+  line-height: 1.7rem;
+  font-size: 1.1rem;
+  height: 2.7rem;
+}
 .map-search-box {
   border-radius: 10px;
   padding-right: 0.5rem;
@@ -131,7 +132,6 @@ const runTimeout = (value = text.value || privateText.value, delay = 1000) => {
     background-color: inherit;
     border: none;
     padding: 0;
-    cursor: pointer;
   }
 }
 

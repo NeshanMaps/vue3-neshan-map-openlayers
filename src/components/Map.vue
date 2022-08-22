@@ -18,8 +18,8 @@
       <DesktopLayers
         v-if="!store.getters.screen.small"
         :tiles="filteredTiles"
-        :settingsBoxClass="settingsBoxClass"
-        :settingsBoxStyle="settingsBoxStyle"
+        :settingsClass="desktopSettingsClass"
+        :settingsStyle="desktopSettingsStyle"
       />
       <button
         v-if="store.getters.screen.small"
@@ -45,9 +45,21 @@
   <MobileLayers
     v-model:value="mobileDrawerModel"
     :tiles="filteredTiles"
+    :settingsClass="mobileSettingsClass"
+    :settingsStyle="mobileSettingsStyle"
   ></MobileLayers>
-  <div class="map-popup-container" ref="popupContainer"></div>
-  <div class="map-popup-container" ref="persistantContainer"></div>
+  <div
+    ref="popupContainer"
+    class="map-popup-container"
+    :class="temporaryPopupContainerClass"
+    :style="temporaryPopupContainerStyle"
+  ></div>
+  <div
+    ref="persistantContainer"
+    class="map-popup-container"
+    :class="persistantPopupContainerClass"
+    :style="persistantPopupContainerStyle"
+  ></div>
 </template>
 <script lang="ts">
 declare const ol: any
@@ -115,8 +127,14 @@ const props = defineProps({
     type: Array as PropType<MapType[]>,
     default: tiles.map((tile) => tile.title),
   },
-  settingsBoxClass: Array,
-  settingsBoxStyle: Object,
+  desktopSettingsClass: [String, Array, Object],
+  mobileSettingsClass: [String, Array, Object],
+  desktopSettingsStyle: Object,
+  mobileSettingsStyle: Object,
+  temporaryPopupContainerClass: [String, Array, Object],
+  persistantPopupContainerClass: [String, Array, Object],
+  temporaryPopupContainerStyle: Object,
+  persistantPopupContainerStyle: Object,
   hideSettings: Boolean,
   typesClass: Array,
   hideSearchBox: Boolean,
@@ -338,8 +356,8 @@ defineExpose({
 
 const handleMobileDrawerClick = (event: MouseEvent) => {
   const target: any = event.composedPath()[1]
-  target.classList.add('floaten')
-  setTimeout(() => target.classList.remove('floaten'), 350)
+  target.classList.add("floaten")
+  setTimeout(() => target.classList.remove("floaten"), 350)
   mobileDrawerModel.value = true
 }
 </script>
@@ -383,8 +401,8 @@ const handleMobileDrawerClick = (event: MouseEvent) => {
   background: rgba(255, 255, 255, 0.701);
   border: none;
   border-radius: 50%;
-  height: 2rem;
-  width: 2rem;
+  height: 2.3rem;
+  width: 2.3rem;
   padding: 0.25rem;
   box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
   img {

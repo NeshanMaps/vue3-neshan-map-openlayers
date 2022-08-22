@@ -1,42 +1,47 @@
 <template>
   <div
     v-show="model"
-    class="mobile-layers-container pos-absolute o-hidden"
+    class="mobile-settings-container pos-absolute o-hidden"
+    :class="settingsBoxClass"
+    :style="settingsBoxStyle"
     @click="close"
   >
     <div
-      class="mobile-layers pos-absolute px-1"
+      class="mobile-settings pos-absolute px-1"
       :activated="showTiles"
       @click.prevent.stop="() => {}"
     >
+      <div class="map-layers d-flex justify-center">
+        <div
+          class="d-flex justify-center align-center tile"
+          :selected="store.state.poiLayer"
+          @click="store.togglePoiLayer()"
+        >
+          <img :src="require('@/static/poi.png')" />
+          <div class="desc text-sm">POI</div>
+        </div>
+        <div
+          class="d-flex justify-center align-center tile"
+          :selected="store.state.trafficLayer"
+          @click="store.toggleTrafficLayer()"
+        >
+          <img :src="require('@/static/traffic.png')" />
+          <div class="desc text-sm">Traffic</div>
+        </div>
+      </div>
       <div class="map-types d-flex justify-center">
         <!-- @click="emit('update:mapType', tile.title)" -->
         <div
           v-for="tile of tiles"
           :key="tile.title"
           :selected="tile.title == store.state.mapType"
+          class="d-flex justify-center align-center tile"
           @click="store.setMapType(tile.title)"
         >
           <img :src="tile.url" />
-          <div class="desc">
+          <div class="desc text-sm">
             {{ tile.title[0].toUpperCase() + tile.title.slice(1) }}
           </div>
-        </div>
-      </div>
-      <div class="map-layers d-flex justify-center">
-        <div
-          class="d-flex justify-center align-center"
-          :selected="store.state.poiLayer"
-          @click="store.togglePoiLayer()"
-        >
-          <img :src="require('@/static/poi.png')" />
-        </div>
-        <div
-          class="d-flex justify-center align-center"
-          :selected="store.state.trafficLayer"
-          @click="store.toggleTrafficLayer()"
-        >
-          <img :src="require('@/static/traffic.png')" />
         </div>
       </div>
     </div>
@@ -54,6 +59,8 @@ const props = defineProps({
     type: Array as PropType<Tile[]>,
     default: () => [],
   },
+  settingsBoxClass: [Array, Object],
+  settingsBoxStyle: Object,
 })
 
 const emit = defineEmits([
@@ -87,13 +94,13 @@ const close = () => {
 }
 </script>
 <style scoped lang="scss">
-.mobile-layers-container {
+.mobile-settings-container {
   top: 0;
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.221);
   z-index: 1000001;
-  .mobile-layers {
+  .mobile-settings {
     bottom: 0;
     width: 100%;
     transition: 0.2s;
@@ -103,40 +110,33 @@ const close = () => {
     border-top-right-radius: 0.5rem;
     box-sizing: border-box;
     &[activated="true"] {
-      max-height: 60%;
+      max-height: 70%;
     }
     .map-types {
       flex-wrap: wrap;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      & > div {
-        flex: 0 0 auto;
-        width: 33.333333%;
-        box-sizing: border-box;
-        border: 1px solid rgba(255, 255, 255, 0);
-        &[selected="true"] {
-          border: 1px solid var(--primary);
-          border-radius: 0.5rem;
-          color: var(--primary);
-        }
-      }
     }
     .map-layers {
       flex-wrap: wrap;
-      & > div {
-        flex: 0 0 auto;
-        width: 33.333333%;
-        box-sizing: border-box;
-        margin: 0 auto 10px auto;
-        &[selected="true"] {
-          border: 1px solid var(--primary);
-          border-radius: 0.5rem;
-          color: var(--primary);
-        }
-        img {
-          width: 80%;
-        }
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+  .tile {
+    flex: 0 0 auto;
+    flex-flow: column;
+    width: 6rem;
+    margin: 0 auto 10px auto;
+    height: 6rem;
+    img {
+      height: 5rem;
+      width: 5rem;
+      border-radius: 0.5rem;
+    }
+    &[selected="true"] {
+      img {
+        border: 1px solid var(--primary);
       }
+      color: var(--primary);
     }
   }
 }
