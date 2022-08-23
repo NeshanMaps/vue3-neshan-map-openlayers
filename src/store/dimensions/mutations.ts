@@ -5,7 +5,7 @@ export const dimensionsMutations = {
   setBreakPoints(value: BreakPoints) {
     state.breakpoints = value
   },
-  setMapDimenstions(value: { width: number; height: number }) {
+  setMapDimenstions(value: { width: string; height: string }) {
     state.mapDimensions = value
   },
 }

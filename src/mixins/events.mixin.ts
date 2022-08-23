@@ -18,6 +18,7 @@ export function eventsMixin({
   zoomOnResultClick,
   popupOnMarkerHover,
   popupOnResultHover,
+  reverseOnClick,
   mapContainer,
   popupContainer,
   persistantContainer,
@@ -120,19 +121,23 @@ export function eventsMixin({
     if (!isMainMarker && store.state.mainMarker)
       store.state.map?.removeLayer(store.state.mainMarker)
     store.actions.overlays.changeOverlayStats(undefined, "persistant")
-    if (zoomOnMarkerClick && selectedFeature) {
-      handleFeatureClick(selectedFeature)
+    if (selectedFeature) {
+      if (zoomOnMarkerClick) {
+        handleFeatureClick(selectedFeature)
+      }
     } else {
       if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
       else store.toggleDrawerActivation(true)
-      store.toggleReverseLoading(true)
-      const result = await store.actions.markers.reverseOnPoint(
-        event.coordinate
-      )
-      emittingMarker = result.marker
-      emittingData = result.data
-      emittingStdPoint = result.stdPoint
-      store.toggleReverseLoading(false)
+      if (reverseOnClick) {
+        store.toggleReverseLoading(true)
+        const result = await store.actions.markers.reverseOnPoint(
+          event.coordinate
+        )
+        emittingMarker = result.marker
+        emittingData = result.data
+        emittingStdPoint = result.stdPoint
+        store.toggleReverseLoading(false)
+      }
     }
     emits("on-click", {
       event,

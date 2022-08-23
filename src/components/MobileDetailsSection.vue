@@ -6,7 +6,7 @@
     >
       <Icon :size="25"></Icon>
     </button>
-    <div class="o-hidden details-container" ref="mobileResultViewContainer">
+    <div class="details-container" ref="mobileResultViewContainer">
       <Loading v-show="store.state.reverseLoading" class="curved-loading" />
       <Icon
         name="close"
@@ -28,7 +28,6 @@
         :style="`
       height: ${store.state.mapDimensions.height}px;
       margin-top: ${drawerConstants.bottomSheetloadingHeight};`"
-        class="o-auto"
       >
         <PointDetails
           :item="store.state.selectedMarker"
@@ -50,13 +49,19 @@ import { drawerConstants } from "@/parameters"
 const mobileResultViewContainer = ref<HTMLDivElement>()
 const fullScreen = ref(false)
 
+// DEBUG:
 const handleTouchMove = (evt: TouchEvent) => {
   evt.preventDefault()
   const maxHeight =
-    store.state.mapDimensions.height - Math.round(evt.targetTouches[0].clientY)
+    Number(
+      store.state.mapDimensions.height.slice(
+        0,
+        store.state.mapDimensions.height.length - 2
+      )
+    ) - Math.round(evt.targetTouches[0].clientY)
   mobileResultViewContainer.value?.style.setProperty(
     "max-height",
-    `calc(${maxHeight}px + 1.5rem)`
+    `calc(${maxHeight}px + 1.5em)`
   )
 }
 
@@ -67,20 +72,26 @@ const handleTouchEnd = () => {
     mobileResultViewContainer.value
   ).maxHeight
   const maxHeightNumber = Number(maxHeight.slice(0, maxHeight.length - 2))
+  const mapHeight = Number(
+    store.state.mapDimensions.height.slice(
+      0,
+      store.state.mapDimensions.height.length - 2
+    )
+  )
   if (fullScreen.value) {
-    if (maxHeightNumber < store.state.mapDimensions.height * 0.8) {
+    if (maxHeightNumber < mapHeight * 0.8) {
       closeScreen()
     } else {
       mobileResultViewContainer.value.style.setProperty(
         "max-height",
-        store.state.mapDimensions.height + "px"
+        store.state.mapDimensions.height
       )
     }
   } else {
-    if (maxHeightNumber > store.state.mapDimensions.height / 4) {
+    if (maxHeightNumber > mapHeight / 4) {
       mobileResultViewContainer.value.style.setProperty(
         "max-height",
-        store.state.mapDimensions.height + "px"
+        store.state.mapDimensions.height
       )
       mobileResultViewContainer.value.style.setProperty("border-radius", "0")
       fullScreen.value = true
@@ -159,24 +170,25 @@ watch(
   z-index: 1000000;
   bottom: 0;
   direction: rtl;
+  overflow: scroll;
+  background-color: white;
   .details-container {
-    background-color: white;
-    max-height: 3rem;
-    border-radius: 1rem 1rem 0 0;
+    max-height: 3em;
+    border-radius: 1em 1em 0 0;
   }
   .curved-loading {
     width: 100%;
-    border-radius: 1rem 1rem 0 0;
+    border-radius: 1em 1em 0 0;
   }
   .close-icon {
-    left: 1rem;
-    top: 1rem;
+    left: 1em;
+    top: 1em;
     z-index: 2;
   }
   .drag-button {
-    padding-bottom: 4rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-bottom: 4em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -191,8 +203,8 @@ watch(
     }
   }
   .close-modal-button {
-    top: calc(-2rem - 20px);
-    right: 1rem;
+    top: calc(-2em - 20px);
+    right: 1em;
     z-index: 2;
     background-color: white;
     border: none;

@@ -5,13 +5,13 @@ import { store } from ".."
 import { BreakPoints, BreakpointsSegments } from "./dimensions.model"
 
 /**
- * Updates map height value on window resize
+ * Updates map width & height values on window resize
  */
 const updateMapDimensions = (mapContainer: DivElementRef) => {
   if (!mapContainer.value) return
   store.setMapDimenstions({
-    height: mapContainer.value.clientHeight,
-    width: mapContainer.value.clientWidth,
+    height: mapContainer.value.clientHeight + 'px',
+    width: mapContainer.value.clientWidth + 'px',
   })
 }
 

@@ -1,12 +1,13 @@
 :root {
-  --sm: 0.25rem;
-  --md: 0.5rem;
-  --lg: 1rem;
-  --text-xl: 1.3rem;
-  --text-lg: 1.05rem;
-  --text-sm: 0.85rem;
-  --text-xs: 0.8rem;
-  --text-xxs: 0.75rem;
+  --sm: 0.25em;
+  --md: 0.5em;
+  --lg: 1em;
+  --text-xl: 1.3em;
+  --text-lg: 1.05em;
+  --text-nm: 1em;
+  --text-sm: 0.85em;
+  --text-xs: 0.8em;
+  --text-xxs: 0.75em;
   --primary: #03a9f4;
 }
 
@@ -55,6 +56,9 @@
 }
 .text-lg {
   font-size: var(--text-lg);
+}
+.text-nm {
+  font-size: var(--text-nm);
 }
 .text-sm {
   font-size: var(--text-sm);

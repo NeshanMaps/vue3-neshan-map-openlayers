@@ -69,8 +69,8 @@ watch(
   (nv) => {
     if (!nv) return
     const style = store.getters.screen.small
-      ? `height: ${store.state.mapDimensions.height}px; width: ${store.getters.drawerWidth}px; ${props.resultBoxStyle}`
-      : `height: ${store.state.mapDimensions.height}px; width: ${store.getters.drawerWidth}px; ${props.resultBoxStyle}`
+      ? `height: ${store.state.mapDimensions.height}; width: ${store.getters.drawerWidth}; ${props.resultBoxStyle}`
+      : `height: ${store.state.mapDimensions.height}; width: ${store.getters.drawerWidth}; ${props.resultBoxStyle}`
     resultSection.value?.setAttribute("style", style)
   }
 )

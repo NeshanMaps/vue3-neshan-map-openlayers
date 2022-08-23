@@ -111,6 +111,7 @@ export declare interface EventsMixinProps {
   popupOnResultHover: boolean
   zoomOnMarkerClick: boolean
   zoomOnResultClick: boolean
+  reverseOnClick: boolean
 }
 
 export declare interface CreateMarkersOptions {

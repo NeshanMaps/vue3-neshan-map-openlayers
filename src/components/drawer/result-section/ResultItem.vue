@@ -29,8 +29,8 @@ defineProps({
 
 <style lang="scss" scoped>
 .list-item {
-  padding: 1rem;
-  border-radius: 0.3rem;
+  padding: 1em;
+  border-radius: 0.3em;
   text-align: start;
   cursor: pointer;
   &:hover {
@@ -38,8 +38,8 @@ defineProps({
   }
 }
 hr {
-  margin: 0 1rem;
-  border-width: 0.01rem;
+  margin: 0 1em;
+  border-width: 0.01em;
   border-color: rgb(255, 255, 255);
 }
 </style>

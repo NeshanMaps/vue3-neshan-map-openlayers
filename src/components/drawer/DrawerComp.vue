@@ -101,15 +101,15 @@ onMounted(() => {
   right: 2%;
   transition: 0.6s;
   max-width: min-content;
-  border-radius: 10px;
+  border-radius: 0.7em;
   overflow: hidden;
   &[activated="true"] {
     top: 0;
     right: 0;
     max-height: 100%;
     border-radius: 0;
-    padding-right: 1rem;
-    padding-left: 1rem;
+    padding-right: 1em;
+    padding-left: 1em;
   }
 }
 
@@ -126,7 +126,7 @@ onMounted(() => {
   transform: translateX(50%);
   transition: 0.6s;
   max-width: min-content;
-  border-radius: 10px;
+  border-radius: 0.7em;
   overflow: hidden;
   &[activated="true"] {
     top: 0;

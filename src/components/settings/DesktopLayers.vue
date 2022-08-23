@@ -13,7 +13,7 @@
         :selected="tile.title == store.state.mapType"
       >
         <img :src="tile.url" />
-        <div class="desc">
+        <div class="desc text-nm">
           {{ tile.title[0].toUpperCase() + tile.title.slice(1) }}
         </div>
       </div>
@@ -53,23 +53,23 @@ defineProps({
 <style lang="scss" scoped>
 .map-settings {
   background-color: white;
-  border-radius: 0.5rem;
+  border-radius: 0.5em;
   border: 1px solid rgb(178, 178, 178);
   z-index: 10;
   bottom: 4%;
   left: 1%;
-  max-width: 6rem;
-  max-height: 6rem;
+  max-width: 6em;
+  max-height: 6em;
   transition: 0.5s;
   box-sizing: border-box;
   &:hover {
-    max-width: 38rem;
+    max-width: 38em;
     max-height: 100%;
     transition: 1s;
   }
   div [selected="true"] {
     border: 1px solid var(--primary);
-    border-radius: 0.5rem;
+    border-radius: 0.5em;
     color: var(--primary);
   }
   .map-tiles {
@@ -78,16 +78,15 @@ defineProps({
         border: 1px solid rgba(255, 255, 255, 0);
       }
       img {
-        width: 6rem;
-        height: 6rem;
-        border-radius: 1rem;
+        width: 6em;
+        height: 6em;
+        border-radius: 1em;
       }
       .desc {
         overflow: hidden;
-        padding-right: 0.1rem;
-        padding-left: 0.1rem;
+        padding-right: 0.1em;
+        padding-left: 0.1em;
         text-align: center;
-        font-size: small;
       }
     }
   }
@@ -98,7 +97,7 @@ defineProps({
       margin: 0 auto 10px auto;
       transition: 0.2s;
       img {
-        width: 4rem;
+        width: 4em;
       }
       &:not([selected="true"]) {
         border: 1px solid rgba(255, 255, 255, 0);

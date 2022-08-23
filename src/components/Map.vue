@@ -2,11 +2,23 @@
   <!-- <img :src="require('@/assets/search-marker.png')" /> -->
   <div
     ref="mapContainer"
-    class="map pos-relative"
+    class="map pos-relative o-hidden"
     :class="{
       small: store.getters.screen.small,
     }"
   >
+    <div
+      ref="popupContainer"
+      class="map-popup-container"
+      :class="temporaryPopupContainerClass"
+      :style="temporaryPopupContainerStyle"
+    ></div>
+    <div
+      ref="persistantContainer"
+      class="map-popup-container"
+      :class="persistantPopupContainerClass"
+      :style="persistantPopupContainerStyle"
+    ></div>
     <slot
       v-if="!hideSettings"
       name="settings"
@@ -37,29 +49,17 @@
         @result-hover="handleResultHover"
       />
     </slot>
+    <MobileLayers
+      v-model:value="mobileDrawerModel"
+      :tiles="filteredTiles"
+      :settingsClass="mobileSettingsClass"
+      :settingsStyle="mobileSettingsStyle"
+    ></MobileLayers>
+    <MobileDetailsSection
+      v-if="store.getters.screen.small"
+      v-show="store.state.mobileDrawerShowDetails"
+    ></MobileDetailsSection>
   </div>
-  <MobileDetailsSection
-    v-if="store.getters.screen.small"
-    v-show="store.state.mobileDrawerShowDetails"
-  ></MobileDetailsSection>
-  <MobileLayers
-    v-model:value="mobileDrawerModel"
-    :tiles="filteredTiles"
-    :settingsClass="mobileSettingsClass"
-    :settingsStyle="mobileSettingsStyle"
-  ></MobileLayers>
-  <div
-    ref="popupContainer"
-    class="map-popup-container"
-    :class="temporaryPopupContainerClass"
-    :style="temporaryPopupContainerStyle"
-  ></div>
-  <div
-    ref="persistantContainer"
-    class="map-popup-container"
-    :class="persistantPopupContainerClass"
-    :style="persistantPopupContainerStyle"
-  ></div>
 </template>
 <script lang="ts">
 declare const ol: any
@@ -168,6 +168,10 @@ const props = defineProps({
     type: Number,
     default: 18,
   },
+  reverseOnClick: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 store.setApi(createApi(props.serviceKey))
@@ -234,6 +238,7 @@ const toggleTraffic = (value: boolean) => {
   store.state.map?.switchTrafficLayer(value)
 }
 
+store.actions.dimensions.updateBreakpoints()
 /**
  * Setups Map, adds serviceToken to api
  */
@@ -242,7 +247,6 @@ onMounted(() => {
   scriptTag.onload = () => {
     startMap()
     setupMapEvents()
-    store.actions.dimensions.updateBreakpoints()
     store.actions.dimensions.updateMapDimensions(mapContainer)
   }
 })
@@ -313,6 +317,7 @@ const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   zoomOnResultClick: props.zoomOnResultClick,
   popupOnMarkerHover: props.popupOnMarkerHover,
   popupOnResultHover: props.popupOnResultHover,
+  reverseOnClick: props.reverseOnClick,
   mapContainer,
   popupContainer,
   persistantContainer,
@@ -401,9 +406,9 @@ const handleMobileDrawerClick = (event: MouseEvent) => {
   background: rgba(255, 255, 255, 0.701);
   border: none;
   border-radius: 50%;
-  height: 2.3rem;
-  width: 2.3rem;
-  padding: 0.25rem;
+  height: 2.3em;
+  width: 2.3em;
+  padding: 0.25em;
   box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
   img {
     width: 100%;

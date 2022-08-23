@@ -29,7 +29,8 @@
       <br />
       <button @click="search()">جستجو</button>
     </div> -->
-    <Map
+    <div class="mymap">
+      <Map
       ref="map"
       mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
       serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
@@ -38,6 +39,7 @@
       poi
       traffic
     />
+    </div>
   </div>
 </template>
 
@@ -93,5 +95,10 @@ export default defineComponent({
   max-width: 50vw;
   top: 4vh;
   left: 4vw;
+}
+
+.mymap {
+  height: 500px;
+  font-size: 0.8rem;
 }
 </style>

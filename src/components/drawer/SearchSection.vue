@@ -1,7 +1,7 @@
 <template>
   <div
     :activated="store.state.drawerActivation"
-    :style="`width: ${width}px; ${searchBoxStyle}`"
+    :style="`width: ${width}; ${searchBoxStyle}`"
     class="map-search-box d-flex justify-between align-center mx-auto"
     :class="searchBoxClass"
   >
@@ -93,24 +93,24 @@ const runTimeout = (value = text.value, delay = 1000) => {
 
 <style lang="scss" scoped>
 .small .map-search-box input[type="search"] {
-  line-height: 1.7rem;
-  font-size: 1.1rem;
-  height: 2.7rem;
+  line-height: 1.7em;
+  font-size: var(--text-lg);
+  height: 2.7em;
 }
 .map-search-box {
-  border-radius: 10px;
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
+  border-radius: 0.7em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
   background-color: white;
   transition: inherit;
   input[type="search"] {
     border: none;
     background: inherit;
     outline: none;
-    line-height: 1.5rem;
-    font-size: 1rem;
-    height: 2.3rem;
-    padding-right: 0.5rem;
+    line-height: 1.5em;
+    font-size: 1em;
+    height: 2.3em;
+    padding-right: 0.5em;
     width: 100%;
     font-family: inherit;
   }
@@ -139,11 +139,10 @@ const runTimeout = (value = text.value, delay = 1000) => {
   align-items: center;
   background: #f5f5f5;
   border: 1px solid #d9d9d9;
-  border-radius: 10px;
   box-shadow: none;
   // height: 40px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1em;
+  margin-bottom: 1em;
   pointer-events: auto;
   // width: 308px;
 }

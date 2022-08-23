@@ -96,7 +96,7 @@ const close = () => {
 <style scoped lang="scss">
 .mobile-settings-container {
   top: 0;
-  height: 100%;
+  bottom: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.221);
   z-index: 1000001;
@@ -106,8 +106,8 @@ const close = () => {
     transition: 0.2s;
     max-height: 0;
     background-color: white;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
     box-sizing: border-box;
     &[activated="true"] {
       max-height: 70%;
@@ -117,20 +117,20 @@ const close = () => {
     }
     .map-layers {
       flex-wrap: wrap;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
+      margin-top: 1em;
+      margin-bottom: 0.5em;
     }
   }
   .tile {
     flex: 0 0 auto;
     flex-flow: column;
-    width: 6rem;
+    width: 6em;
     margin: 0 auto 10px auto;
-    height: 6rem;
+    height: 6em;
     img {
-      height: 5rem;
-      width: 5rem;
-      border-radius: 0.5rem;
+      height: 5em;
+      width: 5em;
+      border-radius: 0.5em;
     }
     &[selected="true"] {
       img {
