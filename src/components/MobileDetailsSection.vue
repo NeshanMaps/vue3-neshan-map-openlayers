@@ -1,17 +1,19 @@
 <template>
-  <div class="mobile-details-section pos-absolute">
+  <div
+    ref="mobileDetailsSectionContainer"
+    class="mobile-details-section pos-absolute"
+  >
     <button
       class="close-modal-button pos-absolute d-flex justify-center align-center"
       @click="hideModal"
     >
       <Icon :size="25"></Icon>
     </button>
-    <div class="details-container" ref="mobileResultViewContainer">
+    <div class="details-container o-auto" ref="mobileResultViewContainer">
       <Loading v-show="store.state.reverseLoading" class="curved-loading" />
       <Icon
         name="close"
         :size="40"
-        style="float: left"
         :style="`visibility: ${fullScreen ? 'visible' : 'hidden'};`"
         class="close-icon pos-absolute"
         @click="closeScreen"
@@ -46,22 +48,18 @@ import PointDetails from "./drawer/result-section/PointDetails.vue"
 import Loading from "./LoadingComp.vue"
 import { drawerConstants } from "@/parameters"
 
+const mobileDetailsSectionContainer = ref<HTMLDivElement>()
 const mobileResultViewContainer = ref<HTMLDivElement>()
 const fullScreen = ref(false)
 
-// DEBUG:
 const handleTouchMove = (evt: TouchEvent) => {
   evt.preventDefault()
-  const maxHeight =
-    Number(
-      store.state.mapDimensions.height.slice(
-        0,
-        store.state.mapDimensions.height.length - 2
-      )
-    ) - Math.round(evt.targetTouches[0].clientY)
+  if (!mobileDetailsSectionContainer.value || !store.state.mapContainer) return
+  const mapClientBottom = store.state.mapContainer.getBoundingClientRect().bottom
+  const additionalHeight =  mapClientBottom - evt.touches[0].clientY
   mobileResultViewContainer.value?.style.setProperty(
     "max-height",
-    `calc(${maxHeight}px + 1.5em)`
+    `calc(${additionalHeight}px)`
   )
 }
 
@@ -71,7 +69,7 @@ const handleTouchEnd = () => {
   const maxHeight = window.getComputedStyle(
     mobileResultViewContainer.value
   ).maxHeight
-  const maxHeightNumber = Number(maxHeight.slice(0, maxHeight.length - 2))
+  const currentHeight = Number(maxHeight.slice(0, maxHeight.length - 2))
   const mapHeight = Number(
     store.state.mapDimensions.height.slice(
       0,
@@ -79,7 +77,7 @@ const handleTouchEnd = () => {
     )
   )
   if (fullScreen.value) {
-    if (maxHeightNumber < mapHeight * 0.8) {
+    if (currentHeight < mapHeight * 0.8) {
       closeScreen()
     } else {
       mobileResultViewContainer.value.style.setProperty(
@@ -88,10 +86,10 @@ const handleTouchEnd = () => {
       )
     }
   } else {
-    if (maxHeightNumber > mapHeight / 4) {
+    if (currentHeight > mapHeight / 4) {
       mobileResultViewContainer.value.style.setProperty(
         "max-height",
-        store.state.mapDimensions.height
+        `calc(${store.state.mapDimensions.height} - 2em)`
       )
       mobileResultViewContainer.value.style.setProperty("border-radius", "0")
       fullScreen.value = true
@@ -170,7 +168,6 @@ watch(
   z-index: 1000000;
   bottom: 0;
   direction: rtl;
-  overflow: scroll;
   background-color: white;
   .details-container {
     max-height: 3em;

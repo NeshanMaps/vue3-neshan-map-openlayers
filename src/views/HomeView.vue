@@ -98,6 +98,7 @@ export default defineComponent({
 }
 
 .mymap {
+  margin-top: 100px;
   height: 500px;
   font-size: 0.8rem;
 }

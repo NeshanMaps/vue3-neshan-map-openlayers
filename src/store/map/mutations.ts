@@ -5,6 +5,9 @@ export const mapMutations = {
   setMap(value: OlMap) {
     state.map = value
   },
+  setMapContainer(value: HTMLDivElement) {
+    state.mapContainer = value
+  },
   setZoom(value: number) {
     state.zoom = value
   },

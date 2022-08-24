@@ -237,19 +237,6 @@ const togglePoi = (value: boolean) => {
 const toggleTraffic = (value: boolean) => {
   store.state.map?.switchTrafficLayer(value)
 }
-
-store.actions.dimensions.updateBreakpoints()
-/**
- * Setups Map, adds serviceToken to api
- */
-onMounted(() => {
-  const scriptTag = importMap(urls.map)
-  scriptTag.onload = () => {
-    startMap()
-    setupMapEvents()
-    store.actions.dimensions.updateMapDimensions(mapContainer)
-  }
-})
 /**
  * Adds the map from given url to given script
  * @param url - Url of map or another script
@@ -352,6 +339,13 @@ const handleSearch = ({ term = "", coords }: HandleSearchProps) => {
   store.actions.markers.search({ term, coords: reliableCoords }, options)
 }
 
+const handleMobileDrawerClick = (event: MouseEvent) => {
+  const target: any = event.composedPath()[1]
+  target.classList.add("floaten")
+  setTimeout(() => target.classList.remove("floaten"), 350)
+  mobileDrawerModel.value = true
+}
+
 /**
  * Makes it possible to have access to search function from outside of the component
  */
@@ -359,12 +353,19 @@ defineExpose({
   search: handleSearch,
 })
 
-const handleMobileDrawerClick = (event: MouseEvent) => {
-  const target: any = event.composedPath()[1]
-  target.classList.add("floaten")
-  setTimeout(() => target.classList.remove("floaten"), 350)
-  mobileDrawerModel.value = true
-}
+store.actions.dimensions.updateBreakpoints()
+/**
+ * Setups Map, adds serviceToken to api
+ */
+onMounted(() => {
+  if (mapContainer.value) store.setMapContainer(mapContainer.value)
+  const scriptTag = importMap(urls.map)
+  scriptTag.onload = () => {
+    startMap()
+    setupMapEvents()
+    store.actions.dimensions.updateMapDimensions(mapContainer)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

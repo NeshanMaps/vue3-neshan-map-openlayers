@@ -251,8 +251,12 @@ const selectFeauture = (
   }
 }
 
+/**
+ * Removes persistant overlay and marker layer from the map.
+ * Deactivates drawers and clears selected marker
+ */
 const deselectAll = () => {
-  store.actions.overlays.changeOverlayStats(undefined, 'persistant')
+  store.actions.overlays.changeOverlayStats(undefined, "persistant")
   store.actions.markers.clearMarkerLayer(store.state.mainMarker)
   store.setSelectedMarker(null)
   store.actions.drawers.toggleResultDrawers(false)
