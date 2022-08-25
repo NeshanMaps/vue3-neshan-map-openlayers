@@ -2,6 +2,7 @@
   <div
     ref="mobileDetailsSectionContainer"
     class="mobile-details-section pos-absolute"
+    :class="{ fullScreen }"
   >
     <button
       class="close-modal-button pos-absolute d-flex justify-center align-center"
@@ -9,7 +10,15 @@
     >
       <Icon :size="25"></Icon>
     </button>
-    <div class="details-container o-auto" ref="mobileResultViewContainer">
+    <div
+      class="details-container"
+      ref="detailsContainer"
+      :class="fullScreen ? 'o-auto' : 'o-hidden'"
+      :style="`
+        --maxHeight: ${detailsContainerMaxHeight};
+        --borderRadius: ${detailsContainerBorderRadius};
+        --transition: ${detailsContainerTransition};`"
+    >
       <Loading v-show="store.state.reverseLoading" class="curved-loading" />
       <Icon
         name="close"
@@ -31,10 +40,7 @@
       height: ${store.state.mapDimensions.height}px;
       margin-top: ${drawerConstants.bottomSheetloadingHeight};`"
       >
-        <PointDetails
-          :item="store.state.selectedMarker"
-          :collapse="!fullScreen"
-        ></PointDetails>
+        <PointDetails :item="store.state.selectedMarker"></PointDetails>
       </div>
     </div>
   </div>
@@ -49,26 +55,25 @@ import Loading from "./LoadingComp.vue"
 import { drawerConstants } from "@/parameters"
 
 const mobileDetailsSectionContainer = ref<HTMLDivElement>()
-const mobileResultViewContainer = ref<HTMLDivElement>()
+const detailsContainer = ref<HTMLDivElement>()
 const fullScreen = ref(false)
+const detailsContainerMaxHeight = ref(drawerConstants.bottomSheetNormalHeight)
+const detailsContainerBorderRadius = ref("1em 1em 0 0")
+const detailsContainerTransition = ref("0")
 
 const handleTouchMove = (evt: TouchEvent) => {
   evt.preventDefault()
   if (!mobileDetailsSectionContainer.value || !store.state.mapContainer) return
-  const mapClientBottom = store.state.mapContainer.getBoundingClientRect().bottom
-  const additionalHeight =  mapClientBottom - evt.touches[0].clientY
-  mobileResultViewContainer.value?.style.setProperty(
-    "max-height",
-    `calc(${additionalHeight}px)`
-  )
+  const mapClientBottom =
+    store.state.mapContainer.getBoundingClientRect().bottom
+  const additionalHeight = mapClientBottom - evt.touches[0].clientY
+  detailsContainerMaxHeight.value = additionalHeight + "px"
 }
 
 const handleTouchEnd = () => {
-  if (!mobileResultViewContainer.value) return
+  if (!detailsContainer.value) return
   addTemporaryTransition()
-  const maxHeight = window.getComputedStyle(
-    mobileResultViewContainer.value
-  ).maxHeight
+  const maxHeight = detailsContainerMaxHeight.value
   const currentHeight = Number(maxHeight.slice(0, maxHeight.length - 2))
   const mapHeight = Number(
     store.state.mapDimensions.height.slice(
@@ -80,42 +85,30 @@ const handleTouchEnd = () => {
     if (currentHeight < mapHeight * 0.8) {
       closeScreen()
     } else {
-      mobileResultViewContainer.value.style.setProperty(
-        "max-height",
-        store.state.mapDimensions.height
-      )
+      detailsContainerMaxHeight.value = store.state.mapDimensions.height
     }
   } else {
     if (currentHeight > mapHeight / 4) {
-      mobileResultViewContainer.value.style.setProperty(
-        "max-height",
-        `calc(${store.state.mapDimensions.height} - 2em)`
-      )
-      mobileResultViewContainer.value.style.setProperty("border-radius", "0")
+      detailsContainerMaxHeight.value = `calc(${store.state.mapDimensions.height})`
+      detailsContainerBorderRadius.value = "0"
       fullScreen.value = true
     } else {
-      mobileResultViewContainer.value.style.setProperty(
-        "max-height",
-        drawerConstants.bottomSheetNormalHeight
-      )
+      detailsContainerMaxHeight.value = drawerConstants.bottomSheetNormalHeight
     }
   }
 }
 
 const closeScreen = () => {
   fullScreen.value = false
-  mobileResultViewContainer.value?.style.removeProperty("border-radius")
-  mobileResultViewContainer.value?.style.removeProperty("max-height")
   addTemporaryTransition()
+  detailsContainerBorderRadius.value = "1em 1em 0 0"
+  detailsContainerMaxHeight.value = drawerConstants.bottomSheetNormalHeight
 }
 
 const addTemporaryTransition = (transitionTime = 0.5) => {
-  mobileResultViewContainer.value?.style.setProperty(
-    "transition",
-    transitionTime + "s"
-  )
+  detailsContainerTransition.value = transitionTime + "s"
   setTimeout(() => {
-    mobileResultViewContainer.value?.style.removeProperty("transition")
+    detailsContainerTransition.value = "none"
   }, transitionTime * 1000)
 }
 
@@ -124,17 +117,11 @@ const hideModal = () => {
 }
 
 const collapseSheet = () => {
-  mobileResultViewContainer.value?.style.setProperty(
-    "max-height",
-    drawerConstants.bottomSheetloadingHeight
-  )
+  detailsContainerMaxHeight.value = drawerConstants.bottomSheetloadingHeight
 }
 
 const openSheet = () => {
-  mobileResultViewContainer.value?.style.setProperty(
-    "max-height",
-    drawerConstants.bottomSheetNormalHeight
-  )
+  detailsContainerMaxHeight.value = drawerConstants.bottomSheetNormalHeight
 }
 
 watch(
@@ -169,9 +156,14 @@ watch(
   bottom: 0;
   direction: rtl;
   background-color: white;
+  border-radius: 1em 1em 0 0;
+  &.fullScreen {
+    border-radius: 0;
+  }
   .details-container {
-    max-height: 3em;
-    border-radius: 1em 1em 0 0;
+    max-height: var(--maxHeight);
+    border-radius: var(--borderRadius);
+    transition: var(--transition);
   }
   .curved-loading {
     width: 100%;

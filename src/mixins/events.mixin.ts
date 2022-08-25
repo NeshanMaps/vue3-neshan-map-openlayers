@@ -19,7 +19,6 @@ export function eventsMixin({
   popupOnMarkerHover,
   popupOnResultHover,
   reverseOnClick,
-  mapContainer,
   popupContainer,
   persistantContainer,
 }: EventsMixinProps) {
@@ -96,7 +95,7 @@ export function eventsMixin({
 
   const setupResizeEvents = () => {
     window.addEventListener("resize", () =>
-      store.actions.dimensions.updateMapDimensions(mapContainer)
+      store.actions.dimensions.updateMapDimensions()
     )
     window.addEventListener(
       "resize",

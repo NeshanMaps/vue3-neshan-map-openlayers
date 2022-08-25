@@ -31,14 +31,14 @@
     </div> -->
     <div class="mymap">
       <Map
-      ref="map"
-      mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
-      serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
-      :center="{ latitude: 36.311559, longitude: 59.5870851 }"
-      @on-click="handleClick"
-      poi
-      traffic
-    />
+        ref="map"
+        mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
+        serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
+        :center="{ latitude: 36.311559, longitude: 59.5870851 }"
+        @on-click="handleClick"
+        poi
+        traffic
+      />
     </div>
   </div>
 </template>
@@ -47,9 +47,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // import Map from "../../dist/NeshanMap.umd.js";
-import Map from "@/components/Map.vue";
+import Map from "@/components/Map.vue"
 
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
 export default defineComponent({
   name: "HomeView",
   components: {
@@ -60,27 +60,27 @@ export default defineComponent({
       searchText: "",
       autoSearch: false,
       coords: null,
-    };
+    }
   },
   methods: {
     handleClick(event: any) {
-      this.coords = event.stdPoint;
+      this.coords = event.stdPoint
       if (this.autoSearch) {
-        this.search();
+        this.search()
       }
     },
     search({ coords, text }: { coords?: any; text?: any } = {}) {
-      coords ||= this.coords;
-      text ||= this.searchText;
-      (this.$refs.map as any).search({ text, coords });
+      coords ||= this.coords
+      text ||= this.searchText
+      ;(this.$refs.map as any).search({ text, coords })
     },
   },
-});
+})
 </script>
 
 <style>
 /* @import url('../../dist/NeshanMap.css'); */
-@import url('@/assets/test.scss');
+@import url("@/assets/test.scss");
 
 .page {
   height: 100%;
@@ -100,6 +100,8 @@ export default defineComponent({
 .mymap {
   margin-top: 100px;
   height: 500px;
-  font-size: 0.8rem;
+  border: 1px solid;
+  box-sizing: border-box;
+  /* font-size: 0.8rem; */
 }
 </style>

@@ -1,4 +1,3 @@
-import { DivElementRef } from "../../components/Map.model"
 import { breakpointsSegments, breakpointsSegmentsPixels } from "@/parameters"
 import { toRaw } from "vue"
 import { store } from ".."
@@ -7,11 +6,11 @@ import { BreakPoints, BreakpointsSegments } from "./dimensions.model"
 /**
  * Updates map width & height values on window resize
  */
-const updateMapDimensions = (mapContainer: DivElementRef) => {
-  if (!mapContainer.value) return
+const updateMapDimensions = () => {
+  if (!store.state.mapContainer) return
   store.setMapDimenstions({
-    height: mapContainer.value.clientHeight + 'px',
-    width: mapContainer.value.clientWidth + 'px',
+    height: store.state.mapContainer.clientHeight + 'px',
+    width: store.state.mapContainer.clientWidth + 'px',
   })
 }
 

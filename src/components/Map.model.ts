@@ -100,7 +100,6 @@ export declare type MarkersIconCallback = (
 ) => CreateIconProps
 
 export declare interface EventsMixinProps {
-  mapContainer: DivElementRef
   popupContainer: DivElementRef
   persistantContainer: DivElementRef
   emits: (event: "on-zoom" | "on-click", arg: any) => void

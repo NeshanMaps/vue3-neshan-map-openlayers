@@ -305,7 +305,6 @@ const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   popupOnMarkerHover: props.popupOnMarkerHover,
   popupOnResultHover: props.popupOnResultHover,
   reverseOnClick: props.reverseOnClick,
-  mapContainer,
   popupContainer,
   persistantContainer,
 })
@@ -363,7 +362,7 @@ onMounted(() => {
   scriptTag.onload = () => {
     startMap()
     setupMapEvents()
-    store.actions.dimensions.updateMapDimensions(mapContainer)
+    store.actions.dimensions.updateMapDimensions()
   }
 })
 </script>
