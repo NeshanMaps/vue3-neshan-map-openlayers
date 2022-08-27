@@ -156,7 +156,7 @@ const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
       store.state.zoom > zoomConstants.maxZoom
         ? store.state.zoom
         : zoomConstants.maxZoom,
-    padding: [15, store.getters.screen.small ? 15 : 300, 15, 15],
+    padding: [15, store.getters.touchPlatform ? 15 : 300, 15, 15],
   })
 }
 

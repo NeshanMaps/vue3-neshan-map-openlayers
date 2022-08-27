@@ -14,7 +14,7 @@
       @focus="store.toggleDrawerActivation(true)"
     />
     <button
-      v-if="store.state.drawerShowDetails && !store.getters.screen.small"
+      v-if="store.state.drawerShowDetails && !store.getters.touchPlatform"
       @click="store.toggleDrawerShowDetails(false)"
       class="pointer"
     >
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from "vue"
+import { defineProps, defineEmits } from "vue"
 import { computed } from "@vue/reactivity"
 import { store } from "@/store"
 import Icon from "../icons/IconComponent.vue"
@@ -48,7 +48,7 @@ const props = defineProps({
   },
 })
 
-const width = ref(drawerConstants.width)
+const width = drawerConstants.width
 const emit = defineEmits([
   "update:search-text",
   "update:search-coords",
@@ -92,7 +92,7 @@ const runTimeout = (value = text.value, delay = 1000) => {
 </script>
 
 <style lang="scss" scoped>
-.small .map-search-box input[type="search"] {
+.touch .map-search-box input[type="search"] {
   line-height: 1.7em;
   font-size: var(--text-lg);
   height: 2.7em;

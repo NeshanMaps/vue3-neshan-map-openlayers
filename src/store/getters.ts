@@ -1,19 +1,18 @@
 import { state } from "./state"
 import { computed, reactive } from "vue"
 import { drawerConstants } from "@/parameters"
+import { isTouchPlatform } from "@/utils"
 export const getters = reactive({
-  screen: computed(() => {
-    return {
-      small: state.breakpoints.lt.md,
-    }
-  }),
   drawerWidth: computed(() => {
-    const width = state.breakpoints.lt.md
+    const width = isTouchPlatform()
       ? state.mapDimensions.width
       : drawerConstants.width
     return width
   }),
   loading: computed(() => {
     return state.searchLoading || state.reverseLoading
+  }),
+  touchPlatform: computed(() => {
+    return isTouchPlatform()
   }),
 })

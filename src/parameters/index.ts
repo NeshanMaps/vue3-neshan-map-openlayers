@@ -59,14 +59,15 @@ export const breakpointsSegmentsPixels = {
 }
 
 export const drawerConstants = {
-  width: '240px',
-  bottomSheetNormalHeight: "3em",
+  width: "18em",
+  bottomSheetNormalHeight: "5em",
   bottomSheetloadingHeight: "2em",
+  bottomSheetBorderRadius: "1em 1em 0 0",
 }
 
 export const unsetMapDimnensions = {
-  width: '700px',
-  height: '1000px',
+  width: "700px",
+  height: "1000px",
 }
 
 export const zoomConstants = {

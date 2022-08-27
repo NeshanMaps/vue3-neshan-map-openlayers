@@ -11,13 +11,12 @@
       <Icon :size="25"></Icon>
     </button>
     <div
-      class="details-container"
       ref="detailsContainer"
       :class="fullScreen ? 'o-auto' : 'o-hidden'"
       :style="`
-        --maxHeight: ${detailsContainerMaxHeight};
-        --borderRadius: ${detailsContainerBorderRadius};
-        --transition: ${detailsContainerTransition};`"
+        max-height: ${detailsContainerMaxHeight};
+        border-radius: ${detailsContainerBorderRadius};
+        transition: ${detailsContainerTransition};`"
     >
       <Loading v-show="store.state.reverseLoading" class="curved-loading" />
       <Icon
@@ -58,7 +57,9 @@ const mobileDetailsSectionContainer = ref<HTMLDivElement>()
 const detailsContainer = ref<HTMLDivElement>()
 const fullScreen = ref(false)
 const detailsContainerMaxHeight = ref(drawerConstants.bottomSheetNormalHeight)
-const detailsContainerBorderRadius = ref("1em 1em 0 0")
+const detailsContainerBorderRadius = ref(
+  drawerConstants.bottomSheetBorderRadius
+)
 const detailsContainerTransition = ref("0")
 
 const handleTouchMove = (evt: TouchEvent) => {
@@ -101,13 +102,15 @@ const handleTouchEnd = () => {
 const closeScreen = () => {
   fullScreen.value = false
   addTemporaryTransition()
-  detailsContainerBorderRadius.value = "1em 1em 0 0"
+  detailsContainerBorderRadius.value = drawerConstants.bottomSheetBorderRadius
   detailsContainerMaxHeight.value = drawerConstants.bottomSheetNormalHeight
 }
 
+let timeout: number
 const addTemporaryTransition = (transitionTime = 0.5) => {
+  clearTimeout(timeout)
   detailsContainerTransition.value = transitionTime + "s"
-  setTimeout(() => {
+  timeout = setTimeout(() => {
     detailsContainerTransition.value = "none"
   }, transitionTime * 1000)
 }
@@ -159,11 +162,6 @@ watch(
   border-radius: 1em 1em 0 0;
   &.fullScreen {
     border-radius: 0;
-  }
-  .details-container {
-    max-height: var(--maxHeight);
-    border-radius: var(--borderRadius);
-    transition: var(--transition);
   }
   .curved-loading {
     width: 100%;

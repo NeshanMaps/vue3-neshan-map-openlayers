@@ -4,8 +4,9 @@
     ref="mapContainer"
     class="map pos-relative o-hidden"
     :class="{
-      small: store.getters.screen.small,
+      touch: store.getters.touchPlatform,
     }"
+    :style="`font-size: ${fontSize}`"
   >
     <div
       ref="popupContainer"
@@ -28,13 +29,13 @@
       :traffic="store.state.trafficLayer"
     >
       <DesktopLayers
-        v-if="!store.getters.screen.small"
+        v-if="!store.getters.touchPlatform"
         :tiles="filteredTiles"
         :settingsClass="desktopSettingsClass"
         :settingsStyle="desktopSettingsStyle"
       />
       <button
-        v-if="store.getters.screen.small"
+        v-if="store.getters.touchPlatform"
         class="mobile-layers-button pos-absolute justify-center align-center d-flex"
         @click="handleMobileDrawerClick"
       >
@@ -56,7 +57,7 @@
       :settingsStyle="mobileSettingsStyle"
     ></MobileLayers>
     <MobileDetailsSection
-      v-if="store.getters.screen.small"
+      v-if="store.getters.touchPlatform"
       v-show="store.state.mobileDrawerShowDetails"
     ></MobileDetailsSection>
   </div>
@@ -84,7 +85,6 @@ import {
   ResultClickCallback,
   MarkersIconCallback,
   MarkerHoverCallback,
-  DivElementRef,
   HandleSearchProps,
 } from "./Map.model"
 import { Coordinate } from "openlayers"
@@ -172,6 +172,13 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  scale: {
+    type: Number,
+    default: 1,
+  },
+  viewType: {
+    type: String as PropType<undefined | "mobile" | "desktop">,
+  },
 })
 
 store.setApi(createApi(props.serviceKey))
@@ -190,6 +197,14 @@ watch(
   () => props.serviceKey,
   (nv) => {
     setToken(nv)
+  }
+)
+
+const fontSize = ref("1rem")
+watch(
+  () => props.scale,
+  (nv) => {
+    fontSize.value = nv + "rem"
   }
 )
 
@@ -214,29 +229,15 @@ watch(
 watch(
   () => store.state.trafficLayer,
   (nv) => {
-    toggleTraffic(nv)
+    store.actions.map.toggleTraffic(nv)
   }
 )
 watch(
   () => store.state.poiLayer,
   (nv) => {
-    togglePoi(nv)
+    store.actions.map.togglePoi(nv)
   }
 )
-/**
- * Switches poi layer
- * @param value - Whether it should be on or off
- */
-const togglePoi = (value: boolean) => {
-  store.state.map?.switchPoiLayer(value)
-}
-/**
- * Switches traffic layer
- * @param value - Whether it should be on or off
- */
-const toggleTraffic = (value: boolean) => {
-  store.state.map?.switchTrafficLayer(value)
-}
 /**
  * Adds the map from given url to given script
  * @param url - Url of map or another script
@@ -283,17 +284,11 @@ const startMap = async () => {
   store.setMap(newMap)
   // Currently there is a problem with assigning different map type on initilization
   store.setMapType(props.defaultType)
-  shakeMap()
-}
-/**
- * Updates map frame so the offset problem is no more.
- */
-const shakeMap = () => {
-  setTimeout(() => store.state.map?.updateSize(), 300)
+  store.actions.map.shakeMap(300)
 }
 
-const popupContainer: DivElementRef = ref()
-const persistantContainer: DivElementRef = ref()
+const popupContainer = ref<HTMLDivElement>()
+const persistantContainer = ref<HTMLDivElement>()
 const eventsEmits = defineEmits(["on-zoom", "on-click"])
 const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   emits: eventsEmits,
@@ -305,8 +300,6 @@ const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   popupOnMarkerHover: props.popupOnMarkerHover,
   popupOnResultHover: props.popupOnResultHover,
   reverseOnClick: props.reverseOnClick,
-  popupContainer,
-  persistantContainer,
 })
 
 /**
@@ -358,6 +351,9 @@ store.actions.dimensions.updateBreakpoints()
  */
 onMounted(() => {
   if (mapContainer.value) store.setMapContainer(mapContainer.value)
+  if (popupContainer.value) store.setPopupContainer(popupContainer.value)
+  if (persistantContainer.value)
+    store.setPersistantContainer(persistantContainer.value)
   const scriptTag = importMap(urls.map)
   scriptTag.onload = () => {
     startMap()
@@ -395,7 +391,7 @@ onMounted(() => {
   }
 }
 
-.small .map-popup-container {
+.touch .map-popup-container {
   font-size: var(--text-xs);
 }
 

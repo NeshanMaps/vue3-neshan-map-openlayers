@@ -1,34 +1,5 @@
 <template>
   <div class="page">
-    <!-- <div class="map-search-form">
-      <label>
-        <input
-          type="checkbox"
-          name="activate-search"
-          v-model="autoSearch"
-          @keydown.enter="search()"
-        />
-        :جستجو با کلیک روی نقشه
-      </label>
-      <br />
-      <label class="justify-between">
-        <input
-          dir="rtl"
-          type="search"
-          name="search"
-          v-model="searchText"
-          @keydown.enter="search()"
-        />
-        :متن جستجو
-      </label>
-      <br />
-      <label class="justify-between">
-        <input type="text" name="coords" v-model="coords" />
-        :مختصات جستجو
-      </label>
-      <br />
-      <button @click="search()">جستجو</button>
-    </div> -->
     <div class="mymap">
       <Map
         ref="map"

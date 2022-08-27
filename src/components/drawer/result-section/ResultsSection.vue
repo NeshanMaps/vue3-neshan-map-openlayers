@@ -7,14 +7,14 @@
   >
     <Loading
       v-if="
-        store.getters.screen.small
+        store.getters.touchPlatform
           ? store.state.searchLoading
           : store.getters.loading
       "
     />
     <template
       v-if="
-        !store.getters.screen.small &&
+        !store.getters.touchPlatform &&
         store.state.drawerShowDetails &&
         store.state.selectedMarker
       "
@@ -53,7 +53,7 @@ const resultSection = ref<HTMLDivElement>()
 
 const emits = defineEmits(["result-hover", "result-click"])
 const handleHoverEmit = (item: SearchItem) => {
-  if (!store.getters.screen.small) {
+  if (!store.getters.touchPlatform) {
     emitHover(item)
   }
 }
@@ -68,7 +68,7 @@ watch(
   () => store.state.drawerActivation,
   (nv) => {
     if (!nv) return
-    const style = store.getters.screen.small
+    const style = store.getters.touchPlatform
       ? `height: ${store.state.mapDimensions.height}; width: ${store.getters.drawerWidth}; ${props.resultBoxStyle}`
       : `height: ${store.state.mapDimensions.height}; width: ${store.getters.drawerWidth}; ${props.resultBoxStyle}`
     resultSection.value?.setAttribute("style", style)

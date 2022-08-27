@@ -4,6 +4,7 @@ import { markersMutations } from "./markers/mutations"
 import { drawersMutations } from "./drawers/mutations"
 import { state } from "./state"
 import { mapMutations } from "./map/mutations"
+import { overlaysMutations } from "./overlays/mutations"
 
 export const mutations = {
   toggleSearchLoading(value: boolean) {
@@ -18,5 +19,6 @@ export const mutations = {
   ...markersMutations,
   ...dimensionsMutations,
   ...drawersMutations,
-  ...mapMutations
+  ...mapMutations,
+  ...overlaysMutations,
 }

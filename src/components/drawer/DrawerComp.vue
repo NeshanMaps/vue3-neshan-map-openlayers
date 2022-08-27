@@ -1,10 +1,10 @@
 <template>
   <div
     :class="{
-      'map-drawer--mobile': store.getters.screen.small,
-      'map-drawer--desktop': !store.getters.screen.small,
+      'map-drawer--mobile': store.getters.touchPlatform,
+      'map-drawer--desktop': !store.getters.touchPlatform,
       'map-drawer--desktop---activated':
-        !store.getters.screen.small && store.state.drawerActivation,
+        !store.getters.touchPlatform && store.state.drawerActivation,
       'box-shadow': !store.state.drawerActivation,
     }"
     class="d-flex flex-column"

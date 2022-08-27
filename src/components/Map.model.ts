@@ -23,8 +23,6 @@ export declare interface CoordsObj {
   latitude: number
   longitude: number
 }
-export declare type DivElementRef = Ref<HTMLDivElement | undefined>
-
 export declare interface Tile {
   title: MapType
   url: string
@@ -100,8 +98,6 @@ export declare type MarkersIconCallback = (
 ) => CreateIconProps
 
 export declare interface EventsMixinProps {
-  popupContainer: DivElementRef
-  persistantContainer: DivElementRef
   emits: (event: "on-zoom" | "on-click", arg: any) => void
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback

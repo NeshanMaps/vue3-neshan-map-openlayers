@@ -1,32 +1,24 @@
-import { DivElementRef } from "../../components/Map.model"
 import { Overlay } from "openlayers"
-import { state } from "../state"
+import { store } from ".."
+import { overlaysMutations } from "./mutations"
 import {
   ChangeOverlayStats,
-  SetupOverlay,
-  SetupOverlayProps,
 } from "./overlays.model"
 import { markersOffset } from "@/parameters"
 
 declare const ol: any
 
-let privatePopupContainer: SetupOverlayProps["popupContainer"]
-let privatePersistantContainer: SetupOverlayProps["persistantContainer"]
 /**
  * Sets up overlay on map
  */
-const setupOverlays: SetupOverlay = ({
-  popupContainer,
-  persistantContainer,
-}) => {
-  privatePopupContainer = popupContainer
-  privatePersistantContainer = persistantContainer
-  const overlay = createOverlay(popupContainer)
-  state.overlay = overlay
-  const persistantOverlay = createOverlay(persistantContainer, true)
-  state.persistantOverlay = persistantOverlay
-  state.map?.addOverlay(overlay)
-  state.map?.addOverlay(persistantOverlay)
+const setupOverlays = () => {
+  if (!store.state.popupContainer || !store.state.persistantContainer) return
+  const overlay = createOverlay(store.state.popupContainer)
+  overlaysMutations.setOverlay(overlay)
+  const persistantOverlay = createOverlay(store.state.persistantContainer, true)
+  overlaysMutations.setPersistantOverlay(persistantOverlay)
+  store.state.map?.addOverlay(overlay)
+  store.state.map?.addOverlay(persistantOverlay)
 }
 
 /**
@@ -37,16 +29,16 @@ const setupOverlays: SetupOverlay = ({
  */
 const changeOverlayStats: ChangeOverlayStats = (
   stats,
-  target: "temporary" | "persistant" = "temporary"
+  target = "temporary"
 ) => {
   const targetContainer =
-    target === "temporary" ? privatePopupContainer : privatePersistantContainer
+    target === "temporary" ? store.state.popupContainer : store.state.persistantContainer
   const targetOverlay =
-    target === "temporary" ? state.overlay : state.persistantOverlay
-  if (!targetContainer.value) return
+    target === "temporary" ? store.state.overlay : store.state.persistantOverlay
+  if (!targetContainer) return
   if (stats) {
     const { coords, text, offset } = stats
-    targetContainer.value.innerHTML = text
+    targetContainer.innerHTML = text
     if (offset) {
       targetOverlay?.setOffset(offset)
     }
@@ -61,10 +53,10 @@ const changeOverlayStats: ChangeOverlayStats = (
  * @param persistant - Whether it should not disappear on mouse leaving
  * @returns overlay
  */
-const createOverlay = (container: DivElementRef, persistant = false) => {
+const createOverlay = (container: HTMLDivElement, persistant = false) => {
   const overlay: Overlay = new ol.Overlay({
-    element: container.value,
-    map: state.map,
+    element: container,
+    map: store.state.map,
     positioning: "top-center",
     offset: markersOffset.short,
   })

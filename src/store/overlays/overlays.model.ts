@@ -1,4 +1,4 @@
-import { DivElementRef, Ol } from "../../components/Map.model"
+import { Ol } from "../../components/Map.model"
 import { Coordinate } from "openlayers"
 import { Ref } from "vue"
 import { OlMap } from "../map/map.model"
@@ -20,9 +20,3 @@ export declare type ChangeOverlayStats = (
   options?: ChangeOverlayStatsProps,
   target?: "temporary" | "persistant"
 ) => void
-
-export declare interface SetupOverlayProps {
-  popupContainer: DivElementRef
-  persistantContainer: DivElementRef
-}
-export declare type SetupOverlay = (options: SetupOverlayProps) => void

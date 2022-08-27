@@ -19,8 +19,6 @@ export function eventsMixin({
   popupOnMarkerHover,
   popupOnResultHover,
   reverseOnClick,
-  popupContainer,
-  persistantContainer,
 }: EventsMixinProps) {
   /**
    * Sets the required events up for the map.
@@ -57,10 +55,7 @@ export function eventsMixin({
    * Sets up hover event for marker popups
    */
   const setupMarkerHoverEvent = () => {
-    store.actions.overlays.setupOverlays({
-      popupContainer,
-      persistantContainer,
-    })
+    store.actions.overlays.setupOverlays()
     store.state.map?.on("pointermove", function (evt) {
       const hoveredFeature = store.actions.markers.getFeatureFromEvent(
         <MapBrowserEvent>evt
@@ -125,7 +120,7 @@ export function eventsMixin({
         handleFeatureClick(selectedFeature)
       }
     } else {
-      if (store.getters.screen.small) store.toggleMobileDrawerShowDetails(true)
+      if (store.getters.touchPlatform) store.toggleMobileDrawerShowDetails(true)
       else store.toggleDrawerActivation(true)
       if (reverseOnClick) {
         store.toggleReverseLoading(true)

@@ -6,7 +6,7 @@ import { store } from ".."
 const toggleResultDrawers: (value?: boolean) => void = (
   value = !store.state.drawerShowDetails
 ) => {
-  if (store.getters.screen.small) {
+  if (store.getters.touchPlatform) {
     store.toggleMobileDrawerShowDetails(value)
   } else {
     store.toggleDrawerShowDetails(value)
