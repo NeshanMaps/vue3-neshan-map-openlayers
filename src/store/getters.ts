@@ -4,7 +4,8 @@ import { drawerConstants } from "@/parameters"
 import { isTouchPlatform } from "@/utils"
 export const getters = reactive({
   drawerWidth: computed(() => {
-    const width = isTouchPlatform()
+    const isMobile = state.viewType ? state.viewType === 'mobile' : isTouchPlatform()
+    const width = isMobile
       ? state.mapDimensions.width
       : drawerConstants.width
     return width

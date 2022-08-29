@@ -12,3 +12,5 @@ export declare type MapType =
   | "standard-night"
   | "standard-day"
   | "osm-bright"
+
+export declare type ViewType = undefined | 'desktop' | 'mobile'

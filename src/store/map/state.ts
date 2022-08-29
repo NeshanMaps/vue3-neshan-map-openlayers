@@ -1,4 +1,4 @@
-import { MapType, OlMap } from "./map.model"
+import { MapType, OlMap, ViewType } from "./map.model"
 import { zoomConstants } from "@/parameters"
 
 const stateGen = () => {
@@ -9,6 +9,7 @@ const stateGen = () => {
     zoom: zoomConstants.initialZoom,
     poiLayer: true,
     trafficLayer: true,
+    viewType: 'desktop' as ViewType
   }
 }
 

@@ -89,7 +89,7 @@ import {
 } from "./Map.model"
 import { Coordinate } from "openlayers"
 import { SearchOptions } from "../store/markers/markers.model"
-import { MapType, OlMap } from "@/store/map/map.model"
+import { MapType, OlMap, ViewType } from "@/store/map/map.model"
 export default {
   name: "NeshanMap",
 }
@@ -177,7 +177,7 @@ const props = defineProps({
     default: 1,
   },
   viewType: {
-    type: String as PropType<undefined | "mobile" | "desktop">,
+    type: String as PropType<ViewType>,
   },
 })
 
@@ -205,6 +205,14 @@ watch(
   () => props.scale,
   (nv) => {
     fontSize.value = nv + "rem"
+  }
+)
+
+store.setViewType(props.viewType)
+watch(
+  () => props.viewType,
+  (nv) => {
+    store.setViewType(nv)
   }
 )
 
