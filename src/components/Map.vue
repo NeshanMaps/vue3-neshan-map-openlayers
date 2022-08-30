@@ -34,6 +34,12 @@
         :settingsClass="desktopSettingsClass"
         :settingsStyle="desktopSettingsStyle"
       />
+      <MobileLayers
+        v-model:value="mobileDrawerModel"
+        :tiles="filteredTiles"
+        :settingsClass="mobileSettingsClass"
+        :settingsStyle="mobileSettingsStyle"
+      ></MobileLayers>
       <button
         v-if="store.getters.touchPlatform"
         class="mobile-layers-button pos-absolute justify-center align-center d-flex"
@@ -49,17 +55,11 @@
         @result-click="handleResultClick"
         @result-hover="handleResultHover"
       />
+      <MobileDetailsSection
+        v-if="store.getters.touchPlatform"
+        v-show="store.state.mobileDrawerShowDetails"
+      ></MobileDetailsSection>
     </slot>
-    <MobileLayers
-      v-model:value="mobileDrawerModel"
-      :tiles="filteredTiles"
-      :settingsClass="mobileSettingsClass"
-      :settingsStyle="mobileSettingsStyle"
-    ></MobileLayers>
-    <MobileDetailsSection
-      v-if="store.getters.touchPlatform"
-      v-show="store.state.mobileDrawerShowDetails"
-    ></MobileDetailsSection>
   </div>
 </template>
 <script lang="ts">
@@ -357,6 +357,7 @@ store.actions.dimensions.updateBreakpoints()
  */
 onMounted(() => {
   if (mapContainer.value) store.setMapContainer(mapContainer.value)
+  console.log(mapContainer.value);
   if (popupContainer.value) store.setPopupContainer(popupContainer.value)
   if (persistantContainer.value)
     store.setPersistantContainer(persistantContainer.value)

@@ -8,7 +8,7 @@ import {
   PrimaryReverseResult,
   SearchResult,
 } from "../store/markers/markers.model"
-import { MapType, OlMap } from "@/store/map/map.model"
+import { MapType, OlMap } from "../store/map/map.model"
 
 export declare type NuString = null | string
 export declare type DoubleNums = [number, number]
