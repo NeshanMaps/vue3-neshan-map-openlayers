@@ -176,9 +176,7 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-  viewType: {
-    type: String as PropType<ViewType>,
-  },
+  viewType: String as PropType<ViewType>,
 })
 
 store.setApi(createApi(props.serviceKey))

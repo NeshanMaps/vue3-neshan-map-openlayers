@@ -8,6 +8,9 @@
   "browser": {
     "./sfc": "src/components/Map.vue"
   },
+  "files": [
+    "dist/**"
+  ],
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

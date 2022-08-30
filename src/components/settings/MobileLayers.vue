@@ -73,7 +73,7 @@ const model = computed({
   get() {
     return props.value
   },
-  set(val) {
+  set(val: boolean) {
     emit("update:value", val)
   },
 })
@@ -93,7 +93,7 @@ const close = () => {
   }, 200)
 }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 .mobile-settings-container {
   top: 0;
   bottom: 0;
