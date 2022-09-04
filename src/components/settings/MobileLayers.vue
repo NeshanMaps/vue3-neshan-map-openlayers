@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="model"
+    v-show="modelValue"
     class="mobile-settings-container pos-absolute o-hidden"
     :class="settingsBoxClass"
     :style="settingsBoxStyle"
@@ -17,7 +17,7 @@
           :selected="store.state.poiLayer"
           @click="store.togglePoiLayer()"
         >
-          <img :src="require('@/static/poi.png')" />
+          <img src="../../assets/images/poi.png" />
           <div class="desc text-sm">POI</div>
         </div>
         <div
@@ -25,12 +25,11 @@
           :selected="store.state.trafficLayer"
           @click="store.toggleTrafficLayer()"
         >
-          <img :src="require('@/static/traffic.png')" />
+          <img src="../../assets/images/traffic.png" />
           <div class="desc text-sm">Traffic</div>
         </div>
       </div>
       <div class="map-types d-flex justify-center">
-        <!-- @click="emit('update:mapType', tile.title)" -->
         <div
           v-for="tile of tiles"
           :key="tile.title"
@@ -48,13 +47,21 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref } from "@vue/reactivity"
+import { ref } from "vue"
 import { Tile } from "../Map.model"
-import { defineEmits, defineProps, PropType, watch } from "vue"
+import {
+  defineEmits,
+  defineProps,
+  PropType,
+  watch,
+  getCurrentInstance,
+} from "vue"
 import { store } from "@/store"
 
+const instance = getCurrentInstance()
+
 const props = defineProps({
-  value: Boolean,
+  modelValue: Boolean,
   tiles: {
     type: Array as PropType<Tile[]>,
     default: () => [],
@@ -63,37 +70,34 @@ const props = defineProps({
   settingsBoxStyle: Object,
 })
 
-const emit = defineEmits([
-  "update:value",
-  "update:mapType",
-  "update:traffice",
-  "update:poi",
-])
-const model = computed({
-  get() {
-    return props.value
-  },
-  set(val: boolean) {
-    emit("update:value", val)
-  },
-})
+const emit = defineEmits(["update:modelValue"])
+
+const updateModel = (value: boolean) => {
+  emit("update:modelValue", value)
+}
+
 const showTiles = ref(false)
-watch(model, (nv) => {
-  if (nv) {
-    setTimeout(() => {
-      showTiles.value = nv
-    }, 200)
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (newValue) {
+      setTimeout(() => {
+        showTiles.value = true
+        instance?.proxy?.$forceUpdate()
+      }, 200)
+    }
   }
-})
+)
 
 const close = () => {
   showTiles.value = false
+  instance?.proxy?.$forceUpdate()
   setTimeout(() => {
-    model.value = false
+    updateModel(false)
   }, 200)
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .mobile-settings-container {
   top: 0;
   bottom: 0;
@@ -111,6 +115,7 @@ const close = () => {
     box-sizing: border-box;
     &[activated="true"] {
       max-height: 70%;
+      transition: 0.2s;
     }
     .map-types {
       flex-wrap: wrap;

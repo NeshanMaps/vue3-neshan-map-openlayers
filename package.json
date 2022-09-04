@@ -1,46 +1,39 @@
 {
-  "name": "vue3-neshan-map-openlayers",
-  "version": "0.2.5",
-  "main": "dist/NeshanMap.umd.js",
-  "module": "dist/NeshanMap.umd.js",
-  "unpkg": "dist/NeshanMap.umd.min.js",
+  "name": "vue3-neshanmap-openlayers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/Vue3-NeshanMap-Openlayers.umd.cjs",
+  "module": "dist/Vue3-NeshanMap-Openlayers.js",
   "types": "dist/types/components/Map.vue.d.ts",
-  "browser": {
-    "./sfc": "src/components/Map.vue"
-  },
   "files": [
     "dist/**"
   ],
-  "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "open": "vue-cli-service serve --open",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "prepare": "vue-cli-service build --target lib --name NeshanMap src/components/Map.vue"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier .  --write"
   },
   "dependencies": {
-    "@types/openlayers": "^4.6.18",
-    "core-js": "^3.8.3",
+    "sass": "^1.54.8",
     "vue": "^3.2.13"
   },
   "devDependencies": {
+    "@types/node": "^18.7.14",
+    "@types/openlayers": "^4.6.18",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-typescript": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@vitejs/plugin-vue": "^3.0.3",
     "@vue/eslint-config-typescript": "^9.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "lint-staged": "^11.1.2",
-    "sass": "^1.32.7",
-    "sass-loader": "^12.0.0",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-vue": "^9.4.0",
+    "prettier": "^2.7.1",
     "typescript": "~4.5.5",
-    "typescript-declaration-webpack-plugin": "^0.2.2"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+    "vite": "^3.0.9",
+    "vite-plugin-dts": "^1.4.1",
+    "vite-plugin-eslint": "^1.8.1"
   }
 }

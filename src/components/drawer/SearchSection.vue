@@ -33,8 +33,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue"
-import { computed } from "@vue/reactivity"
+import { defineProps, defineEmits, computed } from "vue"
 import { store } from "@/store"
 import Icon from "../icons/IconComponent.vue"
 import { drawerConstants } from "@/parameters"
@@ -85,7 +84,7 @@ const runTimeout = (value = text.value, delay = 1000) => {
   } else if (!store.state.searchLoading) {
     store.toggleSearchLoading(true)
   }
-  emitTimeout = setTimeout(() => {
+  emitTimeout = window.setTimeout(() => {
     emitSearch(value)
   }, delay)
 }

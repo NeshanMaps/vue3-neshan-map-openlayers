@@ -1,30 +1,28 @@
 <template>
   <div class="page">
-    <div class="mymap">
-      <Map
-        ref="map"
-        mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
-        serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
-        :center="{ latitude: 36.311559, longitude: 59.5870851 }"
-        @on-click="handleClick"
-        poi
-        traffic
-      />
-    </div>
+    <NeshanMap
+      ref="map"
+      mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
+      serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
+      :center="{ latitude: 36.311559, longitude: 59.5870851 }"
+      @on-click="handleClick"
+      poi
+      traffic
+    />
   </div>
 </template>
 
 <script lang="ts">
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// import Map from "../../dist/NeshanMap.umd.js";
-import Map from "@/components/Map.vue"
+// import Map from "../../dist/Vue3-NeshanMap-Openlayers.mjs"
+import NeshanMap from "@/components/Map.vue"
 
 import { defineComponent } from "vue"
 export default defineComponent({
   name: "HomeView",
   components: {
-    Map,
+    NeshanMap,
   },
   data() {
     return {
@@ -50,7 +48,7 @@ export default defineComponent({
 </script>
 
 <style>
-/* @import url('../../dist/NeshanMap.css'); */
+/* @import url("../../dist/style.css"); */
 @import url("@/assets/test.scss");
 
 .page {
@@ -66,13 +64,5 @@ export default defineComponent({
   max-width: 50vw;
   top: 4vh;
   left: 4vw;
-}
-
-.mymap {
-  margin-top: 100px;
-  height: 500px;
-  border: 1px solid;
-  box-sizing: border-box;
-  /* font-size: 0.8rem; */
 }
 </style>

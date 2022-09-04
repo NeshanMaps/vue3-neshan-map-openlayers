@@ -1,13 +1,13 @@
-import { state } from "../state"
+import type { Store } from ".."
 
 export const drawersMutations = {
   toggleDrawerActivation(value: boolean) {
-    state.drawerActivation = value
+    (<Store><unknown>this).state.drawerActivation = value
   },
   toggleDrawerShowDetails(value: boolean) {
-    state.drawerShowDetails = value
+    (<Store><unknown>this).state.drawerShowDetails = value
   },
   toggleMobileDrawerShowDetails(value: boolean) {
-    state.mobileDrawerShowDetails = value
+    (<Store><unknown>this).state.mobileDrawerShowDetails = value
   },
 }

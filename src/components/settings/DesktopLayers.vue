@@ -4,34 +4,40 @@
     class="map-settings o-hidden pos-absolute"
     :class="settingsBoxClass"
   >
-    <div class="map-tiles justify-between d-flex">
+    <div class="justify-between d-flex">
       <div
         v-for="tile of tiles"
         :key="tile.title"
         @click="store.setMapType(tile.title)"
-        class="pointer"
+        class="pointer tile"
         :selected="tile.title == store.state.mapType"
       >
         <img :src="tile.url" />
-        <div class="desc text-nm">
+        <div class="text-sm">
           {{ tile.title[0].toUpperCase() + tile.title.slice(1) }}
         </div>
       </div>
     </div>
-    <div class="map-layers d-flex mt-1">
+    <div class="d-flex justify-around poi-traffic">
       <div
-        class="d-flex justify-center align-center pointer"
+        class="pointer tile"
         :selected="store.state.poiLayer"
         @click="store.togglePoiLayer()"
       >
-        <img :src="require('@/static/poi.png')" />
+        <img src="@/assets/images/poi.png" />
+        <div class="text-sm">
+          Traffic
+        </div>
       </div>
       <div
-        class="d-flex justify-center align-center pointer"
+        class="pointer tile"
         :selected="store.state.trafficLayer"
         @click="store.toggleTrafficLayer()"
       >
-        <img :src="require('@/static/traffic.png')" />
+        <img src="@/assets/images/traffic.png" />
+        <div class="text-sm">
+          Poi
+        </div>
       </div>
     </div>
   </div>
@@ -54,7 +60,7 @@ defineProps({
 .map-settings {
   background-color: white;
   border-radius: 0.5em;
-  border: 1px solid rgb(178, 178, 178);
+  border: 1px solid rgb(142, 142, 142);
   z-index: 10;
   bottom: 4%;
   left: 1%;
@@ -66,41 +72,27 @@ defineProps({
     max-width: 38em;
     max-height: 100%;
     transition: 1s;
+    border: 1px solid rgba(142, 142, 142, 0.409);
   }
-  div [selected="true"] {
-    border: 1px solid var(--primary);
-    border-radius: 0.5em;
-    color: var(--primary);
-  }
-  .map-tiles {
-    & > div {
-      &:not([selected="true"]) {
-        border: 1px solid rgba(255, 255, 255, 0);
-      }
+  .tile {
+    width: 6.5em;
+    transition: 0.5s;
+    img {
+      height: 6em;
+      width: 6em;
+      border-radius: 0.5em;
+      border: 1px solid rgba(0, 0, 0, 0);
+    }
+    &[selected="true"] {
       img {
-        width: 6em;
-        height: 6em;
-        border-radius: 1em;
+        border: 1px solid var(--primary);
       }
-      .desc {
-        overflow: hidden;
-        padding-right: 0.1em;
-        padding-left: 0.1em;
-        text-align: center;
-      }
+      color: var(--primary);
     }
   }
-  .map-layers {
-    & > div {
-      width: 45%;
-      box-sizing: border-box;
-      margin: 0 auto 10px auto;
-      transition: 0.2s;
-      img {
-        width: 4em;
-      }
+  .poi-traffic {
+    .tile {
       &:not([selected="true"]) {
-        border: 1px solid rgba(255, 255, 255, 0);
         filter: grayscale(1);
       }
     }

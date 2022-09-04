@@ -43,6 +43,10 @@
   justify-content: center
 }
 
+.justify-around {
+  justify-content: space-around;
+}
+
 .align-center {
   align-items: center;
 }
@@ -53,24 +57,31 @@
 
 .text-xl {
   font-size: var(--text-xl);
+  line-height: var(--text-xl);
 }
 .text-lg {
   font-size: var(--text-lg);
+  line-height: var(--text-lg);
 }
 .text-nm {
   font-size: var(--text-nm);
+  line-height: var(--text-nm);
 }
 .text-sm {
   font-size: var(--text-sm);
+  line-height: var(--text-sm);
 }
 .text-xs {
   font-size: var(--text-xs);
+  line-height: var(--text-xs);
 }
 .text-xxs {
   font-size: var(--text-xxs);
+  line-height: var(--text-xxs);
 }
 .text-caption {
   font-size: var(--text-sm);
+  line-height: var(--text-sm);
   color: grey;
 }
 
@@ -91,6 +102,9 @@
 .mt-1 {
   margin-top: var(--sm);
 }
+.mt-2 {
+  margin-top: var(--md);
+}
 
 .mx-1 {
   margin-left: var(--md);
@@ -99,6 +113,11 @@
 .mx-2 {
   margin-left: var(--lg);
   margin-right: var(--lg);
+}
+
+.my-2 {
+  margin-top: var(--md);
+  margin-bottom: var(--md);
 }
 
 .box-shadow {

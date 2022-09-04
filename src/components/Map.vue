@@ -35,7 +35,8 @@
         :settingsStyle="desktopSettingsStyle"
       />
       <MobileLayers
-        v-model:value="mobileDrawerModel"
+        v-else
+        v-model="mobileDrawerModel"
         :tiles="filteredTiles"
         :settingsClass="mobileSettingsClass"
         :settingsStyle="mobileSettingsStyle"
@@ -45,7 +46,7 @@
         class="mobile-layers-button pos-absolute justify-center align-center d-flex"
         @click="handleMobileDrawerClick"
       >
-        <img :src="require('@/static/layers-outline.svg')" />
+        <img src="../assets/images/layers-outline.svg" />
       </button>
     </slot>
     <slot v-if="!hideSearchContainer" name="search-container">
@@ -89,7 +90,7 @@ import {
 } from "./Map.model"
 import { Coordinate } from "openlayers"
 import { SearchOptions } from "../store/markers/markers.model"
-import { MapType, OlMap, ViewType } from "@/store/map/map.model"
+import { MapType, OlMap, ViewType } from "../store/map/map.model"
 export default {
   name: "NeshanMap",
 }
@@ -357,7 +358,6 @@ store.actions.dimensions.updateBreakpoints()
  */
 onMounted(() => {
   if (mapContainer.value) store.setMapContainer(mapContainer.value)
-  console.log(mapContainer.value);
   if (popupContainer.value) store.setPopupContainer(popupContainer.value)
   if (persistantContainer.value)
     store.setPersistantContainer(persistantContainer.value)
@@ -370,10 +370,11 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-@import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
+<style lang="scss">
 @import url("@/assets/main.scss");
-
+@import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
+</style>
+<style lang="scss" scoped>
 .map {
   height: 100%;
   direction: rtl;

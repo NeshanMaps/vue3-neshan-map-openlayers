@@ -1,27 +1,27 @@
-import { state } from "../state"
 import { MapType, OlMap, ViewType } from "./map.model"
+import type { Store } from ".."
 
 export const mapMutations = {
   setMap(value: OlMap) {
-    state.map = value
+    (<Store><unknown>this).state.map = value
   },
   setMapContainer(value: HTMLDivElement) {
-    state.mapContainer = value
+    (<Store><unknown>this).state.mapContainer = value
   },
   setZoom(value: number) {
-    state.zoom = value
+    (<Store><unknown>this).state.zoom = value
   },
   setMapType(value: MapType) {
-    state.map?.setMapType(value)
-    state.mapType = value
+    (<Store><unknown>this).state.map.setMapType(value);
+    (<Store><unknown>this).state.mapType = value;
   },
   setViewType(value: ViewType) {
-    state.viewType = value
+    (<Store><unknown>this).state.viewType = value
   },
-  togglePoiLayer(value = !state.poiLayer) {
-    state.poiLayer = value
+  togglePoiLayer(value = !(<Store><unknown>this).state.poiLayer) {
+    (<Store><unknown>this).state.poiLayer = value
   },
-  toggleTrafficLayer(value = !state.trafficLayer) {
-    state.trafficLayer = value
+  toggleTrafficLayer(value = !(<Store><unknown>this).state.trafficLayer) {
+    (<Store><unknown>this).state.trafficLayer = value
   },
 }

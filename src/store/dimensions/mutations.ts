@@ -1,11 +1,11 @@
-import { state } from "../state"
 import { BreakPoints } from "./dimensions.model"
+import type { Store } from ".."
 
 export const dimensionsMutations = {
   setBreakPoints(value: BreakPoints) {
-    state.breakpoints = value
+    (<Store><unknown>this).state.breakpoints = value
   },
   setMapDimenstions(value: { width: string; height: string }) {
-    state.mapDimensions = value
+    (<Store><unknown>this).state.mapDimensions = value
   },
 }

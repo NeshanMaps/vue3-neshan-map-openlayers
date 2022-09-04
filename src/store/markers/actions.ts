@@ -22,7 +22,6 @@ import {
 } from "@/utils"
 import { Coordinate, Extent, Feature, MapBrowserEvent } from "openlayers"
 import { toRaw } from "vue"
-import { state } from "../state"
 import { store } from ".."
 import { ReverseOnPointOptions } from "../../mixins/events.mixin.model"
 import { markersOffset, markerUrls, zoomConstants } from "@/parameters"
@@ -46,7 +45,7 @@ import { markersOffset, markerUrls, zoomConstants } from "@/parameters"
  */
 const addMarkers: CreateMarkers = (points, options) => {
   const { layer, style } = createMarkers(points, options)
-  state.map?.addLayer(layer)
+  store.state.map?.addLayer(layer)
   return { layer, style }
 }
 /**
@@ -54,7 +53,7 @@ const addMarkers: CreateMarkers = (points, options) => {
  */
 const clearMarkerLayer = (layer: VectorLayer) => {
   if (!layer) return
-  state.map?.removeLayer(layer)
+  store.state.map?.removeLayer(layer)
 }
 
 /**
@@ -85,7 +84,7 @@ const toggleClusterSource = (layer: VectorLayer, deactivate: boolean) => {
  * @returns The found feature and its cluster
  */
 const getClusterByCoords: GetClusterByCoords = (coords) => {
-  const clusters = state.searchMarkers.getSource().getFeatures()
+  const clusters = store.state.searchMarkers.getSource().getFeatures()
   let foundFeature: Feature | undefined
   const cluster = clusters?.find((cluster) => {
     const feature = getMarkerInClusterByCoords(cluster, coords)
@@ -117,7 +116,7 @@ const getMarkerInClusterByCoords = (cluster: Feature, coords: Coordinate) => {
  * @returns The found marker
  */
 const getMarkerByCoords: GetMarkerByCoords = (coords) => {
-  return state.searchMarkers?.getSource().getFeatureById(coords.join("-"))
+  return store.state.searchMarkers?.getSource().getFeatureById(coords.join("-"))
 }
 
 /**
@@ -127,7 +126,7 @@ const getMarkerByCoords: GetMarkerByCoords = (coords) => {
  */
 const getSearchResultByFeature: GetSearchResultByFeature = (feature) => {
   const title = feature.get("text")
-  return state.searchResults.find(
+  return store.state.searchResults.find(
     (si) => si.title === (Array.isArray(title) ? title[0] : title)
   )
 }
@@ -149,8 +148,8 @@ const zoomToLayer = (layer: VectorLayer, options?: ZoomToExtentOptions) => {
  */
 const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
   const duration = options?.duration || 500
-  state.map?.getView().fit(extent, {
-    size: state.map.getSize(),
+  store.state.map?.getView().fit(extent, {
+    size: store.state.map.getSize(),
     duration,
     maxZoom:
       store.state.zoom > zoomConstants.maxZoom
@@ -241,7 +240,7 @@ const selectFeauture = (
     )
   }
   const foundResult = isMainMarker
-    ? state.reverseResult
+    ? store.state.reverseResult
     : !("mapCoords" in feature)
     ? store.actions.markers.getSearchResultByFeature(feature)
     : feature

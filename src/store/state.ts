@@ -6,13 +6,15 @@ import { overlayState } from "./overlays/state"
 import { drawersState } from "./drawers/state"
 import { mapState } from "./map/state"
 
-export const state = reactive({
-  ...dimenstionsState,
-  ...markersState,
-  ...overlayState,
-  ...drawersState,
-  ...mapState,
-  api: null as Api | null,
-  searchLoading: false,
-  reverseLoading: false,
-})
+export default function () {
+  return reactive({
+    ...dimenstionsState,
+    ...markersState,
+    ...overlayState,
+    ...drawersState,
+    ...mapState,
+    api: null as Api | null,
+    searchLoading: false,
+    reverseLoading: false,
+  })
+}

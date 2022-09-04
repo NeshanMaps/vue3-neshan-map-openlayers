@@ -1,17 +1,17 @@
-import { state } from "../state"
+import type { Store } from ".."
 import { Overlay } from "./overlays.model"
 
 export const overlaysMutations = {
   setOverlay(value: Overlay) {
-    state.overlay = value
+    (<Store><unknown>this).state.overlay = value
   },
   setPersistantOverlay(value: Overlay) {
-    state.persistantOverlay = value
+    (<Store><unknown>this).state.persistantOverlay = value
   },
   setPopupContainer(value: HTMLDivElement) {
-    state.popupContainer = value
+    (<Store><unknown>this).state.popupContainer = value
   },
   setPersistantContainer(value: HTMLDivElement) {
-    state.persistantContainer = value
+    (<Store><unknown>this).state.persistantContainer = value
   },
 }
