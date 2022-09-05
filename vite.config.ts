@@ -5,8 +5,11 @@ import dts from "vite-plugin-dts"
 import eslint from 'vite-plugin-eslint'
 
 // https://vitejs.dev/config/
+const dtsOptions = {
+  outputDir: "./dist/types",
+}
 export default defineConfig({
-  plugins: [vue(), dts(), eslint()],
+  plugins: [vue(), dts(dtsOptions), eslint()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

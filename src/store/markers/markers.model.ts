@@ -1,6 +1,14 @@
-import { MarkersIconCallback, NuString } from "../../components/Map.model"
+import {
+  CreateMarkersOptions,
+  CreateMarkersPoints,
+  CreateMarkersResult,
+  MarkersIconCallback,
+  NuString,
+} from "../../components/Map.model"
 import { RouteTypes } from "../../static/index.model"
 import { Coordinate, Feature } from "openlayers"
+import { Context } from "../store.model"
+
 export declare interface PrimarySearchItem {
   category: string
   location: {
@@ -46,12 +54,17 @@ export declare interface SearchProps {
   coords: Coordinate
 }
 export declare type GetSearchResultByFeature = (
+  context: Context,
   feature: Feature
 ) => SearchItem | undefined
 export declare type GetMarkerByCoords = (
+  context: Context,
   coords: Coordinate
 ) => Feature | undefined
-export declare type GetClusterByCoords = (coords: Coordinate) => {
+export declare type GetClusterByCoords = (
+  context: Context,
+  coords: Coordinate
+) => {
   feature: Feature | undefined
   cluster: Feature | undefined
 }
@@ -73,3 +86,9 @@ export declare interface SearchOptions {
   cluster?: boolean
   clusterThreshold?: number
 }
+
+export declare type AddMarkers = (
+  context: Context,
+  points: CreateMarkersPoints,
+  options?: CreateMarkersOptions
+) => CreateMarkersResult

@@ -77,6 +77,7 @@ export declare interface CreateMarkersResult {
   layer: VectorLayer
   style: Style | undefined
 }
+
 export declare type CreateMarkers = (
   points: CreateMarkersPoints,
   options?: CreateMarkersOptions

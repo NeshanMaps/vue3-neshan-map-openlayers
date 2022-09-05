@@ -93,7 +93,7 @@ defineProps({
   .poi-traffic {
     .tile {
       &:not([selected="true"]) {
-        filter: grayscale(1);
+        filter: grayscale(0.8);
       }
     }
   }

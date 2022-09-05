@@ -1,27 +1,27 @@
 import { breakpointsSegments, breakpointsSegmentsPixels } from "@/parameters"
 import { toRaw } from "vue"
-import { store } from ".."
 import { BreakPoints, BreakpointsSegments } from "./dimensions.model"
+import { Context } from "../store.model"
 
 /**
  * Updates map width & height values on window resize
  */
-const updateMapDimensions = () => {
-  if (!store.state.mapContainer) return
-  store.setMapDimenstions({
-    height: store.state.mapContainer.clientHeight + 'px',
-    width: store.state.mapContainer.clientWidth + 'px',
-  })
+const updateMapDimensions = (context: Context) => {
+  if (!context.state.mapContainer) return
+  context.state.mapDimensions = {
+    height: context.state.mapContainer.clientHeight + "px",
+    width: context.state.mapContainer.clientWidth + "px",
+  }
 }
 
 /**
  * Updates store breakpoints on windows resize
  */
-const updateBreakpoints = () => {
+const updateBreakpoints = (context: Context) => {
   const width = window.innerWidth
   const keys = <(keyof BreakpointsSegments)[]>Object.keys(breakpointsSegments)
   const newBreakpoints: BreakPoints = JSON.parse(
-    JSON.stringify(toRaw(store.state.breakpoints))
+    JSON.stringify(toRaw(context.state.breakpoints))
   )
   keys.forEach((brp, i) => {
     const nextBrp = keys[i + 1]
@@ -39,7 +39,7 @@ const updateBreakpoints = () => {
       newBreakpoints.gt[brp] = false
     }
   })
-  store.setBreakPoints(newBreakpoints)
+  context.state.breakpoints = newBreakpoints
 }
 
 export const dimensionsActions = {

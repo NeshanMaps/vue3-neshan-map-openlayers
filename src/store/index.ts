@@ -1,13 +1,21 @@
-import  state  from "./state"
+import  { stateGenerator }  from "./state"
 import { getters } from "./getters"
-import { mutations } from "./mutations"
 import { actions } from "./actions"
+import { Actions } from "./store.model"
 
 const storeGen = () => {
-  return { state: state(), getters, actions, ...mutations }
+  const actionModulesKeys = <(keyof Actions)[]>Object.keys(actions)
+  const storeActions = actionModulesKeys.reduce((sa, amk) => {
+    type mamd = typeof amk
+    const actionKeys = <(keyof typeof actions[typeof amk])[]>Object.keys(actions[amk])
+    const contextFreeActions = actionKeys.reduce((cfa, ak) => {
+      return () => actions[amk][ak]()
+    })
+    return sa
+  }, {})
+
+  return { state: stateGenerator(), getters, actions }
 }
 export const store = storeGen()
 
-export interface Store {
-  state : any
-}
+export type StoreType = typeof store

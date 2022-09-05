@@ -1,16 +1,17 @@
-import { store } from ".."
+import { Context } from "../store.model"
 
 /**
  * Toggles result view drawers based on screen
  */
-const toggleResultDrawers: (value?: boolean) => void = (
-  value = !store.state.drawerShowDetails
+const toggleResultDrawers = (
+  context: Context,
+  value = !context.state.drawerShowDetails
 ) => {
-  if (store.getters.touchPlatform) {
-    store.toggleMobileDrawerShowDetails(value)
+  if (context.getters.touchPlatform) {
+    context.state.mobileDrawerShowDetails = value
   } else {
-    store.toggleDrawerShowDetails(value)
-    store.toggleDrawerActivation(value)
+    context.state.drawerShowDetails = value
+    context.state.drawerActivation = value
   }
 }
 

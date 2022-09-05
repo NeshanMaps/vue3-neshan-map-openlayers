@@ -1,5 +1,6 @@
-import { CreateMarkers, VectorLayer } from "../../components/Map.model"
+import { VectorLayer } from "../../components/Map.model"
 import {
+  AddMarkers,
   GetClusterByCoords,
   GetMarkerByCoords,
   GetSearchResultByFeature,
@@ -22,9 +23,9 @@ import {
 } from "@/utils"
 import { Coordinate, Extent, Feature, MapBrowserEvent } from "openlayers"
 import { toRaw } from "vue"
-import { store } from ".."
 import { ReverseOnPointOptions } from "../../mixins/events.mixin.model"
 import { markersOffset, markerUrls, zoomConstants } from "@/parameters"
+import { Context } from "../store.model"
 
 /**
  * Receives an array of points and marks them on map.
@@ -43,17 +44,17 @@ import { markersOffset, markerUrls, zoomConstants } from "@/parameters"
  * @param options.props - Props to set for all features
  * @returns style and layer.
  */
-const addMarkers: CreateMarkers = (points, options) => {
+const addMarkers: AddMarkers = ({ state }, points, options) => {
   const { layer, style } = createMarkers(points, options)
-  store.state.map?.addLayer(layer)
+  state.map?.addLayer(layer)
   return { layer, style }
 }
 /**
  * Removes markers from map
  */
-const clearMarkerLayer = (layer: VectorLayer) => {
+const clearMarkerLayer = ({ state }: Context, layer: VectorLayer) => {
   if (!layer) return
-  store.state.map?.removeLayer(layer)
+  state.map?.removeLayer(layer)
 }
 
 /**
@@ -61,7 +62,11 @@ const clearMarkerLayer = (layer: VectorLayer) => {
  * @param layer
  * @param deactivate - whether to deactivate clustering or apply it.
  */
-const toggleClusterSource = (layer: VectorLayer, deactivate: boolean) => {
+const toggleClusterSource = (
+  context: Context,
+  layer: VectorLayer,
+  deactivate: boolean
+) => {
   if (!layer) return
   const rawLayer = toRaw(layer)
   const clusterFeatures = rawLayer.getSource().getFeatures() || []
@@ -83,11 +88,11 @@ const toggleClusterSource = (layer: VectorLayer, deactivate: boolean) => {
  * @param coords - Coorinates of wanted feature
  * @returns The found feature and its cluster
  */
-const getClusterByCoords: GetClusterByCoords = (coords) => {
-  const clusters = store.state.searchMarkers.getSource().getFeatures()
+const getClusterByCoords: GetClusterByCoords = (context, coords) => {
+  const clusters = context.state.searchMarkers.getSource().getFeatures()
   let foundFeature: Feature | undefined
   const cluster = clusters?.find((cluster) => {
-    const feature = getMarkerInClusterByCoords(cluster, coords)
+    const feature = getMarkerInClusterByCoords(context, cluster, coords)
     if (feature) {
       foundFeature = feature
     }
@@ -105,7 +110,11 @@ const getClusterByCoords: GetClusterByCoords = (coords) => {
  * @param coords - Coordinate of wanted feature
  * @returns The found feature
  */
-const getMarkerInClusterByCoords = (cluster: Feature, coords: Coordinate) => {
+const getMarkerInClusterByCoords = (
+  context: Context,
+  cluster: Feature,
+  coords: Coordinate
+) => {
   const features: Feature[] | undefined = cluster.get("features")
   return features?.find((feat) => feat.getId() === coords.join("-"))
 }
@@ -115,8 +124,8 @@ const getMarkerInClusterByCoords = (cluster: Feature, coords: Coordinate) => {
  * @param coords - Coordinate of wanted feature
  * @returns The found marker
  */
-const getMarkerByCoords: GetMarkerByCoords = (coords) => {
-  return store.state.searchMarkers?.getSource().getFeatureById(coords.join("-"))
+const getMarkerByCoords: GetMarkerByCoords = ({ state }, coords) => {
+  return state.searchMarkers?.getSource().getFeatureById(coords.join("-"))
 }
 
 /**
@@ -124,9 +133,12 @@ const getMarkerByCoords: GetMarkerByCoords = (coords) => {
  * @param feature
  * @returns Search Item
  */
-const getSearchResultByFeature: GetSearchResultByFeature = (feature) => {
+const getSearchResultByFeature: GetSearchResultByFeature = (
+  { state },
+  feature
+) => {
   const title = feature.get("text")
-  return store.state.searchResults.find(
+  return state.searchResults.find(
     (si) => si.title === (Array.isArray(title) ? title[0] : title)
   )
 }
@@ -136,9 +148,13 @@ const getSearchResultByFeature: GetSearchResultByFeature = (feature) => {
  * @param layer
  * @param options.duration - Zooming duration
  */
-const zoomToLayer = (layer: VectorLayer, options?: ZoomToExtentOptions) => {
+const zoomToLayer = (
+  context: Context,
+  layer: VectorLayer,
+  options?: ZoomToExtentOptions
+) => {
   const extent: Extent = layer.getSource().getExtent()
-  zoomToExtent(extent, options)
+  zoomToExtent(context, extent, options)
 }
 
 /**
@@ -146,16 +162,18 @@ const zoomToLayer = (layer: VectorLayer, options?: ZoomToExtentOptions) => {
  * @param extent - Extent of the area to zoom on
  * @param options.duration - Zooming duration
  */
-const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
+const zoomToExtent = (
+  { state, getters }: Context,
+  extent: Extent,
+  options?: ZoomToExtentOptions
+) => {
   const duration = options?.duration || 500
-  store.state.map?.getView().fit(extent, {
-    size: store.state.map.getSize(),
+  state.map?.getView().fit(extent, {
+    size: state.map.getSize(),
     duration,
     maxZoom:
-      store.state.zoom > zoomConstants.maxZoom
-        ? store.state.zoom
-        : zoomConstants.maxZoom,
-    padding: [15, store.getters.touchPlatform ? 15 : 300, 15, 15],
+      state.zoom > zoomConstants.maxZoom ? state.zoom : zoomConstants.maxZoom,
+    padding: [15, getters.touchPlatform ? 15 : 300, 15, 15],
   })
 }
 
@@ -164,9 +182,13 @@ const zoomToExtent = (extent: Extent, options?: ZoomToExtentOptions) => {
  * @param marker
  * @param options.duration - Zooming duration
  */
-const zoomToMarker = (marker: Feature, options?: ZoomToExtentOptions) => {
+const zoomToMarker = (
+  context: Context,
+  marker: Feature,
+  options?: ZoomToExtentOptions
+) => {
   const extent = getFeatureExtent(marker)
-  zoomToExtent(extent, options)
+  zoomToExtent(context, extent, options)
 }
 
 /**
@@ -174,9 +196,13 @@ const zoomToMarker = (marker: Feature, options?: ZoomToExtentOptions) => {
  * @param cluster
  * @param options.duration - Zooming duration
  */
-const zoomToCluster = (cluster: Feature, options?: ZoomToExtentOptions) => {
+const zoomToCluster = (
+  context: Context,
+  cluster: Feature,
+  options?: ZoomToExtentOptions
+) => {
   const extent = getClusterExtent(cluster)
-  zoomToExtent(extent, options)
+  zoomToExtent(context, extent, options)
 }
 
 /**
@@ -184,9 +210,13 @@ const zoomToCluster = (cluster: Feature, options?: ZoomToExtentOptions) => {
  * @param coords
  * @param options.duration - Zooming duration
  */
-const zoomToCoords = (coords: Coordinate, options?: ZoomToExtentOptions) => {
+const zoomToCoords = (
+  context: Context,
+  coords: Coordinate,
+  options?: ZoomToExtentOptions
+) => {
   const extent: Extent = [...coords, ...coords]
-  zoomToExtent(extent, options)
+  zoomToExtent(context, extent, options)
 }
 
 /**
@@ -196,6 +226,7 @@ const zoomToCoords = (coords: Coordinate, options?: ZoomToExtentOptions) => {
  * @param options
  */
 const selectFeauture = (
+  context: Context,
   feature: Feature | SearchItem | ReverseResult,
   options?: SelectFeautureOptions
 ) => {
@@ -204,7 +235,7 @@ const selectFeauture = (
   let text = <string>options?.text
   if ("mapCoords" in feature) {
     coords ||= feature.mapCoords
-    zoomToCoords(coords)
+    zoomToCoords(context, coords)
     if ("title" in feature) {
       text = feature.title
     } else {
@@ -212,7 +243,7 @@ const selectFeauture = (
       text = getTitleFromData(feature)
     }
   } else {
-    zoomToMarker(feature)
+    zoomToMarker(context, feature)
     coords ||= getCoordsFromFeature(feature)
     isMainMarker = feature?.getProperties().mainMarker
     text ||= feature.getProperties().text
@@ -220,7 +251,8 @@ const selectFeauture = (
   }
   if (options?.delay !== 0) {
     setTimeout(() => {
-      store.actions.overlays.changeOverlayStats(
+      context.actions.overlays.changeOverlayStats(
+        context,
         {
           coords,
           text,
@@ -230,7 +262,8 @@ const selectFeauture = (
       )
     }, options?.delay || 500)
   } else {
-    store.actions.overlays.changeOverlayStats(
+    context.actions.overlays.changeOverlayStats(
+      context,
       {
         coords,
         text,
@@ -240,13 +273,13 @@ const selectFeauture = (
     )
   }
   const foundResult = isMainMarker
-    ? store.state.reverseResult
+    ? context.state.reverseResult
     : !("mapCoords" in feature)
-    ? store.actions.markers.getSearchResultByFeature(feature)
+    ? context.actions.markers.getSearchResultByFeature(context, feature)
     : feature
   if (foundResult) {
-    store.setSelectedMarker(foundResult)
-    store.actions.drawers.toggleResultDrawers(true)
+    context.state.selectedMarker = foundResult
+    context.actions.drawers.toggleResultDrawers(context, true)
   }
 }
 
@@ -254,11 +287,11 @@ const selectFeauture = (
  * Removes persistant overlay and marker layer from the map.
  * Deactivates drawers and clears selected marker
  */
-const deselectAll = () => {
-  store.actions.overlays.changeOverlayStats(undefined, "persistant")
-  store.actions.markers.clearMarkerLayer(store.state.mainMarker)
-  store.setSelectedMarker(null)
-  store.actions.drawers.toggleResultDrawers(false)
+const deselectAll = (context: Context) => {
+  context.actions.overlays.changeOverlayStats(context, undefined, "persistant")
+  context.actions.markers.clearMarkerLayer(context, context.state.mainMarker)
+  context.state.selectedMarker = null
+  context.actions.drawers.toggleResultDrawers(context, false)
 }
 
 /**
@@ -266,9 +299,9 @@ const deselectAll = () => {
  * @param evt - Map hover or click event
  * @returns feature (If found)
  */
-const getFeatureFromEvent = (evt: MapBrowserEvent) => {
+const getFeatureFromEvent = (context: Context, evt: MapBrowserEvent) => {
   return <Feature | undefined>(
-    store.state.map?.forEachFeatureAtPixel(evt.pixel, (feature) => feature)
+    context.state.map?.forEachFeatureAtPixel(evt.pixel, (feature) => feature)
   )
 }
 /**
@@ -280,6 +313,7 @@ const getFeatureFromEvent = (evt: MapBrowserEvent) => {
  * @returns marker, standard coords of point and api result data
  */
 const reverseOnPoint = async (
+  context: Context,
   point: Coordinate,
   { useMarker = true, usePopup = true, customText }: ReverseOnPointOptions = {}
 ) => {
@@ -287,7 +321,8 @@ const reverseOnPoint = async (
     const stdPoint = transformCoords(point)
     let marker: VectorLayer | null = null
     if (useMarker) {
-      const { layer } = store.actions.markers.addMarkers(
+      const { layer } = context.actions.markers.addMarkers(
+        context,
         [{ coords: point, text: "", iconScale: 0.1, iconUrl: markerUrls.main }],
         {
           props: {
@@ -297,23 +332,24 @@ const reverseOnPoint = async (
           anchor: [0.5, 1],
         }
       )
-      store.setMainMarkerCoords(stdPoint)
-      store.setMainMarker(layer)
+      context.state.mainMarkerCoords = stdPoint
+      context.state.mainMarker = layer
       marker = layer
     }
-    if (!store.state.api) throw "No reverse api"
-    const data = await store.state.api.REVERSE(...stdPoint)
+    if (!context.state.api) throw "No reverse api"
+    const data = await context.state.api.REVERSE(...stdPoint)
     const extendedData = {
       ...data,
       mapCoords: stdPoint,
     }
-    store.setSelectedMarker(extendedData)
-    store.setReverseResult(extendedData)
-    store.actions.drawers.toggleResultDrawers(true)
+    context.state.selectedMarker = extendedData
+    context.state.reverseResult = extendedData
+    context.actions.drawers.toggleResultDrawers(context, true)
     const text = customText || getTitleFromData(extendedData)
-    store.state.mainMarker?.getSource().getFeatures()[0].set("text", text)
+    context.state.mainMarker?.getSource().getFeatures()[0].set("text", text)
     if (usePopup) {
-      store.actions.overlays.changeOverlayStats(
+      context.actions.overlays.changeOverlayStats(
+        context,
         { coords: point, text, offset: markersOffset.high },
         "persistant"
       )
@@ -331,43 +367,50 @@ const reverseOnPoint = async (
  * @param searchParams.coords - Coordinates you want to search around.
  */
 const search = async (
+  context: Context,
   { term = "", coords }: SearchProps,
   options?: SearchOptions
 ) => {
   try {
-    store.toggleSearchLoading(true)
-    if (!store.state.api) return
-    const result = await store.state.api.SEARCH(term, coords)
-    store.toggleDrawerShowDetails(false)
-    clearMarkerLayer(store.state.searchMarkers)
+    context.state.searchLoading = true
+    if (!context.state.api) return
+    const result = await context.state.api.SEARCH(term, coords)
+    context.state.drawerShowDetails = false
+    clearMarkerLayer(context, context.state.searchMarkers)
     const points = await createMapPoints(result.items)
     const resultsWithMapCoords = points.map((point) => ({
       ...point.originalItem,
       iconUrl: point.iconUrl,
       mapCoords: point.coords,
     }))
-    store.setSearchResults(resultsWithMapCoords)
-    const { layer } = store.actions.markers.addMarkers(points, {
+    context.state.searchResults = resultsWithMapCoords
+    const { layer } = context.actions.markers.addMarkers(context, points, {
       markersIconCallback: options?.markersIconCallback,
       cluster: options?.cluster,
       clusterThreshold: options?.clusterThreshold,
     })
-    store.actions.overlays.changeOverlayStats(undefined, "persistant")
-    store.state.searchMarkers = layer
+    context.actions.overlays.changeOverlayStats(
+      context,
+      undefined,
+      "persistant"
+    )
+    context.state.searchMarkers = layer
     // Apparently it takse some async time to cluster the source
     setTimeout(() => {
       const features = layer.getSource().getFeatures()
       //To fix a problem with zooming on single feature layers extent
       if (features.length === 1) {
-        store.actions.markers.zoomToCluster(features[0], { duration: 1500 })
+        context.actions.markers.zoomToCluster(context, features[0], {
+          duration: 1500,
+        })
       } else {
-        store.actions.markers.zoomToLayer(layer, { duration: 1500 })
+        context.actions.markers.zoomToLayer(context, layer, { duration: 1500 })
       }
     }, 200)
   } catch (error) {
     console.log(error)
   } finally {
-    store.toggleSearchLoading(false)
+    context.state.searchLoading = false
   }
 }
 
