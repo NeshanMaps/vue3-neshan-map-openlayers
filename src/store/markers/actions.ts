@@ -289,7 +289,7 @@ const selectFeauture = (
  */
 const deselectAll = (context: Context) => {
   context.actions.overlays.changeOverlayStats(context, undefined, "persistant")
-  context.actions.markers.clearMarkerLayer(context, context.state.mainMarker)
+  clearMarkerLayer(context, context.state.mainMarker)
   context.state.selectedMarker = null
   context.actions.drawers.toggleResultDrawers(context, false)
 }

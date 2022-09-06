@@ -8,7 +8,7 @@
       <div
         v-for="tile of tiles"
         :key="tile.title"
-        @click="store.setMapType(tile.title)"
+        @click="store.actions.map.setMapType(tile.title)"
         class="pointer tile"
         :selected="tile.title == store.state.mapType"
       >
@@ -22,7 +22,7 @@
       <div
         class="pointer tile"
         :selected="store.state.poiLayer"
-        @click="store.togglePoiLayer()"
+        @click="store.actions.map.togglePoi()"
       >
         <img src="@/assets/images/poi.png" />
         <div class="text-sm">
@@ -32,7 +32,7 @@
       <div
         class="pointer tile"
         :selected="store.state.trafficLayer"
-        @click="store.toggleTrafficLayer()"
+        @click="store.actions.map.toggleTraffic()"
       >
         <img src="@/assets/images/traffic.png" />
         <div class="text-sm">

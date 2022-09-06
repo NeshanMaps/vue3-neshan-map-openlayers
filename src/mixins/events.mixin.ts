@@ -8,6 +8,7 @@ import {
   getCoordsFromFeature,
 } from "../utils"
 import { markersOffset } from "@/parameters"
+import { toRaw } from "vue"
 
 export function eventsMixin({
   emits,
@@ -41,13 +42,13 @@ export function eventsMixin({
    */
   const setupZoomEvent = () => {
     if (!store.state.map) return
-    store.setZoom(store.state.map.getView().getZoom())
+    store.state.zoom = store.state.map.getView().getZoom()
     store.state.map.on("moveend", () => {
       if (!store.state.map) return
       const newZoom = store.state.map.getView().getZoom()
       if (store.state.zoom != newZoom) {
         emits("on-zoom", newZoom)
-        store.setZoom(newZoom)
+        store.state.zoom = newZoom
       }
     })
   }
@@ -112,25 +113,27 @@ export function eventsMixin({
     let emittingStdPoint
     const selectedFeature = store.actions.markers.getFeatureFromEvent(event)
     const isMainMarker: boolean = selectedFeature?.getProperties().mainMarker
-    if (!isMainMarker && store.state.mainMarker)
-      store.state.map?.removeLayer(store.state.mainMarker)
+    if (!isMainMarker && store.state.mainMarker) {
+      toRaw(store.state.map)?.removeLayer(store.state.mainMarker)
+    }
     store.actions.overlays.changeOverlayStats(undefined, "persistant")
     if (selectedFeature) {
       if (zoomOnMarkerClick) {
         handleFeatureClick(selectedFeature)
       }
     } else {
-      if (store.getters.touchPlatform) store.toggleMobileDrawerShowDetails(true)
-      else store.toggleDrawerActivation(true)
+      if (store.getters.touchPlatform)
+        store.state.mobileDrawerShowDetails = true
+      else store.state.drawerActivation = true
       if (reverseOnClick) {
-        store.toggleReverseLoading(true)
+        store.state.reverseLoading = true
         const result = await store.actions.markers.reverseOnPoint(
           event.coordinate
         )
         emittingMarker = result.marker
         emittingData = result.data
         emittingStdPoint = result.stdPoint
-        store.toggleReverseLoading(false)
+        store.state.reverseLoading = false
       }
     }
     emits("on-click", {
@@ -191,7 +194,7 @@ export function eventsMixin({
    */
   const handleResultClick = (item: SearchItem) => {
     store.actions.overlays.changeOverlayStats()
-    store.toggleDrawerActivation(false)
+    store.state.drawerActivation = false
     if (zoomOnResultClick) {
       store.actions.markers.selectFeauture(item)
     }

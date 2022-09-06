@@ -1,21 +1,31 @@
-import  { stateGenerator }  from "./state"
+// eslint-disable-next-line
+// @ts-nocheck
+import { stateGenerator } from "./state"
 import { getters } from "./getters"
 import { actions } from "./actions"
-import { Actions } from "./store.model"
 
 const storeGen = () => {
-  const actionModulesKeys = <(keyof Actions)[]>Object.keys(actions)
-  const storeActions = actionModulesKeys.reduce((sa, amk) => {
-    type mamd = typeof amk
-    const actionKeys = <(keyof typeof actions[typeof amk])[]>Object.keys(actions[amk])
+  const state = stateGenerator()
+  const storeGetters = getters(state)
+  const context = {
+    actions,
+    getters: storeGetters,
+    state,
+  }
+
+  // To inject context into actions
+  const actionModulesKeys = Object.keys(actions)
+  const storeActions: any = actionModulesKeys.reduce((sa, amk) => {
+    const actionKeys = Object.keys(actions[amk])
     const contextFreeActions = actionKeys.reduce((cfa, ak) => {
-      return () => actions[amk][ak]()
-    })
-    return sa
+      return {
+        ...cfa,
+        [ak]: (...args) => actions[amk][ak](context, ...args),
+      }
+    }, {})
+    return { ...sa, [amk]: contextFreeActions }
   }, {})
 
-  return { state: stateGenerator(), getters, actions }
+  return { state, getters: storeGetters, actions: storeActions }
 }
 export const store = storeGen()
-
-export type StoreType = typeof store

@@ -180,13 +180,13 @@ const props = defineProps({
   viewType: String as PropType<ViewType>,
 })
 
-store.setApi(createApi(props.serviceKey))
+store.state.api = createApi(props.serviceKey)
 /**
  * Sets the given token for api
  * @param token
  */
 const setToken = (token: string) => {
-  store.setApi(createApi(token))
+  store.state.api = createApi(token)
 }
 /**
  * Whenever service token changes,
@@ -207,11 +207,12 @@ watch(
   }
 )
 
-store.setViewType(props.viewType)
+// eslint-disable-next-line vue/no-setup-props-destructure
+store.state.viewType = props.viewType
 watch(
   () => props.viewType,
   (nv) => {
-    store.setViewType(nv)
+    store.state.viewType = nv
   }
 )
 
@@ -219,30 +220,18 @@ const mobileDrawerModel = ref(false)
 const filteredTiles = reactive(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
 )
-store.togglePoiLayer(props.poi)
-store.toggleTrafficLayer(props.traffic)
+store.actions.map.toggleTraffic(props.traffic)
+store.actions.map.togglePoi(props.poi)
 watch(
   () => props.traffic,
   (nv) => {
-    store.toggleTrafficLayer(nv)
+    store.actions.map.toggleTrafficLayer(nv)
   }
 )
 watch(
   () => props.poi,
   (nv) => {
-    store.togglePoiLayer(nv)
-  }
-)
-watch(
-  () => store.state.trafficLayer,
-  (nv) => {
-    store.actions.map.toggleTraffic(nv)
-  }
-)
-watch(
-  () => store.state.poiLayer,
-  (nv) => {
-    store.actions.map.togglePoi(nv)
+    store.actions.map.togglePoiLayer(nv)
   }
 )
 /**
@@ -288,9 +277,9 @@ const startMap = async () => {
     }),
     controls: [],
   })
-  store.setMap(newMap)
+  store.state.map = newMap
   // Currently there is a problem with assigning different map type on initilization
-  store.setMapType(props.defaultType)
+  store.state.mapType = props.defaultType
   store.actions.map.shakeMap(300)
 }
 
@@ -357,10 +346,10 @@ store.actions.dimensions.updateBreakpoints()
  * Setups Map, adds serviceToken to api
  */
 onMounted(() => {
-  if (mapContainer.value) store.setMapContainer(mapContainer.value)
-  if (popupContainer.value) store.setPopupContainer(popupContainer.value)
+  if (mapContainer.value) store.state.mapContainer = mapContainer.value
+  if (popupContainer.value) store.state.popupContainer = popupContainer.value
   if (persistantContainer.value)
-    store.setPersistantContainer(persistantContainer.value)
+    store.state.persistantContainer = persistantContainer.value
   const scriptTag = importMap(urls.map)
   scriptTag.onload = () => {
     startMap()

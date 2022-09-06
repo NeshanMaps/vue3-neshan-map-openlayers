@@ -11,23 +11,23 @@
       placeholder="جستجو"
       v-model="text"
       @keydown.enter="runTimeout(text, 0)"
-      @focus="store.toggleDrawerActivation(true)"
+      @focus="store.state.drawerActivation = true"
     />
     <button
       v-if="store.state.drawerShowDetails && !store.getters.touchPlatform"
-      @click="store.toggleDrawerShowDetails(false)"
+      @click="store.state.drawerShowDetails = false"
       class="pointer"
     >
       <Icon name="back" :size="19"></Icon>
     </button>
     <button
       v-if="!store.state.drawerActivation"
-      @click="store.toggleDrawerActivation(true)"
+      @click="store.state.drawerActivation = true"
       class="pointer"
     >
       <Icon name="magnet" :size="19"></Icon>
     </button>
-    <button v-else class="pointer" @click="store.toggleDrawerActivation(false)">
+    <button v-else class="pointer" @click="store.state.drawerActivation = false">
       <Icon name="close" :size="19"></Icon>
     </button>
   </div>
@@ -79,10 +79,10 @@ let emitTimeout: number
 const runTimeout = (value = text.value, delay = 1000) => {
   clearTimeout(emitTimeout)
   if (!value) {
-    store.toggleSearchLoading(false)
+    store.state.searchLoading = false
     return
   } else if (!store.state.searchLoading) {
-    store.toggleSearchLoading(true)
+    store.state.searchLoading = true
   }
   emitTimeout = window.setTimeout(() => {
     emitSearch(value)

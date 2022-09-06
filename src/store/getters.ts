@@ -1,20 +1,20 @@
 import { computed, reactive } from "vue"
 import { drawerConstants } from "@/parameters"
 import { isTouchPlatform } from "@/utils"
-// import { store } from "."
-export const getters = reactive({
-  drawerWidth: computed(() => {
-    // const isMobile = store.state.viewType ? store.state.viewType === 'mobile' : isTouchPlatform()
-    // const width = isMobile
-    //   ? store.state.mapDimensions.width
-    //   : drawerConstants.width
-    return drawerConstants.width
-  }),
-  loading: computed(() => {
-    // return store.state.searchLoading || store.state.reverseLoading
-    return false
-  }),
-  touchPlatform: computed(() => {
-    return isTouchPlatform()
-  }),
-})
+import { State } from "./store.model"
+export const getters = (state: State) =>
+  reactive({
+    drawerWidth: computed(() => {
+      const isMobile = state.viewType ? state.viewType === 'mobile' : isTouchPlatform()
+      const width = isMobile
+        ? state.mapDimensions.width
+        : drawerConstants.width
+      return width
+    }),
+    loading: computed(() => {
+      return state.searchLoading || state.reverseLoading
+    }),
+    touchPlatform: computed(() => {
+      return isTouchPlatform()
+    }),
+  })
