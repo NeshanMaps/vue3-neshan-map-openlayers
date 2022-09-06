@@ -45,13 +45,15 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch } from "vue"
-import { store } from "@/store"
+import { inject, ref, watch } from "vue"
+import { drawerConstants } from "@/parameters"
+import type { Store } from '@/store/store.model'
 
 import Icon from "@/components/icons/IconComponent.vue"
 import PointDetails from "./drawer/result-section/PointDetails.vue"
 import Loading from "./LoadingComp.vue"
-import { drawerConstants } from "@/parameters"
+
+const store = inject<Store>('store') as Store
 
 const mobileDetailsSectionContainer = ref<HTMLDivElement>()
 const detailsContainer = ref<HTMLDivElement>()

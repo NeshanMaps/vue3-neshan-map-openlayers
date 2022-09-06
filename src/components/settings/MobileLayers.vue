@@ -15,7 +15,7 @@
         <div
           class="d-flex justify-center align-center tile"
           :selected="store.state.poiLayer"
-          @click="store.togglePoiLayer()"
+          @click="store.actions.map.togglePoi()"
         >
           <img src="../../assets/images/poi.png" />
           <div class="desc text-sm">POI</div>
@@ -23,7 +23,7 @@
         <div
           class="d-flex justify-center align-center tile"
           :selected="store.state.trafficLayer"
-          @click="store.toggleTrafficLayer()"
+          @click="store.actions.map.toggleTraffic()"
         >
           <img src="../../assets/images/traffic.png" />
           <div class="desc text-sm">Traffic</div>
@@ -35,7 +35,7 @@
           :key="tile.title"
           :selected="tile.title == store.state.mapType"
           class="d-flex justify-center align-center tile"
-          @click="store.setMapType(tile.title)"
+          @click="store.actions.map.setMapType(tile.title)"
         >
           <img :src="tile.url" />
           <div class="desc text-sm">
@@ -47,7 +47,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue"
+import { inject, ref } from "vue"
 import { Tile } from "../Map.model"
 import {
   defineEmits,
@@ -56,9 +56,11 @@ import {
   watch,
   getCurrentInstance,
 } from "vue"
-import { store } from "@/store"
+import { Store } from "@/store/store.model";
 
 const instance = getCurrentInstance()
+const store = inject<Store>('store') as Store
+
 
 const props = defineProps({
   modelValue: Boolean,

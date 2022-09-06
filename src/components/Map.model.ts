@@ -9,6 +9,7 @@ import {
   SearchResult,
 } from "../store/markers/markers.model"
 import { MapType, OlMap } from "../store/map/map.model"
+import { Store } from "@/store/store.model"
 
 export declare type NuString = null | string
 export declare type DoubleNums = [number, number]
@@ -100,6 +101,7 @@ export declare type MarkersIconCallback = (
 
 export declare interface EventsMixinProps {
   emits: (event: "on-zoom" | "on-click", arg: any) => void
+  store: Store
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback
   markerHoverCallback?: MarkerHoverCallback

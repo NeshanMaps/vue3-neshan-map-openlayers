@@ -1,5 +1,4 @@
 import { EventsMixinProps } from "../components/Map.model"
-import { store } from "@/store"
 import { SearchItem } from "../store/markers/markers.model"
 import { Feature, MapBrowserEvent } from "openlayers"
 import {
@@ -12,6 +11,7 @@ import { toRaw } from "vue"
 
 export function eventsMixin({
   emits,
+  store,
   resultHoverCallback,
   resultClickCallback,
   markerHoverCallback,

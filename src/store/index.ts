@@ -4,7 +4,7 @@ import { stateGenerator } from "./state"
 import { getters } from "./getters"
 import { actions } from "./actions"
 
-const storeGen = () => {
+export const storeGen = () => {
   const state = stateGenerator()
   const storeGetters = getters(state)
   const context = {
@@ -28,4 +28,3 @@ const storeGen = () => {
 
   return { state, getters: storeGetters, actions: storeActions }
 }
-export const store = storeGen()

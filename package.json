@@ -17,7 +17,6 @@
     "format": "prettier .  --write"
   },
   "dependencies": {
-    "lint-staged": "^13.0.3",
     "sass": "^1.54.8",
     "vue": "^3.2.13"
   },
@@ -36,8 +35,5 @@
     "vite": "^3.0.9",
     "vite-plugin-dts": "^1.4.1",
     "vite-plugin-eslint": "^1.8.1"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
   }
 }

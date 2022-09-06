@@ -33,13 +33,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType, defineEmits, watch, ref } from "vue"
-import { store } from "@/store"
+import { defineProps, PropType, defineEmits, watch, ref, inject } from "vue"
 
 import ResultItem from "./ResultItem.vue"
 import Loading from "@/components/LoadingComp.vue"
 import PointDetails from "./PointDetails.vue"
 import { SearchItem } from "../../../store/markers/markers.model"
+import { Store } from "@/store/store.model"
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
@@ -48,6 +48,8 @@ const props = defineProps({
     default: () => [],
   },
 })
+
+const store = inject<Store>('store') as Store
 
 const resultSection = ref<HTMLDivElement>()
 

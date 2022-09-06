@@ -69,7 +69,7 @@ import { zoomConstants, tiles, urls } from "../parameters"
 import { sanitizeLocation, getLocation } from "../utils"
 import { eventsMixin } from "../mixins"
 import { createApi } from "../apis"
-import { store } from "../store"
+import { storeGen } from "../store"
 import {
   defineProps,
   onMounted,
@@ -79,6 +79,7 @@ import {
   defineExpose,
   defineEmits,
   reactive,
+provide,
 } from "vue"
 import {
   CoordsObj,
@@ -179,6 +180,9 @@ const props = defineProps({
   },
   viewType: String as PropType<ViewType>,
 })
+
+const store = storeGen()
+provide('store', store)
 
 store.state.api = createApi(props.serviceKey)
 /**
@@ -288,6 +292,7 @@ const persistantContainer = ref<HTMLDivElement>()
 const eventsEmits = defineEmits(["on-zoom", "on-click"])
 const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   emits: eventsEmits,
+  store,
   resultHoverCallback: props.resultHoverCallback,
   resultClickCallback: props.resultClickCallback,
   markerHoverCallback: props.markerHoverCallback,

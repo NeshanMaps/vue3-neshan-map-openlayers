@@ -43,9 +43,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, PropType } from "vue"
+import { Store } from "@/store/store.model";
+import { defineProps, inject, PropType } from "vue"
 import { Tile } from "../Map.model"
-import { store } from "@/store"
 defineProps({
   tiles: {
     type: Array as PropType<Tile[]>,
@@ -54,6 +54,9 @@ defineProps({
   settingsBoxClass: [Array, Object],
   settingsBoxStyle: Object,
 })
+
+const store = inject<Store>('store') as Store
+
 </script>
 
 <style lang="scss" scoped>

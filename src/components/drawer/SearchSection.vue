@@ -33,10 +33,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from "vue"
-import { store } from "@/store"
+import { defineProps, defineEmits, computed, inject } from "vue"
 import Icon from "../icons/IconComponent.vue"
 import { drawerConstants } from "@/parameters"
+import { Store } from "@/store/store.model";
 
 const props = defineProps({
   searchBoxClass: [String, Array, Object],
@@ -46,6 +46,8 @@ const props = defineProps({
     type: String,
   },
 })
+
+const store = inject<Store>('store') as Store
 
 const width = drawerConstants.width
 const emit = defineEmits([

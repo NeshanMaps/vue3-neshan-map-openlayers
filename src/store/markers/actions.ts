@@ -49,13 +49,6 @@ const addMarkers: AddMarkers = ({ state }, points, options) => {
   state.map?.addLayer(layer)
   return { layer, style }
 }
-/**
- * Removes markers from map
- */
-const clearMarkerLayer = ({ state }: Context, layer: VectorLayer) => {
-  if (!layer) return
-  state.map?.removeLayer(layer)
-}
 
 /**
  * Toggles cluster source to deactivate or apply clustering (The layer will remain a cluster layer)
@@ -289,7 +282,7 @@ const selectFeauture = (
  */
 const deselectAll = (context: Context) => {
   context.actions.overlays.changeOverlayStats(context, undefined, "persistant")
-  clearMarkerLayer(context, context.state.mainMarker)
+  toRaw(context.state.map)?.removeLayer(context.state.mainMarker)
   context.state.selectedMarker = null
   context.actions.drawers.toggleResultDrawers(context, false)
 }
@@ -376,7 +369,7 @@ const search = async (
     if (!context.state.api) return
     const result = await context.state.api.SEARCH(term, coords)
     context.state.drawerShowDetails = false
-    clearMarkerLayer(context, context.state.searchMarkers)
+    toRaw(context.state.map)?.removeLayer(context.state.searchMarkers)
     const points = await createMapPoints(result.items)
     const resultsWithMapCoords = points.map((point) => ({
       ...point.originalItem,
@@ -416,7 +409,6 @@ const search = async (
 
 export const markersActions = {
   addMarkers,
-  clearMarkerLayer,
   toggleClusterSource,
   getClusterByCoords,
   getMarkerInClusterByCoords,
