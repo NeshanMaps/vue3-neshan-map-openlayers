@@ -79,7 +79,7 @@ import {
   defineExpose,
   defineEmits,
   reactive,
-provide,
+  provide,
 } from "vue"
 import {
   CoordsObj,
@@ -182,7 +182,7 @@ const props = defineProps({
 })
 
 const store = storeGen()
-provide('store', store)
+provide("store", store)
 
 store.state.api = createApi(props.serviceKey)
 /**
@@ -203,7 +203,7 @@ watch(
   }
 )
 
-const fontSize = ref("1rem")
+const fontSize = ref(props.scale + "rem")
 watch(
   () => props.scale,
   (nv) => {
@@ -356,11 +356,11 @@ onMounted(() => {
   if (persistantContainer.value)
     store.state.persistantContainer = persistantContainer.value
   const scriptTag = importMap(urls.map)
-  scriptTag.onload = () => {
+  scriptTag.addEventListener("load", () => {
     startMap()
     setupMapEvents()
     store.actions.dimensions.updateMapDimensions()
-  }
+  })
 })
 </script>
 

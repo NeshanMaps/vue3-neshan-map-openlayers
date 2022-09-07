@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "commonjs",
-  "main": "dist/Vue3-NeshanMap-Openlayers.umd.cjs",
-  "module": "dist/Vue3-NeshanMap-Openlayers.js",
+  "main": "dist/Vue3-NeshanMap-Openlayers.umd.js",
+  "module": "dist/Vue3-NeshanMap-Openlayers.mjs",
   "types": "dist/types/components/Map.vue.d.ts",
   "files": [
     "dist/**"
