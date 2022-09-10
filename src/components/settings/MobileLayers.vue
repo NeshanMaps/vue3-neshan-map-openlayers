@@ -13,7 +13,7 @@
     >
       <div class="map-layers d-flex justify-center">
         <div
-          class="d-flex justify-center align-center tile"
+          class="d-flex justify-between align-center tile"
           :selected="store.state.poiLayer"
           @click="store.actions.map.togglePoi()"
         >
@@ -21,7 +21,7 @@
           <div class="desc text-sm">POI</div>
         </div>
         <div
-          class="d-flex justify-center align-center tile"
+          class="d-flex justify-between align-center tile"
           :selected="store.state.trafficLayer"
           @click="store.actions.map.toggleTraffic()"
         >
@@ -34,7 +34,7 @@
           v-for="tile of tiles"
           :key="tile.title"
           :selected="tile.title == store.state.mapType"
-          class="d-flex justify-center align-center tile"
+          class="d-flex justify-between align-center tile"
           @click="store.actions.map.setMapType(tile.title)"
         >
           <img :src="tile.url" />
@@ -135,8 +135,8 @@ const close = () => {
     margin: 0 auto 10px auto;
     height: 6em;
     img {
-      height: 5em;
-      width: 5em;
+      height: calc(6em - var(--text-sm) - 0.3em);
+      width: calc(6em - var(--text-sm) - 0.3em);
       border-radius: 0.5em;
     }
     &[selected="true"] {
