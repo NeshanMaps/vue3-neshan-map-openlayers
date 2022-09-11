@@ -1,4 +1,5 @@
+import { Context } from "../store.model";
 export declare const dimensionsActions: {
-    updateMapDimensions: () => void;
-    updateBreakpoints: () => void;
+    updateMapDimensions: (context: Context) => void;
+    updateBreakpoints: (context: Context) => void;
 };

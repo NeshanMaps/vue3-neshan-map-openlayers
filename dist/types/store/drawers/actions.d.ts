@@ -1,3 +1,4 @@
+import { Context } from "../store.model";
 export declare const drawersActions: {
-    toggleResultDrawers: (value?: boolean | undefined) => void;
+    toggleResultDrawers: (context: Context, value?: boolean) => void;
 };

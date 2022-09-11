@@ -5,6 +5,7 @@ import { Feature, style, Coordinate } from "openlayers";
 import { ChangeOverlayStats } from "../store/overlays/overlays.model";
 import { PrimaryReverseResult, SearchResult } from "../store/markers/markers.model";
 import { MapType, OlMap } from "../store/map/map.model";
+import { Store } from '../store/store.model';
 export declare type NuString = null | string;
 export declare type DoubleNums = [number, number];
 export declare type Style = style.Style;
@@ -77,6 +78,7 @@ export declare type MarkerHoverCallback = (options: MarkerHoverCallbackProps) =>
 export declare type MarkersIconCallback = (points: CreateMarkersPointsItem) => CreateIconProps;
 export declare interface EventsMixinProps {
     emits: (event: "on-zoom" | "on-click", arg: any) => void;
+    store: Store;
     resultHoverCallback?: ResultHoverCallback;
     resultClickCallback?: ResultClickCallback;
     markerHoverCallback?: MarkerHoverCallback;
