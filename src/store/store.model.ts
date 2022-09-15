@@ -1,8 +1,8 @@
-import { reactiveState } from "./state"
+import { state } from "./state"
 import { actions } from "./actions"
 import { storeGen } from "."
 
-export type State = typeof reactiveState
+export type State = typeof state
 export type Actions = typeof actions
 export type Store = ReturnType<typeof storeGen>
 

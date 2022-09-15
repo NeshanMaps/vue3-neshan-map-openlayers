@@ -56,11 +56,10 @@ import {
   watch,
   getCurrentInstance,
 } from "vue"
-import { Store } from "@/store/store.model";
+import { Store } from "@/store/store.model"
 
 const instance = getCurrentInstance()
-const store = inject<Store>('store') as Store
-
+const store = inject<Store>("store") as Store
 
 const props = defineProps({
   modelValue: Boolean,
@@ -129,6 +128,7 @@ const close = () => {
     }
   }
   .tile {
+    text-align: center;
     flex: 0 0 auto;
     flex-flow: column;
     width: 6em;

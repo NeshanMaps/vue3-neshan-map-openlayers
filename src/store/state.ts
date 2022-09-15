@@ -18,8 +18,6 @@ export const state = {
   reverseLoading: false,
 }
 
-export const reactiveState = reactive(state)
-
 export const stateGenerator = () => {
   return reactive(<State>JSON.parse(JSON.stringify(state)))
 }

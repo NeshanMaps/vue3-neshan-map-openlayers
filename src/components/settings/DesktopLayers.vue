@@ -25,9 +25,7 @@
         @click="store.actions.map.togglePoi()"
       >
         <img src="@/assets/images/poi.png" />
-        <div class="text-sm">
-          Traffic
-        </div>
+        <div class="text-sm">Traffic</div>
       </div>
       <div
         class="pointer tile"
@@ -35,15 +33,13 @@
         @click="store.actions.map.toggleTraffic()"
       >
         <img src="@/assets/images/traffic.png" />
-        <div class="text-sm">
-          Poi
-        </div>
+        <div class="text-sm">Poi</div>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { Store } from "@/store/store.model";
+import { Store } from "@/store/store.model"
 import { defineProps, inject, PropType } from "vue"
 import { Tile } from "../Map.model"
 defineProps({
@@ -55,8 +51,7 @@ defineProps({
   settingsBoxStyle: Object,
 })
 
-const store = inject<Store>('store') as Store
-
+const store = inject<Store>("store") as Store
 </script>
 
 <style lang="scss" scoped>
@@ -78,6 +73,7 @@ const store = inject<Store>('store') as Store
     border: 1px solid rgba(142, 142, 142, 0.409);
   }
   .tile {
+    text-align: center;
     width: 6.5em;
     transition: 0.5s;
     img {

@@ -103,24 +103,57 @@ import Drawer from "./drawer/DrawerComp.vue"
 import MobileDetailsSection from "./MobileDetailsSection.vue"
 
 const props = defineProps({
+  /**
+   * کلید نقشه، گرفته شده از پلتفرم نشان
+   */
   mapKey: {
     type: String,
     required: true,
   },
+  /**
+   * کلید سرویس‌ها برای تبدیل نقطه به آدرس (Reverse)
+   */
   serviceKey: {
     type: String,
     default: "",
   },
+  /**
+   * مرکز نقشه در هنگام شروع
+   */
   center: {
     type: Object as PropType<CoordsObj>,
     default: null,
   },
+  /**
+   * میزان زوم نقشه در هنگام شروع
+   */
   zoom: {
     type: Number,
     default: zoomConstants.initialZoom,
   },
-  poi: Boolean,
-  traffic: Boolean,
+  /**
+   * نمایش یا عدم نمایش نقاط
+   */
+  poi: {
+    type: Boolean,
+    default: true,
+  },
+  /**
+   * نمایش یا عدم نمایش خطوط ترافیک
+   */
+  traffic: {
+    type: Boolean,
+    default: true,
+  },
+  /**
+   * نوع نقشه در هنگام شروع
+   * "neshan"
+  | "dreamy"
+  | "dreamy-gold"
+  | "standard-night"
+  | "standard-day"
+  | "osm-bright" 
+   */
   defaultType: {
     type: String as PropType<MapType>,
     default: "neshan",
@@ -204,10 +237,13 @@ watch(
 )
 
 const fontSize = ref(props.scale + "rem")
+// eslint-disable-next-line vue/no-setup-props-destructure
+store.state.scale = props.scale
 watch(
   () => props.scale,
   (nv) => {
     fontSize.value = nv + "rem"
+    store.state.scale = nv
   }
 )
 
@@ -346,6 +382,11 @@ defineExpose({
   search: handleSearch,
 })
 
+const onScriptLoad = async () => {
+  await startMap()
+  setupMapEvents()
+  store.actions.dimensions.updateMapDimensions()
+}
 store.actions.dimensions.updateBreakpoints()
 /**
  * Setups Map, adds serviceToken to api
@@ -356,11 +397,13 @@ onMounted(() => {
   if (persistantContainer.value)
     store.state.persistantContainer = persistantContainer.value
   const scriptTag = importMap(urls.map)
-  scriptTag.addEventListener("load", () => {
-    startMap()
-    setupMapEvents()
-    store.actions.dimensions.updateMapDimensions()
-  })
+  if (typeof ol !== 'undefined') {
+    onScriptLoad()
+  } else {
+    scriptTag.addEventListener("load", () => {
+      onScriptLoad()
+    })
+  }
 })
 </script>
 

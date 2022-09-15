@@ -9,7 +9,8 @@ const stateGen = () => {
     zoom: zoomConstants.initialZoom,
     poiLayer: true,
     trafficLayer: true,
-    viewType: 'desktop' as ViewType
+    viewType: 'desktop' as ViewType,
+    scale: 1
   }
 }
 
