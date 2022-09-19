@@ -8,6 +8,7 @@
       @on-click="handleClick"
       poi
       traffic
+      :scale="0.75"
     />
   </div>
 </template>
@@ -53,16 +54,5 @@ export default defineComponent({
 
 .page {
   height: 100%;
-}
-.map-search-form {
-  padding: 1rem;
-  position: absolute;
-  z-index: 2;
-  background-color: white;
-  border: 1px solid rgb(116, 116, 116);
-  min-width: 300px;
-  max-width: 50vw;
-  top: 4vh;
-  left: 4vw;
 }
 </style>

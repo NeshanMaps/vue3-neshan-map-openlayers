@@ -14,7 +14,13 @@
       "
       :width="width"
     />
-    <Icon v-else :name="iconName" :size="width" color="steelblue"></Icon>
+    <Icon
+      v-else
+      :name="iconName"
+      :size="width"
+      color="steelblue"
+      :scale="false"
+    ></Icon>
     <div class="px-2 text-lg">
       <div v-if="formattedItem?.place" class="d-flex align-center">
         <Icon name="marker" :size="25" color="steelblue" class="px-1"></Icon>
@@ -55,22 +61,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, PropType } from "vue";
-import { detailsSectionMixin } from "@/mixins";
-import Icon from "@/components/icons/IconComponent.vue";
-import { SelectedMarker } from "../../../store/markers/markers.model";
-import { markerUrls } from "@/parameters/index";
+import { ref, defineProps, PropType } from "vue"
+import { detailsSectionMixin } from "@/mixins"
+import Icon from "@/components/icons/IconComponent.vue"
+import { SelectedMarker } from "../../../store/markers/markers.model"
+import { markerUrls } from "@/parameters/index"
 
 const props = defineProps({
   item: Object as PropType<SelectedMarker>,
   collapse: Boolean,
-});
+})
 
-const pointDetailsContainer = ref<HTMLDivElement>();
+const pointDetailsContainer = ref<HTMLDivElement>()
 const { iconName, width, formattedItem } = detailsSectionMixin({
   props,
   containerRef: pointDetailsContainer,
-});
+})
 </script>
 
 <style></style>

@@ -10,7 +10,7 @@ export default {
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   argTypes: {
     scale: {
-      defaultValue: 0.7,
+      defaultValue: 0.75,
     },
     center: {
       defaultValue: { latitude: 36.311559, longitude: 59.5870851 },
@@ -30,8 +30,19 @@ export default {
       description: "میزان زوم نقشه در هنگام ایجاد شدن",
     },
     resultHoverCallback: {
-      type: 'function'
-    }
+      type: "function",
+    },
+    mapTypes: {
+      table: {
+        defaultValue: {
+          summary: `["dreamy"
+        "dreamy-gold"
+        "standard-night"
+        "standard-day"
+        "osm-bright" ]`,
+        },
+      },
+    },
   },
 } as Meta<typeof NeshanMap>
 

@@ -22,7 +22,6 @@ import {
   transformCoords,
 } from "@/utils"
 import { Coordinate, Extent, Feature, MapBrowserEvent } from "openlayers"
-import { toRaw } from "vue"
 import { ReverseOnPointOptions } from "../../mixins/events.mixin.model"
 import { markersOffset, markerUrls, zoomConstants } from "@/parameters"
 import { Context } from "../store.model"
@@ -61,8 +60,7 @@ const toggleClusterSource = (
   deactivate: boolean
 ) => {
   if (!layer) return
-  const rawLayer = toRaw(layer)
-  const clusterFeatures = rawLayer.getSource().getFeatures() || []
+  const clusterFeatures = layer.getSource().getFeatures() || []
   if (!clusterFeatures.some((cf) => cf.get("isCluster"))) return
   const features = clusterFeatures.reduce((result: Feature[], cf) => {
     const features: Feature[] = cf.get("features")
@@ -82,7 +80,7 @@ const toggleClusterSource = (
  * @returns The found feature and its cluster
  */
 const getClusterByCoords: GetClusterByCoords = (context, coords) => {
-  const clusters = context.state.searchMarkers.getSource().getFeatures()
+  const clusters = context.state.searchMarkers?.getSource().getFeatures()
   let foundFeature: Feature | undefined
   const cluster = clusters?.find((cluster) => {
     const feature = getMarkerInClusterByCoords(context, cluster, coords)
@@ -282,7 +280,8 @@ const selectFeauture = (
  */
 const deselectAll = (context: Context) => {
   context.actions.overlays.changeOverlayStats(context, undefined, "persistant")
-  toRaw(context.state.map)?.removeLayer(context.state.mainMarker)
+  if (context.state.mainMarker)
+    context.state.map?.removeLayer(context.state.mainMarker)
   context.state.selectedMarker = null
   context.actions.drawers.toggleResultDrawers(context, false)
 }
@@ -369,7 +368,8 @@ const search = async (
     if (!context.state.api) return
     const result = await context.state.api.SEARCH(term, coords)
     context.state.drawerShowDetails = false
-    toRaw(context.state.map)?.removeLayer(context.state.searchMarkers)
+    if (context.state.searchMarkers)
+      context.state.map?.removeLayer(context.state.searchMarkers)
     const points = await createMapPoints(result.items)
     const resultsWithMapCoords = points.map((point) => ({
       ...point.originalItem,

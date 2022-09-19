@@ -41,7 +41,6 @@ import { Store } from "@/store/store.model";
 const props = defineProps({
   searchBoxClass: [String, Array, Object],
   searchBoxStyle: Object,
-  typesClass: Array,
   searchText: {
     type: String,
   },

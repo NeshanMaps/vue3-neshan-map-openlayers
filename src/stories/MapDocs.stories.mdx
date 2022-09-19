@@ -1,0 +1,94 @@
+import { ArgsTable, Meta, Story } from "@storybook/addon-docs"
+import NeshanMap from "@/components/Map.vue"
+
+<Meta
+  title="NeshanMaps"
+  component={NeshanMap}
+  argTypes={{
+    scale: {
+      defaultValue: 0.75,
+    },
+    center: {
+      defaultValue: { latitude: 36.311559, longitude: 59.5870851 },
+    },
+    mapKey: {
+      type: "string",
+      defaultValue: "web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm",
+    },
+    serviceKey: {
+      type: "string",
+      defaultValue: "service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD",
+    },
+    zoom: {
+      type: "number",
+      defaultValue: 12,
+      table: { defaultValue: { summary: 12 } },
+      description: "میزان زوم نقشه در هنگام ایجاد شدن",
+    },
+    resultHoverCallback: {
+      type: "function",
+    },
+    mapTypes: {
+      table: {
+        defaultValue: {
+          summary: `["dreamy"
+        "dreamy-gold"
+        "standard-night"
+        "standard-day"
+        "osm-bright" ]`,
+        },
+      },
+    },
+  }}
+  decorators={[
+    () => ({ template: '<div style="margin: 3em;"><story/></div>' }),
+  ]}
+/>
+
+export const Template = (args) => ({
+  //👇 Your template goes here
+  components: { NeshanMap },
+  setup() {
+    return {
+      args,
+    }
+  },
+  template: '<neshan-map v-bind="args" />',
+})
+
+<style>{`
+  tr td:nth-of-type(2) {
+    direction: rtl;
+    text-align: right;
+  }
+  tr td:nth-of-type(2) div:last-of-type {
+    direction: ltr;
+  }
+  `}</style>
+
+<div dir="rtl">
+  <h1>Vue SDK نقشه و مسیریاب نشان</h1>
+  <br />
+  کامپوننت
+  <strong>
+    <a href="https://Vuejs.org" target="blank">
+      &nbsp; Vuejs &nbsp;
+    </a>
+  </strong>
+  نقشه و مسیریاب نشان، برای راحتی بیشتر توسعه‌دهنده‌های وب ایجاد گشته و با Api
+  ساده، دو قابلیت
+  <a href="https://platform.neshan.org/api/search" target="blank">
+    <b> Search </b>
+  </a>و<a
+    href="https://platform.neshan.org/api/reverse-geocoding"
+    target="blank"
+  >
+    <b> Reverse GeoCoding </b>
+  </a>
+  را در اختیار توسعه دهندگان Vuejs قرار می‌دهد.
+  <br />
+</div>
+
+<Story name="Vue3 OpenLayers">{Template.bind({})}</Story>
+
+<ArgsTable story="Vue3 OpenLayers" />

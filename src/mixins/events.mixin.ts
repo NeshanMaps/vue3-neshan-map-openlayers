@@ -7,7 +7,6 @@ import {
   getCoordsFromFeature,
 } from "../utils"
 import { markersOffset } from "@/parameters"
-import { toRaw } from "vue"
 
 export function eventsMixin({
   emits,
@@ -114,7 +113,7 @@ export function eventsMixin({
     const selectedFeature = store.actions.markers.getFeatureFromEvent(event)
     const isMainMarker: boolean = selectedFeature?.getProperties().mainMarker
     if (!isMainMarker && store.state.mainMarker) {
-      toRaw(store.state.map)?.removeLayer(store.state.mainMarker)
+      store.state.map?.removeLayer(store.state.mainMarker)
     }
     store.actions.overlays.changeOverlayStats(undefined, "persistant")
     if (selectedFeature) {

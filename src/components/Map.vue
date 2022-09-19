@@ -111,7 +111,7 @@ const props = defineProps({
     required: true,
   },
   /**
-   * کلید سرویس‌ها برای تبدیل نقطه به آدرس (Reverse)
+   * کلید سرویس‌ها برای تبدیل نقطه به آدرس (Reverse) و جستجو (search)
    */
   serviceKey: {
     type: String,
@@ -147,34 +147,68 @@ const props = defineProps({
   },
   /**
    * نوع نقشه در هنگام شروع
-   * "neshan"
-  | "dreamy"
-  | "dreamy-gold"
-  | "standard-night"
-  | "standard-day"
-  | "osm-bright" 
+   * <br>
+   * neshan
+  | dreamy
+  | dreamy-gold
+  | standard-night
+  | standard-day
+  | osm-bright 
    */
   defaultType: {
     type: String as PropType<MapType>,
     default: "neshan",
   },
+  /**
+   * آرایه‌ای از انواع نقشه‌هایی که می‌خواهید در تنظیمات نمایش داده شود.
+   */
   mapTypes: {
     type: Array as PropType<MapType[]>,
     default: tiles.map((tile) => tile.title),
   },
+  /**
+   * تغییر کلاس بخش تنظیمات برای حالت دستکتاپ
+   */
   desktopSettingsClass: [String, Array, Object],
+  /**
+   * تغییر کلاس بخش تنظیمات برای حالت موبایل
+   */
   mobileSettingsClass: [String, Array, Object],
+  /**
+   * تغییر استایل بخش تنظیمات برای حالت دستکتاپ
+   */
   desktopSettingsStyle: Object,
+  /**
+   * تغییر استایل بخش تنظیمات برای حالت موبایل
+   */
   mobileSettingsStyle: Object,
+  /**
+   * تغییر کلاس پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+   */
   temporaryPopupContainerClass: [String, Array, Object],
+  /**
+   * تغییر کلاس پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+   */
   persistantPopupContainerClass: [String, Array, Object],
+  /**
+   * تغییر استایل پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+   */
   temporaryPopupContainerStyle: Object,
+  /**
+   * تغییر استایل پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+   */
   persistantPopupContainerStyle: Object,
+  /**
+   * عدم نمایش تنظیمات
+   */
   hideSettings: Boolean,
-  typesClass: Array,
-  hideSearchBox: Boolean,
+  /**
+   * عدم نمایش بخش سرج و نتایج
+   */
   hideSearchContainer: Boolean,
-  hideResultBox: Boolean,
+  /**
+   * 
+   */
   resultHoverCallback: Function as PropType<ResultHoverCallback>,
   resultClickCallback: Function as PropType<ResultClickCallback>,
   markersIconCallback: Function as PropType<MarkersIconCallback>,
