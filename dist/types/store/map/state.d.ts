@@ -7,4 +7,5 @@ export declare const mapState: {
     poiLayer: boolean;
     trafficLayer: boolean;
     viewType: ViewType;
+    scale: number;
 };

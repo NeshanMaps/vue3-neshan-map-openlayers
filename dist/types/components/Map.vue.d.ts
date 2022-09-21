@@ -3,45 +3,112 @@ import { CoordsObj, ResultHoverCallback, ResultClickCallback, MarkersIconCallbac
 import { Coordinate } from "openlayers";
 import { MapType, ViewType } from "../store/map/map.model";
 declare const _sfc_main: import("vue").DefineComponent<{
+    /**
+     * کلید نقشه، گرفته شده از پلتفرم نشان
+     */
     mapKey: {
         type: StringConstructor;
         required: true;
     };
+    /**
+     * کلید سرویس‌ها برای تبدیل نقطه به آدرس (Reverse) و جستجو (search)
+     */
     serviceKey: {
         type: StringConstructor;
         default: string;
     };
+    /**
+     * مرکز نقشه در هنگام شروع
+     */
     center: {
         type: PropType<CoordsObj>;
         default: null;
     };
+    /**
+     * میزان زوم نقشه در هنگام شروع
+     */
     zoom: {
         type: NumberConstructor;
         default: number;
     };
-    poi: BooleanConstructor;
-    traffic: BooleanConstructor;
+    /**
+     * نمایش یا عدم نمایش نقاط
+     */
+    poi: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /**
+     * نمایش یا عدم نمایش خطوط ترافیک
+     */
+    traffic: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /**
+     * نوع نقشه در هنگام شروع
+     * <br>
+     * neshan
+    | dreamy
+    | dreamy-gold
+    | standard-night
+    | standard-day
+    | osm-bright
+     */
     defaultType: {
         type: PropType<MapType>;
         default: string;
     };
+    /**
+     * آرایه‌ای از انواع نقشه‌هایی که می‌خواهید در تنظیمات نمایش داده شود.
+     */
     mapTypes: {
         type: PropType<MapType[]>;
         default: MapType[];
     };
+    /**
+     * تغییر کلاس بخش تنظیمات برای حالت دستکتاپ
+     */
     desktopSettingsClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر کلاس بخش تنظیمات برای حالت موبایل
+     */
     mobileSettingsClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر استایل بخش تنظیمات برای حالت دستکتاپ
+     */
     desktopSettingsStyle: ObjectConstructor;
+    /**
+     * تغییر استایل بخش تنظیمات برای حالت موبایل
+     */
     mobileSettingsStyle: ObjectConstructor;
+    /**
+     * تغییر کلاس پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+     */
     temporaryPopupContainerClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر کلاس پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+     */
     persistantPopupContainerClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر استایل پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+     */
     temporaryPopupContainerStyle: ObjectConstructor;
+    /**
+     * تغییر استایل پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+     */
     persistantPopupContainerStyle: ObjectConstructor;
+    /**
+     * عدم نمایش تنظیمات
+     */
     hideSettings: BooleanConstructor;
-    typesClass: ArrayConstructor;
-    hideSearchBox: BooleanConstructor;
+    /**
+     * عدم نمایش بخش سرج و نتایج
+     */
     hideSearchContainer: BooleanConstructor;
-    hideResultBox: BooleanConstructor;
+    /**
+     *
+     */
     resultHoverCallback: PropType<ResultHoverCallback>;
     resultClickCallback: PropType<ResultClickCallback>;
     markersIconCallback: PropType<MarkersIconCallback>;
@@ -81,45 +148,112 @@ declare const _sfc_main: import("vue").DefineComponent<{
     viewType: PropType<ViewType>;
 }, {
     props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
+        /**
+         * کلید نقشه، گرفته شده از پلتفرم نشان
+         */
         mapKey: {
             type: StringConstructor;
             required: true;
         };
+        /**
+         * کلید سرویس‌ها برای تبدیل نقطه به آدرس (Reverse) و جستجو (search)
+         */
         serviceKey: {
             type: StringConstructor;
             default: string;
         };
+        /**
+         * مرکز نقشه در هنگام شروع
+         */
         center: {
             type: PropType<CoordsObj>;
             default: null;
         };
+        /**
+         * میزان زوم نقشه در هنگام شروع
+         */
         zoom: {
             type: NumberConstructor;
             default: number;
         };
-        poi: BooleanConstructor;
-        traffic: BooleanConstructor;
+        /**
+         * نمایش یا عدم نمایش نقاط
+         */
+        poi: {
+            type: BooleanConstructor;
+            default: boolean;
+        };
+        /**
+         * نمایش یا عدم نمایش خطوط ترافیک
+         */
+        traffic: {
+            type: BooleanConstructor;
+            default: boolean;
+        };
+        /**
+         * نوع نقشه در هنگام شروع
+         * <br>
+         * neshan
+        | dreamy
+        | dreamy-gold
+        | standard-night
+        | standard-day
+        | osm-bright
+         */
         defaultType: {
             type: PropType<MapType>;
             default: string;
         };
+        /**
+         * آرایه‌ای از انواع نقشه‌هایی که می‌خواهید در تنظیمات نمایش داده شود.
+         */
         mapTypes: {
             type: PropType<MapType[]>;
             default: MapType[];
         };
+        /**
+         * تغییر کلاس بخش تنظیمات برای حالت دستکتاپ
+         */
         desktopSettingsClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+        /**
+         * تغییر کلاس بخش تنظیمات برای حالت موبایل
+         */
         mobileSettingsClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+        /**
+         * تغییر استایل بخش تنظیمات برای حالت دستکتاپ
+         */
         desktopSettingsStyle: ObjectConstructor;
+        /**
+         * تغییر استایل بخش تنظیمات برای حالت موبایل
+         */
         mobileSettingsStyle: ObjectConstructor;
+        /**
+         * تغییر کلاس پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+         */
         temporaryPopupContainerClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+        /**
+         * تغییر کلاس پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+         */
         persistantPopupContainerClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+        /**
+         * تغییر استایل پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+         */
         temporaryPopupContainerStyle: ObjectConstructor;
+        /**
+         * تغییر استایل پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+         */
         persistantPopupContainerStyle: ObjectConstructor;
+        /**
+         * عدم نمایش تنظیمات
+         */
         hideSettings: BooleanConstructor;
-        typesClass: ArrayConstructor;
-        hideSearchBox: BooleanConstructor;
+        /**
+         * عدم نمایش بخش سرج و نتایج
+         */
         hideSearchContainer: BooleanConstructor;
-        hideResultBox: BooleanConstructor;
+        /**
+         *
+         */
         resultHoverCallback: PropType<ResultHoverCallback>;
         resultClickCallback: PropType<ResultClickCallback>;
         markersIconCallback: PropType<MarkersIconCallback>;
@@ -230,6 +364,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
             poiLayer: boolean;
             trafficLayer: boolean;
             viewType: ViewType;
+            scale: number;
             drawerActivation: boolean;
             drawerShowDetails: boolean;
             mobileDrawerShowDetails: boolean;
@@ -357,8 +492,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                 once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                 un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-            };
-            mainMarkerCoords: [number, number];
+            } | null;
+            mainMarkerCoords: [number, number] | null;
             reverseResult: {
                 mapCoords: [number, number];
                 city: import("./Map.model").NuString;
@@ -410,7 +545,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                 once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                 un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-            };
+            } | null;
             searchResults: {
                 mapCoords: [number, number];
                 iconUrl: string;
@@ -460,14 +595,18 @@ declare const _sfc_main: import("vue").DefineComponent<{
     };
     setToken: (token: string) => void;
     fontSize: import("vue").Ref<string>;
+    neshanBrandContainer: HTMLDivElement;
+    getNeshanBrandContainer: () => HTMLDivElement | undefined;
+    updateNeshanBrandContainerScale: () => void;
+    updateNeshanBrandContainerPos: () => void;
     mobileDrawerModel: import("vue").Ref<boolean>;
     filteredTiles: {
         title: MapType;
         url: string;
     }[];
+    mapContainer: import("vue").Ref<HTMLDivElement | undefined>;
     importMap: (url: string, tagName?: string) => HTMLElement;
     sanitizedCenter: import("vue").Ref<[number, number] | undefined>;
-    mapContainer: import("vue").Ref<HTMLDivElement | undefined>;
     startMap: () => Promise<void>;
     popupContainer: import("vue").Ref<HTMLDivElement | undefined>;
     persistantContainer: import("vue").Ref<HTMLDivElement | undefined>;
@@ -477,6 +616,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
     handleResultClick: (item: import("../store/markers/markers.model").SearchItem) => void;
     handleSearch: ({ term, coords }: HandleSearchProps) => void;
     handleMobileDrawerClick: (event: MouseEvent) => void;
+    onScriptLoad: () => Promise<void>;
     DesktopLayers: import("vue").DefineComponent<{
         tiles: {
             type: PropType<import("./Map.model").Tile[]>;
@@ -554,6 +694,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 poiLayer: boolean;
                 trafficLayer: boolean;
                 viewType: ViewType;
+                scale: number;
                 drawerActivation: boolean;
                 drawerShowDetails: boolean;
                 mobileDrawerShowDetails: boolean;
@@ -681,8 +822,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
-                mainMarkerCoords: [number, number];
+                } | null;
+                mainMarkerCoords: [number, number] | null;
                 reverseResult: {
                     mapCoords: [number, number];
                     city: import("./Map.model").NuString;
@@ -734,7 +875,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
+                } | null;
                 searchResults: {
                     mapCoords: [number, number];
                     iconUrl: string;
@@ -871,6 +1012,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 poiLayer: boolean;
                 trafficLayer: boolean;
                 viewType: ViewType;
+                scale: number;
                 drawerActivation: boolean;
                 drawerShowDetails: boolean;
                 mobileDrawerShowDetails: boolean;
@@ -998,8 +1140,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
-                mainMarkerCoords: [number, number];
+                } | null;
+                mainMarkerCoords: [number, number] | null;
                 reverseResult: {
                     mapCoords: [number, number];
                     city: import("./Map.model").NuString;
@@ -1051,7 +1193,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
+                } | null;
                 searchResults: {
                     mapCoords: [number, number];
                     iconUrl: string;
@@ -1223,6 +1365,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 poiLayer: boolean;
                 trafficLayer: boolean;
                 viewType: ViewType;
+                scale: number;
                 drawerActivation: boolean;
                 drawerShowDetails: boolean;
                 mobileDrawerShowDetails: boolean;
@@ -1350,8 +1493,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
-                mainMarkerCoords: [number, number];
+                } | null;
+                mainMarkerCoords: [number, number] | null;
                 reverseResult: {
                     mapCoords: [number, number];
                     city: import("./Map.model").NuString;
@@ -1403,7 +1546,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
+                } | null;
                 searchResults: {
                     mapCoords: [number, number];
                     iconUrl: string;
@@ -1462,7 +1605,6 @@ declare const _sfc_main: import("vue").DefineComponent<{
         SearchSection: import("vue").DefineComponent<{
             searchBoxClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
             searchBoxStyle: ObjectConstructor;
-            typesClass: ArrayConstructor;
             searchText: {
                 type: StringConstructor;
             };
@@ -1470,7 +1612,6 @@ declare const _sfc_main: import("vue").DefineComponent<{
             props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
                 searchBoxClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
                 searchBoxStyle: ObjectConstructor;
-                typesClass: ArrayConstructor;
                 searchText: {
                     type: StringConstructor;
                 };
@@ -1548,6 +1689,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     poiLayer: boolean;
                     trafficLayer: boolean;
                     viewType: ViewType;
+                    scale: number;
                     drawerActivation: boolean;
                     drawerShowDetails: boolean;
                     mobileDrawerShowDetails: boolean;
@@ -1675,8 +1817,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                    };
-                    mainMarkerCoords: [number, number];
+                    } | null;
+                    mainMarkerCoords: [number, number] | null;
                     reverseResult: {
                         mapCoords: [number, number];
                         city: import("./Map.model").NuString;
@@ -1728,7 +1870,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                    };
+                    } | null;
                     searchResults: {
                         mapCoords: [number, number];
                         iconUrl: string;
@@ -1792,7 +1934,325 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     default: number;
                 };
                 color: StringConstructor;
+                scale: {
+                    type: BooleanConstructor;
+                    default: boolean;
+                };
             }, {
+                props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
+                    name: {
+                        type: PropType<"close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back">;
+                        default: string;
+                    };
+                    size: {
+                        type: NumberConstructor;
+                        default: number;
+                    };
+                    color: StringConstructor;
+                    scale: {
+                        type: BooleanConstructor;
+                        default: boolean;
+                    };
+                }>> & {}>>;
+                computedSize: import("vue").ComputedRef<number>;
+                store: {
+                    state: {
+                        api: {
+                            REVERSE: (lng: number, lat: number) => Promise<import("../store/markers/markers.model").PrimaryReverseResult>;
+                            SEARCH: (term: string, coords: Coordinate) => Promise<import("../store/markers/markers.model").SearchResult>;
+                        } | null;
+                        searchLoading: boolean;
+                        reverseLoading: boolean;
+                        mapContainer: HTMLDivElement | null;
+                        map: {
+                            setMapType: (value: MapType) => void;
+                            switchPoiLayer: (value: boolean) => void;
+                            switchTrafficLayer: (value: boolean) => void;
+                            addControl: (control: import("openlayers").control.Control) => void;
+                            addInteraction: (interaction: import("openlayers").interaction.Interaction) => void;
+                            addLayer: (layer: import("openlayers").layer.Base) => void;
+                            addOverlay: (overlay: import("openlayers").Overlay) => void;
+                            forEachFeatureAtPixel: <T>(pixel: import("openlayers").Pixel, callback: (feature: import("openlayers").Feature | import("openlayers").render.Feature, layer: import("openlayers").layer.Layer) => T, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => T;
+                            getFeaturesAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => (import("openlayers").Feature | import("openlayers").render.Feature)[] | null;
+                            forEachLayerAtPixel: <T_1>(pixel: import("openlayers").Pixel, callback: (layer: import("openlayers").layer.Layer, color: import("openlayers").Color) => T_1, opt_this?: any, opt_layerFilter?: ((layer: import("openlayers").layer.Layer) => boolean) | undefined, opt_this2?: any) => T_1;
+                            hasFeatureAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => boolean;
+                            getEventCoordinate: (event: Event) => Coordinate;
+                            getEventPixel: (event: Event) => import("openlayers").Pixel;
+                            getTarget: () => string | Element;
+                            getTargetElement: () => Element;
+                            getCoordinateFromPixel: (pixel: import("openlayers").Pixel) => Coordinate;
+                            getControls: () => import("openlayers").Collection<import("openlayers").control.Control>;
+                            getOverlays: () => import("openlayers").Collection<import("openlayers").Overlay>;
+                            getOverlayById: (id: string | number) => import("openlayers").Overlay;
+                            getInteractions: () => import("openlayers").Collection<import("openlayers").interaction.Interaction>;
+                            getLayerGroup: () => import("openlayers").layer.Group;
+                            getLayers: () => import("openlayers").Collection<import("openlayers").layer.Base>;
+                            getPixelFromCoordinate: (coordinate: Coordinate) => import("openlayers").Pixel;
+                            getSize: () => import("openlayers").Size;
+                            getView: () => import("openlayers").View;
+                            getViewport: () => Element;
+                            renderSync: () => void;
+                            render: () => void;
+                            removeControl: (control: import("openlayers").control.Control) => import("openlayers").control.Control;
+                            removeInteraction: (interaction: import("openlayers").interaction.Interaction) => import("openlayers").interaction.Interaction;
+                            removeLayer: (layer: import("openlayers").layer.Base) => import("openlayers").layer.Base;
+                            removeOverlay: (overlay: import("openlayers").Overlay) => import("openlayers").Overlay;
+                            setLayerGroup: (layerGroup: import("openlayers").layer.Group) => void;
+                            setSize: (size: import("openlayers").Size) => void;
+                            setTarget: (target: string | Element) => void;
+                            setView: (view: import("openlayers").View) => void;
+                            updateSize: () => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        mapType: MapType;
+                        zoom: number;
+                        poiLayer: boolean;
+                        trafficLayer: boolean;
+                        viewType: ViewType;
+                        scale: number;
+                        drawerActivation: boolean;
+                        drawerShowDetails: boolean;
+                        mobileDrawerShowDetails: boolean;
+                        overlay: {
+                            getElement: () => Element;
+                            getId: () => string | number;
+                            getMap: () => import("openlayers").Map;
+                            getOffset: () => number[];
+                            getPosition: () => Coordinate;
+                            getPositioning: () => import("openlayers").OverlayPositioning;
+                            setElement: (element: Element) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setOffset: (offset: number[]) => void;
+                            setPosition: (position: Coordinate | undefined) => void;
+                            setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        persistantOverlay: {
+                            getElement: () => Element;
+                            getId: () => string | number;
+                            getMap: () => import("openlayers").Map;
+                            getOffset: () => number[];
+                            getPosition: () => Coordinate;
+                            getPositioning: () => import("openlayers").OverlayPositioning;
+                            setElement: (element: Element) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setOffset: (offset: number[]) => void;
+                            setPosition: (position: Coordinate | undefined) => void;
+                            setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        popupContainer: HTMLDivElement | null;
+                        persistantContainer: HTMLDivElement | null;
+                        selectedMarker: {
+                            mapCoords: [number, number];
+                            city: import("./Map.model").NuString;
+                            district: import("./Map.model").NuString;
+                            formatted_address: import("./Map.model").NuString;
+                            in_odd_even_zone: boolean;
+                            in_traffic_zone: boolean;
+                            municipality_zone: import("./Map.model").NuString;
+                            neighbourhood: import("./Map.model").NuString;
+                            place: import("./Map.model").NuString;
+                            route_name: import("./Map.model").NuString;
+                            route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                            state: import("./Map.model").NuString;
+                            status: import("./Map.model").NuString;
+                            village: import("./Map.model").NuString;
+                        } | {
+                            mapCoords: [number, number];
+                            iconUrl: string;
+                            category: string;
+                            location: {
+                                x: number;
+                                y: number;
+                            };
+                            neighbourhood: string;
+                            region: string;
+                            title: string;
+                            type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                            address: string;
+                        } | null;
+                        mainMarker: {
+                            getSource: () => import("openlayers").source.Vector;
+                            getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                            getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                            setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setSource: (source: import("openlayers").source.Source) => void;
+                            getExtent: () => import("openlayers").Extent;
+                            getMaxResolution: () => number;
+                            getMinResolution: () => number;
+                            getOpacity: () => number;
+                            getVisible: () => boolean;
+                            getZIndex: () => number;
+                            setExtent: (extent: import("openlayers").Extent) => void;
+                            setMaxResolution: (maxResolution: number) => void;
+                            setMinResolution: (minResolution: number) => void;
+                            setOpacity: (opacity: number) => void;
+                            setVisible: (visible: boolean) => void;
+                            setZIndex: (zindex: number) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        mainMarkerCoords: [number, number] | null;
+                        reverseResult: {
+                            mapCoords: [number, number];
+                            city: import("./Map.model").NuString;
+                            district: import("./Map.model").NuString;
+                            formatted_address: import("./Map.model").NuString;
+                            in_odd_even_zone: boolean;
+                            in_traffic_zone: boolean;
+                            municipality_zone: import("./Map.model").NuString;
+                            neighbourhood: import("./Map.model").NuString;
+                            place: import("./Map.model").NuString;
+                            route_name: import("./Map.model").NuString;
+                            route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                            state: import("./Map.model").NuString;
+                            status: import("./Map.model").NuString;
+                            village: import("./Map.model").NuString;
+                        } | null;
+                        searchMarkers: {
+                            getSource: () => import("openlayers").source.Vector;
+                            getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                            getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                            setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setSource: (source: import("openlayers").source.Source) => void;
+                            getExtent: () => import("openlayers").Extent;
+                            getMaxResolution: () => number;
+                            getMinResolution: () => number;
+                            getOpacity: () => number;
+                            getVisible: () => boolean;
+                            getZIndex: () => number;
+                            setExtent: (extent: import("openlayers").Extent) => void;
+                            setMaxResolution: (maxResolution: number) => void;
+                            setMinResolution: (minResolution: number) => void;
+                            setOpacity: (opacity: number) => void;
+                            setVisible: (visible: boolean) => void;
+                            setZIndex: (zindex: number) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        searchResults: {
+                            mapCoords: [number, number];
+                            iconUrl: string;
+                            category: string;
+                            location: {
+                                x: number;
+                                y: number;
+                            };
+                            neighbourhood: string;
+                            region: string;
+                            title: string;
+                            type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                            address: string;
+                        }[];
+                        breakpoints: {
+                            lt: {
+                                xs: boolean;
+                                sm: boolean;
+                                md: boolean;
+                                lg: boolean;
+                                xl: boolean;
+                            };
+                            gt: {
+                                xs: boolean;
+                                sm: boolean;
+                                md: boolean;
+                                lg: boolean;
+                                xl: boolean;
+                            };
+                            xs: boolean;
+                            sm: boolean;
+                            md: boolean;
+                            lg: boolean;
+                            xl: boolean;
+                        };
+                        mapDimensions: {
+                            width: string;
+                            height: string;
+                        };
+                    };
+                    getters: {
+                        drawerWidth: string;
+                        loading: boolean;
+                        touchPlatform: boolean;
+                    };
+                    actions: any;
+                };
                 inlineSvgs: {
                     close: {
                         d: string;
@@ -1829,7 +2289,9 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     metro_entrance: {
                         d: string;
                         scale: number;
-                    };
+                    }; /**
+                     * تغییر استایل بخش تنظیمات برای حالت موبایل
+                     */
                     footway: {
                         d: string;
                     };
@@ -1871,14 +2333,18 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     default: number;
                 };
                 color: StringConstructor;
+                scale: {
+                    type: BooleanConstructor;
+                    default: boolean;
+                };
             }>>, {
+                scale: boolean;
                 name: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
                 size: number;
             }>;
         }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("update:search-text" | "update:search-coords" | "submit")[], "update:search-text" | "update:search-coords" | "submit", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
             searchBoxClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
             searchBoxStyle: ObjectConstructor;
-            typesClass: ArrayConstructor;
             searchText: {
                 type: StringConstructor;
             };
@@ -1975,6 +2441,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     poiLayer: boolean;
                     trafficLayer: boolean;
                     viewType: ViewType;
+                    scale: number;
                     drawerActivation: boolean;
                     drawerShowDetails: boolean;
                     mobileDrawerShowDetails: boolean;
@@ -2102,8 +2569,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                    };
-                    mainMarkerCoords: [number, number];
+                    } | null;
+                    mainMarkerCoords: [number, number] | null;
                     reverseResult: {
                         mapCoords: [number, number];
                         city: import("./Map.model").NuString;
@@ -2155,7 +2622,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                         un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                    };
+                    } | null;
                     searchResults: {
                         mapCoords: [number, number];
                         iconUrl: string;
@@ -2258,7 +2725,325 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         default: number;
                     };
                     color: StringConstructor;
+                    scale: {
+                        type: BooleanConstructor;
+                        default: boolean;
+                    };
                 }, {
+                    props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
+                        name: {
+                            type: PropType<"close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back">;
+                            default: string;
+                        };
+                        size: {
+                            type: NumberConstructor;
+                            default: number;
+                        };
+                        color: StringConstructor;
+                        scale: {
+                            type: BooleanConstructor;
+                            default: boolean;
+                        };
+                    }>> & {}>>;
+                    computedSize: import("vue").ComputedRef<number>;
+                    store: {
+                        state: {
+                            api: {
+                                REVERSE: (lng: number, lat: number) => Promise<import("../store/markers/markers.model").PrimaryReverseResult>;
+                                SEARCH: (term: string, coords: Coordinate) => Promise<import("../store/markers/markers.model").SearchResult>;
+                            } | null;
+                            searchLoading: boolean;
+                            reverseLoading: boolean;
+                            mapContainer: HTMLDivElement | null;
+                            map: {
+                                setMapType: (value: MapType) => void;
+                                switchPoiLayer: (value: boolean) => void;
+                                switchTrafficLayer: (value: boolean) => void;
+                                addControl: (control: import("openlayers").control.Control) => void;
+                                addInteraction: (interaction: import("openlayers").interaction.Interaction) => void;
+                                addLayer: (layer: import("openlayers").layer.Base) => void;
+                                addOverlay: (overlay: import("openlayers").Overlay) => void;
+                                forEachFeatureAtPixel: <T>(pixel: import("openlayers").Pixel, callback: (feature: import("openlayers").Feature | import("openlayers").render.Feature, layer: import("openlayers").layer.Layer) => T, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => T;
+                                getFeaturesAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => (import("openlayers").Feature | import("openlayers").render.Feature)[] | null;
+                                forEachLayerAtPixel: <T_1>(pixel: import("openlayers").Pixel, callback: (layer: import("openlayers").layer.Layer, color: import("openlayers").Color) => T_1, opt_this?: any, opt_layerFilter?: ((layer: import("openlayers").layer.Layer) => boolean) | undefined, opt_this2?: any) => T_1;
+                                hasFeatureAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => boolean;
+                                getEventCoordinate: (event: Event) => Coordinate;
+                                getEventPixel: (event: Event) => import("openlayers").Pixel;
+                                getTarget: () => string | Element;
+                                getTargetElement: () => Element;
+                                getCoordinateFromPixel: (pixel: import("openlayers").Pixel) => Coordinate;
+                                getControls: () => import("openlayers").Collection<import("openlayers").control.Control>;
+                                getOverlays: () => import("openlayers").Collection<import("openlayers").Overlay>;
+                                getOverlayById: (id: string | number) => import("openlayers").Overlay;
+                                getInteractions: () => import("openlayers").Collection<import("openlayers").interaction.Interaction>;
+                                getLayerGroup: () => import("openlayers").layer.Group;
+                                getLayers: () => import("openlayers").Collection<import("openlayers").layer.Base>;
+                                getPixelFromCoordinate: (coordinate: Coordinate) => import("openlayers").Pixel;
+                                getSize: () => import("openlayers").Size;
+                                getView: () => import("openlayers").View;
+                                getViewport: () => Element;
+                                renderSync: () => void;
+                                render: () => void;
+                                removeControl: (control: import("openlayers").control.Control) => import("openlayers").control.Control;
+                                removeInteraction: (interaction: import("openlayers").interaction.Interaction) => import("openlayers").interaction.Interaction;
+                                removeLayer: (layer: import("openlayers").layer.Base) => import("openlayers").layer.Base;
+                                removeOverlay: (overlay: import("openlayers").Overlay) => import("openlayers").Overlay;
+                                setLayerGroup: (layerGroup: import("openlayers").layer.Group) => void;
+                                setSize: (size: import("openlayers").Size) => void;
+                                setTarget: (target: string | Element) => void;
+                                setView: (view: import("openlayers").View) => void;
+                                updateSize: () => void;
+                                get: (key: string) => any;
+                                getKeys: () => string[];
+                                getProperties: () => {
+                                    [k: string]: any;
+                                };
+                                set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                                setProperties: (values: {
+                                    [k: string]: any;
+                                }, opt_silent?: boolean | undefined) => void;
+                                unset: (key: string, opt_silent?: boolean | undefined) => void;
+                                changed: () => void;
+                                dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                                getRevision: () => number;
+                                on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                            } | null;
+                            mapType: MapType;
+                            zoom: number;
+                            poiLayer: boolean;
+                            trafficLayer: boolean;
+                            viewType: ViewType;
+                            scale: number;
+                            drawerActivation: boolean;
+                            drawerShowDetails: boolean;
+                            mobileDrawerShowDetails: boolean;
+                            overlay: {
+                                getElement: () => Element;
+                                getId: () => string | number;
+                                getMap: () => import("openlayers").Map;
+                                getOffset: () => number[];
+                                getPosition: () => Coordinate;
+                                getPositioning: () => import("openlayers").OverlayPositioning;
+                                setElement: (element: Element) => void;
+                                setMap: (map: import("openlayers").Map) => void;
+                                setOffset: (offset: number[]) => void;
+                                setPosition: (position: Coordinate | undefined) => void;
+                                setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                                get: (key: string) => any;
+                                getKeys: () => string[];
+                                getProperties: () => {
+                                    [k: string]: any;
+                                };
+                                set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                                setProperties: (values: {
+                                    [k: string]: any;
+                                }, opt_silent?: boolean | undefined) => void;
+                                unset: (key: string, opt_silent?: boolean | undefined) => void;
+                                changed: () => void;
+                                dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                                getRevision: () => number;
+                                on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                            } | null;
+                            persistantOverlay: {
+                                getElement: () => Element;
+                                getId: () => string | number;
+                                getMap: () => import("openlayers").Map;
+                                getOffset: () => number[];
+                                getPosition: () => Coordinate;
+                                getPositioning: () => import("openlayers").OverlayPositioning;
+                                setElement: (element: Element) => void;
+                                setMap: (map: import("openlayers").Map) => void;
+                                setOffset: (offset: number[]) => void;
+                                setPosition: (position: Coordinate | undefined) => void;
+                                setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                                get: (key: string) => any;
+                                getKeys: () => string[];
+                                getProperties: () => {
+                                    [k: string]: any;
+                                };
+                                set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                                setProperties: (values: {
+                                    [k: string]: any;
+                                }, opt_silent?: boolean | undefined) => void;
+                                unset: (key: string, opt_silent?: boolean | undefined) => void;
+                                changed: () => void;
+                                dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                                getRevision: () => number;
+                                on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                            } | null;
+                            popupContainer: HTMLDivElement | null;
+                            persistantContainer: HTMLDivElement | null;
+                            selectedMarker: {
+                                mapCoords: [number, number];
+                                city: import("./Map.model").NuString;
+                                district: import("./Map.model").NuString;
+                                formatted_address: import("./Map.model").NuString;
+                                in_odd_even_zone: boolean;
+                                in_traffic_zone: boolean;
+                                municipality_zone: import("./Map.model").NuString;
+                                neighbourhood: import("./Map.model").NuString;
+                                place: import("./Map.model").NuString;
+                                route_name: import("./Map.model").NuString;
+                                route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                                state: import("./Map.model").NuString;
+                                status: import("./Map.model").NuString;
+                                village: import("./Map.model").NuString;
+                            } | {
+                                mapCoords: [number, number];
+                                iconUrl: string;
+                                category: string;
+                                location: {
+                                    x: number;
+                                    y: number;
+                                };
+                                neighbourhood: string;
+                                region: string;
+                                title: string;
+                                type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                                address: string;
+                            } | null;
+                            mainMarker: {
+                                getSource: () => import("openlayers").source.Vector;
+                                getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                                getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                                setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                                setMap: (map: import("openlayers").Map) => void;
+                                setSource: (source: import("openlayers").source.Source) => void;
+                                getExtent: () => import("openlayers").Extent;
+                                getMaxResolution: () => number;
+                                getMinResolution: () => number;
+                                getOpacity: () => number;
+                                getVisible: () => boolean;
+                                getZIndex: () => number;
+                                setExtent: (extent: import("openlayers").Extent) => void;
+                                setMaxResolution: (maxResolution: number) => void;
+                                setMinResolution: (minResolution: number) => void;
+                                setOpacity: (opacity: number) => void;
+                                setVisible: (visible: boolean) => void;
+                                setZIndex: (zindex: number) => void;
+                                get: (key: string) => any;
+                                getKeys: () => string[];
+                                getProperties: () => {
+                                    [k: string]: any;
+                                };
+                                set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                                setProperties: (values: {
+                                    [k: string]: any;
+                                }, opt_silent?: boolean | undefined) => void;
+                                unset: (key: string, opt_silent?: boolean | undefined) => void;
+                                changed: () => void;
+                                dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                                getRevision: () => number;
+                                on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                            } | null;
+                            mainMarkerCoords: [number, number] | null;
+                            reverseResult: {
+                                mapCoords: [number, number];
+                                city: import("./Map.model").NuString;
+                                district: import("./Map.model").NuString;
+                                formatted_address: import("./Map.model").NuString;
+                                in_odd_even_zone: boolean;
+                                in_traffic_zone: boolean;
+                                municipality_zone: import("./Map.model").NuString;
+                                neighbourhood: import("./Map.model").NuString;
+                                place: import("./Map.model").NuString;
+                                route_name: import("./Map.model").NuString;
+                                route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                                state: import("./Map.model").NuString;
+                                status: import("./Map.model").NuString;
+                                village: import("./Map.model").NuString;
+                            } | null;
+                            searchMarkers: {
+                                getSource: () => import("openlayers").source.Vector;
+                                getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                                getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                                setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                                setMap: (map: import("openlayers").Map) => void;
+                                setSource: (source: import("openlayers").source.Source) => void;
+                                getExtent: () => import("openlayers").Extent;
+                                getMaxResolution: () => number;
+                                getMinResolution: () => number;
+                                getOpacity: () => number;
+                                getVisible: () => boolean;
+                                getZIndex: () => number;
+                                setExtent: (extent: import("openlayers").Extent) => void;
+                                setMaxResolution: (maxResolution: number) => void;
+                                setMinResolution: (minResolution: number) => void;
+                                setOpacity: (opacity: number) => void;
+                                setVisible: (visible: boolean) => void;
+                                setZIndex: (zindex: number) => void;
+                                get: (key: string) => any;
+                                getKeys: () => string[];
+                                getProperties: () => {
+                                    [k: string]: any;
+                                };
+                                set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                                setProperties: (values: {
+                                    [k: string]: any;
+                                }, opt_silent?: boolean | undefined) => void;
+                                unset: (key: string, opt_silent?: boolean | undefined) => void;
+                                changed: () => void;
+                                dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                                getRevision: () => number;
+                                on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                                un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                            } | null;
+                            searchResults: {
+                                mapCoords: [number, number];
+                                iconUrl: string;
+                                category: string;
+                                location: {
+                                    x: number;
+                                    y: number;
+                                };
+                                neighbourhood: string;
+                                region: string;
+                                title: string;
+                                type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                                address: string;
+                            }[];
+                            breakpoints: {
+                                lt: {
+                                    xs: boolean;
+                                    sm: boolean;
+                                    md: boolean;
+                                    lg: boolean;
+                                    xl: boolean;
+                                };
+                                gt: {
+                                    xs: boolean;
+                                    sm: boolean;
+                                    md: boolean;
+                                    lg: boolean;
+                                    xl: boolean;
+                                };
+                                xs: boolean;
+                                sm: boolean;
+                                md: boolean;
+                                lg: boolean;
+                                xl: boolean;
+                            };
+                            mapDimensions: {
+                                width: string;
+                                height: string;
+                            };
+                        };
+                        getters: {
+                            drawerWidth: string;
+                            loading: boolean;
+                            touchPlatform: boolean;
+                        };
+                        actions: any;
+                    };
                     inlineSvgs: {
                         close: {
                             d: string;
@@ -2295,7 +3080,9 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         metro_entrance: {
                             d: string;
                             scale: number;
-                        };
+                        }; /**
+                         * تغییر استایل بخش تنظیمات برای حالت موبایل
+                         */
                         footway: {
                             d: string;
                         };
@@ -2337,7 +3124,12 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         default: number;
                     };
                     color: StringConstructor;
+                    scale: {
+                        type: BooleanConstructor;
+                        default: boolean;
+                    };
                 }>>, {
+                    scale: boolean;
                     name: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
                     size: number;
                 }>;
@@ -2456,6 +3248,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 poiLayer: boolean;
                 trafficLayer: boolean;
                 viewType: ViewType;
+                scale: number;
                 drawerActivation: boolean;
                 drawerShowDetails: boolean;
                 mobileDrawerShowDetails: boolean;
@@ -2583,8 +3376,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
-                mainMarkerCoords: [number, number];
+                } | null;
+                mainMarkerCoords: [number, number] | null;
                 reverseResult: {
                     mapCoords: [number, number];
                     city: import("./Map.model").NuString;
@@ -2636,7 +3429,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
                     un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-                };
+                } | null;
                 searchResults: {
                     mapCoords: [number, number];
                     iconUrl: string;
@@ -2714,7 +3507,325 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 default: number;
             };
             color: StringConstructor;
+            scale: {
+                type: BooleanConstructor;
+                default: boolean;
+            };
         }, {
+            props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
+                name: {
+                    type: PropType<"close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back">;
+                    default: string;
+                };
+                size: {
+                    type: NumberConstructor;
+                    default: number;
+                };
+                color: StringConstructor;
+                scale: {
+                    type: BooleanConstructor;
+                    default: boolean;
+                };
+            }>> & {}>>;
+            computedSize: import("vue").ComputedRef<number>;
+            store: {
+                state: {
+                    api: {
+                        REVERSE: (lng: number, lat: number) => Promise<import("../store/markers/markers.model").PrimaryReverseResult>;
+                        SEARCH: (term: string, coords: Coordinate) => Promise<import("../store/markers/markers.model").SearchResult>;
+                    } | null;
+                    searchLoading: boolean;
+                    reverseLoading: boolean;
+                    mapContainer: HTMLDivElement | null;
+                    map: {
+                        setMapType: (value: MapType) => void;
+                        switchPoiLayer: (value: boolean) => void;
+                        switchTrafficLayer: (value: boolean) => void;
+                        addControl: (control: import("openlayers").control.Control) => void;
+                        addInteraction: (interaction: import("openlayers").interaction.Interaction) => void;
+                        addLayer: (layer: import("openlayers").layer.Base) => void;
+                        addOverlay: (overlay: import("openlayers").Overlay) => void;
+                        forEachFeatureAtPixel: <T>(pixel: import("openlayers").Pixel, callback: (feature: import("openlayers").Feature | import("openlayers").render.Feature, layer: import("openlayers").layer.Layer) => T, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => T;
+                        getFeaturesAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => (import("openlayers").Feature | import("openlayers").render.Feature)[] | null;
+                        forEachLayerAtPixel: <T_1>(pixel: import("openlayers").Pixel, callback: (layer: import("openlayers").layer.Layer, color: import("openlayers").Color) => T_1, opt_this?: any, opt_layerFilter?: ((layer: import("openlayers").layer.Layer) => boolean) | undefined, opt_this2?: any) => T_1;
+                        hasFeatureAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => boolean;
+                        getEventCoordinate: (event: Event) => Coordinate;
+                        getEventPixel: (event: Event) => import("openlayers").Pixel;
+                        getTarget: () => string | Element;
+                        getTargetElement: () => Element;
+                        getCoordinateFromPixel: (pixel: import("openlayers").Pixel) => Coordinate;
+                        getControls: () => import("openlayers").Collection<import("openlayers").control.Control>;
+                        getOverlays: () => import("openlayers").Collection<import("openlayers").Overlay>;
+                        getOverlayById: (id: string | number) => import("openlayers").Overlay;
+                        getInteractions: () => import("openlayers").Collection<import("openlayers").interaction.Interaction>;
+                        getLayerGroup: () => import("openlayers").layer.Group;
+                        getLayers: () => import("openlayers").Collection<import("openlayers").layer.Base>;
+                        getPixelFromCoordinate: (coordinate: Coordinate) => import("openlayers").Pixel;
+                        getSize: () => import("openlayers").Size;
+                        getView: () => import("openlayers").View;
+                        getViewport: () => Element;
+                        renderSync: () => void;
+                        render: () => void;
+                        removeControl: (control: import("openlayers").control.Control) => import("openlayers").control.Control;
+                        removeInteraction: (interaction: import("openlayers").interaction.Interaction) => import("openlayers").interaction.Interaction;
+                        removeLayer: (layer: import("openlayers").layer.Base) => import("openlayers").layer.Base;
+                        removeOverlay: (overlay: import("openlayers").Overlay) => import("openlayers").Overlay;
+                        setLayerGroup: (layerGroup: import("openlayers").layer.Group) => void;
+                        setSize: (size: import("openlayers").Size) => void;
+                        setTarget: (target: string | Element) => void;
+                        setView: (view: import("openlayers").View) => void;
+                        updateSize: () => void;
+                        get: (key: string) => any;
+                        getKeys: () => string[];
+                        getProperties: () => {
+                            [k: string]: any;
+                        };
+                        set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                        setProperties: (values: {
+                            [k: string]: any;
+                        }, opt_silent?: boolean | undefined) => void;
+                        unset: (key: string, opt_silent?: boolean | undefined) => void;
+                        changed: () => void;
+                        dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                        getRevision: () => number;
+                        on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                    } | null;
+                    mapType: MapType;
+                    zoom: number;
+                    poiLayer: boolean;
+                    trafficLayer: boolean;
+                    viewType: ViewType;
+                    scale: number;
+                    drawerActivation: boolean;
+                    drawerShowDetails: boolean;
+                    mobileDrawerShowDetails: boolean;
+                    overlay: {
+                        getElement: () => Element;
+                        getId: () => string | number;
+                        getMap: () => import("openlayers").Map;
+                        getOffset: () => number[];
+                        getPosition: () => Coordinate;
+                        getPositioning: () => import("openlayers").OverlayPositioning;
+                        setElement: (element: Element) => void;
+                        setMap: (map: import("openlayers").Map) => void;
+                        setOffset: (offset: number[]) => void;
+                        setPosition: (position: Coordinate | undefined) => void;
+                        setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                        get: (key: string) => any;
+                        getKeys: () => string[];
+                        getProperties: () => {
+                            [k: string]: any;
+                        };
+                        set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                        setProperties: (values: {
+                            [k: string]: any;
+                        }, opt_silent?: boolean | undefined) => void;
+                        unset: (key: string, opt_silent?: boolean | undefined) => void;
+                        changed: () => void;
+                        dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                        getRevision: () => number;
+                        on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                    } | null;
+                    persistantOverlay: {
+                        getElement: () => Element;
+                        getId: () => string | number;
+                        getMap: () => import("openlayers").Map;
+                        getOffset: () => number[];
+                        getPosition: () => Coordinate;
+                        getPositioning: () => import("openlayers").OverlayPositioning;
+                        setElement: (element: Element) => void;
+                        setMap: (map: import("openlayers").Map) => void;
+                        setOffset: (offset: number[]) => void;
+                        setPosition: (position: Coordinate | undefined) => void;
+                        setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                        get: (key: string) => any;
+                        getKeys: () => string[];
+                        getProperties: () => {
+                            [k: string]: any;
+                        };
+                        set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                        setProperties: (values: {
+                            [k: string]: any;
+                        }, opt_silent?: boolean | undefined) => void;
+                        unset: (key: string, opt_silent?: boolean | undefined) => void;
+                        changed: () => void;
+                        dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                        getRevision: () => number;
+                        on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                    } | null;
+                    popupContainer: HTMLDivElement | null;
+                    persistantContainer: HTMLDivElement | null;
+                    selectedMarker: {
+                        mapCoords: [number, number];
+                        city: import("./Map.model").NuString;
+                        district: import("./Map.model").NuString;
+                        formatted_address: import("./Map.model").NuString;
+                        in_odd_even_zone: boolean;
+                        in_traffic_zone: boolean;
+                        municipality_zone: import("./Map.model").NuString;
+                        neighbourhood: import("./Map.model").NuString;
+                        place: import("./Map.model").NuString;
+                        route_name: import("./Map.model").NuString;
+                        route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                        state: import("./Map.model").NuString;
+                        status: import("./Map.model").NuString;
+                        village: import("./Map.model").NuString;
+                    } | {
+                        mapCoords: [number, number];
+                        iconUrl: string;
+                        category: string;
+                        location: {
+                            x: number;
+                            y: number;
+                        };
+                        neighbourhood: string;
+                        region: string;
+                        title: string;
+                        type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                        address: string;
+                    } | null;
+                    mainMarker: {
+                        getSource: () => import("openlayers").source.Vector;
+                        getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                        getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                        setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                        setMap: (map: import("openlayers").Map) => void;
+                        setSource: (source: import("openlayers").source.Source) => void;
+                        getExtent: () => import("openlayers").Extent;
+                        getMaxResolution: () => number;
+                        getMinResolution: () => number;
+                        getOpacity: () => number;
+                        getVisible: () => boolean;
+                        getZIndex: () => number;
+                        setExtent: (extent: import("openlayers").Extent) => void;
+                        setMaxResolution: (maxResolution: number) => void;
+                        setMinResolution: (minResolution: number) => void;
+                        setOpacity: (opacity: number) => void;
+                        setVisible: (visible: boolean) => void;
+                        setZIndex: (zindex: number) => void;
+                        get: (key: string) => any;
+                        getKeys: () => string[];
+                        getProperties: () => {
+                            [k: string]: any;
+                        };
+                        set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                        setProperties: (values: {
+                            [k: string]: any;
+                        }, opt_silent?: boolean | undefined) => void;
+                        unset: (key: string, opt_silent?: boolean | undefined) => void;
+                        changed: () => void;
+                        dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                        getRevision: () => number;
+                        on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                    } | null;
+                    mainMarkerCoords: [number, number] | null;
+                    reverseResult: {
+                        mapCoords: [number, number];
+                        city: import("./Map.model").NuString;
+                        district: import("./Map.model").NuString;
+                        formatted_address: import("./Map.model").NuString;
+                        in_odd_even_zone: boolean;
+                        in_traffic_zone: boolean;
+                        municipality_zone: import("./Map.model").NuString;
+                        neighbourhood: import("./Map.model").NuString;
+                        place: import("./Map.model").NuString;
+                        route_name: import("./Map.model").NuString;
+                        route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                        state: import("./Map.model").NuString;
+                        status: import("./Map.model").NuString;
+                        village: import("./Map.model").NuString;
+                    } | null;
+                    searchMarkers: {
+                        getSource: () => import("openlayers").source.Vector;
+                        getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                        getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                        setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                        setMap: (map: import("openlayers").Map) => void;
+                        setSource: (source: import("openlayers").source.Source) => void;
+                        getExtent: () => import("openlayers").Extent;
+                        getMaxResolution: () => number;
+                        getMinResolution: () => number;
+                        getOpacity: () => number;
+                        getVisible: () => boolean;
+                        getZIndex: () => number;
+                        setExtent: (extent: import("openlayers").Extent) => void;
+                        setMaxResolution: (maxResolution: number) => void;
+                        setMinResolution: (minResolution: number) => void;
+                        setOpacity: (opacity: number) => void;
+                        setVisible: (visible: boolean) => void;
+                        setZIndex: (zindex: number) => void;
+                        get: (key: string) => any;
+                        getKeys: () => string[];
+                        getProperties: () => {
+                            [k: string]: any;
+                        };
+                        set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                        setProperties: (values: {
+                            [k: string]: any;
+                        }, opt_silent?: boolean | undefined) => void;
+                        unset: (key: string, opt_silent?: boolean | undefined) => void;
+                        changed: () => void;
+                        dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                        getRevision: () => number;
+                        on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                        un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                    } | null;
+                    searchResults: {
+                        mapCoords: [number, number];
+                        iconUrl: string;
+                        category: string;
+                        location: {
+                            x: number;
+                            y: number;
+                        };
+                        neighbourhood: string;
+                        region: string;
+                        title: string;
+                        type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                        address: string;
+                    }[];
+                    breakpoints: {
+                        lt: {
+                            xs: boolean;
+                            sm: boolean;
+                            md: boolean;
+                            lg: boolean;
+                            xl: boolean;
+                        };
+                        gt: {
+                            xs: boolean;
+                            sm: boolean;
+                            md: boolean;
+                            lg: boolean;
+                            xl: boolean;
+                        };
+                        xs: boolean;
+                        sm: boolean;
+                        md: boolean;
+                        lg: boolean;
+                        xl: boolean;
+                    };
+                    mapDimensions: {
+                        width: string;
+                        height: string;
+                    };
+                };
+                getters: {
+                    drawerWidth: string;
+                    loading: boolean;
+                    touchPlatform: boolean;
+                };
+                actions: any;
+            };
             inlineSvgs: {
                 close: {
                     d: string;
@@ -2751,7 +3862,9 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 metro_entrance: {
                     d: string;
                     scale: number;
-                };
+                }; /**
+                 * تغییر استایل بخش تنظیمات برای حالت موبایل
+                 */
                 footway: {
                     d: string;
                 };
@@ -2793,7 +3906,12 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 default: number;
             };
             color: StringConstructor;
+            scale: {
+                type: BooleanConstructor;
+                default: boolean;
+            };
         }>>, {
+            scale: boolean;
             name: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
             size: number;
         }>;
@@ -2826,7 +3944,325 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     default: number;
                 };
                 color: StringConstructor;
+                scale: {
+                    type: BooleanConstructor;
+                    default: boolean;
+                };
             }, {
+                props: Readonly<import("@vue/shared").LooseRequired<Readonly<import("vue").ExtractPropTypes<{
+                    name: {
+                        type: PropType<"close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back">;
+                        default: string;
+                    };
+                    size: {
+                        type: NumberConstructor;
+                        default: number;
+                    };
+                    color: StringConstructor;
+                    scale: {
+                        type: BooleanConstructor;
+                        default: boolean;
+                    };
+                }>> & {}>>;
+                computedSize: import("vue").ComputedRef<number>;
+                store: {
+                    state: {
+                        api: {
+                            REVERSE: (lng: number, lat: number) => Promise<import("../store/markers/markers.model").PrimaryReverseResult>;
+                            SEARCH: (term: string, coords: Coordinate) => Promise<import("../store/markers/markers.model").SearchResult>;
+                        } | null;
+                        searchLoading: boolean;
+                        reverseLoading: boolean;
+                        mapContainer: HTMLDivElement | null;
+                        map: {
+                            setMapType: (value: MapType) => void;
+                            switchPoiLayer: (value: boolean) => void;
+                            switchTrafficLayer: (value: boolean) => void;
+                            addControl: (control: import("openlayers").control.Control) => void;
+                            addInteraction: (interaction: import("openlayers").interaction.Interaction) => void;
+                            addLayer: (layer: import("openlayers").layer.Base) => void;
+                            addOverlay: (overlay: import("openlayers").Overlay) => void;
+                            forEachFeatureAtPixel: <T>(pixel: import("openlayers").Pixel, callback: (feature: import("openlayers").Feature | import("openlayers").render.Feature, layer: import("openlayers").layer.Layer) => T, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => T;
+                            getFeaturesAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => (import("openlayers").Feature | import("openlayers").render.Feature)[] | null;
+                            forEachLayerAtPixel: <T_1>(pixel: import("openlayers").Pixel, callback: (layer: import("openlayers").layer.Layer, color: import("openlayers").Color) => T_1, opt_this?: any, opt_layerFilter?: ((layer: import("openlayers").layer.Layer) => boolean) | undefined, opt_this2?: any) => T_1;
+                            hasFeatureAtPixel: (pixel: import("openlayers").Pixel, opt_options?: import("openlayers").olx.AtPixelOptions | undefined) => boolean;
+                            getEventCoordinate: (event: Event) => Coordinate;
+                            getEventPixel: (event: Event) => import("openlayers").Pixel;
+                            getTarget: () => string | Element;
+                            getTargetElement: () => Element;
+                            getCoordinateFromPixel: (pixel: import("openlayers").Pixel) => Coordinate;
+                            getControls: () => import("openlayers").Collection<import("openlayers").control.Control>;
+                            getOverlays: () => import("openlayers").Collection<import("openlayers").Overlay>;
+                            getOverlayById: (id: string | number) => import("openlayers").Overlay;
+                            getInteractions: () => import("openlayers").Collection<import("openlayers").interaction.Interaction>;
+                            getLayerGroup: () => import("openlayers").layer.Group;
+                            getLayers: () => import("openlayers").Collection<import("openlayers").layer.Base>;
+                            getPixelFromCoordinate: (coordinate: Coordinate) => import("openlayers").Pixel;
+                            getSize: () => import("openlayers").Size;
+                            getView: () => import("openlayers").View;
+                            getViewport: () => Element;
+                            renderSync: () => void;
+                            render: () => void;
+                            removeControl: (control: import("openlayers").control.Control) => import("openlayers").control.Control;
+                            removeInteraction: (interaction: import("openlayers").interaction.Interaction) => import("openlayers").interaction.Interaction;
+                            removeLayer: (layer: import("openlayers").layer.Base) => import("openlayers").layer.Base;
+                            removeOverlay: (overlay: import("openlayers").Overlay) => import("openlayers").Overlay;
+                            setLayerGroup: (layerGroup: import("openlayers").layer.Group) => void;
+                            setSize: (size: import("openlayers").Size) => void;
+                            setTarget: (target: string | Element) => void;
+                            setView: (view: import("openlayers").View) => void;
+                            updateSize: () => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        mapType: MapType;
+                        zoom: number;
+                        poiLayer: boolean;
+                        trafficLayer: boolean;
+                        viewType: ViewType;
+                        scale: number;
+                        drawerActivation: boolean;
+                        drawerShowDetails: boolean;
+                        mobileDrawerShowDetails: boolean;
+                        overlay: {
+                            getElement: () => Element;
+                            getId: () => string | number;
+                            getMap: () => import("openlayers").Map;
+                            getOffset: () => number[];
+                            getPosition: () => Coordinate;
+                            getPositioning: () => import("openlayers").OverlayPositioning;
+                            setElement: (element: Element) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setOffset: (offset: number[]) => void;
+                            setPosition: (position: Coordinate | undefined) => void;
+                            setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        persistantOverlay: {
+                            getElement: () => Element;
+                            getId: () => string | number;
+                            getMap: () => import("openlayers").Map;
+                            getOffset: () => number[];
+                            getPosition: () => Coordinate;
+                            getPositioning: () => import("openlayers").OverlayPositioning;
+                            setElement: (element: Element) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setOffset: (offset: number[]) => void;
+                            setPosition: (position: Coordinate | undefined) => void;
+                            setPositioning: (positioning: import("openlayers").OverlayPositioning) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        popupContainer: HTMLDivElement | null;
+                        persistantContainer: HTMLDivElement | null;
+                        selectedMarker: {
+                            mapCoords: [number, number];
+                            city: import("./Map.model").NuString;
+                            district: import("./Map.model").NuString;
+                            formatted_address: import("./Map.model").NuString;
+                            in_odd_even_zone: boolean;
+                            in_traffic_zone: boolean;
+                            municipality_zone: import("./Map.model").NuString;
+                            neighbourhood: import("./Map.model").NuString;
+                            place: import("./Map.model").NuString;
+                            route_name: import("./Map.model").NuString;
+                            route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                            state: import("./Map.model").NuString;
+                            status: import("./Map.model").NuString;
+                            village: import("./Map.model").NuString;
+                        } | {
+                            mapCoords: [number, number];
+                            iconUrl: string;
+                            category: string;
+                            location: {
+                                x: number;
+                                y: number;
+                            };
+                            neighbourhood: string;
+                            region: string;
+                            title: string;
+                            type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                            address: string;
+                        } | null;
+                        mainMarker: {
+                            getSource: () => import("openlayers").source.Vector;
+                            getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                            getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                            setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setSource: (source: import("openlayers").source.Source) => void;
+                            getExtent: () => import("openlayers").Extent;
+                            getMaxResolution: () => number;
+                            getMinResolution: () => number;
+                            getOpacity: () => number;
+                            getVisible: () => boolean;
+                            getZIndex: () => number;
+                            setExtent: (extent: import("openlayers").Extent) => void;
+                            setMaxResolution: (maxResolution: number) => void;
+                            setMinResolution: (minResolution: number) => void;
+                            setOpacity: (opacity: number) => void;
+                            setVisible: (visible: boolean) => void;
+                            setZIndex: (zindex: number) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        mainMarkerCoords: [number, number] | null;
+                        reverseResult: {
+                            mapCoords: [number, number];
+                            city: import("./Map.model").NuString;
+                            district: import("./Map.model").NuString;
+                            formatted_address: import("./Map.model").NuString;
+                            in_odd_even_zone: boolean;
+                            in_traffic_zone: boolean;
+                            municipality_zone: import("./Map.model").NuString;
+                            neighbourhood: import("./Map.model").NuString;
+                            place: import("./Map.model").NuString;
+                            route_name: import("./Map.model").NuString;
+                            route_type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back" | null;
+                            state: import("./Map.model").NuString;
+                            status: import("./Map.model").NuString;
+                            village: import("./Map.model").NuString;
+                        } | null;
+                        searchMarkers: {
+                            getSource: () => import("openlayers").source.Vector;
+                            getStyle: () => import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[];
+                            getStyleFunction: () => import("openlayers").StyleFunction | undefined;
+                            setStyle: (style: import("openlayers").style.Style | import("openlayers").StyleFunction | import("openlayers").style.Style[] | null | undefined) => void;
+                            setMap: (map: import("openlayers").Map) => void;
+                            setSource: (source: import("openlayers").source.Source) => void;
+                            getExtent: () => import("openlayers").Extent;
+                            getMaxResolution: () => number;
+                            getMinResolution: () => number;
+                            getOpacity: () => number;
+                            getVisible: () => boolean;
+                            getZIndex: () => number;
+                            setExtent: (extent: import("openlayers").Extent) => void;
+                            setMaxResolution: (maxResolution: number) => void;
+                            setMinResolution: (minResolution: number) => void;
+                            setOpacity: (opacity: number) => void;
+                            setVisible: (visible: boolean) => void;
+                            setZIndex: (zindex: number) => void;
+                            get: (key: string) => any;
+                            getKeys: () => string[];
+                            getProperties: () => {
+                                [k: string]: any;
+                            };
+                            set: (key: string, value: any, opt_silent?: boolean | undefined) => void;
+                            setProperties: (values: {
+                                [k: string]: any;
+                            }, opt_silent?: boolean | undefined) => void;
+                            unset: (key: string, opt_silent?: boolean | undefined) => void;
+                            changed: () => void;
+                            dispatchEvent: (event: string | import("openlayers").GlobalObject | import("openlayers").events.Event) => void;
+                            getRevision: () => number;
+                            on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
+                            un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
+                        } | null;
+                        searchResults: {
+                            mapCoords: [number, number];
+                            iconUrl: string;
+                            category: string;
+                            location: {
+                                x: number;
+                                y: number;
+                            };
+                            neighbourhood: string;
+                            region: string;
+                            title: string;
+                            type: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
+                            address: string;
+                        }[];
+                        breakpoints: {
+                            lt: {
+                                xs: boolean;
+                                sm: boolean;
+                                md: boolean;
+                                lg: boolean;
+                                xl: boolean;
+                            };
+                            gt: {
+                                xs: boolean;
+                                sm: boolean;
+                                md: boolean;
+                                lg: boolean;
+                                xl: boolean;
+                            };
+                            xs: boolean;
+                            sm: boolean;
+                            md: boolean;
+                            lg: boolean;
+                            xl: boolean;
+                        };
+                        mapDimensions: {
+                            width: string;
+                            height: string;
+                        };
+                    };
+                    getters: {
+                        drawerWidth: string;
+                        loading: boolean;
+                        touchPlatform: boolean;
+                    };
+                    actions: any;
+                };
                 inlineSvgs: {
                     close: {
                         d: string;
@@ -2863,7 +4299,9 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     metro_entrance: {
                         d: string;
                         scale: number;
-                    };
+                    }; /**
+                     * تغییر استایل بخش تنظیمات برای حالت موبایل
+                     */
                     footway: {
                         d: string;
                     };
@@ -2905,7 +4343,12 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     default: number;
                 };
                 color: StringConstructor;
+                scale: {
+                    type: BooleanConstructor;
+                    default: boolean;
+                };
             }>>, {
+                scale: boolean;
                 name: "close" | "magnet" | "neighborhood_landmark" | "formal_school" | "university" | "primary" | "secondary" | "tertiary" | "vaccine" | "subway_station" | "metro_entrance" | "footway" | "department_store" | "internet_cafe" | "park" | "hotel" | "local_government_office" | "marker" | "city" | "residential" | "back";
                 size: number;
             }>;
@@ -2941,45 +4384,112 @@ declare const _sfc_main: import("vue").DefineComponent<{
         }>;
     }, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{}>>, {}>;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("on-zoom" | "on-click")[], "on-zoom" | "on-click", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    /**
+     * کلید نقشه، گرفته شده از پلتفرم نشان
+     */
     mapKey: {
         type: StringConstructor;
         required: true;
     };
+    /**
+     * کلید سرویس‌ها برای تبدیل نقطه به آدرس (Reverse) و جستجو (search)
+     */
     serviceKey: {
         type: StringConstructor;
         default: string;
     };
+    /**
+     * مرکز نقشه در هنگام شروع
+     */
     center: {
         type: PropType<CoordsObj>;
         default: null;
     };
+    /**
+     * میزان زوم نقشه در هنگام شروع
+     */
     zoom: {
         type: NumberConstructor;
         default: number;
     };
-    poi: BooleanConstructor;
-    traffic: BooleanConstructor;
+    /**
+     * نمایش یا عدم نمایش نقاط
+     */
+    poi: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /**
+     * نمایش یا عدم نمایش خطوط ترافیک
+     */
+    traffic: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /**
+     * نوع نقشه در هنگام شروع
+     * <br>
+     * neshan
+    | dreamy
+    | dreamy-gold
+    | standard-night
+    | standard-day
+    | osm-bright
+     */
     defaultType: {
         type: PropType<MapType>;
         default: string;
     };
+    /**
+     * آرایه‌ای از انواع نقشه‌هایی که می‌خواهید در تنظیمات نمایش داده شود.
+     */
     mapTypes: {
         type: PropType<MapType[]>;
         default: MapType[];
     };
+    /**
+     * تغییر کلاس بخش تنظیمات برای حالت دستکتاپ
+     */
     desktopSettingsClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر کلاس بخش تنظیمات برای حالت موبایل
+     */
     mobileSettingsClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر استایل بخش تنظیمات برای حالت دستکتاپ
+     */
     desktopSettingsStyle: ObjectConstructor;
+    /**
+     * تغییر استایل بخش تنظیمات برای حالت موبایل
+     */
     mobileSettingsStyle: ObjectConstructor;
+    /**
+     * تغییر کلاس پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+     */
     temporaryPopupContainerClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر کلاس پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+     */
     persistantPopupContainerClass: (StringConstructor | ObjectConstructor | ArrayConstructor)[];
+    /**
+     * تغییر استایل پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
+     */
     temporaryPopupContainerStyle: ObjectConstructor;
+    /**
+     * تغییر استایل پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
+     */
     persistantPopupContainerStyle: ObjectConstructor;
+    /**
+     * عدم نمایش تنظیمات
+     */
     hideSettings: BooleanConstructor;
-    typesClass: ArrayConstructor;
-    hideSearchBox: BooleanConstructor;
+    /**
+     * عدم نمایش بخش سرج و نتایج
+     */
     hideSearchContainer: BooleanConstructor;
-    hideResultBox: BooleanConstructor;
+    /**
+     *
+     */
     resultHoverCallback: PropType<ResultHoverCallback>;
     resultClickCallback: PropType<ResultClickCallback>;
     markersIconCallback: PropType<MarkersIconCallback>;
@@ -3022,6 +4532,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
     "onOn-click"?: ((...args: any[]) => any) | undefined;
 }, {
     zoom: number;
+    scale: number;
     serviceKey: string;
     center: CoordsObj;
     poi: boolean;
@@ -3029,9 +4540,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
     defaultType: MapType;
     mapTypes: MapType[];
     hideSettings: boolean;
-    hideSearchBox: boolean;
     hideSearchContainer: boolean;
-    hideResultBox: boolean;
     popupOnMarkerHover: boolean;
     popupOnResultHover: boolean;
     zoomOnMarkerClick: boolean;
@@ -3039,6 +4548,5 @@ declare const _sfc_main: import("vue").DefineComponent<{
     cluster: boolean;
     clusterThreshold: number;
     reverseOnClick: boolean;
-    scale: number;
 }>;
 export default _sfc_main;

@@ -207,7 +207,7 @@ const props = defineProps({
    */
   hideSearchContainer: Boolean,
   /**
-   * 
+   *
    */
   resultHoverCallback: Function as PropType<ResultHoverCallback>,
   resultClickCallback: Function as PropType<ResultClickCallback>,
@@ -269,7 +269,6 @@ watch(
     setToken(nv)
   }
 )
-
 const fontSize = ref(props.scale + "rem")
 // eslint-disable-next-line vue/no-setup-props-destructure
 store.state.scale = props.scale
@@ -278,8 +277,31 @@ watch(
   (nv) => {
     fontSize.value = nv + "rem"
     store.state.scale = nv
+    updateNeshanBrandContainerScale()
   }
 )
+
+let neshanBrandContainer: HTMLDivElement
+const getNeshanBrandContainer = () => {
+  if (neshanBrandContainer) return neshanBrandContainer
+  const allDivs = mapContainer.value
+    ?.querySelector(".ol-viewport")
+    ?.querySelectorAll("div:last-child")
+  if (!allDivs) return
+  neshanBrandContainer = Array.from(allDivs)[allDivs.length - 1] as HTMLDivElement
+  return neshanBrandContainer
+}
+
+const updateNeshanBrandContainerScale = () => {
+  const neshanMapContainer = getNeshanBrandContainer()
+  neshanMapContainer?.style.setProperty("scale", "" + props.scale)
+}
+
+const updateNeshanBrandContainerPos = () => {
+  const neshanMapContainer = getNeshanBrandContainer()
+  neshanMapContainer?.style.setProperty("bottom", "0.2em")
+  neshanMapContainer?.style.setProperty("left", "0.4em")
+}
 
 // eslint-disable-next-line vue/no-setup-props-destructure
 store.state.viewType = props.viewType
@@ -308,6 +330,7 @@ watch(
     store.actions.map.togglePoiLayer(nv)
   }
 )
+const mapContainer = ref<HTMLDivElement>()
 /**
  * Adds the map from given url to given script
  * @param url - Url of map or another script
@@ -327,7 +350,6 @@ const importMap = (url: string, tagName = "my-openlayer") => {
 const sanitizedCenter = ref<Coordinate | undefined>(
   sanitizeLocation(props.center)
 )
-const mapContainer = ref<HTMLDivElement>()
 /**
  * Starts the map and adds it to element with id='map'
  * Gets the mapKey, zoom, traffic and poi from props.
@@ -430,84 +452,26 @@ onMounted(() => {
   if (popupContainer.value) store.state.popupContainer = popupContainer.value
   if (persistantContainer.value)
     store.state.persistantContainer = persistantContainer.value
-  const scriptTag = importMap(urls.map)
-  if (typeof ol !== 'undefined') {
+  if (typeof ol !== "undefined") {
     onScriptLoad()
   } else {
+    const scriptTag = importMap(urls.map)
     scriptTag.addEventListener("load", () => {
       onScriptLoad()
     })
   }
+  updateNeshanBrandContainerScale()
+  updateNeshanBrandContainerPos()
 })
 </script>
 
 <style lang="scss">
 @import url("@/assets/main.scss");
 @import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
-</style>
-<style lang="scss" scoped>
-.map {
-  height: 100%;
-  direction: rtl;
-}
-
-.map-popup-container {
-  background-color: white;
-  -webkit-box-shadow: 0px 0px 4px 2px #0000008d;
-  box-shadow: 0px 0px 4px 2px #00000046;
-  border-radius: 5px;
-  padding: 2px 5px;
-  font-size: var(--text-sm);
-  &::after {
-    content: " ";
-    position: absolute;
-    top: 100%; /* At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -10px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: rgb(255, 255, 255) transparent transparent transparent;
-  }
-}
-
-.touch .map-popup-container {
-  font-size: var(--text-xs);
-}
-
-.mobile-layers-button {
-  top: 20%;
-  right: 10%;
-  z-index: 2;
-  background: rgba(255, 255, 255, 0.701);
-  border: none;
-  border-radius: 50%;
-  height: 2.3em;
-  width: 2.3em;
-  padding: 0.25em;
-  box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
-  img {
-    width: 100%;
-  }
-  &.floaten {
-    animation-name: float;
-    animation-duration: 0.35s;
-    animation-iteration-count: 1;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-}
-</style>
-
-<style lang="scss">
 .ol-overlay-container {
   pointer-events: none;
 }
+</style>
+<style lang="scss" scoped>
+@import url("./Map.scss");
 </style>

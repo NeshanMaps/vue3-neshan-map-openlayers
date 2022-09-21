@@ -1,11 +1,10 @@
 import { Coordinate } from "openlayers";
-import { Ref } from "vue";
 import { ReverseResult, SearchItem, SelectedMarker } from "./markers.model";
 export declare const markersState: {
     selectedMarker: SelectedMarker;
-    mainMarker: Ref<import("openlayers").layer.Vector>;
-    mainMarkerCoords: Ref<Coordinate>;
+    mainMarker: import("openlayers").layer.Vector | null;
+    mainMarkerCoords: Coordinate | null;
     reverseResult: ReverseResult | null;
-    searchMarkers: Ref<import("openlayers").layer.Vector>;
+    searchMarkers: import("openlayers").layer.Vector | null;
     searchResults: SearchItem[];
 };

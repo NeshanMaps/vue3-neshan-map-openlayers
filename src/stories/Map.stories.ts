@@ -2,7 +2,7 @@ import NeshanMap from "@/components/Map.vue"
 import { Meta, StoryFn } from "@storybook/vue3"
 
 export default {
-  title: "Example/Map",
+  title: "NeshanMaps/Map",
   component: NeshanMap,
   decorators: [
     () => ({ template: '<div style="margin: 3em;"><story/></div>' }),

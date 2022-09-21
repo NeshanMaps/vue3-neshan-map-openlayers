@@ -67,6 +67,7 @@ export declare const storeGen: () => {
         poiLayer: boolean;
         trafficLayer: boolean;
         viewType: import("./map/map.model").ViewType;
+        scale: number;
         drawerActivation: boolean;
         drawerShowDetails: boolean;
         mobileDrawerShowDetails: boolean;
@@ -194,8 +195,8 @@ export declare const storeGen: () => {
             on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
             once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
             un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-        };
-        mainMarkerCoords: [number, number];
+        } | null;
+        mainMarkerCoords: [number, number] | null;
         reverseResult: {
             mapCoords: [number, number];
             city: import("../components/Map.model").NuString;
@@ -247,7 +248,7 @@ export declare const storeGen: () => {
             on: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
             once: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => import("openlayers").GlobalObject | import("openlayers").GlobalObject[];
             un: (type: string | string[], listener: import("openlayers").EventsListenerFunctionType, opt_this?: import("openlayers").GlobalObject | undefined) => void;
-        };
+        } | null;
         searchResults: {
             mapCoords: [number, number];
             iconUrl: string;
