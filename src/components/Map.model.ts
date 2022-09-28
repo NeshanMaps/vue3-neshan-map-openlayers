@@ -99,8 +99,23 @@ export declare type MarkersIconCallback = (
   points: CreateMarkersPointsItem
 ) => CreateIconProps
 
+declare type EmitNames = "on-zoom" | "on-click"
+declare type EventsEmits = {
+  (event: EmitNames, arg: OnClickEmitData[T]) => void
+}
+declare interface OnClickEmitData {
+  'on-click': {
+    event?: ol.MapBrowserEvent
+    marker?: ol.layer.Vector
+    point?: ol.Coordinate
+    apiData?: PrimaryReverseResult
+    map: OlMap
+    selectedFeature?: ol.Feature
+  }
+  'on-zoom': number
+}
 export declare interface EventsMixinProps {
-  emits: (event: "on-zoom" | "on-click", arg: any) => void
+  emits: EventsEmits
   store: Store
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback

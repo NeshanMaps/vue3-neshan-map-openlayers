@@ -138,8 +138,8 @@ export function eventsMixin({
     emits("on-click", {
       event,
       marker: emittingMarker,
-      stdPoint: emittingData,
-      data: emittingStdPoint,
+      point: emittingStdPoint,
+      apiData: emittingData,
       map: store.state.map,
       selectedFeature,
     })
