@@ -84,38 +84,40 @@ export declare type CreateMarkers = (
   options?: CreateMarkersOptions
 ) => CreateMarkersResult
 
-export declare type ResultHoverCallback = (...[arg]: any[]) => any
-export declare type ResultClickCallback = (...[arg]: any[]) => any
-
 export declare interface MarkerHoverCallbackProps {
   changeOverlayStats: ChangeOverlayStats
   map: OlMap | null
   feature: Feature
 }
+
 export declare type MarkerHoverCallback = (
   options: MarkerHoverCallbackProps
 ) => void
+
 export declare type MarkersIconCallback = (
   points: CreateMarkersPointsItem
 ) => CreateIconProps
 
-declare type EmitNames = "on-zoom" | "on-click"
-declare type EventsEmits = {
-  (event: EmitNames, arg: OnClickEmitData[T]) => void
-}
+export declare type ResultHoverCallback = (...[arg]: any[]) => any
+export declare type ResultClickCallback = (...[arg]: any[]) => any
+
+declare type EventsEmits<T extends keyof OnClickEmitData> = (
+  event: T,
+  arg: OnClickEmitData[T]
+) => void
 declare interface OnClickEmitData {
-  'on-click': {
+  "on-click": {
     event?: ol.MapBrowserEvent
     marker?: ol.layer.Vector
     point?: ol.Coordinate
     apiData?: PrimaryReverseResult
-    map: OlMap
+    map: OlMap | null
     selectedFeature?: ol.Feature
   }
-  'on-zoom': number
+  "on-zoom": number
 }
 export declare interface EventsMixinProps {
-  emits: EventsEmits
+  emits: EventsEmits<keyof OnClickEmitData>
   store: Store
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback

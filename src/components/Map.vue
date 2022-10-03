@@ -21,8 +21,8 @@
       :style="persistantPopupContainerStyle"
     ></div>
     <slot
-      v-if="!hideSettings"
-      name="settings"
+      v-if="!hideLayers"
+      name="layers"
       :tiles="filteredTiles"
       :mapType="store.state.mapType"
       :poi="store.state.poiLayer"
@@ -31,15 +31,15 @@
       <DesktopLayers
         v-if="!store.getters.touchPlatform"
         :tiles="filteredTiles"
-        :settingsClass="desktopSettingsClass"
-        :settingsStyle="desktopSettingsStyle"
+        :layersClass="desktopLayersClass"
+        :layersStyle="desktopLayersStyle"
       />
       <MobileLayers
         v-else
         v-model="mobileDrawerModel"
         :tiles="filteredTiles"
-        :settingsClass="mobileSettingsClass"
-        :settingsStyle="mobileSettingsStyle"
+        :layersClass="mobileLayersClass"
+        :layersStyle="mobileLayersStyle"
       ></MobileLayers>
       <button
         v-if="store.getters.touchPlatform"
@@ -97,8 +97,8 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import DesktopLayers from "./settings/DesktopLayers.vue"
-import MobileLayers from "./settings/MobileLayers.vue"
+import DesktopLayers from "./layers/DesktopLayers.vue"
+import MobileLayers from "./layers/MobileLayers.vue"
 import Drawer from "./drawer/DrawerComp.vue"
 import MobileDetailsSection from "./MobileDetailsSection.vue"
 
@@ -117,6 +117,8 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  reverseUrl: String,
+  searchUrl: String,
   /**
    * مرکز نقشه در هنگام شروع
    */
@@ -160,28 +162,28 @@ const props = defineProps({
     default: "neshan",
   },
   /**
-   * آرایه‌ای از انواع نقشه‌هایی که می‌خواهید در تنظیمات نمایش داده شود.
+   * آرایه‌ای از انواع نقشه‌هایی که می‌خواهید در لایه‌ها نمایش داده شود.
    */
   mapTypes: {
     type: Array as PropType<MapType[]>,
     default: tiles.map((tile) => tile.title),
   },
   /**
-   * تغییر کلاس بخش تنظیمات برای حالت دستکتاپ
+   * تغییر کلاس بخش لایه‌ها برای حالت دستکتاپ
    */
-  desktopSettingsClass: [String, Array, Object],
+  desktopLayersClass: [String, Array, Object],
   /**
-   * تغییر کلاس بخش تنظیمات برای حالت موبایل
+   * تغییر کلاس بخش لایه‌ها برای حالت موبایل
    */
-  mobileSettingsClass: [String, Array, Object],
+  mobileLayersClass: [String, Array, Object],
   /**
-   * تغییر استایل بخش تنظیمات برای حالت دستکتاپ
+   * تغییر استایل بخش لایه‌ها برای حالت دستکتاپ
    */
-  desktopSettingsStyle: Object,
+  desktopLayersStyle: Object,
   /**
-   * تغییر استایل بخش تنظیمات برای حالت موبایل
+   * تغییر استایل بخش لایه‌ها برای حالت موبایل
    */
-  mobileSettingsStyle: Object,
+  mobileLayersStyle: Object,
   /**
    * تغییر کلاس پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
    */
@@ -199,9 +201,9 @@ const props = defineProps({
    */
   persistantPopupContainerStyle: Object,
   /**
-   * عدم نمایش تنظیمات
+   * عدم نمایش لایه‌ها
    */
-  hideSettings: Boolean,
+  hideLayers: Boolean,
   /**
    * عدم نمایش بخش سرج و نتایج
    */
@@ -251,7 +253,6 @@ const props = defineProps({
 const store = storeGen()
 provide("store", store)
 
-store.state.api = createApi(props.serviceKey)
 /**
  * Sets the given token for api
  * @param token
@@ -259,6 +260,7 @@ store.state.api = createApi(props.serviceKey)
 const setToken = (token: string) => {
   store.state.api = createApi(token)
 }
+setToken(props.serviceKey)
 /**
  * Whenever service token changes,
  * applies it to api

@@ -202,14 +202,16 @@ const styleFuncGen = (
     if (hidePopup) {
       style.getText().setText(feature.get("text"))
     }
-    const iconProps = feature.get("iconProps")
-    if (iconProps) {
-      style.setImage(createIcon(iconProps))
-    } else {
-      style.setImage(
-        createIcon({ src: feature.get("iconUrl"), iconScale, anchor })
-      )
+    const iconProps: CreateIconProps = feature.get("iconProps")
+    const rawCreateIconProps = {
+      src: feature.get("iconUrl"),
+      iconScale,
+      anchor,
     }
+    const createIconProps = iconProps
+      ? { ...rawCreateIconProps, ...iconProps }
+      : rawCreateIconProps
+    style.setImage(createIcon(createIconProps))
     return style
   }
 }

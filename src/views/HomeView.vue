@@ -8,7 +8,6 @@
       @on-click="handleClick"
       poi
       traffic
-      :scale="0.75"
     />
   </div>
 </template>
