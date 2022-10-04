@@ -414,7 +414,7 @@ watch(
   }
 )
 
-const handleSearch = ({ term = "", coords }: HandleSearchProps) => {
+const handleSearch = ({ term, coords }: HandleSearchProps) => {
   const reliableCoords =
     coords || store.state.mainMarkerCoords || sanitizedCenter.value
   if (!reliableCoords || !store.state.api) return
@@ -433,11 +433,10 @@ const handleMobileDrawerClick = (event: MouseEvent) => {
   mobileDrawerModel.value = true
 }
 
-/**
- * Makes it possible to have access to search function from outside of the component
- */
 defineExpose({
+  state: store.state,
   search: handleSearch,
+  reverse: store.actions.markers.reverseOnPointو
 })
 
 const onScriptLoad = async () => {

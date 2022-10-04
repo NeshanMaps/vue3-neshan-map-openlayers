@@ -60,7 +60,7 @@ export declare interface Api {
 }
 
 export declare interface HandleSearchProps {
-  term?: string
+  term: string
   coords?: Coordinate
 }
 
@@ -101,11 +101,11 @@ export declare type MarkersIconCallback = (
 export declare type ResultHoverCallback = (...[arg]: any[]) => any
 export declare type ResultClickCallback = (...[arg]: any[]) => any
 
-declare type EventsEmits<T extends keyof OnClickEmitData> = (
+declare type EventsEmits<T extends keyof EmitData> = (
   event: T,
-  arg: OnClickEmitData[T]
+  arg: EmitData[T]
 ) => void
-declare interface OnClickEmitData {
+declare interface EmitData {
   "on-click": {
     event?: ol.MapBrowserEvent
     marker?: ol.layer.Vector
@@ -117,7 +117,7 @@ declare interface OnClickEmitData {
   "on-zoom": number
 }
 export declare interface EventsMixinProps {
-  emits: EventsEmits<keyof OnClickEmitData>
+  emits: EventsEmits<keyof EmitData>
   store: Store
   resultHoverCallback?: ResultHoverCallback
   resultClickCallback?: ResultClickCallback
