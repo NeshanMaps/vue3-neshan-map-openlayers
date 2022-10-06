@@ -48,6 +48,11 @@ export declare interface PrimaryReverseResult {
 export declare interface ReverseResult extends PrimaryReverseResult {
   mapCoords: Coordinate
 }
+export declare interface ReverseOnPointOptions {
+  useMarker?: boolean
+  usePopup?: boolean
+  customText?: string
+}
 
 export declare interface SearchProps {
   term: string

@@ -109,7 +109,7 @@ declare interface EmitData {
   "on-click": {
     event?: ol.MapBrowserEvent
     marker?: ol.layer.Vector
-    point?: ol.Coordinate
+    coords?: ol.Coordinate
     apiData?: PrimaryReverseResult
     map: OlMap | null
     selectedFeature?: ol.Feature

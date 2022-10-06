@@ -4,6 +4,7 @@ import {
   GetClusterByCoords,
   GetMarkerByCoords,
   GetSearchResultByFeature,
+  ReverseOnPointOptions,
   ReverseResult,
   SearchItem,
   SearchOptions,
@@ -22,7 +23,6 @@ import {
   transformCoords,
 } from "@/utils"
 import { Coordinate, Extent, Feature, MapBrowserEvent } from "openlayers"
-import { ReverseOnPointOptions } from "../../mixins/events.mixin.model"
 import { markersOffset, markerUrls, zoomConstants } from "@/parameters"
 import { Context } from "../store.model"
 
@@ -300,22 +300,33 @@ const getFeatureFromEvent = (context: Context, evt: MapBrowserEvent) => {
  * Places a marker on a point on ol map
  * Sends a reverse request on that position
  * and adds a title based on returned value
- * @param point - OL Coords
- * @param putMarker - Whether to put marker on locating area
+ * @param coords - OL Coords
+ * @param options.useMarker - Whether to put marker on locating area or not
  * @returns marker, standard coords of point and api result data
  */
 const reverseOnPoint = async (
   context: Context,
-  point: Coordinate,
+  coords: Coordinate,
   { useMarker = true, usePopup = true, customText }: ReverseOnPointOptions = {}
 ) => {
   try {
-    const stdPoint = transformCoords(point)
+    context.state.reverseLoading = true
+    const mapCoords = transformCoords(coords, "EPSG:4326", "EPSG:3857")
+    if (context.getters.touchPlatform)
+      context.state.mobileDrawerShowDetails = true
+    else context.state.drawerActivation = true
     let marker: VectorLayer | null = null
     if (useMarker) {
       const { layer } = context.actions.markers.addMarkers(
         context,
-        [{ coords: point, text: "", iconScale: 0.1, iconUrl: markerUrls.main }],
+        [
+          {
+            coords: mapCoords,
+            text: "",
+            iconScale: 0.1,
+            iconUrl: markerUrls.main,
+          },
+        ],
         {
           props: {
             mainMarker: true,
@@ -324,15 +335,15 @@ const reverseOnPoint = async (
           anchor: [0.5, 1],
         }
       )
-      context.state.mainMarkerCoords = stdPoint
+      context.state.mainMarkerCoords = coords
       context.state.mainMarker = layer
       marker = layer
     }
     if (!context.state.api) throw "No reverse api"
-    const data = await context.state.api.REVERSE(...stdPoint)
+    const data = await context.state.api.REVERSE(...coords)
     const extendedData = {
       ...data,
-      mapCoords: stdPoint,
+      mapCoords: coords,
     }
     context.state.selectedMarker = extendedData
     context.state.reverseResult = extendedData
@@ -342,14 +353,16 @@ const reverseOnPoint = async (
     if (usePopup) {
       context.actions.overlays.changeOverlayStats(
         context,
-        { coords: point, text, offset: markersOffset.high },
+        { coords: mapCoords, text, offset: markersOffset.high },
         "persistant"
       )
     }
-    return { marker, stdPoint, data }
+    return { marker, coords, data }
   } catch (error) {
     console.log(error)
     return {}
+  } finally {
+    context.state.reverseLoading = false
   }
 }
 

@@ -436,7 +436,7 @@ const handleMobileDrawerClick = (event: MouseEvent) => {
 defineExpose({
   state: store.state,
   search: handleSearch,
-  reverse: store.actions.markers.reverseOnPointو
+  reverse: store.actions.markers.reverseOnPoint
 })
 
 const onScriptLoad = async () => {

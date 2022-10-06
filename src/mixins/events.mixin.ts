@@ -5,6 +5,7 @@ import {
   getCoordsAndTextFromFeature,
   getClusterExtent,
   getCoordsFromFeature,
+  transformCoords,
 } from "../utils"
 import { markersOffset } from "@/parameters"
 
@@ -109,7 +110,7 @@ export function eventsMixin({
   const handleClickEvent = async (event: MapBrowserEvent) => {
     let emittingMarker
     let emittingData
-    let emittingStdPoint
+    const coords = transformCoords(event.coordinate)
     const selectedFeature = store.actions.markers.getFeatureFromEvent(event)
     const isMainMarker: boolean = selectedFeature?.getProperties().mainMarker
     if (!isMainMarker && store.state.mainMarker) {
@@ -120,25 +121,17 @@ export function eventsMixin({
       if (zoomOnMarkerClick) {
         handleFeatureClick(selectedFeature)
       }
-    } else {
-      if (store.getters.touchPlatform)
-        store.state.mobileDrawerShowDetails = true
-      else store.state.drawerActivation = true
-      if (reverseOnClick) {
-        store.state.reverseLoading = true
-        const result = await store.actions.markers.reverseOnPoint(
-          event.coordinate
-        )
-        emittingMarker = result.marker
-        emittingData = result.data
-        emittingStdPoint = result.stdPoint
-        store.state.reverseLoading = false
-      }
+    } else if (reverseOnClick) {
+      const result = await store.actions.markers.reverseOnPoint(
+        coords
+      )
+      emittingMarker = result.marker
+      emittingData = result.data
     }
     emits("on-click", {
       event,
       marker: emittingMarker,
-      point: emittingStdPoint,
+      coords,
       apiData: emittingData,
       map: store.state.map,
       selectedFeature,
