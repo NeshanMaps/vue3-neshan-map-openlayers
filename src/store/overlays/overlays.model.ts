@@ -9,7 +9,7 @@ export declare type Overlay = Ol.Overlay
 export declare interface OverlayMixinProps {
   map: OlMap | null
   popupContainer: Ref<HTMLElement | null>
-  persistantContainer: Ref<HTMLElement | null>
+  persistentContainer: Ref<HTMLElement | null>
 }
 
 export declare interface ChangeOverlayStatsProps {
@@ -20,5 +20,5 @@ export declare interface ChangeOverlayStatsProps {
 export declare type ChangeOverlayStats = (
   context: Context,
   options?: ChangeOverlayStatsProps,
-  target?: "temporary" | "persistant"
+  target?: "temporary" | "persistent"
 ) => void

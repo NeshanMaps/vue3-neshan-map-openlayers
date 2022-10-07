@@ -23,7 +23,7 @@
     </template>
     <template v-else>
       <ResultItem
-        v-for="item in results"
+        v-for="item in items"
         :key="'' + item.location.x + item.location.y"
         :item="item"
         @mouseenter="handleHoverEmit(item)"
@@ -43,7 +43,7 @@ import { Store } from "@/store/store.model"
 const props = defineProps({
   resultBoxClass: Array,
   resultBoxStyle: Object,
-  results: {
+  items: {
     type: Array as PropType<SearchItem[]>,
     default: () => [],
   },

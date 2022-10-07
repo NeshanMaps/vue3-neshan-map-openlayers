@@ -9,25 +9,25 @@ declare const ol: any
  * Sets up overlay on map
  */
 const setupOverlays = (context: Context) => {
-  if (!context.state.popupContainer || !context.state.persistantContainer)
+  if (!context.state.popupContainer || !context.state.persistentContainer)
     return
   const overlay = createOverlay(context, context.state.popupContainer)
   context.state.overlay = overlay
-  const persistantOverlay = createOverlay(
+  const persistentOverlay = createOverlay(
     context,
-    context.state.persistantContainer,
+    context.state.persistentContainer,
     true
   )
-  context.state.persistantOverlay = persistantOverlay
+  context.state.persistentOverlay = persistentOverlay
   context.state.map?.addOverlay(overlay)
-  context.state.map?.addOverlay(persistantOverlay)
+  context.state.map?.addOverlay(persistentOverlay)
 }
 
 /**
  * Changes overlay coords and text
  * @param stats.coords
  * @param stats.text
- * @param target - Whether to manipulated temporary or persistant overlay stats
+ * @param target - Whether to manipulated temporary or persistent overlay stats
  */
 const changeOverlayStats: ChangeOverlayStats = (
   context,
@@ -37,11 +37,11 @@ const changeOverlayStats: ChangeOverlayStats = (
   const targetContainer =
     target === "temporary"
       ? context.state.popupContainer
-      : context.state.persistantContainer
+      : context.state.persistentContainer
   const targetOverlay =
     target === "temporary"
       ? context.state.overlay
-      : context.state.persistantOverlay
+      : context.state.persistentOverlay
   if (!targetContainer) return
   if (stats) {
     const { coords, text, offset } = stats
@@ -57,13 +57,13 @@ const changeOverlayStats: ChangeOverlayStats = (
 
 /**
  * Creates an ol overlay on container element
- * @param persistant - Whether it should not disappear on mouse leaving
+ * @param persistent - Whether it should not disappear on mouse leaving
  * @returns overlay
  */
 const createOverlay = (
   context: Context,
   container: HTMLDivElement,
-  persistant = false
+  persistent = false
 ) => {
   const overlay: Overlay = new ol.Overlay({
     element: container,
@@ -71,7 +71,7 @@ const createOverlay = (
     positioning: "top-center",
     offset: markersOffset.short,
   })
-  overlay.set("persistant", persistant) // An attr to know that we should remove it on following hovers
+  overlay.set("persistent", persistent) // An attr to know that we should remove it on following hovers
   return overlay
 }
 

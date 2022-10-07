@@ -116,7 +116,7 @@ export function eventsMixin({
     if (!isMainMarker && store.state.mainMarker) {
       store.state.map?.removeLayer(store.state.mainMarker)
     }
-    store.actions.overlays.changeOverlayStats(undefined, "persistant")
+    store.actions.overlays.changeOverlayStats(undefined, "persistent")
     if (selectedFeature) {
       if (zoomOnMarkerClick) {
         handleFeatureClick(selectedFeature)

@@ -212,7 +212,7 @@ const zoomToCoords = (
 
 /**
  * Zooms on given feature and shows its details on detail section
- * Adds a persistant overlay on it
+ * Adds a persistent overlay on it
  * @param feature
  * @param options
  */
@@ -249,7 +249,7 @@ const selectFeauture = (
           text,
           offset: isMainMarker ? markersOffset.high : markersOffset.short,
         },
-        "persistant"
+        "persistent"
       )
     }, options?.delay || 500)
   } else {
@@ -260,7 +260,7 @@ const selectFeauture = (
         text,
         offset: isMainMarker ? markersOffset.high : markersOffset.short,
       },
-      "persistant"
+      "persistent"
     )
   }
   const foundResult = isMainMarker
@@ -275,11 +275,11 @@ const selectFeauture = (
 }
 
 /**
- * Removes persistant overlay and marker layer from the map.
+ * Removes persistent overlay and marker layer from the map.
  * Deactivates drawers and clears selected marker
  */
 const deselectAll = (context: Context) => {
-  context.actions.overlays.changeOverlayStats(context, undefined, "persistant")
+  context.actions.overlays.changeOverlayStats(context, undefined, "persistent")
   if (context.state.mainMarker)
     context.state.map?.removeLayer(context.state.mainMarker)
   context.state.selectedMarker = null
@@ -354,7 +354,7 @@ const reverseOnPoint = async (
       context.actions.overlays.changeOverlayStats(
         context,
         { coords: mapCoords, text, offset: markersOffset.high },
-        "persistant"
+        "persistent"
       )
     }
     return { marker, coords, data }
@@ -398,7 +398,7 @@ const search = async (
     context.actions.overlays.changeOverlayStats(
       context,
       undefined,
-      "persistant"
+      "persistent"
     )
     context.state.searchMarkers = layer
     // Apparently it takse some async time to cluster the source
@@ -413,6 +413,10 @@ const search = async (
         context.actions.markers.zoomToLayer(context, layer, { duration: 1500 })
       }
     }, 200)
+    return {
+      markers: layer,
+      data: result
+    }
   } catch (error) {
     console.log(error)
   } finally {

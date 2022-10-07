@@ -6,7 +6,6 @@ import { Feature, style, Coordinate } from "openlayers"
 import { ChangeOverlayStats } from "../store/overlays/overlays.model"
 import {
   PrimaryReverseResult,
-  SearchResult,
 } from "../store/markers/markers.model"
 import { MapType, OlMap } from "../store/map/map.model"
 import { Store } from "@/store/store.model"
@@ -52,11 +51,6 @@ export declare interface CreateLayerProps {
   target?: string | Element
   style?: Style | Ol.StyleFunction
   source?: Source
-}
-
-export declare interface Api {
-  REVERSE: (lng: number, lat: number) => Promise<PrimaryReverseResult>
-  SEARCH: (term: string, coords: Coordinate) => Promise<SearchResult>
 }
 
 export declare interface HandleSearchProps {

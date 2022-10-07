@@ -4,7 +4,7 @@
     ref="mapContainer"
     class="map pos-relative o-hidden"
     :class="{
-      touch: store.getters.touchPlatform,
+      touch: store.getters.touchPlatform
     }"
     :style="`font-size: ${fontSize}`"
   >
@@ -15,10 +15,10 @@
       :style="temporaryPopupContainerStyle"
     ></div>
     <div
-      ref="persistantContainer"
+      ref="persistentContainer"
       class="map-popup-container"
-      :class="persistantPopupContainerClass"
-      :style="persistantPopupContainerStyle"
+      :class="persistentPopupContainerClass"
+      :style="persistentPopupContainerStyle"
     ></div>
     <slot
       v-if="!hideLayers"
@@ -51,7 +51,7 @@
     </slot>
     <slot v-if="!hideSearchContainer" name="search-container">
       <Drawer
-        :results="store.state.searchResults"
+        :items="store.state.searchResults"
         @search="handleSearch"
         @result-click="handleResultClick"
         @result-hover="handleResultHover"
@@ -64,12 +64,12 @@
   </div>
 </template>
 <script lang="ts">
-declare const ol: any
-import { zoomConstants, tiles, urls } from "../parameters"
-import { sanitizeLocation, getLocation } from "../utils"
-import { eventsMixin } from "../mixins"
-import { createApi } from "../apis"
-import { storeGen } from "../store"
+declare const ol: any;
+import { zoomConstants, tiles, urls } from "../parameters";
+import { sanitizeLocation, getLocation } from "../utils";
+import { eventsMixin } from "../mixins";
+import { createApi } from "../apis";
+import { storeGen } from "../store";
 import {
   defineProps,
   onMounted,
@@ -79,28 +79,29 @@ import {
   defineExpose,
   defineEmits,
   reactive,
-  provide,
-} from "vue"
+  provide
+} from "vue";
 import {
   CoordsObj,
   ResultHoverCallback,
   ResultClickCallback,
   MarkersIconCallback,
   MarkerHoverCallback,
-  HandleSearchProps,
-} from "./Map.model"
-import { Coordinate } from "openlayers"
-import { SearchOptions } from "../store/markers/markers.model"
-import { MapType, OlMap, ViewType } from "../store/map/map.model"
+  HandleSearchProps
+} from "./Map.model";
+import { Coordinate } from "openlayers";
+import { SearchOptions } from "../store/markers/markers.model";
+import { MapType, OlMap, ViewType } from "../store/map/map.model";
+import { CreateApiOptions } from "@/apis/apis.model";
 export default {
-  name: "NeshanMap",
-}
+  name: "NeshanMap"
+};
 </script>
 <script setup lang="ts">
-import DesktopLayers from "./layers/DesktopLayers.vue"
-import MobileLayers from "./layers/MobileLayers.vue"
-import Drawer from "./drawer/DrawerComp.vue"
-import MobileDetailsSection from "./MobileDetailsSection.vue"
+import DesktopLayers from "./layers/DesktopLayers.vue";
+import MobileLayers from "./layers/MobileLayers.vue";
+import Drawer from "./drawer/DrawerComp.vue";
+import MobileDetailsSection from "./MobileDetailsSection.vue";
 
 const props = defineProps({
   /**
@@ -108,14 +109,14 @@ const props = defineProps({
    */
   mapKey: {
     type: String,
-    required: true,
+    required: true
   },
   /**
    * کلید سرویس‌ها برای تبدیل نقطه به آدرس (Reverse) و جستجو (search)
    */
   serviceKey: {
     type: String,
-    default: "",
+    default: ""
   },
   reverseUrl: String,
   searchUrl: String,
@@ -124,28 +125,28 @@ const props = defineProps({
    */
   center: {
     type: Object as PropType<CoordsObj>,
-    default: null,
+    default: null
   },
   /**
    * میزان زوم نقشه در هنگام شروع
    */
   zoom: {
     type: Number,
-    default: zoomConstants.initialZoom,
+    default: zoomConstants.initialZoom
   },
   /**
    * نمایش یا عدم نمایش نقاط
    */
   poi: {
     type: Boolean,
-    default: true,
+    default: true
   },
   /**
    * نمایش یا عدم نمایش خطوط ترافیک
    */
   traffic: {
     type: Boolean,
-    default: true,
+    default: true
   },
   /**
    * نوع نقشه در هنگام شروع
@@ -159,14 +160,14 @@ const props = defineProps({
    */
   defaultType: {
     type: String as PropType<MapType>,
-    default: "neshan",
+    default: "neshan"
   },
   /**
    * آرایه‌ای از انواع نقشه‌هایی که می‌خواهید در لایه‌ها نمایش داده شود.
    */
   mapTypes: {
     type: Array as PropType<MapType[]>,
-    default: tiles.map((tile) => tile.title),
+    default: tiles.map((tile) => tile.title)
   },
   /**
    * تغییر کلاس بخش لایه‌ها برای حالت دستکتاپ
@@ -191,7 +192,7 @@ const props = defineProps({
   /**
    * تغییر کلاس پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
    */
-  persistantPopupContainerClass: [String, Array, Object],
+  persistentPopupContainerClass: [String, Array, Object],
   /**
    * تغییر استایل پاپ آپ موقت (هنگامی که کاربر با موس هاور می‌کند)
    */
@@ -199,7 +200,7 @@ const props = defineProps({
   /**
    * تغییر استایل پاپ آپ دائم (هنگامی که کاربر کلیک می‌کند)
    */
-  persistantPopupContainerStyle: Object,
+  persistentPopupContainerStyle: Object,
   /**
    * عدم نمایش لایه‌ها
    */
@@ -217,122 +218,130 @@ const props = defineProps({
   markerHoverCallback: Function as PropType<MarkerHoverCallback>,
   popupOnMarkerHover: {
     type: Boolean,
-    default: true,
+    default: true
   },
   popupOnResultHover: {
     type: Boolean,
-    default: true,
+    default: true
   },
   zoomOnMarkerClick: {
     type: Boolean,
-    default: true,
+    default: true
   },
   zoomOnResultClick: {
     type: Boolean,
-    default: true,
+    default: true
   },
   cluster: {
     type: Boolean,
-    default: true,
+    default: true
   },
   clusterThreshold: {
     type: Number,
-    default: 18,
+    default: 18
   },
   reverseOnClick: {
     type: Boolean,
-    default: true,
+    default: true
   },
   scale: {
     type: Number,
-    default: 1,
+    default: 1
   },
-  viewType: String as PropType<ViewType>,
-})
+  viewType: String as PropType<ViewType>
+});
 
-const store = storeGen()
-provide("store", store)
+const store = storeGen();
+provide("store", store);
 
 /**
  * Sets the given token for api
  * @param token
  */
-const setToken = (token: string) => {
-  store.state.api = createApi(token)
-}
-setToken(props.serviceKey)
+const setToken = (token: string, options?: CreateApiOptions) => {
+  store.state.api = createApi(token, options);
+};
+setToken(props.serviceKey, {
+  searchUrl: props.searchUrl,
+  reverseUrl: props.reverseUrl
+});
 /**
  * Whenever service token changes,
  * applies it to api
  */
 watch(
-  () => props.serviceKey,
+  () => [props.serviceKey, props.searchUrl, props.reverseUrl],
   (nv) => {
-    setToken(nv)
+    setToken(nv[0] as string, {
+      searchUrl: nv[1],
+      reverseUrl: nv[2]
+    });
   }
-)
-const fontSize = ref(props.scale + "rem")
+);
+const fontSize = ref(props.scale + "rem");
 // eslint-disable-next-line vue/no-setup-props-destructure
-store.state.scale = props.scale
+store.state.scale = props.scale;
 watch(
   () => props.scale,
   (nv) => {
-    fontSize.value = nv + "rem"
-    store.state.scale = nv
-    updateNeshanBrandContainerScale()
+    fontSize.value = nv + "rem";
+    store.state.scale = nv;
+    updateNeshanBrandContainerScale();
   }
-)
+);
 
-let neshanBrandContainer: HTMLDivElement
+let neshanBrandContainer: HTMLDivElement;
 const getNeshanBrandContainer = () => {
-  if (neshanBrandContainer) return neshanBrandContainer
+  if (neshanBrandContainer) return neshanBrandContainer;
   const allDivs = mapContainer.value
     ?.querySelector(".ol-viewport")
-    ?.querySelectorAll("div:last-child")
-  if (!allDivs) return
-  neshanBrandContainer = Array.from(allDivs)[allDivs.length - 1] as HTMLDivElement
-  return neshanBrandContainer
-}
+    ?.querySelectorAll("div:last-child");
+  if (!allDivs) return;
+  neshanBrandContainer = Array.from(allDivs)[
+    allDivs.length - 1
+  ] as HTMLDivElement;
+  return neshanBrandContainer;
+};
 
 const updateNeshanBrandContainerScale = () => {
-  const neshanMapContainer = getNeshanBrandContainer()
-  neshanMapContainer?.style.setProperty("scale", "" + props.scale)
-}
+  const neshanMapContainer = getNeshanBrandContainer();
+  neshanMapContainer?.style.setProperty("scale", "" + props.scale);
+};
 
 const updateNeshanBrandContainerPos = () => {
-  const neshanMapContainer = getNeshanBrandContainer()
-  neshanMapContainer?.style.setProperty("bottom", "0.2em")
-  neshanMapContainer?.style.setProperty("left", "0.4em")
-}
+  const neshanMapContainer = getNeshanBrandContainer();
+  neshanMapContainer?.style.setProperty("bottom", "0.2em");
+  neshanMapContainer?.style.setProperty("left", "0.4em");
+};
 
 // eslint-disable-next-line vue/no-setup-props-destructure
-store.state.viewType = props.viewType
+store.state.viewType = props.viewType;
 watch(
   () => props.viewType,
   (nv) => {
-    store.state.viewType = nv
+    store.state.viewType = nv;
   }
-)
+);
 
-const mobileDrawerModel = ref(false)
+const mobileDrawerModel = ref(false);
 const filteredTiles = reactive(
   tiles.filter((tile) => props.mapTypes.includes(tile.title))
-)
-store.actions.map.toggleTraffic(props.traffic)
-store.actions.map.togglePoi(props.poi)
+);
+store.actions.map.toggleTraffic(props.traffic);
+store.actions.map.togglePoi(props.poi);
 watch(
   () => props.traffic,
   (nv) => {
-    store.actions.map.toggleTrafficLayer(nv)
+    store.actions.map.toggleTrafficLayer(nv);
   }
-)
+);
 watch(
   () => props.poi,
   (nv) => {
-    store.actions.map.togglePoiLayer(nv)
+    store.actions.map.togglePoiLayer(nv);
   }
-)
-const mapContainer = ref<HTMLDivElement>()
+);
+const mapContainer = ref<HTMLDivElement>();
 /**
  * Adds the map from given url to given script
  * @param url - Url of map or another script
@@ -340,18 +349,18 @@ const mapContainer = ref<HTMLDivElement>()
  * @returns Created tag
  */
 const importMap = (url: string, tagName = "my-openlayer") => {
-  const foundDoc = document.getElementById(tagName)
-  if (foundDoc) return foundDoc // was already loaded
-  const scriptTag = document.createElement("script")
-  scriptTag.src = url
-  scriptTag.id = tagName
-  document.getElementsByTagName("head")[0].appendChild(scriptTag)
-  return scriptTag
-}
+  const foundDoc = document.getElementById(tagName);
+  if (foundDoc) return foundDoc; // was already loaded
+  const scriptTag = document.createElement("script");
+  scriptTag.src = url;
+  scriptTag.id = tagName;
+  document.getElementsByTagName("head")[0].appendChild(scriptTag);
+  return scriptTag;
+};
 
 const sanitizedCenter = ref<Coordinate | undefined>(
   sanitizeLocation(props.center)
-)
+);
 /**
  * Starts the map and adds it to element with id='map'
  * Gets the mapKey, zoom, traffic and poi from props.
@@ -359,8 +368,8 @@ const sanitizedCenter = ref<Coordinate | undefined>(
  * or Neshan building location.
  */
 const startMap = async () => {
-  if (!mapContainer.value) return
-  const coords = sanitizedCenter.value || (await getLocation())
+  if (!mapContainer.value) return;
+  const coords = sanitizedCenter.value || (await getLocation());
   const newMap: OlMap = new ol.Map({
     target: mapContainer.value,
     key: props.mapKey,
@@ -370,20 +379,20 @@ const startMap = async () => {
     view: new ol.View({
       center: ol.proj.fromLonLat(coords),
       zoom: props.zoom,
-      smoothExtentConstraint: true,
+      smoothExtentConstraint: true
       // projection: 'EPSG:4326' //Default was EPSG:3857
     }),
-    controls: [],
-  })
-  store.state.map = newMap
+    controls: []
+  });
+  store.state.map = newMap;
   // Currently there is a problem with assigning different map type on initilization
-  store.state.mapType = props.defaultType
-  store.actions.map.shakeMap(300)
-}
+  store.state.mapType = props.defaultType;
+  store.actions.map.shakeMap(300);
+};
 
-const popupContainer = ref<HTMLDivElement>()
-const persistantContainer = ref<HTMLDivElement>()
-const eventsEmits = defineEmits(["on-zoom", "on-click"])
+const popupContainer = ref<HTMLDivElement>();
+const persistentContainer = ref<HTMLDivElement>();
+const eventsEmits = defineEmits(["on-zoom", "on-click"]);
 const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   emits: eventsEmits,
   store,
@@ -394,8 +403,8 @@ const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   zoomOnResultClick: props.zoomOnResultClick,
   popupOnMarkerHover: props.popupOnMarkerHover,
   popupOnResultHover: props.popupOnResultHover,
-  reverseOnClick: props.reverseOnClick,
-})
+  reverseOnClick: props.reverseOnClick
+});
 
 /**
  * Changes cluster source to marker source on cluster threshold passing and vice versa
@@ -404,66 +413,69 @@ watch(
   () => store.state.zoom,
   (nv, ov) => {
     if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
-      store.actions.markers.toggleClusterSource(store.state.searchMarkers, true)
+      store.actions.markers.toggleClusterSource(
+        store.state.searchMarkers,
+        true
+      );
     } else if (nv < props.clusterThreshold && ov >= props.clusterThreshold) {
       store.actions.markers.toggleClusterSource(
         store.state.searchMarkers,
         false
-      )
+      );
     }
   }
-)
+);
 
 const handleSearch = ({ term, coords }: HandleSearchProps) => {
   const reliableCoords =
-    coords || store.state.mainMarkerCoords || sanitizedCenter.value
-  if (!reliableCoords || !store.state.api) return
+    coords || store.state.mainMarkerCoords || sanitizedCenter.value;
+  if (!reliableCoords || !store.state.api) return;
   const options: SearchOptions = {
     cluster: props.cluster,
     clusterThreshold: props.clusterThreshold,
-    markersIconCallback: props.markersIconCallback,
-  }
-  store.actions.markers.search({ term, coords: reliableCoords }, options)
-}
+    markersIconCallback: props.markersIconCallback
+  };
+  store.actions.markers.search({ term, coords: reliableCoords }, options);
+};
 
 const handleMobileDrawerClick = (event: MouseEvent) => {
-  const target: any = event.composedPath()[1]
-  target.classList.add("floaten")
-  setTimeout(() => target.classList.remove("floaten"), 350)
-  mobileDrawerModel.value = true
-}
+  const target: any = event.composedPath()[1];
+  target.classList.add("floaten");
+  setTimeout(() => target.classList.remove("floaten"), 350);
+  mobileDrawerModel.value = true;
+};
 
 defineExpose({
   state: store.state,
   search: handleSearch,
   reverse: store.actions.markers.reverseOnPoint
-})
+});
 
 const onScriptLoad = async () => {
-  await startMap()
-  setupMapEvents()
-  store.actions.dimensions.updateMapDimensions()
-}
-store.actions.dimensions.updateBreakpoints()
+  await startMap();
+  setupMapEvents();
+  store.actions.dimensions.updateMapDimensions();
+};
+store.actions.dimensions.updateBreakpoints();
 /**
  * Setups Map, adds serviceToken to api
  */
 onMounted(() => {
-  if (mapContainer.value) store.state.mapContainer = mapContainer.value
-  if (popupContainer.value) store.state.popupContainer = popupContainer.value
-  if (persistantContainer.value)
-    store.state.persistantContainer = persistantContainer.value
+  if (mapContainer.value) store.state.mapContainer = mapContainer.value;
+  if (popupContainer.value) store.state.popupContainer = popupContainer.value;
+  if (persistentContainer.value)
+    store.state.persistentContainer = persistentContainer.value;
   if (typeof ol !== "undefined") {
-    onScriptLoad()
+    onScriptLoad();
   } else {
-    const scriptTag = importMap(urls.map)
+    const scriptTag = importMap(urls.map);
     scriptTag.addEventListener("load", () => {
-      onScriptLoad()
-    })
+      onScriptLoad();
+    });
   }
-  updateNeshanBrandContainerScale()
-  updateNeshanBrandContainerPos()
-})
+  updateNeshanBrandContainerScale();
+  updateNeshanBrandContainerPos();
+});
 </script>
 
 <style lang="scss">

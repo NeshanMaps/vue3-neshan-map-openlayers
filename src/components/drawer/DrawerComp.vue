@@ -17,7 +17,7 @@
       @submit="emitSearch({ term: $event })"
     ></SearchSection>
     <ResultsSection
-      :results="results"
+      :items="items"
       @result-click="emitResultClick"
       @result-hover="emitResultHover"
     ></ResultsSection>
@@ -33,7 +33,7 @@ import { SearchItem } from "../../store/markers/markers.model"
 import { Store } from "@/store/store.model"
 
 const props = defineProps({
-  results: Array as PropType<SearchItem[]>,
+  items: Array as PropType<SearchItem[]>,
   searchCoords: {
     type: Object as PropType<CoordsObj>,
     default: () => createCoordsObject(),
