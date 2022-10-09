@@ -325,11 +325,11 @@ const reverseOnPoint = async (
             text: "",
             iconScale: 0.1,
             iconUrl: markerUrls.main,
+            isReverseMarker: true
           },
         ],
         {
           props: {
-            mainMarker: true,
             isCluster: false,
           },
           anchor: [0.5, 1],

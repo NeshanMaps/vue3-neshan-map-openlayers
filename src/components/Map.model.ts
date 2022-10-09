@@ -50,7 +50,7 @@ export declare interface CreateStyleProps {
 export declare interface CreateLayerProps {
   target?: string | Element
   style?: Style | Ol.StyleFunction
-  source?: Source
+  source: Ol.source.Vector
 }
 
 export declare interface HandleSearchProps {
@@ -59,12 +59,11 @@ export declare interface HandleSearchProps {
 }
 
 export declare interface CreateMarkersPointsItem {
-  style?: Style
-  image?: Image
   iconUrl?: string
   iconScale?: number
   text?: string
   coords: Coordinate
+  isReverseMarker?: boolean
   props?: any
 }
 export declare type CreateMarkersPoints = CreateMarkersPointsItem[]
