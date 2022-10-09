@@ -15,6 +15,6 @@ export const getters = (state: State) =>
       return state.searchLoading || state.reverseLoading
     }),
     touchPlatform: computed(() => {
-      return isTouchPlatform()
+      return state.viewType ? state.viewType === 'mobile' : isTouchPlatform()
     }),
   })

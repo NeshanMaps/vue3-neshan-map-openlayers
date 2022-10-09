@@ -43,7 +43,7 @@
       ></MobileLayers>
       <button
         v-if="store.getters.touchPlatform"
-        class="mobile-layers-button pos-absolute justify-center align-center d-flex"
+        class="mobile-layers-button pos-absolute justify-center align-center d-flex pointer"
         @click="handleMobileDrawerClick"
       >
         <img src="../assets/images/layers-outline.svg" />
@@ -438,6 +438,11 @@ const handleSearch = ({ term, coords }: HandleSearchProps) => {
   store.actions.markers.search({ term, coords: reliableCoords }, options);
 };
 
+const exposingSearch = ({ term, coords }: HandleSearchProps) => {
+  store.state.drawerActivation = true
+  handleSearch({ term, coords })
+}
+
 const handleMobileDrawerClick = (event: MouseEvent) => {
   const target: any = event.composedPath()[1];
   target.classList.add("floaten");
@@ -447,7 +452,7 @@ const handleMobileDrawerClick = (event: MouseEvent) => {
 
 defineExpose({
   state: store.state,
-  search: handleSearch,
+  search: exposingSearch,
   reverse: store.actions.markers.reverseOnPoint
 });
 

@@ -7,7 +7,6 @@
       :center="{ latitude: 36.311559, longitude: 59.5870851 }"
       @on-click="handleClick"
       poi
-      traffic
     />
   </div>
 </template>
