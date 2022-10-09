@@ -1,8 +1,8 @@
 <template>
   <div
-    :style="settingsBoxStyle"
+    :style="layersStyle"
     class="map-settings o-hidden pos-absolute"
-    :class="settingsBoxClass"
+    :class="layersClass"
   >
     <div class="justify-between d-flex">
       <div
@@ -25,7 +25,7 @@
         @click="store.actions.map.togglePoi()"
       >
         <img src="@/assets/images/poi.png" />
-        <div class="text-sm">Traffic</div>
+        <div class="text-sm">Poi</div>
       </div>
       <div
         class="pointer tile"
@@ -33,7 +33,7 @@
         @click="store.actions.map.toggleTraffic()"
       >
         <img src="@/assets/images/traffic.png" />
-        <div class="text-sm">Poi</div>
+        <div class="text-sm">Traffic</div>
       </div>
     </div>
   </div>
@@ -47,8 +47,8 @@ defineProps({
     type: Array as PropType<Tile[]>,
     default: () => [],
   },
-  settingsBoxClass: [Array, Object],
-  settingsBoxStyle: Object,
+  layersClass: [String, Array, Object],
+  layersStyle: Object,
 })
 
 const store = inject<Store>("store") as Store

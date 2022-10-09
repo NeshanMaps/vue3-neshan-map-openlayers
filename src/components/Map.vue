@@ -385,6 +385,7 @@ const startMap = async () => {
     controls: []
   });
   store.state.map = newMap;
+  store.state.map.setMapType(props.defaultType)
   // Currently there is a problem with assigning different map type on initilization
   store.state.mapType = props.defaultType;
   store.actions.map.shakeMap(300);
@@ -439,9 +440,9 @@ const handleSearch = ({ term, coords }: HandleSearchProps) => {
 };
 
 const exposingSearch = ({ term, coords }: HandleSearchProps) => {
-  store.state.drawerActivation = true
-  handleSearch({ term, coords })
-}
+  store.state.drawerActivation = true;
+  handleSearch({ term, coords });
+};
 
 const handleMobileDrawerClick = (event: MouseEvent) => {
   const target: any = event.composedPath()[1];

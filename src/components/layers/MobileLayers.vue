@@ -2,8 +2,8 @@
   <div
     v-show="modelValue"
     class="mobile-settings-container pos-absolute o-hidden"
-    :class="settingsBoxClass"
-    :style="settingsBoxStyle"
+    :class="layersClass"
+    :style="layersStyle"
     @click="close"
   >
     <div
@@ -67,8 +67,8 @@ const props = defineProps({
     type: Array as PropType<Tile[]>,
     default: () => [],
   },
-  settingsBoxClass: [Array, Object],
-  settingsBoxStyle: Object,
+  layersClass: [String, Array, Object],
+  layersStyle: Object,
 })
 
 const emit = defineEmits(["update:modelValue"])

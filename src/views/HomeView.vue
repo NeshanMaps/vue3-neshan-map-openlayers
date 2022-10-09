@@ -4,9 +4,8 @@
       ref="map"
       mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
       serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
-      :center="{ latitude: 36.311559, longitude: 59.5870851 }"
-      @on-click="handleClick"
-      poi
+      :center="{ latitude: 35.69672648316882, longitude: 51.36281969540723 }"
+      :zoom="19"
     />
   </div>
 </template>
