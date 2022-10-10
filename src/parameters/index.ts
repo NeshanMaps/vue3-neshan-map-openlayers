@@ -7,7 +7,7 @@ export const urls = {
 }
 
 export const markerUrls = {
-  main: "https://img.icons8.com/color/344/marker--v1.png",
+  main: "src/assets/images/main-marker.png",
   // blue: "https://img.icons8.com/ultraviolet/344/marker.png",
   search: "https://static.neshanmap.ir/poi/square/",
   colorSvg: "https://static.neshanmap.ir/poi/svg/color/",

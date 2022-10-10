@@ -5,6 +5,7 @@
       mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
       serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
       :center="{ latitude: 35.69672648316882, longitude: 51.36281969540723 }"
+      :markers-icon-callback="markersIconCallback"
     />
   </div>
 </template>
@@ -13,6 +14,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // import Map from "../../dist/Vue3-NeshanMap-Openlayers.mjs"
+import { CreateMarkersPointsItem } from "@/components/Map.model";
 import NeshanMap from "@/components/Map.vue"
 
 import { defineComponent } from "vue"
@@ -21,25 +23,10 @@ export default defineComponent({
   components: {
     NeshanMap,
   },
-  data() {
-    return {
-      searchText: "",
-      autoSearch: false,
-      coords: null,
-    }
-  },
   methods: {
-    handleClick(event: any) {
-      this.coords = event.stdPoint
-      if (this.autoSearch) {
-        this.search()
-      }
-    },
-    search({ coords, text }: { coords?: any; text?: any } = {}) {
-      coords ||= this.coords
-      text ||= this.searchText
-      ;(this.$refs.map as any).search({ text, coords })
-    },
+    markersIconCallback(payload: CreateMarkersPointsItem) {
+      if (payload.)
+    }
   },
 })
 </script>

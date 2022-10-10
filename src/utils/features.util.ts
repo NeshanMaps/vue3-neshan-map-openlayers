@@ -11,7 +11,6 @@ import {
   CreateStyleProps,
   MarkersIconCallback,
   Ol,
-  Source,
   Style,
   // Text,
   VectorLayer,
@@ -117,7 +116,7 @@ export const createStyle = ({
  * @param features
  * @returns ol source
  */
-const createSource = (features: Feature[]): Source => {
+const createSource = (features: Feature[]): Ol.source.Vector => {
   return new ol.source.Vector({
     features,
     // projection: map.value.getView().projection, // Is it neccesary?
@@ -132,7 +131,7 @@ export const createLayer = ({
   target = "points",
   style,
   source,
-}: CreateLayerProps): VectorLayer => {
+}: CreateLayerProps): Ol.layer.Vector => {
   return new ol.layer.Vector({
     target,
     source,
@@ -219,7 +218,7 @@ const styleFuncGen = (
 export const createClusterSource = (
   features: Feature[],
   { minDistance = 30, distance = 30 } = {}
-): Source => {
+): Ol.source.Cluster => {
   return new ol.source.Cluster({
     distance,
     minDistance,
@@ -227,7 +226,7 @@ export const createClusterSource = (
   })
 }
 
-const createClusterText = (size: number) => {
+const createClusterText = (size: number): Ol.style.Text => {
   return new ol.style.Text({
     text: size.toString(),
     font: "bold 15px serif",
@@ -372,6 +371,7 @@ export const createFeaturesFromPoints = (
       text: point.text,
       iconUrl: point.iconUrl,
       iconProps: markersIconCallback && markersIconCallback(point),
+      mainMarker: point.isReverseMarker,
       ...point.props,
       ...props,
     })
