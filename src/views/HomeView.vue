@@ -24,8 +24,17 @@ export default defineComponent({
     NeshanMap,
   },
   methods: {
-    markersIconCallback(payload: CreateMarkersPointsItem) {
-      if (payload.)
+    markersIconCallback(point: CreateMarkersPointsItem) {
+      if (point.isReverseMarker) {
+        return {
+          src: "https://img.icons8.com/arcade/344/experimental-marker-arcade.png"
+        }
+      } else {
+        return {
+          src: "https://img.icons8.com/fluency/344/find-clinic.png",
+          iconScale: 0.05
+        }
+      }
     }
   },
 })

@@ -87,7 +87,6 @@ import {
   MarkerHoverCallback,
   HandleSearchProps
 } from "./Map.model";
-import { Coordinate } from "openlayers";
 import { SearchOptions } from "../store/markers/markers.model";
 import { MapType, OlMap, ViewType } from "../store/map/map.model";
 import { CreateApiOptions } from "@/apis/apis.model";
@@ -351,7 +350,7 @@ const importMap = (url: string, tagName = "my-openlayer") => {
   return scriptTag;
 };
 
-const sanitizedCenter = ref<Coordinate | undefined>(
+const sanitizedCenter = ref(
   sanitizeLocation(props.center)
 );
 /**
@@ -362,7 +361,7 @@ const sanitizedCenter = ref<Coordinate | undefined>(
  */
 const startMap = async () => {
   if (!mapContainer.value) return;
-  const coords = sanitizedCenter.value || (await getLocation());
+  const centralCoords = sanitizedCenter.value || (await getLocation());
   const newMap: OlMap = new ol.Map({
     target: mapContainer.value,
     key: props.mapKey,
@@ -370,7 +369,7 @@ const startMap = async () => {
     poi: store.state.poiLayer,
     traffic: store.state.trafficLayer,
     view: new ol.View({
-      center: ol.proj.fromLonLat(coords),
+      center: ol.proj.fromLonLat(centralCoords),
       zoom: props.zoom,
       smoothExtentConstraint: true
       // projection: 'EPSG:4326' //Default was EPSG:3857
@@ -396,6 +395,7 @@ const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   emits: eventsEmits,
   store,
   markerHoverCallback: props.markerHoverCallback,
+  markersIconCallback: props.markersIconCallback,
   zoomOnMarkerClick: props.zoomOnMarkerClick,
   zoomOnResultClick: props.zoomOnResultClick,
   popupOnMarkerHover: props.popupOnMarkerHover,

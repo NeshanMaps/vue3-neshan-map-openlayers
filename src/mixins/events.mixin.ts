@@ -18,6 +18,7 @@ export function eventsMixin({
   popupOnMarkerHover,
   popupOnResultHover,
   reverseOnClick,
+  markersIconCallback
 }: EventsMixinProps) {
   /**
    * Sets the required events up for the map.
@@ -120,7 +121,9 @@ export function eventsMixin({
         handleFeatureClick(selectedFeature)
       }
     } else if (reverseOnClick) {
-      const result = await store.actions.markers.reverseOnPoint(coords)
+      const result = await store.actions.markers.reverseOnPoint(coords, {
+        markersIconCallback
+      })
       emittingMarker = result.marker
       emittingData = result.data
     }

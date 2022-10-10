@@ -307,7 +307,12 @@ const getFeatureFromEvent = (context: Context, evt: MapBrowserEvent) => {
 const reverseOnPoint = async (
   context: Context,
   coords: Coordinate,
-  { useMarker = true, usePopup = true, customText }: ReverseOnPointOptions = {}
+  {
+    useMarker = true,
+    usePopup = true,
+    customText,
+    markersIconCallback,
+  }: ReverseOnPointOptions = {}
 ) => {
   try {
     context.state.reverseLoading = true
@@ -325,10 +330,11 @@ const reverseOnPoint = async (
             text: "",
             iconScale: 0.1,
             iconUrl: markerUrls.main,
-            isReverseMarker: true
+            isReverseMarker: true,
           },
         ],
         {
+          markersIconCallback,
           props: {
             isCluster: false,
           },
@@ -415,7 +421,7 @@ const search = async (
     }, 200)
     return {
       markers: layer,
-      data: result
+      data: result,
     }
   } catch (error) {
     console.log(error)

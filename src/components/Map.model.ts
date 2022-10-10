@@ -115,6 +115,7 @@ declare interface EmitData {
 export declare interface EventsMixinProps {
   emits: EventsEmits<keyof EmitData>
   store: Store
+  markersIconCallback?: MarkersIconCallback
   markerHoverCallback?: MarkerHoverCallback
   popupOnMarkerHover: boolean
   popupOnResultHover: boolean
