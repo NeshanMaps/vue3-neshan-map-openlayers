@@ -5,7 +5,7 @@ export type { Ol }
 import { Feature, style, Coordinate } from "openlayers"
 import { ChangeOverlayStats } from "../store/overlays/overlays.model"
 import {
-  PrimaryReverseResult,
+  PrimaryReverseResult, SearchItem,
 } from "../store/markers/markers.model"
 import { MapType, OlMap } from "../store/map/map.model"
 import { Store } from "@/store/store.model"
@@ -89,11 +89,8 @@ export declare type MarkerHoverCallback = (
 ) => void
 
 export declare type MarkersIconCallback = (
-  points: CreateMarkersPointsItem
+  point: CreateMarkersPointsItem
 ) => CreateIconProps
-
-export declare type ResultHoverCallback = (...[arg]: any[]) => any
-export declare type ResultClickCallback = (...[arg]: any[]) => any
 
 declare type EventsEmits<T extends keyof EmitData> = (
   event: T,
@@ -109,12 +106,16 @@ declare interface EmitData {
     selectedFeature?: ol.Feature
   }
   "on-zoom": number
+  "on-result-hover": {
+    item: SearchItem
+    cluster: Feature
+    marker: Feature
+  }
+  "on-result-click": SearchItem
 }
 export declare interface EventsMixinProps {
   emits: EventsEmits<keyof EmitData>
   store: Store
-  resultHoverCallback?: ResultHoverCallback
-  resultClickCallback?: ResultClickCallback
   markerHoverCallback?: MarkerHoverCallback
   popupOnMarkerHover: boolean
   popupOnResultHover: boolean

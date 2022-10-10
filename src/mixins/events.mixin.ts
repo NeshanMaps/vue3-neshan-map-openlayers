@@ -12,8 +12,6 @@ import { markersOffset } from "@/parameters"
 export function eventsMixin({
   emits,
   store,
-  resultHoverCallback,
-  resultClickCallback,
   markerHoverCallback,
   zoomOnMarkerClick,
   zoomOnResultClick,
@@ -122,9 +120,7 @@ export function eventsMixin({
         handleFeatureClick(selectedFeature)
       }
     } else if (reverseOnClick) {
-      const result = await store.actions.markers.reverseOnPoint(
-        coords
-      )
+      const result = await store.actions.markers.reverseOnPoint(coords)
       emittingMarker = result.marker
       emittingData = result.data
     }
@@ -159,22 +155,22 @@ export function eventsMixin({
    * @param item - Search item
    */
   const handleResultHover = (item: SearchItem) => {
-    let feature = store.actions.markers.getClusterByCoords(
+    const clusterResult = store.actions.markers.getClusterByCoords(
       item.mapCoords
-    ).cluster
-    if (!feature)
-      feature = store.actions.markers.getMarkerByCoords(item.mapCoords)
+    )
+    const cluster = clusterResult.cluster
+    const feature =
+      clusterResult.feature ||
+      store.actions.markers.getMarkerByCoords(item.mapCoords)
     if (!feature) return
-    const coords = getCoordsFromFeature(feature)
+    const coords = getCoordsFromFeature(cluster || feature)
     if (popupOnResultHover) {
       store.actions.overlays.changeOverlayStats({
         coords,
         text: item.title,
       })
     }
-    if (resultHoverCallback) {
-      resultHoverCallback({ map: store.state.map, item })
-    }
+    emits("on-result-hover", { item, cluster, marker: feature })
   }
 
   /**
@@ -190,9 +186,7 @@ export function eventsMixin({
     if (zoomOnResultClick) {
       store.actions.markers.selectFeauture(item)
     }
-    if (resultClickCallback) {
-      resultClickCallback({ map: store.state.map, item })
-    }
+    emits("on-result-click", item)
   }
 
   return {

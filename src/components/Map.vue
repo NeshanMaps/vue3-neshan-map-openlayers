@@ -83,8 +83,6 @@ import {
 } from "vue";
 import {
   CoordsObj,
-  ResultHoverCallback,
-  ResultClickCallback,
   MarkersIconCallback,
   MarkerHoverCallback,
   HandleSearchProps
@@ -209,11 +207,6 @@ const props = defineProps({
    * عدم نمایش بخش سرج و نتایج
    */
   hideSearchContainer: Boolean,
-  /**
-   *
-   */
-  resultHoverCallback: Function as PropType<ResultHoverCallback>,
-  resultClickCallback: Function as PropType<ResultClickCallback>,
   markersIconCallback: Function as PropType<MarkersIconCallback>,
   markerHoverCallback: Function as PropType<MarkerHoverCallback>,
   popupOnMarkerHover: {
@@ -385,7 +378,7 @@ const startMap = async () => {
     controls: []
   });
   store.state.map = newMap;
-  store.state.map.setMapType(props.defaultType)
+  store.state.map.setMapType(props.defaultType);
   // Currently there is a problem with assigning different map type on initilization
   store.state.mapType = props.defaultType;
   store.actions.map.shakeMap(300);
@@ -393,12 +386,15 @@ const startMap = async () => {
 
 const popupContainer = ref<HTMLDivElement>();
 const persistentContainer = ref<HTMLDivElement>();
-const eventsEmits = defineEmits(["on-zoom", "on-click"]);
+const eventsEmits = defineEmits([
+  "on-zoom",
+  "on-click",
+  "on-result-hover",
+  "on-result-click"
+]);
 const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
   emits: eventsEmits,
   store,
-  resultHoverCallback: props.resultHoverCallback,
-  resultClickCallback: props.resultClickCallback,
   markerHoverCallback: props.markerHoverCallback,
   zoomOnMarkerClick: props.zoomOnMarkerClick,
   zoomOnResultClick: props.zoomOnResultClick,
