@@ -324,13 +324,13 @@ store.actions.map.togglePoi(props.poi);
 watch(
   () => props.traffic,
   (nv) => {
-    store.actions.map.toggleTrafficLayer(nv);
+    store.actions.map.toggleTraffic(nv);
   }
 );
 watch(
   () => props.poi,
   (nv) => {
-    store.actions.map.togglePoiLayer(nv);
+    store.actions.map.togglePoi(nv);
   }
 );
 const mapContainer = ref<HTMLDivElement>();
@@ -409,6 +409,7 @@ const { setupMapEvents, handleResultHover, handleResultClick } = eventsMixin({
 watch(
   () => store.state.zoom,
   (nv, ov) => {
+    if(!store.state.searchMarkers) return
     if (nv >= props.clusterThreshold && ov < props.clusterThreshold) {
       store.actions.markers.toggleClusterSource(
         store.state.searchMarkers,

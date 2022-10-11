@@ -1,6 +1,6 @@
 import { state } from "./state"
 import { actions } from "./actions"
-import { storeGen } from "."
+import { functionChanger, storeGen } from "."
 
 export type State = typeof state
 export type Actions = typeof actions
@@ -13,7 +13,7 @@ export declare interface Context {
 }
 
 type Func = (context: Context, ...args: any) => any
-type ActionsModuleMapper<AM extends { [s: string]: { [y: string]: Func } }> = {
+export type ActionsModuleMapper<AM extends { [s: string]: { [y: string]: Func } }> = {
   [Module in keyof AM]: ActionsMapper<AM[Module]>
 }
 
@@ -21,10 +21,19 @@ type ActionsMapper<Module extends { [s: string]: Func }> = {
   [A in keyof Module]: ChangedFunction<Module[A]>
 }
 
-type ChangedFunction<F extends Func> = (...args: Parameters<F>) => void
+class Wrapper<T extends Func, C extends Context = Context> {
+  wrapped(e: T, context: C) {
+    return functionChanger<T>(e, context)
+  }
+}
+type FunctionChanger<T extends Func> = ReturnType<Wrapper<T>['wrapped']>
+type ChangedFunction<F extends Func> = FunctionChanger<F>
 
-type MappedActions = ActionsModuleMapper<Actions>
+// Not needed anywhere but thought it might be good leaving it here
+export type ExcludeFromTuple<T extends readonly any[], E> =
+    T extends [infer F, ...infer R] ? [F] extends [E] ? ExcludeFromTuple<R, E> :
+    [F, ...ExcludeFromTuple<R, E>] : []
 
-type test = ActionsMapper<Actions["map"]>
-
-type funcTest = ChangedFunction<Actions["map"]["setMapType"]>
+export type RemoveFirstFromTuple<T extends any[]> = 
+  T['length'] extends 0 ? undefined :
+  (((...b: T) => void) extends (a: any, ...b: infer I) => void ? I : [])

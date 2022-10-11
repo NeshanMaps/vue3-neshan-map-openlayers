@@ -3,6 +3,14 @@
 import { stateGenerator } from "./state"
 import { getters } from "./getters"
 import { actions } from "./actions"
+import { Actions, ActionsModuleMapper, Context, RemoveFirstFromTuple } from "./store.model"
+
+export const functionChanger = <T extends (...args: any) => any>(
+  func: T,
+  context: Context
+): ((...args: (RemoveFirstFromTuple<Parameters<T>, Context>)) => ReturnType<T>) => {
+  return (...args: (Exclude<Parameters<T>, Context>)[]) => func(context, ...args)
+}
 
 export const storeGen = () => {
   const state = stateGenerator()
@@ -15,12 +23,15 @@ export const storeGen = () => {
 
   // To inject context into actions
   const actionModulesKeys = Object.keys(actions)
-  const storeActions: any = actionModulesKeys.reduce((sa, amk) => {
+  const storeActions: ActionsModuleMapper<Actions> = actionModulesKeys.reduce((sa, amk) => {
     const actionKeys = Object.keys(actions[amk])
     const contextFreeActions = actionKeys.reduce((cfa, ak) => {
       return {
         ...cfa,
-        [ak]: (...args) => actions[amk][ak](context, ...args),
+        [ak]: functionChanger<typeof actions[amk][ak]>(
+          actions[amk][ak],
+          context
+        ),
       }
     }, {})
     return { ...sa, [amk]: contextFreeActions }
