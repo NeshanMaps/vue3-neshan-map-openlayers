@@ -5,11 +5,11 @@ import { getters } from "./getters"
 import { actions } from "./actions"
 import { Actions, ActionsModuleMapper, Context, RemoveFirstFromTuple } from "./store.model"
 
-export const functionChanger = <T extends (...args: any) => any>(
+export const functionChanger = <T extends (...args: any) => ReturnType<T>>(
   func: T,
   context: Context
-): ((...args: (RemoveFirstFromTuple<Parameters<T>>)) => ReturnType<T>) => {
-  return (...args: (RemoveFirstFromTuple<Parameters<T>>)[]) => func(context, ...args)
+) => {
+  return (...args: (RemoveFirstFromTuple<Parameters<T>>)) => func(context, ...args)
 }
 
 export const storeGen = () => {
