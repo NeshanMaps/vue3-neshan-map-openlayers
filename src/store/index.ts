@@ -8,8 +8,8 @@ import { Actions, ActionsModuleMapper, Context, RemoveFirstFromTuple } from "./s
 export const functionChanger = <T extends (...args: any) => any>(
   func: T,
   context: Context
-): ((...args: (RemoveFirstFromTuple<Parameters<T>, Context>)) => ReturnType<T>) => {
-  return (...args: (Exclude<Parameters<T>, Context>)[]) => func(context, ...args)
+): ((...args: (RemoveFirstFromTuple<Parameters<T>>)) => ReturnType<T>) => {
+  return (...args: (RemoveFirstFromTuple<Parameters<T>>)[]) => func(context, ...args)
 }
 
 export const storeGen = () => {
