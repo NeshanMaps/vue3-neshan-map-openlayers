@@ -1,6 +1,6 @@
 {
-  "name": "vue3-neshanmap-openlayers",
-  "version": "0.1.0",
+  "name": "vue3-neshan-map-openlayers",
+  "version": "1.0.0",
   "private": true,
   "type": "commonjs",
   "main": "dist/Vue3-NeshanMap-Openlayers.umd.js",
