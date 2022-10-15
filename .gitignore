@@ -2,6 +2,7 @@
 node_modules
 # /dist
 stories/Map.stories.ts
+storybook-static
 
 
 # local env files
