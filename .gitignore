@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 # /dist
+stories/Map.stories.ts
 
 
 # local env files
