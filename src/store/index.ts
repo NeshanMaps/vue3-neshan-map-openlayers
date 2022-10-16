@@ -5,7 +5,7 @@ import { getters } from "./getters"
 import { actions } from "./actions"
 import { Actions, ActionsModuleMapper, Context, RemoveFirstFromTuple } from "./store.model"
 
-export const functionChanger = <T extends (...args: any) => ReturnType<T>>(
+export const contextInjector = <T extends (...args: any) => ReturnType<T>>(
   func: T,
   context: Context
 ) => {
@@ -28,7 +28,7 @@ export const storeGen = () => {
     const contextFreeActions = actionKeys.reduce((cfa, ak) => {
       return {
         ...cfa,
-        [ak]: functionChanger<typeof actions[amk][ak]>(
+        [ak]: contextInjector<typeof actions[amk][ak]>(
           actions[amk][ak],
           context
         ),

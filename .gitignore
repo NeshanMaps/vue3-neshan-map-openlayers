@@ -8,6 +8,8 @@ storybook-static
 # local env files
 .env.local
 .env.*.local
+.env
+env.d.ts
 
 # Log files
 npm-debug.log*
