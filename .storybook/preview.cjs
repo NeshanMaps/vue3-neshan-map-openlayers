@@ -6,9 +6,4 @@ export const parameters = {
       date: /Date$/,
     },
   },
-  options: {
-    storySort: {
-      order: ["NeshanMaps/Vue3 OpenLayers"],
-    },
-  },
-}
+};
