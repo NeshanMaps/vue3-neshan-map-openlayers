@@ -2,8 +2,8 @@
   <div class="page">
     <NeshanMap
       ref="map"
-      mapKey="web.ApsMGWLRNZ6JAsKIKfVjhTfX5ojUSeSdk7kVuavm"
-      serviceKey="service.iEBKgNGr3yicBeQgKhFKB187X3df2vFmqpOLM5GD"
+      :mapKey="mapKey"
+      :serviceKey="serviceKey"
       :center="{ latitude: 35.69672648316882, longitude: 51.36281969540723 }"
       :zoom="12"
     />
@@ -24,24 +24,10 @@ export default defineComponent({
   },
   data() {
     return {
-      searchText: "",
-      autoSearch: false,
-      coords: null,
+      mapKey: import.meta.env.VITE_MAP_KEY,
+      serviceKey: import.meta.env.VITE_SERVICE_KEY
     }
-  },
-  methods: {
-    handleClick(event: any) {
-      this.coords = event.stdPoint
-      if (this.autoSearch) {
-        this.search()
-      }
-    },
-    search({ coords, text }: { coords?: any; text?: any } = {}) {
-      coords ||= this.coords
-      text ||= this.searchText
-      ;(this.$refs.map as any).search({ text, coords })
-    },
-  },
+  }
 })
 </script>
 
