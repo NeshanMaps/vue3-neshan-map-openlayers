@@ -1,6 +1,6 @@
 import { state } from "./state"
 import { actions } from "./actions"
-import { functionChanger, storeGen } from "."
+import { contextInjector, storeGen } from "."
 
 export type State = typeof state
 export type Actions = typeof actions
@@ -23,11 +23,11 @@ type ActionsMapper<Module extends { [s: string]: Func }> = {
 
 class Wrapper<T extends Func, C extends Context = Context> {
   wrapped(e: T, context: C) {
-    return functionChanger<T>(e, context)
+    return contextInjector<T>(e, context)
   }
 }
-type FunctionChanger<T extends Func> = ReturnType<Wrapper<T>['wrapped']>
-type ChangedFunction<F extends Func> = FunctionChanger<F>
+type ContextInjector<T extends Func> = ReturnType<Wrapper<T>['wrapped']>
+type ChangedFunction<F extends Func> = ContextInjector<F>
 
 // Not needed anywhere but thought it might be good leaving it here
 export type ExcludeFromTuple<T extends readonly any[], E> =
