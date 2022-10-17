@@ -17,13 +17,10 @@ yarn dev
 ### Compiles and minifies for production
 ```
 npm run build
-<!-- or -->
-yarn build
 ```
 
 ### Lints and fixes files
 ```
 npm run lint
-<!-- or -->
-yarn lint
 ```
+

@@ -1,6 +1,6 @@
 import { state } from "./state"
 import { actions } from "./actions"
-import { contextInjector, storeGen } from "."
+import { functionChanger, storeGen } from "."
 
 export type State = typeof state
 export type Actions = typeof actions
@@ -23,7 +23,7 @@ type ActionsMapper<Module extends { [s: string]: Func }> = {
 
 class Wrapper<T extends Func, C extends Context = Context> {
   wrapped(e: T, context: C) {
-    return contextInjector<T>(e, context)
+    return functionChanger<T>(e, context)
   }
 }
 type FunctionChanger<T extends Func> = ReturnType<Wrapper<T>['wrapped']>
