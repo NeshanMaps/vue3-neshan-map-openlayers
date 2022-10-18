@@ -484,6 +484,7 @@ onMounted(() => {
 <style lang="scss">
 @import url("@/assets/main.scss");
 @import url("https://static.neshan.org/sdk/openlayers/5.3.0/ol.css");
+
 .ol-overlay-container {
   pointer-events: none;
 }
