@@ -1,4 +1,3 @@
-declare const ol: any // eslint-disable-line
 import { urls } from "../parameters"
 import { Api, CreateApiOptions } from "./apis.model"
 
